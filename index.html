@@ -1158,12 +1158,275 @@
             console.log('Maximizar:', windowId);
         }
 
+        // === SISTEMA ASTROLÓGICO INTEGRADO ===
+        class AstrologicalSystem {
+            constructor() {
+                this.currentPlanet = this.getCurrentPlanet();
+                this.lastCheck = Date.now();
+                this.threats = [];
+                this.init();
+            }
+
+            init() {
+                this.updatePlanetaryIndicator();
+                this.scheduleUpdates();
+                this.checkAstrologicalThreats();
+            }
+
+            getCurrentPlanet() {
+                const hour = new Date().getHours();
+                const planets = [
+                    { name: 'Sol', symbol: '☉', color: '#FFD700', hour: 6 },
+                    { name: 'Vênus', symbol: '♀', color: '#32CD32', hour: 7 },
+                    { name: 'Mercúrio', symbol: '☿', color: '#4169E1', hour: 8 },
+                    { name: 'Lua', symbol: '☽', color: '#C0C0C0', hour: 9 },
+                    { name: 'Saturno', symbol: '♄', color: '#696969', hour: 10 },
+                    { name: 'Júpiter', symbol: '♃', color: '#4169E1', hour: 11 },
+                    { name: 'Marte', symbol: '♂', color: '#DC143C', hour: 12 }
+                ];
+                
+                return planets[hour % 7];
+            }
+
+            updatePlanetaryIndicator() {
+                const indicator = document.getElementById('planetary-indicator');
+                if (indicator) {
+                    const planet = this.getCurrentPlanet();
+                    indicator.textContent = planet.symbol;
+                    indicator.style.color = planet.color;
+                    indicator.style.textShadow = `0 0 10px ${planet.color}`;
+                    indicator.title = `${planet.name} - Hora Planetária Ativa`;
+                    
+                    // Atualizar cor do escudo do AFAST!
+                    this.updateAFASTShield(planet);
+                }
+            }
+
+            updateAFASTShield(planet) {
+                const afastIcon = document.querySelector('[data-app="afast"] img');
+                if (afastIcon) {
+                    afastIcon.style.filter = `drop-shadow(0 0 15px ${planet.color}) hue-rotate(${this.getHueRotation(planet.name)}deg)`;
+                }
+            }
+
+            getHueRotation(planetName) {
+                const rotations = {
+                    'Sol': 0,
+                    'Lua': 180,
+                    'Marte': 300,
+                    'Mercúrio': 240,
+                    'Júpiter': 220,
+                    'Vênus': 120,
+                    'Saturno': 0
+                };
+                return rotations[planetName] || 0;
+            }
+
+            checkAstrologicalThreats() {
+                const threats = this.generateThreats();
+                
+                threats.forEach(threat => {
+                    if (!this.threats.includes(threat.id)) {
+                        this.threats.push(threat.id);
+                        this.triggerAFASTAlert(threat);
+                    }
+                });
+
+                // Limpar ameaças antigas
+                this.threats = this.threats.filter(id => 
+                    threats.some(threat => threat.id === id)
+                );
+            }
+
+            generateThreats() {
+                const threats = [];
+                const hour = new Date().getHours();
+                const minute = new Date().getMinutes();
+                
+                // Mercúrio Retrógrado (a cada 3 horas)
+                if (hour % 3 === 0 && minute < 5) {
+                    threats.push({
+                        id: 'mercury-retrograde',
+                        type: 'Mercúrio Retrógrado',
+                        message: 'AFÁSTI detectou Mercúrio retrógrado - risco de falhas de comunicação',
+                        severity: 'medium'
+                    });
+                }
+
+                // Lua Fora de Curso (23h-1h)
+                if (hour >= 23 || hour <= 1) {
+                    threats.push({
+                        id: 'void-moon',
+                        type: 'Lua Fora de Curso',
+                        message: 'AFÁSTI alerta: Lua fora de curso - evite decisões importantes',
+                        severity: 'low'
+                    });
+                }
+
+                // Marte em Tensão (6h, 12h, 18h)
+                if ([6, 12, 18].includes(hour) && minute < 10) {
+                    threats.push({
+                        id: 'mars-tension',
+                        type: 'Marte em Tensão',
+                        message: 'AFÁSTI detectou energia marcial agressiva - defesas ativadas',
+                        severity: 'high'
+                    });
+                }
+
+                // Eclipse Raro (1% de chance)
+                if (Math.random() < 0.01) {
+                    threats.push({
+                        id: 'eclipse',
+                        type: 'Eclipse Detectado',
+                        message: 'AFÁSTI alerta: Fenômeno eclipse ativo - cuidado redobrado!',
+                        severity: 'critical'
+                    });
+                }
+
+                return threats;
+            }
+
+            triggerAFASTAlert(threat) {
+                // Notificação visual
+                auroraOS.showNotification(`🛡️ ${threat.type}`, threat.message);
+                
+                // Alerta sonoro + voz
+                setTimeout(() => {
+                    afastVoice.speak(threat.message);
+                }, 1000);
+
+                // Efeito visual no escudo
+                this.animateShieldAlert(threat.severity);
+            }
+
+            animateShieldAlert(severity) {
+                const afastIcon = document.querySelector('[data-app="afast"] img');
+                if (afastIcon) {
+                    const colors = {
+                        'low': '#32CD32',
+                        'medium': '#FFD700', 
+                        'high': '#DC143C',
+                        'critical': '#FF0000'
+                    };
+                    
+                    const color = colors[severity] || '#FFD700';
+                    afastIcon.style.animation = `shield-pulse 2s ease-in-out 3`;
+                    afastIcon.style.filter = `drop-shadow(0 0 20px ${color}) brightness(1.5)`;
+                    
+                    setTimeout(() => {
+                        afastIcon.style.animation = '';
+                        this.updateAFASTShield(this.getCurrentPlanet());
+                    }, 6000);
+                }
+            }
+
+            scheduleUpdates() {
+                // Atualizar planeta a cada minuto
+                setInterval(() => {
+                    const newPlanet = this.getCurrentPlanet();
+                    if (newPlanet.name !== this.currentPlanet.name) {
+                        this.currentPlanet = newPlanet;
+                        this.updatePlanetaryIndicator();
+                        
+                        // Notificar mudança planetária
+                        auroraOS.showNotification(
+                            `${newPlanet.symbol} ${newPlanet.name} Ativo`,
+                            `Proteção planetária atualizada - ${newPlanet.name} assume o comando`
+                        );
+                        
+                        setTimeout(() => {
+                            afastVoice.speak(`${newPlanet.name} assume a proteção do sistema`);
+                        }, 2000);
+                    }
+                }, 60000);
+
+                // Verificar ameaças a cada 5 minutos
+                setInterval(() => {
+                    this.checkAstrologicalThreats();
+                }, 300000);
+
+                // Primeira verificação após 10 segundos
+                setTimeout(() => {
+                    this.checkAstrologicalThreats();
+                }, 10000);
+            }
+
+            getPlanetaryStatus() {
+                const planet = this.getCurrentPlanet();
+                const protectionLevel = this.getProtectionLevel(planet.name);
+                
+                return {
+                    planet: planet,
+                    protection: protectionLevel,
+                    threats: this.threats.length,
+                    status: this.threats.length === 0 ? 'Protegido' : 'Alerta Ativo'
+                };
+            }
+
+            getProtectionLevel(planetName) {
+                const levels = {
+                    'Sol': 'Máxima - Harmonia Dourada',
+                    'Lua': 'Intuitiva - Proteção Lunar',
+                    'Marte': 'Agressiva - Modo Guerreiro',
+                    'Mercúrio': 'Comunicativa - Canais Seguros',
+                    'Júpiter': 'Expansiva - Proteção Majestosa',
+                    'Vênus': 'Harmoniosa - Equilíbrio Venusiano',
+                    'Saturno': 'Restritiva - Barreiras Sólidas'
+                };
+                return levels[planetName] || 'Padrão';
+            }
+        }
+
+        // === CSS PARA ANIMAÇÕES ===
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shield-pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+            }
+            
+            #planetary-indicator {
+                animation: planet-glow 3s ease-in-out infinite;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            @keyframes planet-glow {
+                0%, 100% { opacity: 0.8; }
+                50% { opacity: 1; }
+            }
+            
+            #planetary-indicator:hover {
+                transform: scale(1.2);
+                filter: brightness(1.3);
+            }
+        `;
+        document.head.appendChild(style);
+
         // === INICIALIZAÇÃO ===
         let auroraOS;
+        let astrologicalSystem;
         
         document.addEventListener('DOMContentLoaded', () => {
             auroraOS = new AuroraOS();
-            console.log('🌟 Aurora OS • MysticSoft carregado com sucesso!');
+            
+            // Inicializar sistema astrológico após o boot
+            setTimeout(() => {
+                astrologicalSystem = new AstrologicalSystem();
+                // Adicionar evento de clique no indicador planetário
+                const planetaryIndicator = document.getElementById('planetary-indicator');
+                if (planetaryIndicator) {
+                    planetaryIndicator.addEventListener('click', () => {
+                        const status = astrologicalSystem.getPlanetaryStatus();
+                        auroraOS.showNotification(
+                            `${status.planet.symbol} ${status.planet.name}`,
+                            `Proteção: ${status.protection}\nStatus: ${status.status}\nAmeaças: ${status.threats}`
+                        );
+                    });
+                }
+            }, 5000);
+            
+            console.log('🌟 MysticSoft carregado com sucesso!');
         });
     </script>
 </body>
