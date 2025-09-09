@@ -1,17 +1,58 @@
-# 🌟 Aurora OS • MysticSoft
+# 🌟 MysticSoft - Sistema Operacional Mágico
 
-Um sistema operacional retrô-mágico que roda no navegador, inspirado no Windows ME com estética whimsigoth e funcionalidades místicas.
+Um sistema operacional retrô-mágico que roda no navegador, inspirado no Windows ME mas com uma estética whimsigoth única da Aurora Sagrada.
 
 ![Aurora OS](https://img.shields.io/badge/Aurora%20OS-MysticSoft-purple?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSIjRjBBQTUzIi8+Cjwvc3ZnPgo=)
 
-## ✨ Características
+## ✨ Funcionalidades Principais
 
-- **🎨 Interface Retrô**: Estética autêntica do Windows ME com cores místicas
-- **🛡️ AFAST! Guardiã Mística**: Antivírus que responde a eventos astrológicos
-- **🎵 Aurora Player**: Media player com máscaras/skins intercambiáveis
-- **🌙 Sistema Planetário**: Indicador de horas planetárias em tempo real
-- **📱 Notificações**: Sistema estilo MSN dos anos 2000
-- **🔊 Áudio Imersivo**: Sons retrô-mágicos para todas as interações
+### 🖥️ **Sistema Operacional Completo**
+- **Tela de boot** animada com logo oficial da MysticSoft
+- **Desktop** com ícones arrastáveis e organizáveis
+- **Barra de tarefas** autêntica estilo Windows ME
+- **Menu Iniciar** funcional com todos os aplicativos
+- **Sistema de janelas** com controles completos
+
+### 🛡️ **AFAST! - Guardiã Mística**
+- **Antivírus astrológico** que responde aos ciclos planetários
+- **Detecção de ameaças cósmicas** (Mercúrio retrógrado, Lua fora de curso, etc.)
+- **Sistema de voz** em português (pronuncia "AFÁSTI")
+- **Integração planetária** com cores dinâmicas
+- **Alertas automáticos** baseados em eventos astrológicos
+
+### 🎵 **Aurora Player Avançado**
+- **6 máscaras/skins** intercambiáveis
+- **Equalizador** de 10 bandas funcional
+- **Visualizador de áudio** em tempo real
+- **Playlist** interativa e persistente
+- **Controles completos** (shuffle, repeat, crossfade)
+- **Sistema de sincronização** global
+
+### 🔐 **Painel de Administração**
+- **Acesso exclusivo** para gerenciar conteúdo
+- **Upload de áudios** direto para o Aurora Player
+- **Gerenciamento** da playlist global
+- **Sincronização automática** para todos os usuários
+- **Estatísticas** detalhadas do sistema
+- **Acesso**: [admin-panel.html](admin-panel.html)
+
+### 🖼️ **Sistema de Papel de Parede**
+- **6 papéis pré-definidos** com temas mágicos
+- **Upload personalizado** de imagens
+- **Menu de contexto** (clique direito no desktop)
+- **Salvamento automático** das preferências
+
+### 🔊 **Sistema de Sons Retrô/Mágicos**
+- **Sons gerados** em tempo real via Web Audio API
+- **Efeitos sonoros** para todas as interações
+- **Paleta sonora** baseada nas cores da Aurora Sagrada
+- **Síntese de voz** para alertas do AFAST!
+
+### 📱 **Sistema de Notificações**
+- **Toasts estilo MSN** no canto da tela
+- **Diferentes tipos** (info, warning, error, success)
+- **Sons coordenados** com alertas visuais
+- **Histórico** de notificações
 
 ## 🎯 Aplicativos Incluídos
 
