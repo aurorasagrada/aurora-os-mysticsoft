@@ -815,38 +815,235 @@
         }
 
         .mask-witch {
-            background: radial-gradient(circle at 30% 70%, var(--verde) 0%, var(--vinho) 50%, var(--azul) 100%);
-        }
-
-        /* === NOTIFICAÇÕES === */
-        .notification {
+            background: radial-gradient(circle at 30% 70%, var(--verde) 0%, var(--vinho) 50%, var(--azul) 100        /* === SISTEMA DE NOTIFICAÇÕES ESTILO MSN === */
+        .notification-container {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: var(--vinho);
-            color: var(--pergaminho);
-            border: 2px solid var(--dourado);
-            border-radius: 8px;
-            padding: 12px 16px;
-            max-width: 300px;
-            z-index: 9999;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            animation: slideIn 0.3s ease;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 320px;
+            pointer-events: none;
         }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .notification {
+            background: linear-gradient(to bottom, #c0c0c0 0%, #c0c0c0 1px, #dfdfdf 1px, #dfdfdf 50%, #c0c0c0 50%, #a0a0a0 100%);
+            border-left: 2px solid #ffffff;
+            border-top: 2px solid #ffffff;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
+            border-radius: 0;
+            padding: 8px 12px;
+            font-family: 'MS Sans Serif', 'Microsoft Sans Serif', Tahoma, sans-serif;
+            font-size: 11px;
+            color: #000000;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            transform: translateX(100%);
+            opacity: 0;
+            animation: slideInNotification 0.3s ease-out forwards;
+            pointer-events: auto;
+            cursor: pointer;
+            position: relative;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notification.info {
+            border-left-color: #4169E1;
+        }
+
+        .notification.success {
+            border-left-color: #32CD32;
+        }
+
+        .notification.warning {
+            border-left-color: #f0aa53;
+        }
+
+        .notification.error {
+            border-left-color: #DC143C;
+        }
+
+        .notification.afast {
+            border-left-color: #f0aa53;
+            background: linear-gradient(to bottom, #3e0a29 0%, #3e0a29 1px, #4e1a39 1px, #4e1a39 50%, #3e0a29 50%, #2e0a19 100%);
+            color: #f2eaff;
+            border-left: 2px solid #f0aa53;
+            border-top: 2px solid #f0aa53;
+            border-right: 2px solid #1a0a0f;
+            border-bottom: 2px solid #1a0a0f;
+        }
+
+        .notification-icon {
+            font-size: 16px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .notification-content {
+            flex: 1;
         }
 
         .notification-title {
-            color: var(--dourado);
             font-weight: bold;
-            font-size: 12px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
+            font-size: 11px;
         }
 
         .notification-message {
+            font-size: 10px;
+            line-height: 1.3;
+            color: #333333;
+        }
+
+        .notification.afast .notification-message {
+            color: #b2d1b1;
+        }
+
+        .notification-close {
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            width: 14px;
+            height: 14px;
+            background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
+            border-left: 1px solid #ffffff;
+            border-top: 1px solid #ffffff;
+            border-right: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+            cursor: pointer;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .notification-close:hover {
+            background: linear-gradient(to bottom, #d0d0d0, #b0b0b0);
+        }
+
+        .notification-close:active {
+            border-left: 1px solid #808080;
+            border-top: 1px solid #808080;
+            border-right: 1px solid #ffffff;
+            border-bottom: 1px solid #ffffff;
+            background: linear-gradient(to bottom, #a0a0a0, #c0c0c0);
+        }
+
+        .notification.removing {
+            animation: slideOutNotification 0.3s ease-in forwards;
+        }
+
+        @keyframes slideInNotification {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutNotification {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        /* === HISTÓRICO DE NOTIFICAÇÕES === */
+        .notification-history {
+            position: fixed;
+            top: 50px;
+            right: 20px;
+            width: 300px;
+            max-height: 400px;
+            background: linear-gradient(to bottom, #c0c0c0 0%, #c0c0c0 1px, #dfdfdf 1px, #dfdfdf 50%, #c0c0c0 50%, #a0a0a0 100%);
+            border-left: 2px solid #ffffff;
+            border-top: 2px solid #ffffff;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
+            display: none;
+            z-index: 9999;
+            font-family: 'MS Sans Serif', 'Microsoft Sans Serif', Tahoma, sans-serif;
+            font-size: 11px;
+        }
+
+        .notification-history-header {
+            background: linear-gradient(to bottom, #0b1836 0%, #1e3c72 100%);
+            color: #f2eaff;
+            padding: 4px 8px;
+            font-weight: bold;
+            border-bottom: 1px solid #808080;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-history-close {
+            background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
+            border-left: 1px solid #ffffff;
+            border-top: 1px solid #ffffff;
+            border-right: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+            width: 16px;
+            height: 14px;
+            cursor: pointer;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .notification-history-list {
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .notification-history-item {
+            padding: 6px 8px;
+            border-bottom: 1px solid #a0a0a0;
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        .notification-history-item:hover {
+            background: linear-gradient(to bottom, #d0d0d0, #c0c0c0);
+        }
+
+        .notification-history-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-history-time {
+            color: #666666;
+            font-size: 9px;
+            float: right;
+        }
+
+        .notification-history-title {
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .notification-history-message {
+            color: #333333;
+            line-height: 1.2;
+        }ication-message {
             font-size: 11px;
             line-height: 1.3;
         }
@@ -1083,6 +1280,20 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Sistema de Notificações -->
+    <div class="notification-container" id="notification-container"></div>
+    
+    <!-- Histórico de Notificações -->
+    <div class="notification-history" id="notification-history">
+        <div class="notification-history-header">
+            <span>📱 Histórico de Notificações</span>
+            <div class="notification-history-close" onclick="closeNotificationHistory()">×</div>
+        </div>
+        <div class="notification-history-list" id="notification-history-list">
+            <!-- Histórico será preenchido dinamicamente -->
         </div>
     </div>
 
@@ -2093,10 +2304,523 @@
                 }
             }, 5000);
             
-            console.log('🌟 MysticSoft carregado com sucesso!');
-        });
+        // === SISTEMA DE NOTIFICAÇÕES ESTILO MSN ===
+        class NotificationManager {
+            constructor() {
+                this.notifications = [];
+                this.history = [];
+                this.container = document.getElementById('notification-container');
+                this.maxNotifications = 5;
+                this.defaultDuration = 5000;
+                this.notificationId = 0;
+            }
 
-        // === SISTEMA DE PAPEL DE PAREDE ===
+            show(title, message, type = 'info', duration = null, icon = null) {
+                const id = ++this.notificationId;
+                const notification = this.createNotification(id, title, message, type, icon);
+                
+                // Adicionar ao container
+                this.container.appendChild(notification);
+                this.notifications.push({ id, element: notification, type });
+                
+                // Adicionar ao histórico
+                this.addToHistory(title, message, type);
+                
+                // Limitar número de notificações
+                this.limitNotifications();
+                
+                // Auto-dismiss
+                if (duration !== 0) {
+                    setTimeout(() => this.remove(id), duration || this.defaultDuration);
+                }
+                
+                // Som baseado no tipo
+                this.playNotificationSound(type);
+                
+                return id;
+            }
+
+            createNotification(id, title, message, type, customIcon) {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.dataset.id = id;
+                
+                const icons = {
+                    info: '💬',
+                    success: '✅',
+                    warning: '⚠️',
+                    error: '❌',
+                    afast: '🛡️'
+                };
+                
+                const icon = customIcon || icons[type] || icons.info;
+                
+                notification.innerHTML = `
+                    <div class="notification-icon">${icon}</div>
+                    <div class="notification-content">
+                        <div class="notification-title">${title}</div>
+                        <div class="notification-message">${message}</div>
+                    </div>
+                    <div class="notification-close" onclick="notificationManager.remove(${id})">×</div>
+                `;
+                
+                // Clique para fechar
+                notification.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('notification-close')) {
+                        this.remove(id);
+                    }
+                });
+                
+                return notification;
+            }
+
+            remove(id) {
+                const notification = this.notifications.find(n => n.id === id);
+                if (notification) {
+                    notification.element.classList.add('removing');
+                    
+                    setTimeout(() => {
+                        if (notification.element.parentNode) {
+                            notification.element.parentNode.removeChild(notification.element);
+                        }
+                        this.notifications = this.notifications.filter(n => n.id !== id);
+                    }, 300);
+                }
+            }
+
+            limitNotifications() {
+                while (this.notifications.length > this.maxNotifications) {
+                    const oldest = this.notifications[0];
+                    this.remove(oldest.id);
+                }
+            }
+
+            addToHistory(title, message, type) {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('pt-BR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                
+                this.history.unshift({
+                    title,
+                    message,
+                    type,
+                    time: timeString,
+                    timestamp: now
+                });
+                
+                // Limitar histórico a 50 itens
+                if (this.history.length > 50) {
+                    this.history = this.history.slice(0, 50);
+                }
+                
+                this.updateHistoryDisplay();
+            }
+
+            updateHistoryDisplay() {
+                const historyList = document.getElementById('notification-history-list');
+                historyList.innerHTML = '';
+                
+                this.history.forEach(item => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'notification-history-item';
+                    historyItem.innerHTML = `
+                        <div class="notification-history-time">${item.time}</div>
+                        <div class="notification-history-title">${item.title}</div>
+                        <div class="notification-history-message">${item.message}</div>
+                    `;
+                    historyList.appendChild(historyItem);
+                });
+            }
+
+            showHistory() {
+                document.getElementById('notification-history').style.display = 'block';
+            }
+
+            hideHistory() {
+                document.getElementById('notification-history').style.display = 'none';
+            }
+
+            playNotificationSound(type) {
+                if (auroraSounds) {
+                    switch (type) {
+                        case 'success':
+                            auroraSounds.play('notify');
+                            break;
+                        case 'error':
+                            auroraSounds.play('error');
+                            break;
+                        case 'warning':
+                            auroraSounds.play('nudge');
+                            break;
+                        case 'afast':
+                            auroraSounds.play('notify');
+                            break;
+                        default:
+                            auroraSounds.play('notify');
+                    }
+                }
+            }
+
+            // Métodos de conveniência
+            info(title, message, duration) {
+                return this.show(title, message, 'info', duration);
+            }
+
+            success(title, message, duration) {
+                return this.show(title, message, 'success', duration);
+            }
+
+            warning(title, message, duration) {
+                return this.show(title, message, 'warning', duration);
+            }
+
+            error(title, message, duration) {
+                return this.show(title, message, 'error', duration);
+            }
+
+            afast(title, message, duration) {
+                return this.show(title, message, 'afast', duration, '🛡️');
+            }
+        }
+
+        // Funções globais para o histórico
+        function closeNotificationHistory() {
+            notificationManager.hideHistory();
+        }
+
+        // === SISTEMA DE SONS RETRÔ/MÁGICOS ===
+        class AuroraSounds {
+            constructor() {
+                this.audioContext = null;
+                this.sounds = {};
+                this.initialized = false;
+                this.volume = 0.7;
+                this.init();
+            }
+
+            async init() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    await this.generateSounds();
+                    this.initialized = true;
+                    console.log('🔊 Sistema de sons Aurora carregado');
+                } catch (error) {
+                    console.log('Erro ao inicializar áudio:', error);
+                }
+            }
+
+            async generateSounds() {
+                // Sons baseados na paleta Aurora Sagrada
+                this.sounds = {
+                    boot: await this.createBootSound(),
+                    shutdown: await this.createShutdownSound(),
+                    notify: await this.createNotifySound(),
+                    error: await this.createErrorSound(),
+                    nudge: await this.createNudgeSound(),
+                    click: await this.createClickSound(),
+                    delete: await this.createDeleteSound(),
+                    success: await this.createSuccessSound(),
+                    warning: await this.createWarningSound()
+                };
+            }
+
+            // Som de inicialização mística (2s)
+            async createBootSound() {
+                const duration = 2.0;
+                const sampleRate = this.audioContext.sampleRate;
+                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < data.length; i++) {
+                    const t = i / sampleRate;
+                    
+                    // Acorde mágico: Dó + Mi + Sol + Si (frequências douradas)
+                    const note1 = Math.sin(2 * Math.PI * 261.63 * t); // Dó
+                    const note2 = Math.sin(2 * Math.PI * 329.63 * t); // Mi
+                    const note3 = Math.sin(2 * Math.PI * 392.00 * t); // Sol
+                    const note4 = Math.sin(2 * Math.PI * 493.88 * t); // Si
+                    
+                    // Envelope de fade-in suave
+                    const envelope = Math.min(1, t * 2) * Math.max(0, 1 - (t - 1.5) * 2);
+                    
+                    // Reverb místico
+                    const reverb = Math.sin(2 * Math.PI * 880 * t) * 0.1 * envelope;
+                    
+                    data[i] = (note1 + note2 + note3 + note4) * 0.15 * envelope + reverb;
+                }
+
+                return buffer;
+            }
+
+            // Som de encerramento (1.5s)
+            async createShutdownSound() {
+                const duration = 1.5;
+                const sampleRate = this.audioContext.sampleRate;
+                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < data.length; i++) {
+                    const t = i / sampleRate;
+                    
+                    // Sino descendente
+                    const freq = 880 * Math.exp(-t * 2); // Frequência decrescente
+                    const sine = Math.sin(2 * Math.PI * freq * t);
+                    
+                    // Envelope de fade-out
+                    const envelope = Math.exp(-t * 3);
+                    
+                    data[i] = sine * 0.3 * envelope;
+                }
+
+                return buffer;
+            }
+
+            // Notificação cristalina (0.4s)
+            async createNotifySound() {
+                const duration = 0.4;
+                const sampleRate = this.audioContext.sampleRate;
+                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < data.length; i++) {
+                    const t = i / sampleRate;
+                    
+                    // Ping cristalino (verde sálvia)
+                    const freq = 1760; // Lá agudo
+                    const sine = Math.sin(2 * Math.PI * freq * t);
+                    
+                    // Envelope rápido
+                    const envelope = Math.exp(-t * 8);
+                    
+                    data[i] = sine * 0.4 * envelope;
+                }
+
+                return buffer;
+            }
+
+            // Som de erro (0.6s)
+            async createErrorSound() {
+                const duration = 0.6;
+                const sampleRate = this.audioContext.sampleRate;
+                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < data.length; i++) {
+                    const t = i / sampleRate;
+                    
+                    // Tom grave com eco (vinho profundo)
+                    const freq = 220; // Lá grave
+                    const sine = Math.sin(2 * Math.PI * freq * t);
+                    
+                    // Eco
+                    const echo = Math.sin(2 * Math.PI * freq * (t - 0.1)) * 0.3;
+                    
+                    // Envelope
+                    const envelope = Math.exp(-t * 4);
+                    
+                    data[i] = (sine + echo) * 0.5 * envelope;
+                }
+
+                return buffer;
+            }
+
+            // Nudge/chamar atenção (0.5s)
+            async createNudgeSound() {
+                const duration = 0.5;
+                const sampleRate = this.audioContext.sampleRate;
+                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < data.length; i++) {
+                    const t = i / sampleRate;
+                    
+                    // Duplo bip vibrante (dourado solar)
+                    let signal = 0;
+                    
+                    if (t < 0.15) {
+                        signal = Math.sin(2 * Math.PI * 1320 * t); // Primeiro bip
+                    } else if (t > 0.25 && t < 0.4) {
+                        signal = Math.sin(2 * Math.PI * 1320 * (t - 0.25)); // Segundo bip
+                    }
+                    
+                    // Vibração
+                    const vibration = 1 + Math.sin(2 * Math.PI * 20 * t) * 0.1;
+                    
+                    // Envelope
+                    const envelope = Math.exp(-t * 6);
+                    
+                    data[i] = signal * vibration * 0.4 * envelope;
+                }
+
+                return buffer;
+            }
+
+            // Clique seco (0.1s)
+            async createClickSound() {
+                const duration = 0.1;
+                const sampleRate = this.audioContext.sampleRate;
+                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < data.length; i++) {
+                    const t = i / sampleRate;
+                    
+                    // Clique agudo rápido
+                    const freq = 2640; // Muito agudo
+                    const sine = Math.sin(2 * Math.PI * freq * t);
+                    
+                    // Envelope muito rápido
+                    const envelope = Math.exp(-t * 50);
+                    
+                    data[i] = sine * 0.3 * envelope;
+                }
+
+                return buffer;
+            }
+
+            // Som de deletar (0.7s)
+            async createDeleteSound() {
+                const duration = 0.7;
+                const sampleRate = this.audioContext.sampleRate;
+                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < data.length; i++) {
+                    const t = i / sampleRate;
+                    
+                    // Whoosh descendente
+                    const freq = 1760 * Math.exp(-t * 3); // Frequência decrescente
+                    const noise = (Math.random() - 0.5) * 0.1; // Ruído branco sutil
+                    const sine = Math.sin(2 * Math.PI * freq * t);
+                    
+                    // Envelope
+                    const envelope = Math.exp(-t * 2);
+                    
+                    data[i] = (sine + noise) * 0.3 * envelope;
+                }
+
+                return buffer;
+            }
+
+            // Som de sucesso (0.5s)
+            async createSuccessSound() {
+                const duration = 0.5;
+                const sampleRate = this.audioContext.sampleRate;
+                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < data.length; i++) {
+                    const t = i / sampleRate;
+                    
+                    // Acorde ascendente (verde sálvia)
+                    let freq = 440; // Lá
+                    if (t > 0.15) freq = 554.37; // Dó#
+                    if (t > 0.3) freq = 659.25; // Mi
+                    
+                    const sine = Math.sin(2 * Math.PI * freq * t);
+                    
+                    // Envelope
+                    const envelope = Math.exp(-t * 4);
+                    
+                    data[i] = sine * 0.3 * envelope;
+                }
+
+                return buffer;
+            }
+
+            // Som de aviso (0.4s)
+            async createWarningSound() {
+                const duration = 0.4;
+                const sampleRate = this.audioContext.sampleRate;
+                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < data.length; i++) {
+                    const t = i / sampleRate;
+                    
+                    // Tom de alerta (dourado)
+                    const freq = 880;
+                    const sine = Math.sin(2 * Math.PI * freq * t);
+                    
+                    // Modulação de amplitude
+                    const modulation = 1 + Math.sin(2 * Math.PI * 10 * t) * 0.3;
+                    
+                    // Envelope
+                    const envelope = Math.exp(-t * 6);
+                    
+                    data[i] = sine * modulation * 0.4 * envelope;
+                }
+
+                return buffer;
+            }
+
+            // Reproduzir som
+            play(soundName) {
+                if (!this.initialized || !this.sounds[soundName]) {
+                    return;
+                }
+
+                try {
+                    const source = this.audioContext.createBufferSource();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    source.buffer = this.sounds[soundName];
+                    gainNode.gain.value = this.volume;
+                    
+                    source.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    source.start();
+                } catch (error) {
+                    console.log('Erro ao reproduzir som:', error);
+                }
+            }
+
+            // Obter URL base64 (para compatibilidade)
+            get(soundName) {
+                return null; // Não implementado para síntese em tempo real
+            }
+
+            // Ajustar volume
+            setVolume(volume) {
+                this.volume = Math.max(0, Math.min(1, volume));
+            }
+        }
+
+        // === SISTEMA DE VOZ PARA AFAST! ===
+        class AFASTVoice {
+            constructor() {
+                this.synth = window.speechSynthesis;
+                this.voice = null;
+                this.setupVoice();
+            }
+
+            setupVoice() {
+                const voices = this.synth.getVoices();
+                // Procurar voz em português
+                this.voice = voices.find(voice => 
+                    voice.lang.includes('pt') || 
+                    voice.lang.includes('BR')
+                ) || voices[0];
+            }
+
+            speak(text) {
+                if (!this.synth) return;
+
+                // Substituir AFAST! por AFASTE na pronúncia
+                const spokenText = text.replace(/AFAST!/g, 'AFASTE');
+
+                const utterance = new SpeechSynthesisUtterance(spokenText);
+                utterance.voice = this.voice;
+                utterance.rate = 0.9;
+                utterance.pitch = 1.0;
+                utterance.volume = 0.8;
+
+                this.synth.speak(utterance);
+            }
+        }
         class WallpaperManager {
             constructor() {
                 this.wallpapers = [
@@ -2278,11 +3002,35 @@
             wallpaperManager.showProperties();
         }
 
-        // Inicializar gerenciador de papel de parede
+        // === INICIALIZAÇÃO DOS SISTEMAS ===
         let wallpaperManager;
+        let auroraSounds;
+        let notificationManager;
+        let afastVoice;
+
         document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar sistemas
             wallpaperManager = new WallpaperManager();
+            auroraSounds = new AuroraSounds();
+            notificationManager = new NotificationManager();
+            afastVoice = new AFASTVoice();
+            
+            // Aguardar carregamento das vozes
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = () => {
+                    afastVoice.setupVoice();
+                };
+            }
+            
+            console.log('🌟 Todos os sistemas MysticSoft carregados com sucesso!');
         });
+
+        // Função global para mostrar notificações (compatibilidade)
+        function showNotification(title, message, type = 'info') {
+            if (notificationManager) {
+                return notificationManager.show(title, message, type);
+            }
+        }
     </script>
 </body>
 </html>
