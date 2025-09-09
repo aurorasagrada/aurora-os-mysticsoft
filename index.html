@@ -168,81 +168,282 @@
             font-size: 12px;
             text-align: center;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            font-weight: bold;
+            font-weight: normal;
         }
 
-        /* === BARRA DE TAREFAS === */
+        /* === BARRA DE TAREFAS WINDOWS ME === */
         .taskbar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 40px;
-            background: linear-gradient(to bottom, #4a5568, var(--vinho));
-            border-top: 2px solid var(--dourado);
+            height: 30px;
+            background: linear-gradient(to bottom, #d4d0c8 0%, #c0c0c0 50%, #a0a0a0 100%);
+            border-top: 1px solid #ffffff;
+            border-bottom: 1px solid #404040;
             display: flex;
             align-items: center;
-            padding: 0 10px;
+            justify-content: space-between;
+            padding: 0;
             z-index: 1000;
+            box-shadow: inset 0 1px 0 #ffffff, inset 0 -1px 0 #808080;
+            font-family: 'MS Sans Serif', Tahoma, sans-serif;
+            font-size: 11px;
         }
 
         .start-button {
-            background: linear-gradient(to bottom, var(--dourado), #d4941f);
-            color: var(--vinho);
-            border: 2px outset var(--dourado);
-            padding: 4px 12px;
+            background: linear-gradient(to bottom, #7fb069 0%, #6fa055 50%, #5a8a4a 100%);
+            border: 1px outset #7fb069;
+            border-left: 2px outset #7fb069;
+            border-top: 2px outset #7fb069;
+            color: white;
+            padding: 3px 8px 3px 20px;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
-            margin-right: 10px;
+            height: 24px;
+            margin: 3px 2px;
+            position: relative;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.5);
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+        }
+
+        .start-button:before {
+            content: "🌟";
+            position: absolute;
+            left: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
         }
 
         .start-button:hover {
-            background: linear-gradient(to bottom, #fff, var(--dourado));
+            background: linear-gradient(to bottom, #8fc079 0%, #7fb065 50%, #6a9a5a 100%);
         }
 
         .start-button:active {
-            border: 2px inset var(--dourado);
+            border: 1px inset #7fb069;
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
         }
 
         .taskbar-apps {
             flex: 1;
             display: flex;
-            gap: 5px;
+            gap: 1px;
+            margin: 0 4px;
+            height: 24px;
+            align-items: center;
         }
 
         .taskbar-app {
-            background: var(--vinho);
-            color: var(--pergaminho);
-            border: 1px outset #666;
-            padding: 4px 8px;
+            background: linear-gradient(to bottom, #d4d0c8 0%, #c0c0c0 50%, #a0a0a0 100%);
+            border: 1px outset #c0c0c0;
+            padding: 2px 8px;
             font-size: 11px;
             cursor: pointer;
             max-width: 150px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .taskbar-app:hover {
-            background: var(--dourado);
-            color: var(--vinho);
+            background: linear-gradient(to bottom, #e4e0d8 0%, #d0d0d0 50%, #b0b0b0 100%);
+        }
+
+        .taskbar-app.active {
+            border: 1px inset #c0c0c0;
+            background: linear-gradient(to bottom, #a0a0a0 0%, #c0c0c0 50%, #d4d0c8 100%);
         }
 
         .system-tray {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-left: auto;
+            gap: 4px;
+            padding: 0 4px;
+            height: 24px;
+            border-left: 1px solid #808080;
+            border-right: 1px solid #ffffff;
+            background: linear-gradient(to bottom, #d4d0c8 0%, #c0c0c0 50%, #a0a0a0 100%);
+            margin: 3px 2px 3px 0;
         }
 
-        .tray-icon {
-            color: var(--dourado);
-            font-size: 16px;
+        .system-tray-icon {
+            width: 16px;
+            height: 16px;
             cursor: pointer;
-            padding: 2px 4px;
-            border-radius: 3px;
-            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            padding: 1px;
+            border-radius: 1px;
+        }
+
+        .system-tray-icon:hover {
+            border: 1px outset #c0c0c0;
+            background: linear-gradient(to bottom, #e4e0d8, #d0d0d0);
+        }
+
+        .planetary-indicator {
+            font-size: 12px;
+            color: #f0aa53;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            animation: planetaryGlow 2s ease-in-out infinite alternate;
+            cursor: pointer;
+            padding: 2px;
+            border-radius: 2px;
+        }
+
+        .planetary-indicator:hover {
+            background: rgba(240, 170, 83, 0.2);
+            border: 1px solid rgba(240, 170, 83, 0.5);
+        }
+
+        .clock {
+            font-family: 'MS Sans Serif', Tahoma, sans-serif;
+            font-size: 11px;
+            color: #000000;
+            padding: 3px 8px;
+            background: linear-gradient(to bottom, #d4d0c8 0%, #c0c0c0 50%, #a0a0a0 100%);
+            border: 1px inset #c0c0c0;
+            border-left: 1px solid #808080;
+            border-top: 1px solid #808080;
+            border-right: 1px solid #ffffff;
+            border-bottom: 1px solid #ffffff;
+            min-width: 50px;
+            text-align: center;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 3px 2px;
+            cursor: pointer;
+            box-shadow: inset 1px 1px 1px rgba(128,128,128,0.5);
+        }
+
+        .clock:hover {
+            background: linear-gradient(to bottom, #e4e0d8 0%, #d0d0d0 50%, #b0b0b0 100%);
+        }
+
+        .clock:active {
+            border: 1px inset #c0c0c0;
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* === MENU DE CONTEXTO === */
+        .context-menu {
+            position: fixed;
+            background: linear-gradient(to bottom, #d4d0c8, #c0c0c0);
+            border: 2px outset #c0c0c0;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            z-index: 2000;
+            min-width: 150px;
+            font-family: 'MS Sans Serif', Tahoma, sans-serif;
+            font-size: 11px;
+            display: none;
+        }
+
+        .context-menu-item {
+            padding: 4px 16px 4px 24px;
+            cursor: pointer;
+            position: relative;
+            border-bottom: 1px solid #a0a0a0;
+        }
+
+        .context-menu-item:hover {
+            background: linear-gradient(to bottom, #316ac5, #1e4176);
+            color: white;
+        }
+
+        .context-menu-item:before {
+            content: "";
+            position: absolute;
+            left: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background-size: contain;
+        }
+
+        .context-menu-item.wallpaper:before {
+            content: "🖼️";
+            font-size: 12px;
+        }
+
+        .context-menu-item.refresh:before {
+            content: "🔄";
+            font-size: 12px;
+        }
+
+        .context-menu-item.properties:before {
+            content: "⚙️";
+            font-size: 12px;
+        }
+
+        /* === JANELA DE PAPEL DE PAREDE === */
+        .wallpaper-window {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 300px;
+            background: linear-gradient(to bottom, #d4d0c8, #c0c0c0);
+            border: 2px outset #c0c0c0;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            z-index: 1500;
+            display: none;
+        }
+
+        .wallpaper-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 16px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .wallpaper-option {
+            width: 80px;
+            height: 60px;
+            border: 2px inset #c0c0c0;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .wallpaper-option:hover {
+            border: 2px outset #c0c0c0;
+        }
+
+        .wallpaper-option.selected {
+            border: 2px solid #316ac5;
+            box-shadow: 0 0 4px #316ac5;
+        }
+
+        .wallpaper-controls {
+            padding: 8px 16px;
+            border-top: 1px solid #a0a0a0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wallpaper-upload {
+            font-size: 10px;
+            padding: 2px 8px;
+            background: linear-gradient(to bottom, #d4d0c8, #c0c0c0);
+            border: 1px outset #c0c0c0;
+            cursor: pointer;
+        }
+
+        .wallpaper-upload:hover {
+            background: linear-gradient(to bottom, #e4e0d8, #d0d0d0);
         }
 
         .tray-icon:hover {
@@ -703,10 +904,43 @@
             <div class="desktop-icon" data-app="lixeira">
                 <div class="icon-image">🗑️</div>
                 <div class="icon-label">Lixeira</div>
+        </div>
+    </div>
+
+    <!-- Menu de Contexto -->
+    <div class="context-menu" id="context-menu">
+        <div class="context-menu-item wallpaper" onclick="openWallpaperWindow()">Papel de Parede</div>
+        <div class="context-menu-item refresh" onclick="refreshDesktop()">Atualizar</div>
+        <div class="context-menu-item properties" onclick="showProperties()">Propriedades</div>
+    </div>
+
+    <!-- Janela de Papel de Parede -->
+    <div class="wallpaper-window" id="wallpaper-window">
+        <div class="window-header">
+            <div class="window-title">
+                <span>🖼️</span>
+                <span>Papel de Parede</span>
+            </div>
+            <div class="window-controls">
+                <button class="window-control" onclick="closeWallpaperWindow()">×</button>
             </div>
         </div>
+        
+        <div class="window-content">
+            <div class="wallpaper-gallery" id="wallpaper-gallery">
+                <!-- Papéis de parede serão adicionados via JavaScript -->
+            </div>
+            <div class="wallpaper-controls">
+                <label class="wallpaper-upload">
+                    📁 Carregar Imagem
+                    <input type="file" accept="image/*" style="display: none;" onchange="uploadWallpaper(event)">
+                </label>
+                <button onclick="applyWallpaper()" style="padding: 4px 12px; background: linear-gradient(to bottom, #d4d0c8, #c0c0c0); border: 1px outset #c0c0c0; cursor: pointer;">Aplicar</button>
+            </div>
+        </div>
+    </div>
 
-        <!-- Barra de Tarefas -->
+    <!-- Barra de Tarefas -->
         <div class="taskbar">
             <button class="start-button" id="start-button">Iniciar</button>
             <div class="taskbar-apps" id="taskbar-apps"></div>
@@ -1811,6 +2045,194 @@
             }, 5000);
             
             console.log('🌟 MysticSoft carregado com sucesso!');
+        });
+
+        // === SISTEMA DE PAPEL DE PAREDE ===
+        class WallpaperManager {
+            constructor() {
+                this.wallpapers = [
+                    { id: 'cosmic', name: 'Cósmico', gradient: 'radial-gradient(circle at 30% 70%, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #7209b7 100%)' },
+                    { id: 'mystical', name: 'Místico', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+                    { id: 'aurora', name: 'Aurora', gradient: 'linear-gradient(45deg, #3e0a29 0%, #0b1836 50%, #f0aa53 100%)' },
+                    { id: 'forest', name: 'Floresta', gradient: 'linear-gradient(180deg, #2d5016 0%, #3e0a29 50%, #0b1836 100%)' },
+                    { id: 'sunset', name: 'Pôr do Sol', gradient: 'linear-gradient(to bottom, #ff7e5f 0%, #feb47b 50%, #3e0a29 100%)' },
+                    { id: 'ocean', name: 'Oceano', gradient: 'linear-gradient(to bottom, #0b1836 0%, #1e3c72 50%, #2a5298 100%)' }
+                ];
+                this.selectedWallpaper = null;
+                this.init();
+            }
+
+            init() {
+                this.loadSavedWallpaper();
+                this.setupContextMenu();
+                this.populateGallery();
+            }
+
+            setupContextMenu() {
+                const desktop = document.getElementById('desktop');
+                
+                desktop.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    this.showContextMenu(e.clientX, e.clientY);
+                });
+
+                document.addEventListener('click', () => {
+                    this.hideContextMenu();
+                });
+            }
+
+            showContextMenu(x, y) {
+                const menu = document.getElementById('context-menu');
+                menu.style.display = 'block';
+                menu.style.left = x + 'px';
+                menu.style.top = y + 'px';
+            }
+
+            hideContextMenu() {
+                document.getElementById('context-menu').style.display = 'none';
+            }
+
+            populateGallery() {
+                const gallery = document.getElementById('wallpaper-gallery');
+                gallery.innerHTML = '';
+
+                this.wallpapers.forEach(wallpaper => {
+                    const option = document.createElement('div');
+                    option.className = 'wallpaper-option';
+                    option.style.background = wallpaper.gradient;
+                    option.dataset.id = wallpaper.id;
+                    option.title = wallpaper.name;
+                    
+                    option.addEventListener('click', () => {
+                        this.selectWallpaper(wallpaper.id);
+                    });
+
+                    gallery.appendChild(option);
+                });
+            }
+
+            selectWallpaper(id) {
+                // Remove seleção anterior
+                document.querySelectorAll('.wallpaper-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+
+                // Adiciona seleção atual
+                const option = document.querySelector(`[data-id="${id}"]`);
+                if (option) {
+                    option.classList.add('selected');
+                    this.selectedWallpaper = this.wallpapers.find(w => w.id === id);
+                }
+            }
+
+            applyWallpaper() {
+                if (this.selectedWallpaper) {
+                    const desktop = document.getElementById('desktop');
+                    desktop.style.background = this.selectedWallpaper.gradient;
+                    
+                    // Salvar no localStorage
+                    localStorage.setItem('mysticsoft_wallpaper', JSON.stringify(this.selectedWallpaper));
+                    
+                    // Som de confirmação
+                    if (auroraSounds) auroraSounds.play('notify');
+                    
+                    // Fechar janela
+                    this.closeWallpaperWindow();
+                    
+                    // Notificação
+                    auroraOS.showNotification('🖼️ Papel de Parede', `${this.selectedWallpaper.name} aplicado com sucesso!`);
+                }
+            }
+
+            uploadWallpaper(event) {
+                const file = event.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const customWallpaper = {
+                            id: 'custom',
+                            name: 'Personalizado',
+                            gradient: `url(${e.target.result})`,
+                            isCustom: true
+                        };
+                        
+                        // Adicionar à lista se não existir
+                        const existingIndex = this.wallpapers.findIndex(w => w.id === 'custom');
+                        if (existingIndex >= 0) {
+                            this.wallpapers[existingIndex] = customWallpaper;
+                        } else {
+                            this.wallpapers.push(customWallpaper);
+                        }
+                        
+                        this.populateGallery();
+                        this.selectWallpaper('custom');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            loadSavedWallpaper() {
+                const saved = localStorage.getItem('mysticsoft_wallpaper');
+                if (saved) {
+                    try {
+                        const wallpaper = JSON.parse(saved);
+                        const desktop = document.getElementById('desktop');
+                        desktop.style.background = wallpaper.gradient;
+                    } catch (e) {
+                        console.log('Erro ao carregar papel de parede salvo');
+                    }
+                }
+            }
+
+            openWallpaperWindow() {
+                document.getElementById('wallpaper-window').style.display = 'block';
+                this.hideContextMenu();
+            }
+
+            closeWallpaperWindow() {
+                document.getElementById('wallpaper-window').style.display = 'none';
+            }
+
+            refreshDesktop() {
+                // Recarregar ícones e atualizar
+                location.reload();
+            }
+
+            showProperties() {
+                auroraOS.showNotification('⚙️ Propriedades', 'MysticSoft v1.0 - Sistema Operacional Mágico');
+                this.hideContextMenu();
+            }
+        }
+
+        // Funções globais para os botões
+        function openWallpaperWindow() {
+            wallpaperManager.openWallpaperWindow();
+        }
+
+        function closeWallpaperWindow() {
+            wallpaperManager.closeWallpaperWindow();
+        }
+
+        function applyWallpaper() {
+            wallpaperManager.applyWallpaper();
+        }
+
+        function uploadWallpaper(event) {
+            wallpaperManager.uploadWallpaper(event);
+        }
+
+        function refreshDesktop() {
+            wallpaperManager.refreshDesktop();
+        }
+
+        function showProperties() {
+            wallpaperManager.showProperties();
+        }
+
+        // Inicializar gerenciador de papel de parede
+        let wallpaperManager;
+        document.addEventListener('DOMContentLoaded', () => {
+            wallpaperManager = new WallpaperManager();
         });
     </script>
 </body>
