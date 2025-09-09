@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MysticSoft • Sistema Operacional Mágico</title>
+    <title>Aurora OS • MysticSoft</title>
     <style>
         :root {
             --vinho: #3e0a29;
@@ -45,15 +45,18 @@
             width: 200px;
             height: 200px;
             margin-bottom: 30px;
-            background: url('assets/icons/MysticSoft.png') center/contain no-repeat;
+            background: linear-gradient(45deg, var(--dourado), #ffd700);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
             filter: drop-shadow(0 0 20px var(--dourado));
-            image-rendering: pixelated;
         }
 
-        .boot-text {
+        .boot-title {
+            font-size: 32px;
             color: var(--dourado);
-            font-size: 24px;
-            font-weight: bold;
             margin-bottom: 20px;
             text-shadow: 0 0 10px var(--dourado);
         }
@@ -61,59 +64,74 @@
         .boot-progress {
             width: 300px;
             height: 8px;
-            background: var(--vinho);
+            background: rgba(255,255,255,0.2);
             border-radius: 4px;
-            border: 2px solid var(--dourado);
             overflow: hidden;
             margin-bottom: 20px;
         }
 
         .boot-progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--dourado), #fff);
+            background: linear-gradient(90deg, var(--dourado), #ffd700);
             width: 0%;
             transition: width 0.3s ease;
         }
 
         .boot-hint {
-            color: var(--verde);
-            font-size: 14px;
+            color: var(--pergaminho);
             opacity: 0.8;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 0.4; }
+            font-size: 14px;
         }
 
         /* === DESKTOP === */
         .desktop {
             display: none;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 50%, var(--azul) 100%);
+        }
+
+        .desktop.active {
+            display: block;
+        }
+
+        /* === BARRA DE TAREFAS === */
+        .taskbar {
             position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg, var(--azul) 0%, #1a2a4a 50%, var(--vinho) 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 20s ease infinite;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border-top: 2px solid #ffffff;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #404040;
         }
 
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        .start-button {
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border: 2px outset #c0c0c0;
+            padding: 8px 16px;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
+            margin-right: 10px;
         }
 
-        .desktop::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 20% 80%, rgba(240, 170, 83, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(178, 209, 177, 0.1) 0%, transparent 50%);
-            animation: starTwinkle 15s ease-in-out infinite;
+        .start-button:active {
+            border: 2px inset #c0c0c0;
         }
 
-        @keyframes starTwinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.7; }
+        .clock {
+            margin-left: auto;
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border: 1px inset #c0c0c0;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #000;
         }
 
         /* === ÍCONES DO DESKTOP === */
@@ -122,427 +140,71 @@
             top: 20px;
             left: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, 100px);
+            grid-template-columns: repeat(auto-fit, 80px);
             gap: 20px;
-            max-width: calc(100% - 40px);
         }
 
         .desktop-icon {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            cursor: pointer;
             padding: 10px;
             border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100px;
+            transition: background 0.2s;
         }
 
         .desktop-icon:hover {
-            background: rgba(240, 170, 83, 0.2);
-            transform: scale(1.05);
-        }
-
-        .desktop-icon.selected {
-            background: rgba(240, 170, 83, 0.3);
-            border: 2px solid var(--dourado);
+            background: rgba(255,255,255,0.1);
         }
 
         .icon-image {
-            width: 64px;
-            height: 64px;
-            background: var(--vinho);
-            border: 2px solid var(--dourado);
+            width: 48px;
+            height: 48px;
+            background: var(--dourado);
             border-radius: 8px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            color: var(--dourado);
-            text-shadow: 0 0 10px var(--dourado);
+            font-size: 24px;
         }
 
         .icon-label {
-            color: var(--pergaminho);
             font-size: 12px;
             text-align: center;
+            color: var(--pergaminho);
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            font-weight: normal;
-        }
-
-        /* === BARRA DE TAREFAS WINDOWS ME AUTÊNTICA === */
-        .taskbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 28px;
-            background: linear-gradient(to bottom, #c0c0c0 0%, #c0c0c0 1px, #dfdfdf 1px, #dfdfdf 50%, #c0c0c0 50%, #a0a0a0 100%);
-            border-top: 1px solid #dfdfdf;
-            border-bottom: 1px solid #404040;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0;
-            z-index: 1000;
-            box-shadow: inset 0 1px 0 #ffffff, inset 0 -1px 0 #808080;
-            font-family: 'MS Sans Serif', 'Microsoft Sans Serif', Tahoma, sans-serif;
-            font-size: 11px;
-        }
-
-        .start-button {
-            background: linear-gradient(to bottom, #7fb069 0%, #7fb069 1px, #8fc079 1px, #8fc079 50%, #7fb069 50%, #5a8a4a 100%);
-            border-left: 1px solid #ffffff;
-            border-top: 1px solid #ffffff;
-            border-right: 1px solid #404040;
-            border-bottom: 1px solid #404040;
-            color: white;
-            padding: 2px 6px 2px 18px;
-            font-weight: bold;
-            font-size: 11px;
-            cursor: pointer;
-            height: 22px;
-            margin: 3px 1px 3px 2px;
-            position: relative;
-            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.3);
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-            min-width: 54px;
-        }
-
-        .start-button:before {
-            content: "🌟";
-            position: absolute;
-            left: 3px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 9px;
-            filter: drop-shadow(0 0 2px rgba(255,255,255,0.8));
-        }
-
-        .start-button:hover {
-            background: linear-gradient(to bottom, #8fc079 0%, #8fc079 1px, #9fd089 1px, #9fd089 50%, #8fc079 50%, #6a9a5a 100%);
-        }
-
-        .start-button:active {
-            border-left: 1px solid #404040;
-            border-top: 1px solid #404040;
-            border-right: 1px solid #ffffff;
-            border-bottom: 1px solid #ffffff;
-            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
-        }
-
-        .taskbar-apps {
-            flex: 1;
-            display: flex;
-            gap: 1px;
-            margin: 0 2px;
-            height: 22px;
-            align-items: center;
-            padding: 3px 0;
-        }
-
-        .taskbar-app {
-            background: linear-gradient(to bottom, #c0c0c0 0%, #c0c0c0 1px, #dfdfdf 1px, #dfdfdf 50%, #c0c0c0 50%, #a0a0a0 100%);
-            border-left: 1px solid #ffffff;
-            border-top: 1px solid #ffffff;
-            border-right: 1px solid #808080;
-            border-bottom: 1px solid #808080;
-            padding: 1px 6px;
-            font-size: 11px;
-            cursor: pointer;
-            max-width: 160px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            color: #000000;
-        }
-
-        .taskbar-app:hover {
-            background: linear-gradient(to bottom, #d0d0d0 0%, #d0d0d0 1px, #efefef 1px, #efefef 50%, #d0d0d0 50%, #b0b0b0 100%);
-        }
-
-        .taskbar-app.active {
-            border-left: 1px solid #808080;
-            border-top: 1px solid #808080;
-            border-right: 1px solid #ffffff;
-            border-bottom: 1px solid #ffffff;
-            background: linear-gradient(to bottom, #a0a0a0 0%, #a0a0a0 1px, #b0b0b0 1px, #b0b0b0 50%, #c0c0c0 50%, #dfdfdf 100%);
-            box-shadow: inset 1px 1px 1px rgba(0,0,0,0.2);
-        }
-
-        .system-tray {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            padding: 0 2px;
-            height: 22px;
-            border-left: 1px solid #808080;
-            border-right: 1px solid #ffffff;
-            background: linear-gradient(to bottom, #c0c0c0 0%, #c0c0c0 1px, #dfdfdf 1px, #dfdfdf 50%, #c0c0c0 50%, #a0a0a0 100%);
-            margin: 3px 1px 3px 0;
-            min-width: 120px;
-        }
-
-        .system-tray:before {
-            content: "";
-            width: 1px;
-            height: 16px;
-            background: linear-gradient(to bottom, #808080, #ffffff);
-            margin-right: 2px;
-        }
-
-        .system-tray-icon {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            padding: 0;
-            border-radius: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
-
-        .system-tray-icon:hover {
-            border-left: 1px solid #ffffff;
-            border-top: 1px solid #ffffff;
-            border-right: 1px solid #808080;
-            border-bottom: 1px solid #808080;
-            background: linear-gradient(to bottom, #d0d0d0, #c0c0c0);
-        }
-
-        .system-tray-icon:active {
-            border-left: 1px solid #808080;
-            border-top: 1px solid #808080;
-            border-right: 1px solid #ffffff;
-            border-bottom: 1px solid #ffffff;
-            background: linear-gradient(to bottom, #a0a0a0, #c0c0c0);
-        }
-
-        .planetary-indicator {
-            font-size: 11px;
-            color: #f0aa53;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-            animation: planetaryGlow 2s ease-in-out infinite alternate;
-            cursor: pointer;
-            padding: 1px;
-            border-radius: 0;
-            width: 16px;
-            height: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .planetary-indicator:hover {
-            background: rgba(240, 170, 83, 0.2);
-            border-left: 1px solid #ffffff;
-            border-top: 1px solid #ffffff;
-            border-right: 1px solid #808080;
-            border-bottom: 1px solid #808080;
-        }
-
-        .clock {
-            font-family: 'MS Sans Serif', 'Microsoft Sans Serif', Tahoma, sans-serif;
-            font-size: 11px;
-            color: #000000;
-            padding: 2px 6px;
-            background: linear-gradient(to bottom, #a0a0a0 0%, #a0a0a0 1px, #b0b0b0 1px, #b0b0b0 50%, #c0c0c0 50%, #dfdfdf 100%);
-            border-left: 1px solid #808080;
-            border-top: 1px solid #808080;
-            border-right: 1px solid #ffffff;
-            border-bottom: 1px solid #ffffff;
-            min-width: 46px;
-            text-align: center;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 3px 2px;
-            cursor: pointer;
-            box-shadow: inset 1px 1px 1px rgba(0,0,0,0.2);
-        }
-
-        .clock:hover {
-            background: linear-gradient(to bottom, #b0b0b0 0%, #b0b0b0 1px, #c0c0c0 1px, #c0c0c0 50%, #d0d0d0 50%, #efefef 100%);
-        }
-
-        .clock:active {
-            border-left: 1px solid #404040;
-            border-top: 1px solid #404040;
-            border-right: 1px solid #dfdfdf;
-            border-bottom: 1px solid #dfdfdf;
-            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
-        }
-
-        /* === MENU DE CONTEXTO === */
-        .context-menu {
-            position: fixed;
-            background: linear-gradient(to bottom, #d4d0c8, #c0c0c0);
-            border: 2px outset #c0c0c0;
-            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            z-index: 2000;
-            min-width: 150px;
-            font-family: 'MS Sans Serif', Tahoma, sans-serif;
-            font-size: 11px;
-            display: none;
-        }
-
-        .context-menu-item {
-            padding: 4px 16px 4px 24px;
-            cursor: pointer;
-            position: relative;
-            border-bottom: 1px solid #a0a0a0;
-        }
-
-        .context-menu-item:hover {
-            background: linear-gradient(to bottom, #316ac5, #1e4176);
-            color: white;
-        }
-
-        .context-menu-item:before {
-            content: "";
-            position: absolute;
-            left: 4px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 16px;
-            height: 16px;
-            background-size: contain;
-        }
-
-        .context-menu-item.wallpaper:before {
-            content: "🖼️";
-            font-size: 12px;
-        }
-
-        .context-menu-item.refresh:before {
-            content: "🔄";
-            font-size: 12px;
-        }
-
-        .context-menu-item.properties:before {
-            content: "⚙️";
-            font-size: 12px;
-        }
-
-        /* === JANELA DE PAPEL DE PAREDE === */
-        .wallpaper-window {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            height: 300px;
-            background: linear-gradient(to bottom, #d4d0c8, #c0c0c0);
-            border: 2px outset #c0c0c0;
-            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-            z-index: 1500;
-            display: none;
-        }
-
-        .wallpaper-gallery {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            padding: 16px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .wallpaper-option {
-            width: 80px;
-            height: 60px;
-            border: 2px inset #c0c0c0;
-            cursor: pointer;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .wallpaper-option:hover {
-            border: 2px outset #c0c0c0;
-        }
-
-        .wallpaper-option.selected {
-            border: 2px solid #316ac5;
-            box-shadow: 0 0 4px #316ac5;
-        }
-
-        .wallpaper-controls {
-            padding: 8px 16px;
-            border-top: 1px solid #a0a0a0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .wallpaper-upload {
-            font-size: 10px;
-            padding: 2px 8px;
-            background: linear-gradient(to bottom, #d4d0c8, #c0c0c0);
-            border: 1px outset #c0c0c0;
-            cursor: pointer;
-        }
-
-        .wallpaper-upload:hover {
-            background: linear-gradient(to bottom, #e4e0d8, #d0d0d0);
-        }
-
-        .tray-icon:hover {
-            background: rgba(240, 170, 83, 0.3);
-            transform: scale(1.1);
-        }
-
-        .clock {
-            color: var(--pergaminho);
-            font-size: 12px;
-            font-family: monospace;
-            padding: 4px 8px;
-            background: var(--vinho);
-            border: 1px inset #666;
-            cursor: pointer;
         }
 
         /* === JANELAS === */
         .window {
             position: absolute;
-            background: var(--pergaminho);
-            border: 3px outset #ccc;
-            border-radius: 0;
-            box-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
             min-width: 300px;
             min-height: 200px;
-            z-index: 100;
             display: none;
+            z-index: 1000;
         }
 
         .window.active {
-            z-index: 200;
+            display: block;
         }
 
         .window-header {
-            background: linear-gradient(to bottom, var(--dourado), #d4941f);
-            color: var(--vinho);
+            background: linear-gradient(90deg, #0000ff, #000080);
+            color: white;
             padding: 4px 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: move;
-            font-weight: bold;
-            font-size: 12px;
         }
 
         .window-title {
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            font-weight: bold;
+            font-size: 12px;
         }
 
         .window-controls {
@@ -550,533 +212,398 @@
             gap: 2px;
         }
 
-        .window-control {
-            width: 18px;
-            height: 18px;
-            background: var(--pergaminho);
-            border: 1px outset #ccc;
-            color: var(--vinho);
+        .window-btn {
+            width: 16px;
+            height: 14px;
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
             font-size: 10px;
-            font-weight: bold;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .window-control:hover {
-            background: var(--dourado);
-        }
-
-        .window-control:active {
-            border: 1px inset #ccc;
+        .window-btn:active {
+            border: 1px inset #c0c0c0;
         }
 
         .window-content {
             padding: 15px;
-            background: var(--pergaminho);
-            color: var(--vinho);
-            height: calc(100% - 30px);
-            overflow: auto;
+            background: #c0c0c0;
+            color: #000;
+        }
+
+        /* === WIDGET ASTROMÁGICK === */
+        .astromagick-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background: rgba(11, 24, 54, 0.9);
+            border: 2px solid var(--dourado);
+            border-radius: 12px;
+            padding: 15px;
+            color: var(--pergaminho);
+            backdrop-filter: blur(10px);
+        }
+
+        .widget-header {
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--dourado);
+            font-weight: bold;
+        }
+
+        .astro-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .astro-item {
+            background: rgba(240, 170, 83, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(240, 170, 83, 0.3);
+        }
+
+        .astro-label {
+            color: var(--verde);
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .astro-value {
+            color: var(--pergaminho);
         }
 
         /* === AURORA PLAYER === */
         .aurora-player {
-            width: 480px;
-            height: 580px;
-            background: var(--azul);
+            width: 500px;
+            height: 400px;
+        }
+
+        .player-header {
+            background: linear-gradient(135deg, var(--vinho), var(--azul));
             color: var(--pergaminho);
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
         }
 
         .player-content {
-            padding: 15px;
+            background: #c0c0c0;
+            padding: 0;
+            height: calc(100% - 40px);
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            height: 100%;
         }
 
-        .skin-selector {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px;
-            background: var(--vinho);
-            border-radius: 6px;
-            border: 1px solid var(--dourado);
-        }
-
-        .skin-selector label {
+        .player-display {
+            background: #000;
             color: var(--dourado);
-            font-weight: bold;
-            font-size: 12px;
-        }
-
-        .skin-selector select {
-            background: var(--pergaminho);
-            color: var(--vinho);
-            border: 1px solid var(--dourado);
-            border-radius: 4px;
-            padding: 4px 8px;
-            font-size: 12px;
-        }
-
-        .player-mask-container {
-            position: relative;
-            width: 100%;
-            height: 200px;
-            background: var(--vinho);
-            border-radius: 12px;
-            border: 2px solid var(--dourado);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .mask-frame {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .player-viewport {
-            position: relative;
-            width: 80%;
-            height: 70%;
-            background: #000;
-            border-radius: 8px;
-            border: 2px solid var(--dourado);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #audio-visualizer {
-            width: 100%;
-            height: 100%;
-            background: #000;
+            padding: 15px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            border-bottom: 2px inset #c0c0c0;
         }
 
         .track-info {
-            text-align: center;
-            padding: 8px;
-            background: var(--vinho);
-            border-radius: 6px;
-            border: 1px solid var(--dourado);
-        }
-
-        .track-title {
-            color: var(--dourado);
-            font-weight: bold;
             font-size: 14px;
+            margin-bottom: 5px;
         }
 
-        .track-artist {
-            color: var(--verde);
+        .time-info {
             font-size: 12px;
-            margin-top: 2px;
+            opacity: 0.8;
         }
 
-        .control-buttons {
+        .player-controls {
+            padding: 15px;
             display: flex;
             justify-content: center;
-            gap: 8px;
-            padding: 10px;
+            gap: 10px;
+            border-bottom: 2px inset #c0c0c0;
         }
 
-        .control-buttons button {
+        .control-btn {
             width: 40px;
-            height: 40px;
-            background: var(--vinho);
-            color: var(--dourado);
-            border: 2px solid var(--dourado);
-            border-radius: 50%;
+            height: 30px;
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border: 2px outset #c0c0c0;
             cursor: pointer;
-            font-size: 16px;
-            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 16px;
         }
 
-        .control-buttons button:hover {
-            background: var(--dourado);
-            color: var(--vinho);
-            transform: scale(1.1);
+        .control-btn:active {
+            border: 2px inset #c0c0c0;
         }
 
-        .control-buttons button.active {
-            background: var(--dourado);
-            color: var(--vinho);
-        }
-
-        .progress-container {
+        .volume-section {
+            padding: 10px 15px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 5px;
+            gap: 10px;
+            border-bottom: 2px inset #c0c0c0;
         }
 
-        .time-display {
-            color: var(--dourado);
-            font-size: 11px;
-            font-family: monospace;
-            min-width: 35px;
+        .volume-slider {
+            flex: 1;
+            height: 20px;
         }
 
-        .progress-bar {
-            flex-grow: 1;
-            position: relative;
-            height: 6px;
-            background: var(--vinho);
+        .playlist-section {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .playlist-item {
+            padding: 5px 10px;
+            cursor: pointer;
             border-radius: 3px;
-            border: 1px solid var(--dourado);
-        }
-
-        .progress-fill {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            background: var(--dourado);
-            border-radius: 3px;
-            width: 0%;
-            transition: width 0.1s ease;
-        }
-
-        .volume-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px;
-        }
-
-        .volume-container span {
-            color: var(--dourado);
+            margin-bottom: 2px;
             font-size: 12px;
         }
 
-        .playlist-container {
+        .playlist-item:hover {
+            background: #e0e0e0;
+        }
+
+        .playlist-item.active {
+            background: var(--azul);
+            color: white;
+        }
+
+        .admin-section {
+            padding: 10px;
+            border-top: 2px inset #c0c0c0;
+        }
+
+        .admin-btn {
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border: 2px outset #c0c0c0;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-right: 5px;
+            font-size: 11px;
+        }
+
+        .admin-btn:active {
+            border: 2px inset #c0c0c0;
+        }
+
+        /* === WITCH.TV === */
+        .witch-tv {
+            width: 600px;
+            height: 450px;
+        }
+
+        .tv-screen {
+            background: #000;
+            height: 250px;
+            border: 3px inset #c0c0c0;
+            margin: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tv-static {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255,255,255,0.1) 2px,
+                rgba(255,255,255,0.1) 4px
+            );
+            animation: static 0.1s infinite;
+        }
+
+        @keyframes static {
+            0% { opacity: 0.8; }
+            50% { opacity: 0.4; }
+            100% { opacity: 0.8; }
+        }
+
+        .tv-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pergaminho);
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .channel-list {
+            padding: 10px;
             max-height: 120px;
             overflow-y: auto;
         }
 
-        .playlist-container h4 {
-            color: var(--dourado);
-            margin: 0 0 8px 0;
-            font-size: 12px;
-            text-align: center;
-        }
-
-        .playlist {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .playlist-item {
-            padding: 6px 10px;
-            background: var(--vinho);
-            color: var(--pergaminho);
-            border-radius: 4px;
-            border: 1px solid var(--dourado);
+        .channel-item {
+            padding: 5px 10px;
             cursor: pointer;
-            font-size: 11px;
-            transition: all 0.2s ease;
-        }
-
-        .playlist-item:hover {
-            background: var(--dourado);
-            color: var(--vinho);
-        }
-
-        .playlist-item.active {
-            background: var(--dourado);
-            color: var(--vinho);
-            font-weight: bold;
-        }
-
-        /* Máscaras */
-        .mask-classic {
-            background: radial-gradient(circle at center, var(--vinho) 0%, var(--azul) 70%);
-        }
-
-        .mask-mystical {
-            background: radial-gradient(ellipse at center, var(--dourado) 0%, var(--vinho) 40%, var(--azul) 100%);
-        }
-
-        .mask-celestial {
-            background: linear-gradient(45deg, var(--azul) 0%, var(--vinho) 50%, var(--dourado) 100%);
-        }
-
-        .mask-witch {
-            background: radial-gradient(circle at 30% 70%, var(--verde) 0%, var(--vinho) 50%, var(--azul) 100        /* === SISTEMA DE NOTIFICAÇÕES ESTILO MSN === */
-        .notification-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-width: 320px;
-            pointer-events: none;
-        }
-
-        .notification {
-            background: linear-gradient(to bottom, #c0c0c0 0%, #c0c0c0 1px, #dfdfdf 1px, #dfdfdf 50%, #c0c0c0 50%, #a0a0a0 100%);
-            border-left: 2px solid #ffffff;
-            border-top: 2px solid #ffffff;
-            border-right: 2px solid #808080;
-            border-bottom: 2px solid #808080;
-            border-radius: 0;
-            padding: 8px 12px;
-            font-family: 'MS Sans Serif', 'Microsoft Sans Serif', Tahoma, sans-serif;
-            font-size: 11px;
-            color: #000000;
-            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            transform: translateX(100%);
-            opacity: 0;
-            animation: slideInNotification 0.3s ease-out forwards;
-            pointer-events: auto;
-            cursor: pointer;
-            position: relative;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .notification.info {
-            border-left-color: #4169E1;
-        }
-
-        .notification.success {
-            border-left-color: #32CD32;
-        }
-
-        .notification.warning {
-            border-left-color: #f0aa53;
-        }
-
-        .notification.error {
-            border-left-color: #DC143C;
-        }
-
-        .notification.afast {
-            border-left-color: #f0aa53;
-            background: linear-gradient(to bottom, #3e0a29 0%, #3e0a29 1px, #4e1a39 1px, #4e1a39 50%, #3e0a29 50%, #2e0a19 100%);
-            color: #f2eaff;
-            border-left: 2px solid #f0aa53;
-            border-top: 2px solid #f0aa53;
-            border-right: 2px solid #1a0a0f;
-            border-bottom: 2px solid #1a0a0f;
-        }
-
-        .notification-icon {
-            font-size: 16px;
-            min-width: 20px;
-            text-align: center;
-        }
-
-        .notification-content {
-            flex: 1;
-        }
-
-        .notification-title {
-            font-weight: bold;
+            border-radius: 3px;
             margin-bottom: 2px;
-            font-size: 11px;
-        }
-
-        .notification-message {
-            font-size: 10px;
-            line-height: 1.3;
-            color: #333333;
-        }
-
-        .notification.afast .notification-message {
-            color: #b2d1b1;
-        }
-
-        .notification-close {
-            position: absolute;
-            top: 2px;
-            right: 4px;
-            width: 14px;
-            height: 14px;
-            background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
-            border-left: 1px solid #ffffff;
-            border-top: 1px solid #ffffff;
-            border-right: 1px solid #808080;
-            border-bottom: 1px solid #808080;
-            cursor: pointer;
-            font-size: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #000000;
-            font-weight: bold;
-        }
-
-        .notification-close:hover {
-            background: linear-gradient(to bottom, #d0d0d0, #b0b0b0);
-        }
-
-        .notification-close:active {
-            border-left: 1px solid #808080;
-            border-top: 1px solid #808080;
-            border-right: 1px solid #ffffff;
-            border-bottom: 1px solid #ffffff;
-            background: linear-gradient(to bottom, #a0a0a0, #c0c0c0);
-        }
-
-        .notification.removing {
-            animation: slideOutNotification 0.3s ease-in forwards;
-        }
-
-        @keyframes slideInNotification {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideOutNotification {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-
-        /* === HISTÓRICO DE NOTIFICAÇÕES === */
-        .notification-history {
-            position: fixed;
-            top: 50px;
-            right: 20px;
-            width: 300px;
-            max-height: 400px;
-            background: linear-gradient(to bottom, #c0c0c0 0%, #c0c0c0 1px, #dfdfdf 1px, #dfdfdf 50%, #c0c0c0 50%, #a0a0a0 100%);
-            border-left: 2px solid #ffffff;
-            border-top: 2px solid #ffffff;
-            border-right: 2px solid #808080;
-            border-bottom: 2px solid #808080;
-            display: none;
-            z-index: 9999;
-            font-family: 'MS Sans Serif', 'Microsoft Sans Serif', Tahoma, sans-serif;
-            font-size: 11px;
-        }
-
-        .notification-history-header {
-            background: linear-gradient(to bottom, #0b1836 0%, #1e3c72 100%);
-            color: #f2eaff;
-            padding: 4px 8px;
-            font-weight: bold;
-            border-bottom: 1px solid #808080;
+            font-size: 12px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
         }
 
-        .notification-history-close {
-            background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
-            border-left: 1px solid #ffffff;
-            border-top: 1px solid #ffffff;
-            border-right: 1px solid #808080;
-            border-bottom: 1px solid #808080;
-            width: 16px;
-            height: 14px;
-            cursor: pointer;
-            font-size: 8px;
+        .channel-item:hover {
+            background: #e0e0e0;
+        }
+
+        .channel-item.active {
+            background: var(--vinho);
+            color: white;
+        }
+
+        /* === TARÔ === */
+        .tarot-app {
+            width: 500px;
+            height: 400px;
+        }
+
+        .tarot-spread {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 20px;
+            height: 200px;
+        }
+
+        .tarot-card {
+            background: linear-gradient(135deg, var(--vinho), var(--azul));
+            border: 2px solid var(--dourado);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #000000;
-            font-weight: bold;
-        }
-
-        .notification-history-list {
-            max-height: 350px;
-            overflow-y: auto;
-            padding: 4px;
-        }
-
-        .notification-history-item {
-            padding: 6px 8px;
-            border-bottom: 1px solid #a0a0a0;
             cursor: pointer;
+            color: var(--pergaminho);
+            font-size: 24px;
+            transition: transform 0.3s;
+        }
+
+        .tarot-card:hover {
+            transform: scale(1.05);
+        }
+
+        .tarot-card.revealed {
+            background: linear-gradient(135deg, var(--dourado), #ffd700);
+            color: var(--azul);
+        }
+
+        .tarot-reading {
+            padding: 15px;
+            background: rgba(11, 24, 54, 0.1);
+            border-radius: 8px;
+            margin: 10px;
+            font-size: 12px;
+        }
+
+        /* === LIVROS INTERATIVOS === */
+        .books-app {
+            width: 550px;
+            height: 450px;
+        }
+
+        .book-shelf {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 15px;
+            height: 200px;
+        }
+
+        .book-spine {
+            background: linear-gradient(180deg, var(--vinho), var(--azul));
+            border: 1px solid var(--dourado);
+            border-radius: 4px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            padding: 10px 5px;
+            cursor: pointer;
+            color: var(--pergaminho);
             font-size: 10px;
+            text-align: center;
+            transition: transform 0.2s;
         }
 
-        .notification-history-item:hover {
-            background: linear-gradient(to bottom, #d0d0d0, #c0c0c0);
+        .book-spine:hover {
+            transform: translateY(-5px);
         }
 
-        .notification-history-item:last-child {
-            border-bottom: none;
+        .book-content {
+            padding: 15px;
+            background: var(--pergaminho);
+            color: var(--azul);
+            border-radius: 8px;
+            margin: 10px;
+            height: 150px;
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.4;
         }
 
-        .notification-history-time {
-            color: #666666;
-            font-size: 9px;
-            float: right;
+        /* === AFAST! === */
+        .afast-app {
+            width: 450px;
+            height: 350px;
         }
 
-        .notification-history-title {
-            font-weight: bold;
-            margin-bottom: 2px;
+        .speech-area {
+            background: #000;
+            color: var(--verde);
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            height: 150px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-y: auto;
         }
 
-        .notification-history-message {
-            color: #333333;
-            line-height: 1.2;
-        }ication-message {
-            font-size: 11px;
-            line-height: 1.3;
+        .speech-controls {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
         }
 
-        /* === RESPONSIVIDADE === */
-        @media (max-width: 768px) {
-            .desktop-icons {
-                grid-template-columns: repeat(auto-fit, 80px);
-                gap: 15px;
-            }
-            
-            .desktop-icon {
-                width: 80px;
-            }
-            
-            .icon-image {
-                width: 48px;
-                height: 48px;
-                font-size: 24px;
-            }
-            
-            .aurora-player {
-                width: 90%;
-                height: 90%;
-            }
+        .speech-btn {
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border: 2px outset #c0c0c0;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .speech-btn:active {
+            border: 2px inset #c0c0c0;
+        }
+
+        .speech-btn.recording {
+            background: linear-gradient(180deg, #ff4444 0%, #cc0000 100%);
+            color: white;
         }
     </style>
 </head>
 <body>
     <!-- Tela de Boot -->
     <div class="boot-screen" id="boot-screen">
-        <div class="boot-logo"></div>
-        <div class="boot-text">MysticSoft v1.0</div>
+        <div class="boot-logo">🌟</div>
+        <div class="boot-title">MysticSoft v1.0</div>
         <div class="boot-progress">
             <div class="boot-progress-fill" id="boot-progress"></div>
         </div>
@@ -1087,213 +614,253 @@
     <div class="desktop" id="desktop">
         <!-- Ícones do Desktop -->
         <div class="desktop-icons">
-            <div class="desktop-icon" data-app="witch-tarot">
-                <div class="icon-image">🔮</div>
-                <div class="icon-label">Witch Tarot</div>
-            </div>
-            
-            <div class="desktop-icon" data-app="livros-interativos">
-                <div class="icon-image">📚</div>
-                <div class="icon-label">Livros Interativos</div>
-            </div>
-            
-            <div class="desktop-icon" data-app="estrelas-fixas">
-                <div class="icon-image">⭐</div>
-                <div class="icon-label">Estrelas Fixas</div>
-            </div>
-            
-            <div class="desktop-icon" data-app="roda-do-ano">
-                <div class="icon-image">🌙</div>
-                <div class="icon-label">Roda do Ano</div>
-            </div>
-            
             <div class="desktop-icon" data-app="astromagick">
                 <div class="icon-image">🌙</div>
                 <div class="icon-label">AstroMágick</div>
             </div>
-            
-            <div class="desktop-icon" data-app="combina-ervas">
-                <div class="icon-image">🌿</div>
-                <div class="icon-label">Combina as Ervas</div>
-            </div>
-            
-            <div class="desktop-icon" data-app="arvore-vida">
-                <div class="icon-image">🌳</div>
-                <div class="icon-label">Árvore da Vida</div>
-            </div>
-            
-            <div class="desktop-icon" data-app="witch-tv">
-                <img src="assets/icons/Witch-TV.png" alt="Witch.TV" style="width: 84px; height: 84px; image-rendering: pixelated;">
-                <span>Witch.TV</span>
-            </div>
-            
-            <div class="desktop-icon" data-app="livros">
-                <img src="assets/icons/Livros-interativos.png" alt="Livros Interativos" style="width: 84px; height: 84px; image-rendering: pixelated;">
-                <span>Livros Interativos</span>
-            </div>
-            
             <div class="desktop-icon" data-app="aurora-player">
                 <div class="icon-image">🎵</div>
                 <div class="icon-label">Aurora Player</div>
             </div>
-            
+            <div class="desktop-icon" data-app="witch-tv">
+                <div class="icon-image">📺</div>
+                <div class="icon-label">Witch.TV</div>
+            </div>
             <div class="desktop-icon" data-app="afast">
-                <img src="assets/icons/Afast!.png" alt="AFAST!" style="width: 84px; height: 84px; image-rendering: pixelated;">
-                <span>AFAST!</span>
+                <div class="icon-image">🗣️</div>
+                <div class="icon-label">AFAST!</div>
             </div>
-            
-            <div class="desktop-icon" data-app="grimorio">
-                <div class="icon-image">📜</div>
-                <div class="icon-label">Grimório</div>
+            <div class="desktop-icon" data-app="tarot">
+                <div class="icon-image">🔮</div>
+                <div class="icon-label">Tarô</div>
             </div>
-            
-            <div class="desktop-icon" data-app="lixeira">
-                <div class="icon-image">🗑️</div>
-                <div class="icon-label">Lixeira</div>
-        </div>
-    </div>
-
-    <!-- Menu de Contexto -->
-    <div class="context-menu" id="context-menu">
-        <div class="context-menu-item wallpaper" onclick="openWallpaperWindow()">Papel de Parede</div>
-        <div class="context-menu-item refresh" onclick="refreshDesktop()">Atualizar</div>
-        <div class="context-menu-item properties" onclick="showProperties()">Propriedades</div>
-    </div>
-
-    <!-- Janela de Papel de Parede -->
-    <div class="wallpaper-window" id="wallpaper-window">
-        <div class="window-header">
-            <div class="window-title">
-                <span>🖼️</span>
-                <span>Papel de Parede</span>
-            </div>
-            <div class="window-controls">
-                <button class="window-control" onclick="closeWallpaperWindow()">×</button>
+            <div class="desktop-icon" data-app="books">
+                <div class="icon-image">📚</div>
+                <div class="icon-label">Livros Interativos</div>
             </div>
         </div>
-        
-        <div class="window-content">
-            <div class="wallpaper-gallery" id="wallpaper-gallery">
-                <!-- Papéis de parede serão adicionados via JavaScript -->
-            </div>
-            <div class="wallpaper-controls">
-                <label class="wallpaper-upload">
-                    📁 Carregar Imagem
-                    <input type="file" accept="image/*" style="display: none;" onchange="uploadWallpaper(event)">
-                </label>
-                <button onclick="applyWallpaper()" style="padding: 4px 12px; background: linear-gradient(to bottom, #d4d0c8, #c0c0c0); border: 1px outset #c0c0c0; cursor: pointer;">Aplicar</button>
+
+        <!-- Widget AstroMágick -->
+        <div class="astromagick-widget">
+            <div class="widget-header">🌙 AstroMágick</div>
+            <div class="astro-info" id="astro-info">
+                <div class="astro-item">
+                    <div class="astro-label">Data</div>
+                    <div class="astro-value" id="current-date">Carregando...</div>
+                </div>
+                <div class="astro-item">
+                    <div class="astro-label">Signo Solar</div>
+                    <div class="astro-value" id="solar-sign">Carregando...</div>
+                </div>
+                <div class="astro-item">
+                    <div class="astro-label">Fase Lunar</div>
+                    <div class="astro-value" id="lunar-phase">Carregando...</div>
+                </div>
+                <div class="astro-item">
+                    <div class="astro-label">Deusa do Dia</div>
+                    <div class="astro-value" id="goddess-day">Carregando...</div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Barra de Tarefas -->
+        <!-- Barra de Tarefas -->
         <div class="taskbar">
-            <button class="start-button" id="start-button">Iniciar</button>
-            <div class="taskbar-apps" id="taskbar-apps"></div>
-            <div class="system-tray">
-                <div class="tray-icon" id="planetary-indicator" title="Indicador Planetário">☉</div>
-                <div class="tray-icon" title="AFAST!">🛡️</div>
-                <div class="tray-icon" title="Volume">🔊</div>
-                <div class="tray-icon" title="Rede">📶</div>
-                <div class="clock" id="clock">00:00</div>
+            <div class="start-button">Iniciar</div>
+            <div class="clock" id="clock">00:00</div>
+        </div>
+    </div>
+
+    <!-- Janela AstroMágick -->
+    <div class="window" id="astromagick-window">
+        <div class="window-header">
+            <span class="window-title">🌙 AstroMágick - Portal Astrológico</span>
+            <div class="window-controls">
+                <button class="window-btn" onclick="minimizeWindow('astromagick-window')">_</button>
+                <button class="window-btn" onclick="closeWindow('astromagick-window')">×</button>
+            </div>
+        </div>
+        <div class="window-content">
+            <h3>Portal Astrológico Completo</h3>
+            <p>Bem-vindo ao AstroMágick, seu guia místico para os segredos do cosmos!</p>
+            <br>
+            <div id="detailed-astro-info">
+                <h4>Informações Detalhadas:</h4>
+                <div id="detailed-content">Carregando informações astrológicas...</div>
             </div>
         </div>
     </div>
 
-    <!-- Janela do Aurora Player -->
+    <!-- Janela Aurora Player -->
     <div class="window aurora-player" id="aurora-player-window">
         <div class="window-header">
-            <div class="window-title">
-                <span>🎵</span>
-                <span>Aurora Player</span>
-            </div>
+            <span class="window-title">🎵 Aurora Player - Reprodutor Místico</span>
             <div class="window-controls">
-                <button class="window-control" onclick="minimizeWindow('aurora-player-window')">_</button>
-                <button class="window-control" onclick="maximizeWindow('aurora-player-window')">□</button>
-                <button class="window-control" onclick="closeWindow('aurora-player-window')">×</button>
+                <button class="window-btn" onclick="minimizeWindow('aurora-player-window')">_</button>
+                <button class="window-btn" onclick="closeWindow('aurora-player-window')">×</button>
             </div>
         </div>
-        
+        <div class="player-content">
+            <!-- Display do Player -->
+            <div class="player-display">
+                <div class="track-info" id="current-track">♪ Aurora Sagrada - Moonlight Serenade ♪</div>
+                <div class="time-info" id="track-time">00:00 / 03:45</div>
+            </div>
+
+            <!-- Controles -->
+            <div class="player-controls">
+                <button class="control-btn" id="prev-btn" onclick="auroraPlayer.previousTrack()">⏮</button>
+                <button class="control-btn" id="play-btn" onclick="auroraPlayer.togglePlay()">▶</button>
+                <button class="control-btn" id="next-btn" onclick="auroraPlayer.nextTrack()">⏭</button>
+                <button class="control-btn" id="shuffle-btn" onclick="auroraPlayer.toggleShuffle()">🔀</button>
+                <button class="control-btn" id="repeat-btn" onclick="auroraPlayer.toggleRepeat()">🔁</button>
+            </div>
+
+            <!-- Volume -->
+            <div class="volume-section">
+                <span>🔊</span>
+                <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="75">
+                <span id="volume-display">75%</span>
+            </div>
+
+            <!-- Playlist -->
+            <div class="playlist-section">
+                <h4 style="margin: 0 0 10px 0; font-size: 12px;">📜 Playlist Mística</h4>
+                <div id="playlist-container">
+                    <div class="playlist-item active" data-track="0">🌙 Moonlight Serenade - Aurora Sagrada</div>
+                    <div class="playlist-item" data-track="1">⭐ Stellar Dreams - Aurora Sagrada</div>
+                    <div class="playlist-item" data-track="2">💎 Crystal Meditation - Aurora Sagrada</div>
+                    <div class="playlist-item" data-track="3">🌲 Forest Whispers - Aurora Sagrada</div>
+                    <div class="playlist-item" data-track="4">🌌 Cosmic Dance - Aurora Sagrada</div>
+                    <div class="playlist-item" data-track="5">🔥 Phoenix Rising - Aurora Sagrada</div>
+                </div>
+            </div>
+
+            <!-- Painel Administrativo -->
+            <div class="admin-section">
+                <h4 style="margin: 0 0 10px 0; font-size: 12px;">🔧 Painel Administrativo</h4>
+                <button class="admin-btn" onclick="auroraPlayer.addTrack()">➕ Adicionar</button>
+                <button class="admin-btn" onclick="auroraPlayer.removeTrack()">➖ Remover</button>
+                <button class="admin-btn" onclick="auroraPlayer.editPlaylist()">✏️ Editar</button>
+                <button class="admin-btn" onclick="auroraPlayer.savePlaylist()">💾 Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Janela Witch.TV -->
+    <div class="window witch-tv" id="witch-tv-window">
+        <div class="window-header">
+            <span class="window-title">📺 Witch.TV - Streaming Místico</span>
+            <div class="window-controls">
+                <button class="window-btn" onclick="minimizeWindow('witch-tv-window')">_</button>
+                <button class="window-btn" onclick="closeWindow('witch-tv-window')">×</button>
+            </div>
+        </div>
         <div class="window-content">
-            <div class="player-content">
-                <!-- Seletor de Skins -->
-                <div class="skin-selector">
-                    <label>Máscara:</label>
-                    <select id="skin-select">
-                        <option value="classic">Clássica Aurora</option>
-                        <option value="mystical">Orbe Místico</option>
-                        <option value="celestial">Portal Celestial</option>
-                        <option value="witch">Caldeirão da Bruxa</option>
-                    </select>
+            <div class="tv-screen" id="tv-screen">
+                <div class="tv-static"></div>
+                <div class="tv-content" id="tv-content">
+                    🌙 Canal Lunar - Meditações Noturnas 🌙
                 </div>
-                
-                <!-- Container da Máscara -->
-                <div class="player-mask-container" id="player-mask">
-                    <div class="mask-frame mask-classic" id="mask-frame">
-                        <div class="player-viewport" id="player-viewport">
-                            <canvas id="audio-visualizer" width="300" height="140"></canvas>
-                        </div>
-                    </div>
+            </div>
+            <div class="channel-list">
+                <h4 style="margin: 0 0 10px 0; font-size: 12px;">📡 Canais Místicos</h4>
+                <div class="channel-item active" data-channel="0">
+                    <span>🌙 Canal Lunar</span>
+                    <span>AO VIVO</span>
                 </div>
-                
-                <!-- Informações da Faixa -->
-                <div class="track-info" id="track-info">
-                    <div class="track-title" id="track-title">Moonlight Serenade</div>
-                    <div class="track-artist" id="track-artist">Aurora Sagrada</div>
+                <div class="channel-item" data-channel="1">
+                    <span>🔮 Oráculos & Profecias</span>
+                    <span>24h</span>
                 </div>
-                
-                <!-- Controles -->
-                <div class="control-buttons">
-                    <button id="prev-btn" title="Anterior">⏮</button>
-                    <button id="play-btn" title="Play/Pause">▶</button>
-                    <button id="next-btn" title="Próxima">⏭</button>
-                    <button id="shuffle-btn" title="Aleatório">🔀</button>
-                    <button id="repeat-btn" title="Repetir">🔁</button>
+                <div class="channel-item" data-channel="2">
+                    <span>🌿 Herbalismo Sagrado</span>
+                    <span>HD</span>
                 </div>
-                
-                <!-- Progresso -->
-                <div class="progress-container">
-                    <span class="time-display" id="time-current">0:00</span>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progress-fill"></div>
-                    </div>
-                    <span class="time-display" id="time-total">3:00</span>
+                <div class="channel-item" data-channel="3">
+                    <span>⭐ Astrologia Avançada</span>
+                    <span>PREMIUM</span>
                 </div>
-                
-                <!-- Volume -->
-                <div class="volume-container">
-                    <span>🔊</span>
-                    <input type="range" id="volume-slider" min="0" max="100" value="70">
-                    <span id="volume-display">70%</span>
-                </div>
-                
-                <!-- Playlist -->
-                <div class="playlist-container">
-                    <h4>📜 Playlist Mística</h4>
-                    <div class="playlist" id="playlist">
-                        <div class="playlist-item active" data-track="0">🌙 Moonlight Serenade</div>
-                        <div class="playlist-item" data-track="1">⭐ Stellar Dreams</div>
-                        <div class="playlist-item" data-track="2">🔮 Crystal Meditation</div>
-                        <div class="playlist-item" data-track="3">🌿 Forest Whispers</div>
-                        <div class="playlist-item" data-track="4">🌟 Cosmic Dance</div>
-                        <div class="playlist-item" data-track="5">🔥 Phoenix Rising</div>
-                    </div>
+                <div class="channel-item" data-channel="4">
+                    <span>🧙‍♀️ Escola de Magia</span>
+                    <span>NOVO</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Sistema de Notificações -->
-    <div class="notification-container" id="notification-container"></div>
-    
-    <!-- Histórico de Notificações -->
-    <div class="notification-history" id="notification-history">
-        <div class="notification-history-header">
-            <span>📱 Histórico de Notificações</span>
-            <div class="notification-history-close" onclick="closeNotificationHistory()">×</div>
+    <!-- Janela Tarô -->
+    <div class="window tarot-app" id="tarot-window">
+        <div class="window-header">
+            <span class="window-title">🔮 Tarô Místico - Consulta das Cartas</span>
+            <div class="window-controls">
+                <button class="window-btn" onclick="minimizeWindow('tarot-window')">_</button>
+                <button class="window-btn" onclick="closeWindow('tarot-window')">×</button>
+            </div>
         </div>
-        <div class="notification-history-list" id="notification-history-list">
-            <!-- Histórico será preenchido dinamicamente -->
+        <div class="window-content">
+            <div class="tarot-spread" id="tarot-spread">
+                <div class="tarot-card" data-card="0">🂠</div>
+                <div class="tarot-card" data-card="1">🂠</div>
+                <div class="tarot-card" data-card="2">🂠</div>
+            </div>
+            <div class="tarot-reading" id="tarot-reading">
+                <h4>🔮 Consulta de Três Cartas</h4>
+                <p>Clique nas cartas para revelar sua leitura sobre Passado, Presente e Futuro.</p>
+                <p><strong>Concentre-se em sua pergunta...</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Janela Livros Interativos -->
+    <div class="window books-app" id="books-window">
+        <div class="window-header">
+            <span class="window-title">📚 Biblioteca Mística - Livros Interativos</span>
+            <div class="window-controls">
+                <button class="window-btn" onclick="minimizeWindow('books-window')">_</button>
+                <button class="window-btn" onclick="closeWindow('books-window')">×</button>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="book-shelf">
+                <div class="book-spine" data-book="0">Grimório das Sombras</div>
+                <div class="book-spine" data-book="1">Herbário Sagrado</div>
+                <div class="book-spine" data-book="2">Cristais & Energias</div>
+                <div class="book-spine" data-book="3">Rituais Lunares</div>
+                <div class="book-spine" data-book="4">Alquimia Moderna</div>
+                <div class="book-spine" data-book="5">Runas Antigas</div>
+                <div class="book-spine" data-book="6">Chakras & Auras</div>
+                <div class="book-spine" data-book="7">Magia Elemental</div>
+            </div>
+            <div class="book-content" id="book-content">
+                <h4>📖 Biblioteca Mística</h4>
+                <p>Bem-vindo à biblioteca de conhecimentos esotéricos!</p>
+                <p>Clique em qualquer livro da estante para começar sua jornada de aprendizado místico.</p>
+                <p><em>Cada livro contém sabedoria ancestral e práticas modernas.</em></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Janela AFAST! -->
+    <div class="window afast-app" id="afast-window">
+        <div class="window-header">
+            <span class="window-title">🗣️ AFAST! - Assistente de Fala Avançado</span>
+            <div class="window-controls">
+                <button class="window-btn" onclick="minimizeWindow('afast-window')">_</button>
+                <button class="window-btn" onclick="closeWindow('afast-window')">×</button>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="speech-area" id="speech-area">
+                > AFAST! v2.0 - Sistema de Reconhecimento de Voz Iniciado
+                > Aguardando comando de voz...
+                > Digite 'help' para ver comandos disponíveis
+            </div>
+            <div class="speech-controls">
+                <button class="speech-btn" id="record-btn" onclick="afastApp.toggleRecording()">🎤 Gravar</button>
+                <button class="speech-btn" onclick="afastApp.playback()">🔊 Reproduzir</button>
+                <button class="speech-btn" onclick="afastApp.clearLog()">🗑️ Limpar</button>
+                <button class="speech-btn" onclick="afastApp.showHelp()">❓ Ajuda</button>
+            </div>
         </div>
     </div>
 
@@ -1302,27 +869,14 @@
         class AuroraOS {
             constructor() {
                 this.windows = new Map();
-                this.zIndex = 100;
-                this.currentTrack = 0;
-                this.isPlaying = false;
-                this.playlist = [
-                    { title: "Moonlight Serenade", artist: "Aurora Sagrada" },
-                    { title: "Stellar Dreams", artist: "Aurora Sagrada" },
-                    { title: "Crystal Meditation", artist: "Aurora Sagrada" },
-                    { title: "Forest Whispers", artist: "Aurora Sagrada" },
-                    { title: "Cosmic Dance", artist: "Aurora Sagrada" },
-                    { title: "Phoenix Rising", artist: "Aurora Sagrada" }
-                ];
-                this.progressInterval = null;
-                this.currentTime = 0;
-                
+                this.zIndex = 1000;
                 this.init();
             }
 
             init() {
                 this.setupEventListeners();
                 this.updateClock();
-                this.initializeVisualizer();
+                this.updateAstroInfo();
                 setInterval(() => this.updateClock(), 1000);
             }
 
@@ -1333,57 +887,8 @@
                 // Desktop icons
                 document.querySelectorAll('.desktop-icon').forEach(icon => {
                     icon.addEventListener('dblclick', (e) => {
-                        // Som de clique
-                        if (auroraSounds) auroraSounds.play('click');
-                        
                         const app = e.currentTarget.dataset.app;
                         this.openApp(app);
-                    });
-                    
-                    // Som de hover sutil
-                    icon.addEventListener('mouseenter', () => {
-                        if (auroraSounds) auroraSounds.play('nudge');
-                    });
-                });
-
-                // Aurora Player controls
-                document.getElementById('play-btn').addEventListener('click', () => {
-                    if (auroraSounds) auroraSounds.play('click');
-                    this.togglePlay();
-                });
-                document.getElementById('prev-btn').addEventListener('click', () => {
-                    if (auroraSounds) auroraSounds.play('click');
-                    this.previousTrack();
-                });
-                document.getElementById('next-btn').addEventListener('click', () => {
-                    if (auroraSounds) auroraSounds.play('click');
-                    this.nextTrack();
-                });
-                document.getElementById('shuffle-btn').addEventListener('click', () => {
-                    if (auroraSounds) auroraSounds.play('click');
-                    this.toggleShuffle();
-                });
-                document.getElementById('repeat-btn').addEventListener('click', () => {
-                    if (auroraSounds) auroraSounds.play('click');
-                    this.toggleRepeat();
-                });
-                
-                // Skin selector
-                document.getElementById('skin-select').addEventListener('change', (e) => {
-                    if (auroraSounds) auroraSounds.play('success');
-                    this.changeSkin(e.target.value);
-                });
-                
-                // Volume
-                document.getElementById('volume-slider').addEventListener('input', (e) => {
-                    document.getElementById('volume-display').textContent = e.target.value + '%';
-                });
-                
-                // Playlist
-                document.querySelectorAll('.playlist-item').forEach((item, index) => {
-                    item.addEventListener('click', () => {
-                        if (auroraSounds) auroraSounds.play('click');
-                        this.selectTrack(index);
                     });
                 });
             }
@@ -1393,151 +898,19 @@
                 const desktop = document.getElementById('desktop');
                 const progressFill = document.getElementById('boot-progress');
                 
-                // Ativar contexto de áudio e tocar som de boot
-                if (auroraSounds) {
-                    auroraSounds.activate().then(() => {
-                        auroraSounds.play('boot');
-                    });
-                }
-                
                 let progress = 0;
                 const bootInterval = setInterval(() => {
                     progress += Math.random() * 20;
+                    progressFill.style.width = Math.min(progress, 100) + '%';
+                    
                     if (progress >= 100) {
-                        progress = 100;
                         clearInterval(bootInterval);
-                        
                         setTimeout(() => {
                             bootScreen.style.display = 'none';
-                            desktop.style.display = 'block';
-                            
-                            // Som de notificação + notificação visual
-                            setTimeout(() => {
-                                if (auroraSounds) auroraSounds.play('notify');
-                                this.showNotification("🌟 MysticSoft", "Sistema inicializado com sucesso!");
-                            }, 500);
-                            
-                            // Inicializar AFAST! com som
-                            setTimeout(() => {
-                                if (auroraSounds) auroraSounds.play('shield');
-                                afastVoice.speak("Bem-vinda ao AFÁSTI, Guardiã Mística do MysticSoft. Seu sistema está protegido.");
-                            }, 4000);
+                            desktop.classList.add('active');
                         }, 500);
                     }
-                    progressFill.style.width = progress + '%';
                 }, 200);
-            }
-
-            openApp(appName) {
-                // Som específico baseado no app
-                switch(appName) {
-                    case 'aurora-player':
-                        if (auroraSounds) auroraSounds.play('success');
-                        if (window.auroraPlayerAdvanced) {
-                            window.auroraPlayerAdvanced.show();
-                        } else {
-                            // Fallback para o player básico se o avançado não estiver disponível
-                            this.openWindow('aurora-player-window');
-                        }
-                        break;
-                    case 'afast':
-                        if (auroraSounds) auroraSounds.play('shield');
-                        this.showNotification("🛡️ AFAST!", "Guardiã Mística ativada - Sistema protegido", 'afast');
-                        break;
-                    case 'witch-tv':
-                        if (auroraSounds) auroraSounds.play('notify');
-                        this.showNotification("📺 Witch.TV", "Plataforma de streaming em desenvolvimento", 'info');
-                        break;
-                    case 'grimorio':
-                        if (auroraSounds) auroraSounds.play('success');
-                        this.showNotification("📜 Grimório", "Livro de anotações mágicas", 'info');
-                        break;
-                    case 'lixeira':
-                        if (auroraSounds) auroraSounds.play('delete');
-                        this.showNotification("🗑️ Lixeira", "Gerenciador de arquivos descartados", 'warning');
-                        break;
-                    default:
-                        if (auroraSounds) auroraSounds.play('notify');
-                        this.showNotification("🔮 " + appName, "Aplicativo em desenvolvimento", 'info');
-                }
-            }
-
-            openWindow(windowId, title) {
-                // Som de abertura de janela
-                if (auroraSounds) auroraSounds.play('success');
-                
-                const window = document.getElementById(windowId);
-                if (window) {
-                    window.style.display = 'block';
-                    window.style.zIndex = ++this.zIndex;
-                    window.style.left = '50px';
-                    window.style.top = '50px';
-                    
-                    this.windows.set(windowId, { title, element: window });
-                    this.updateTaskbar();
-                    
-                    // Make window draggable
-                    this.makeDraggable(window);
-                }
-            }
-
-            makeDraggable(element) {
-                const header = element.querySelector('.window-header');
-                let isDragging = false;
-                let currentX;
-                let currentY;
-                let initialX;
-                let initialY;
-                let xOffset = 0;
-                let yOffset = 0;
-
-                header.addEventListener('mousedown', (e) => {
-                    initialX = e.clientX - xOffset;
-                    initialY = e.clientY - yOffset;
-                    
-                    if (e.target === header || header.contains(e.target)) {
-                        isDragging = true;
-                        element.style.zIndex = ++this.zIndex;
-                    }
-                });
-
-                document.addEventListener('mousemove', (e) => {
-                    if (isDragging) {
-                        e.preventDefault();
-                        currentX = e.clientX - initialX;
-                        currentY = e.clientY - initialY;
-                        
-                        xOffset = currentX;
-                        yOffset = currentY;
-                        
-                        element.style.left = currentX + 'px';
-                        element.style.top = currentY + 'px';
-                    }
-                });
-
-                document.addEventListener('mouseup', () => {
-                    isDragging = false;
-                });
-            }
-
-            updateTaskbar() {
-                const taskbarApps = document.getElementById('taskbar-apps');
-                taskbarApps.innerHTML = '';
-                
-                this.windows.forEach((window, id) => {
-                    const button = document.createElement('button');
-                    button.className = 'taskbar-app';
-                    button.textContent = window.title;
-                    button.onclick = () => this.focusWindow(id);
-                    taskbarApps.appendChild(button);
-                });
-            }
-
-            focusWindow(windowId) {
-                const window = this.windows.get(windowId);
-                if (window) {
-                    window.element.style.zIndex = ++this.zIndex;
-                }
             }
 
             updateClock() {
@@ -1549,71 +922,162 @@
                 document.getElementById('clock').textContent = timeString;
             }
 
-            showNotification(title, message, type = 'info') {
-                // Usar o NotificationManager se disponível
-                if (typeof notificationManager !== 'undefined' && notificationManager) {
-                    return notificationManager.show(title, message, type);
-                }
+            updateAstroInfo() {
+                const now = new Date();
                 
-                // Fallback para notificação simples
-                const notification = document.createElement('div');
-                notification.className = 'notification';
-                notification.innerHTML = `
-                    <div class="notification-title">${title}</div>
-                    <div class="notification-message">${message}</div>
+                // Data atual
+                document.getElementById('current-date').textContent = 
+                    now.toLocaleDateString('pt-BR');
+                
+                // Signo solar (simplificado)
+                const solarSign = this.getSolarSign(now);
+                document.getElementById('solar-sign').textContent = solarSign;
+                
+                // Fase lunar (simplificada)
+                const lunarPhase = this.getLunarPhase(now);
+                document.getElementById('lunar-phase').textContent = lunarPhase;
+                
+                // Deusa do dia
+                const goddess = this.getGoddessOfDay(now);
+                document.getElementById('goddess-day').textContent = goddess;
+            }
+
+            getSolarSign(date) {
+                const month = date.getMonth() + 1;
+                const day = date.getDate();
+                
+                const signs = [
+                    'Capricórnio', 'Aquário', 'Peixes', 'Áries', 'Touro', 'Gêmeos',
+                    'Câncer', 'Leão', 'Virgem', 'Libra', 'Escorpião', 'Sagitário'
+                ];
+                
+                // Simplificado - baseado no mês
+                return signs[month - 1];
+            }
+
+            getLunarPhase(date) {
+                const phases = ['Nova', 'Crescente', 'Cheia', 'Minguante'];
+                const dayOfMonth = date.getDate();
+                return phases[Math.floor(dayOfMonth / 8)];
+            }
+
+            getGoddessOfDay(date) {
+                const goddesses = [
+                    'Brigid', 'Ísis', 'Hécate', 'Atena', 'Artemis', 'Afrodite',
+                    'Perséfone', 'Deméter', 'Freya', 'Diana', 'Cerridwen', 'Kali'
+                ];
+                const month = date.getMonth();
+                return goddesses[month];
+            }
+
+            openApp(appName) {
+                switch(appName) {
+                    case 'astromagick':
+                        this.openWindow('astromagick-window');
+                        this.loadDetailedAstroInfo();
+                        break;
+                    case 'aurora-player':
+                        this.openWindow('aurora-player-window');
+                        if (!window.auroraPlayer) {
+                            window.auroraPlayer = new AuroraPlayer();
+                        }
+                        break;
+                    case 'witch-tv':
+                        this.openWindow('witch-tv-window');
+                        if (!window.witchTV) {
+                            window.witchTV = new WitchTV();
+                        }
+                        break;
+                    case 'afast':
+                        this.openWindow('afast-window');
+                        if (!window.afastApp) {
+                            window.afastApp = new AFASTApp();
+                        }
+                        break;
+                    case 'tarot':
+                        this.openWindow('tarot-window');
+                        if (!window.tarotApp) {
+                            window.tarotApp = new TarotApp();
+                        }
+                        break;
+                    case 'books':
+                        this.openWindow('books-window');
+                        if (!window.booksApp) {
+                            window.booksApp = new BooksApp();
+                        }
+                        break;
+                }
+            }
+
+            openWindow(windowId) {
+                const window = document.getElementById(windowId);
+                window.classList.add('active');
+                window.style.zIndex = ++this.zIndex;
+                
+                // Posicionar janela
+                window.style.left = '100px';
+                window.style.top = '100px';
+            }
+
+            loadDetailedAstroInfo() {
+                const content = document.getElementById('detailed-content');
+                const now = new Date();
+                
+                content.innerHTML = `
+                    <p><strong>Data:</strong> ${now.toLocaleDateString('pt-BR')}</p>
+                    <p><strong>Signo Solar:</strong> ${this.getSolarSign(now)}</p>
+                    <p><strong>Fase Lunar:</strong> ${this.getLunarPhase(now)}</p>
+                    <p><strong>Deusa do Dia:</strong> ${this.getGoddessOfDay(now)}</p>
+                    <br>
+                    <p><strong>Energia do Dia:</strong> Transformação e renovação espiritual</p>
+                    <p><strong>Cristais Recomendados:</strong> Ametista, Quartzo Rosa, Selenita</p>
+                    <p><strong>Cores Místicas:</strong> Roxo, Dourado, Prateado</p>
                 `;
-                
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.remove();
-                }, 4000);
+            }
+        }
+
+        // === AURORA PLAYER ===
+        class AuroraPlayer {
+            constructor() {
+                this.playlist = [
+                    { title: "Moonlight Serenade", artist: "Aurora Sagrada", duration: "03:45" },
+                    { title: "Stellar Dreams", artist: "Aurora Sagrada", duration: "04:12" },
+                    { title: "Crystal Meditation", artist: "Aurora Sagrada", duration: "05:30" },
+                    { title: "Forest Whispers", artist: "Aurora Sagrada", duration: "03:58" },
+                    { title: "Cosmic Dance", artist: "Aurora Sagrada", duration: "04:25" },
+                    { title: "Phoenix Rising", artist: "Aurora Sagrada", duration: "06:15" }
+                ];
+                this.currentTrack = 0;
+                this.isPlaying = false;
+                this.isShuffled = false;
+                this.isRepeating = false;
+                this.volume = 75;
+                this.currentTime = 0;
+                this.init();
             }
 
-            // === AURORA PLAYER ===
-            initializeVisualizer() {
-                this.canvas = document.getElementById('audio-visualizer');
-                this.ctx = this.canvas.getContext('2d');
-                this.drawVisualizer();
+            init() {
+                this.updateDisplay();
+                this.setupEventListeners();
+                this.startTimeSimulation();
             }
 
-            drawVisualizer() {
-                const width = this.canvas.width;
-                const height = this.canvas.height;
-                
-                this.ctx.fillStyle = '#000';
-                this.ctx.fillRect(0, 0, width, height);
-                
-                if (this.isPlaying) {
-                    const barCount = 32;
-                    const barWidth = width / barCount;
-                    
-                    for (let i = 0; i < barCount; i++) {
-                        const time = Date.now() * 0.001;
-                        const barHeight = (Math.sin(time + i * 0.5) * 0.5 + 0.5) * height * 0.8;
-                        
-                        const gradient = this.ctx.createLinearGradient(0, height, 0, height - barHeight);
-                        gradient.addColorStop(0, '#f0aa53');
-                        gradient.addColorStop(0.5, '#b2d1b1');
-                        gradient.addColorStop(1, '#3e0a29');
-                        
-                        this.ctx.fillStyle = gradient;
-                        this.ctx.fillRect(i * barWidth, height - barHeight, barWidth - 1, barHeight);
-                    }
-                } else {
-                    this.ctx.fillStyle = '#f0aa53';
-                    this.ctx.font = '14px Arial';
-                    this.ctx.textAlign = 'center';
-                    this.ctx.fillText('🎵 Aurora Player', width / 2, height / 2);
+            setupEventListeners() {
+                // Volume slider
+                const volumeSlider = document.getElementById('volume-slider');
+                if (volumeSlider) {
+                    volumeSlider.addEventListener('input', (e) => {
+                        this.volume = e.target.value;
+                        document.getElementById('volume-display').textContent = this.volume + '%';
+                    });
                 }
-                
-                requestAnimationFrame(() => this.drawVisualizer());
-            }
 
-            changeSkin(skinType) {
-                const maskFrame = document.getElementById('mask-frame');
-                maskFrame.className = 'mask-frame';
-                maskFrame.classList.add('mask-' + skinType);
+                // Playlist items
+                document.querySelectorAll('.playlist-item').forEach((item, index) => {
+                    item.addEventListener('click', () => {
+                        this.selectTrack(index);
+                    });
+                });
             }
 
             togglePlay() {
@@ -1622,1504 +1086,413 @@
                 playBtn.textContent = this.isPlaying ? '⏸' : '▶';
                 
                 if (this.isPlaying) {
-                    this.simulatePlayback();
+                    console.log('🎵 Reproduzindo:', this.playlist[this.currentTrack].title);
                 } else {
-                    if (this.progressInterval) {
-                        clearInterval(this.progressInterval);
-                    }
-                }
-            }
-
-            simulatePlayback() {
-                if (this.progressInterval) {
-                    clearInterval(this.progressInterval);
-                }
-                
-                this.currentTime = 0;
-                const duration = 180; // 3 minutos
-                
-                this.progressInterval = setInterval(() => {
-                    if (this.isPlaying) {
-                        this.currentTime += 1;
-                        const progress = (this.currentTime / duration) * 100;
-                        
-                        document.getElementById('progress-fill').style.width = progress + '%';
-                        document.getElementById('time-current').textContent = this.formatTime(this.currentTime);
-                        
-                        if (this.currentTime >= duration) {
-                            this.nextTrack();
-                        }
-                    }
-                }, 1000);
-            }
-
-            selectTrack(index) {
-                this.currentTrack = index;
-                const track = this.playlist[index];
-                
-                document.getElementById('track-title').textContent = track.title;
-                document.getElementById('track-artist').textContent = track.artist;
-                
-                // Update playlist visual
-                document.querySelectorAll('.playlist-item').forEach((item, i) => {
-                    item.classList.toggle('active', i === index);
-                });
-                
-                // Reset progress
-                this.currentTime = 0;
-                document.getElementById('progress-fill').style.width = '0%';
-                document.getElementById('time-current').textContent = '0:00';
-                
-                if (this.isPlaying) {
-                    this.simulatePlayback();
+                    console.log('⏸ Pausado');
                 }
             }
 
             previousTrack() {
-                const newIndex = this.currentTrack > 0 ? this.currentTrack - 1 : this.playlist.length - 1;
-                this.selectTrack(newIndex);
+                this.currentTrack = this.currentTrack > 0 ? this.currentTrack - 1 : this.playlist.length - 1;
+                this.updateDisplay();
+                this.resetTime();
             }
 
             nextTrack() {
-                const newIndex = this.currentTrack < this.playlist.length - 1 ? this.currentTrack + 1 : 0;
-                this.selectTrack(newIndex);
+                if (this.isShuffled) {
+                    this.currentTrack = Math.floor(Math.random() * this.playlist.length);
+                } else {
+                    this.currentTrack = (this.currentTrack + 1) % this.playlist.length;
+                }
+                this.updateDisplay();
+                this.resetTime();
+            }
+
+            selectTrack(index) {
+                this.currentTrack = index;
+                this.updateDisplay();
+                this.resetTime();
+                
+                // Atualizar playlist visual
+                document.querySelectorAll('.playlist-item').forEach((item, i) => {
+                    item.classList.toggle('active', i === index);
+                });
             }
 
             toggleShuffle() {
-                const btn = document.getElementById('shuffle-btn');
-                btn.classList.toggle('active');
+                this.isShuffled = !this.isShuffled;
+                const shuffleBtn = document.getElementById('shuffle-btn');
+                shuffleBtn.style.background = this.isShuffled ? 
+                    'linear-gradient(180deg, #ffff00 0%, #ffa500 100%)' : 
+                    'linear-gradient(180deg, #c0c0c0 0%, #808080 100%)';
+                console.log('🔀 Shuffle:', this.isShuffled ? 'Ativado' : 'Desativado');
             }
 
             toggleRepeat() {
-                const btn = document.getElementById('repeat-btn');
-                btn.classList.toggle('active');
+                this.isRepeating = !this.isRepeating;
+                const repeatBtn = document.getElementById('repeat-btn');
+                repeatBtn.style.background = this.isRepeating ? 
+                    'linear-gradient(180deg, #ffff00 0%, #ffa500 100%)' : 
+                    'linear-gradient(180deg, #c0c0c0 0%, #808080 100%)';
+                console.log('🔁 Repeat:', this.isRepeating ? 'Ativado' : 'Desativado');
             }
 
-            formatTime(seconds) {
-                const mins = Math.floor(seconds / 60);
-                const secs = Math.floor(seconds % 60);
-                return `${mins}:${secs.toString().padStart(2, '0')}`;
+            updateDisplay() {
+                const track = this.playlist[this.currentTrack];
+                document.getElementById('current-track').textContent = 
+                    `♪ ${track.artist} - ${track.title} ♪`;
+            }
+
+            resetTime() {
+                this.currentTime = 0;
+                this.updateTimeDisplay();
+            }
+
+            updateTimeDisplay() {
+                const track = this.playlist[this.currentTrack];
+                const currentMin = Math.floor(this.currentTime / 60);
+                const currentSec = Math.floor(this.currentTime % 60);
+                const timeString = `${currentMin.toString().padStart(2, '0')}:${currentSec.toString().padStart(2, '0')} / ${track.duration}`;
+                document.getElementById('track-time').textContent = timeString;
+            }
+
+            startTimeSimulation() {
+                setInterval(() => {
+                    if (this.isPlaying) {
+                        this.currentTime += 1;
+                        this.updateTimeDisplay();
+                        
+                        // Simular fim da música
+                        const trackDuration = this.playlist[this.currentTrack].duration.split(':');
+                        const totalSeconds = parseInt(trackDuration[0]) * 60 + parseInt(trackDuration[1]);
+                        
+                        if (this.currentTime >= totalSeconds) {
+                            if (this.isRepeating) {
+                                this.resetTime();
+                            } else {
+                                this.nextTrack();
+                            }
+                        }
+                    }
+                }, 1000);
+            }
+
+            // Funções administrativas
+            addTrack() {
+                const title = prompt('Nome da música:');
+                const artist = prompt('Artista:') || 'Aurora Sagrada';
+                const duration = prompt('Duração (mm:ss):') || '04:00';
+                
+                if (title) {
+                    this.playlist.push({ title, artist, duration });
+                    this.refreshPlaylist();
+                    alert('🎵 Música adicionada com sucesso!');
+                }
+            }
+
+            removeTrack() {
+                if (this.playlist.length > 1) {
+                    const index = prompt(`Remover música (0-${this.playlist.length - 1}):`);
+                    if (index !== null && index >= 0 && index < this.playlist.length) {
+                        this.playlist.splice(index, 1);
+                        if (this.currentTrack >= this.playlist.length) {
+                            this.currentTrack = 0;
+                        }
+                        this.refreshPlaylist();
+                        this.updateDisplay();
+                        alert('🗑️ Música removida!');
+                    }
+                } else {
+                    alert('❌ Não é possível remover a última música!');
+                }
+            }
+
+            editPlaylist() {
+                alert('✏️ Editor de playlist - Funcionalidade em desenvolvimento!');
+            }
+
+            savePlaylist() {
+                const playlistData = JSON.stringify(this.playlist, null, 2);
+                console.log('💾 Playlist salva:', playlistData);
+                alert('💾 Playlist salva com sucesso!');
+            }
+
+            refreshPlaylist() {
+                const container = document.getElementById('playlist-container');
+                container.innerHTML = '';
+                
+                this.playlist.forEach((track, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'playlist-item';
+                    if (index === this.currentTrack) item.classList.add('active');
+                    item.dataset.track = index;
+                    item.textContent = `🎵 ${track.title} - ${track.artist}`;
+                    item.addEventListener('click', () => this.selectTrack(index));
+                    container.appendChild(item);
+                });
             }
         }
 
-        // === FUNÇÕES GLOBAIS PARA CONTROLES DE JANELA ===
-        function closeWindow(windowId) {
-            const window = document.getElementById(windowId);
-            if (window) {
-                window.style.display = 'none';
-                auroraOS.windows.delete(windowId);
-                auroraOS.updateTaskbar();
+        // === WITCH.TV ===
+        class WitchTV {
+            constructor() {
+                this.channels = [
+                    { name: "🌙 Canal Lunar", content: "Meditações Noturnas", status: "AO VIVO" },
+                    { name: "🔮 Oráculos & Profecias", content: "Consultas Místicas", status: "24h" },
+                    { name: "🌿 Herbalismo Sagrado", content: "Plantas Medicinais", status: "HD" },
+                    { name: "⭐ Astrologia Avançada", content: "Mapas Astrais", status: "PREMIUM" },
+                    { name: "🧙‍♀️ Escola de Magia", content: "Curso Básico", status: "NOVO" }
+                ];
+                this.currentChannel = 0;
+                this.init();
             }
+
+            init() {
+                this.setupEventListeners();
+                this.updateChannel();
+            }
+
+            setupEventListeners() {
+                document.querySelectorAll('.channel-item').forEach((item, index) => {
+                    item.addEventListener('click', () => {
+                        this.switchChannel(index);
+                    });
+                });
+            }
+
+            switchChannel(channelIndex) {
+                this.currentChannel = channelIndex;
+                this.updateChannel();
+                
+                // Atualizar lista visual
+                document.querySelectorAll('.channel-item').forEach((item, i) => {
+                    item.classList.toggle('active', i === channelIndex);
+                });
+            }
+
+            updateChannel() {
+                const channel = this.channels[this.currentChannel];
+                const tvContent = document.getElementById('tv-content');
+                tvContent.textContent = `${channel.name} - ${channel.content}`;
+                console.log('📺 Mudando para:', channel.name);
+            }
+        }
+
+        // === TARÔ APP ===
+        class TarotApp {
+            constructor() {
+                this.cards = [
+                    { name: "O Mago", meaning: "Poder pessoal, manifestação, recursos disponíveis" },
+                    { name: "A Sacerdotisa", meaning: "Intuição, mistério, conhecimento oculto" },
+                    { name: "A Imperatriz", meaning: "Fertilidade, criatividade, abundância" },
+                    { name: "O Imperador", meaning: "Autoridade, estrutura, controle" },
+                    { name: "O Hierofante", meaning: "Tradição, conformidade, moralidade" },
+                    { name: "Os Amantes", meaning: "Amor, harmonia, relacionamentos" },
+                    { name: "O Carro", meaning: "Controle, determinação, direção" },
+                    { name: "A Força", meaning: "Força interior, bravura, compaixão" },
+                    { name: "O Eremita", meaning: "Busca interior, introspecção, orientação" },
+                    { name: "A Roda da Fortuna", meaning: "Boa sorte, karma, ciclos de vida" }
+                ];
+                this.selectedCards = [];
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                document.querySelectorAll('.tarot-card').forEach((card, index) => {
+                    card.addEventListener('click', () => {
+                        this.revealCard(index);
+                    });
+                });
+            }
+
+            revealCard(cardIndex) {
+                if (this.selectedCards[cardIndex]) return;
+
+                const randomCard = this.cards[Math.floor(Math.random() * this.cards.length)];
+                this.selectedCards[cardIndex] = randomCard;
+
+                const cardElement = document.querySelector(`[data-card="${cardIndex}"]`);
+                cardElement.classList.add('revealed');
+                cardElement.textContent = randomCard.name;
+
+                this.updateReading();
+            }
+
+            updateReading() {
+                const positions = ['Passado', 'Presente', 'Futuro'];
+                const reading = document.getElementById('tarot-reading');
+                
+                let content = '<h4>🔮 Sua Leitura</h4>';
+                
+                this.selectedCards.forEach((card, index) => {
+                    if (card) {
+                        content += `<p><strong>${positions[index]}:</strong> ${card.name}</p>`;
+                        content += `<p><em>${card.meaning}</em></p>`;
+                    }
+                });
+
+                if (this.selectedCards.filter(c => c).length === 0) {
+                    content += '<p>Clique nas cartas para revelar sua leitura sobre Passado, Presente e Futuro.</p>';
+                }
+
+                reading.innerHTML = content;
+            }
+        }
+
+        // === LIVROS APP ===
+        class BooksApp {
+            constructor() {
+                this.books = [
+                    {
+                        title: "Grimório das Sombras",
+                        content: "Este antigo grimório contém feitiços e rituais das tradições sombrias. Aprenda sobre proteção, banimento e trabalho com energias densas de forma segura e responsável."
+                    },
+                    {
+                        title: "Herbário Sagrado",
+                        content: "Guia completo das plantas sagradas e suas propriedades mágicas. Descubra como usar ervas para cura, proteção, amor e prosperidade em seus rituais."
+                    },
+                    {
+                        title: "Cristais & Energias",
+                        content: "Manual prático sobre cristais e pedras preciosas. Aprenda a programar, limpar e usar cristais para amplificar suas intenções e equilibrar chakras."
+                    },
+                    {
+                        title: "Rituais Lunares",
+                        content: "Conecte-se com os ciclos lunares através de rituais poderosos. Cada fase da lua oferece oportunidades únicas para manifestação e transformação."
+                    },
+                    {
+                        title: "Alquimia Moderna",
+                        content: "A arte da transformação aplicada à vida moderna. Descubra como os princípios alquímicos podem ser usados para crescimento pessoal e espiritual."
+                    },
+                    {
+                        title: "Runas Antigas",
+                        content: "Sistema divinatório nórdico com 24 runas. Aprenda o significado de cada símbolo e como usar as runas para orientação e autoconhecimento."
+                    },
+                    {
+                        title: "Chakras & Auras",
+                        content: "Guia completo do sistema energético humano. Técnicas para equilibrar chakras, limpar a aura e desenvolver sensibilidade energética."
+                    },
+                    {
+                        title: "Magia Elemental",
+                        content: "Trabalhe com os quatro elementos: Terra, Água, Fogo e Ar. Aprenda rituais elementais e como invocar as energias da natureza."
+                    }
+                ];
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                document.querySelectorAll('.book-spine').forEach((spine, index) => {
+                    spine.addEventListener('click', () => {
+                        this.openBook(index);
+                    });
+                });
+            }
+
+            openBook(bookIndex) {
+                const book = this.books[bookIndex];
+                const content = document.getElementById('book-content');
+                
+                content.innerHTML = `
+                    <h4>📖 ${book.title}</h4>
+                    <p>${book.content}</p>
+                    <br>
+                    <p><em>Este é apenas um resumo. O livro completo contém exercícios práticos, rituais detalhados e muito mais conhecimento esotérico.</em></p>
+                    <br>
+                    <p><strong>Clique em outro livro para continuar explorando a biblioteca!</strong></p>
+                `;
+                
+                console.log('📚 Abrindo livro:', book.title);
+            }
+        }
+
+        // === AFAST! APP ===
+        class AFASTApp {
+            constructor() {
+                this.isRecording = false;
+                this.speechLog = [];
+                this.init();
+            }
+
+            init() {
+                this.addToLog('> AFAST! v2.0 - Sistema de Reconhecimento de Voz Iniciado');
+                this.addToLog('> Aguardando comando de voz...');
+                this.addToLog('> Digite "help" para ver comandos disponíveis');
+            }
+
+            toggleRecording() {
+                this.isRecording = !this.isRecording;
+                const recordBtn = document.getElementById('record-btn');
+                
+                if (this.isRecording) {
+                    recordBtn.classList.add('recording');
+                    recordBtn.textContent = '⏹️ Parar';
+                    this.addToLog('> 🎤 GRAVANDO... Fale agora!');
+                    
+                    // Simular reconhecimento de voz
+                    setTimeout(() => {
+                        if (this.isRecording) {
+                            this.addToLog('> Reconhecido: "Olá, AFAST!"');
+                            this.addToLog('> Resposta: Olá! Como posso ajudá-lo hoje?');
+                        }
+                    }, 3000);
+                } else {
+                    recordBtn.classList.remove('recording');
+                    recordBtn.textContent = '🎤 Gravar';
+                    this.addToLog('> ⏹️ Gravação finalizada');
+                }
+            }
+
+            playback() {
+                this.addToLog('> 🔊 Reproduzindo última gravação...');
+                this.addToLog('> "Olá, AFAST! Como você está?"');
+            }
+
+            clearLog() {
+                const speechArea = document.getElementById('speech-area');
+                speechArea.textContent = '';
+                this.speechLog = [];
+                this.addToLog('> Log limpo - Sistema pronto');
+            }
+
+            showHelp() {
+                this.addToLog('> === COMANDOS DISPONÍVEIS ===');
+                this.addToLog('> 🎤 Gravar - Iniciar/parar gravação de voz');
+                this.addToLog('> 🔊 Reproduzir - Tocar última gravação');
+                this.addToLog('> 🗑️ Limpar - Limpar histórico');
+                this.addToLog('> ❓ Ajuda - Mostrar esta ajuda');
+                this.addToLog('> ========================');
+            }
+
+            addToLog(message) {
+                const speechArea = document.getElementById('speech-area');
+                this.speechLog.push(message);
+                speechArea.textContent = this.speechLog.join('\n');
+                speechArea.scrollTop = speechArea.scrollHeight;
+            }
+        }
+
+        // Funções globais para janelas
+        function closeWindow(windowId) {
+            document.getElementById(windowId).classList.remove('active');
         }
 
         function minimizeWindow(windowId) {
-            const window = document.getElementById(windowId);
-            if (window) {
-                window.style.display = 'none';
-            }
+            document.getElementById(windowId).classList.remove('active');
         }
 
-        function maximizeWindow(windowId) {
-            // Implementar maximização se necessário
-            console.log('Maximizar:', windowId);
-        }
-
-        // === SISTEMA DE SONS RETRÔ/MÁGICKOS ===
-        class AuroraSounds {
-            constructor() {
-                this.audioContext = null;
-                this.sounds = {};
-                this.init();
-            }
-
-            async init() {
-                try {
-                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    this.generateSounds();
-                    console.log('🔊 Sistema de Sons Aurora Sagrada carregado!');
-                } catch (error) {
-                    console.warn('Áudio não disponível:', error);
-                }
-            }
-
-            generateSounds() {
-                // Sons baseados na paleta Aurora Sagrada
-                this.sounds = {
-                    boot: this.createBootSound(),
-                    shutdown: this.createShutdownSound(),
-                    notify: this.createNotifySound(),
-                    error: this.createErrorSound(),
-                    click: this.createClickSound(),
-                    delete: this.createDeleteSound(),
-                    nudge: this.createNudgeSound(),
-                    magic: this.createMagicSound(),
-                    planetary: this.createPlanetarySound(),
-                    shield: this.createShieldSound()
-                };
-            }
-
-            createBootSound() {
-                // Som de inicialização mística (2s)
-                return () => {
-                    if (!this.audioContext) return;
-                    
-                    const duration = 2;
-                    const oscillator1 = this.audioContext.createOscillator();
-                    const oscillator2 = this.audioContext.createOscillator();
-                    const gainNode = this.audioContext.createGain();
-                    
-                    // Acorde mágico: Dó + Sol + Mi (C + G + E)
-                    oscillator1.frequency.setValueAtTime(261.63, this.audioContext.currentTime); // C4
-                    oscillator2.frequency.setValueAtTime(392.00, this.audioContext.currentTime); // G4
-                    
-                    oscillator1.type = 'sine';
-                    oscillator2.type = 'triangle';
-                    
-                    // Envelope mágico
-                    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
-                    gainNode.gain.linearRampToValueAtTime(0.3, this.audioContext.currentTime + 0.1);
-                    gainNode.gain.exponentialRampToValueAtTime(0.1, this.audioContext.currentTime + 1);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
-                    
-                    oscillator1.connect(gainNode);
-                    oscillator2.connect(gainNode);
-                    gainNode.connect(this.audioContext.destination);
-                    
-                    oscillator1.start(this.audioContext.currentTime);
-                    oscillator2.start(this.audioContext.currentTime);
-                    oscillator1.stop(this.audioContext.currentTime + duration);
-                    oscillator2.stop(this.audioContext.currentTime + duration);
-                };
-            }
-
-            createShutdownSound() {
-                // Som de encerramento suave (1.5s)
-                return () => {
-                    if (!this.audioContext) return;
-                    
-                    const duration = 1.5;
-                    const oscillator = this.audioContext.createOscillator();
-                    const gainNode = this.audioContext.createGain();
-                    
-                    oscillator.frequency.setValueAtTime(440, this.audioContext.currentTime);
-                    oscillator.frequency.exponentialRampToValueAtTime(220, this.audioContext.currentTime + duration);
-                    oscillator.type = 'sine';
-                    
-                    gainNode.gain.setValueAtTime(0.2, this.audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(this.audioContext.destination);
-                    
-                    oscillator.start(this.audioContext.currentTime);
-                    oscillator.stop(this.audioContext.currentTime + duration);
-                };
-            }
-
-            createNotifySound() {
-                // Ping cristalino (0.4s) - Verde sálvia
-                return () => {
-                    if (!this.audioContext) return;
-                    
-                    const duration = 0.4;
-                    const oscillator = this.audioContext.createOscillator();
-                    const gainNode = this.audioContext.createGain();
-                    
-                    oscillator.frequency.setValueAtTime(800, this.audioContext.currentTime);
-                    oscillator.frequency.exponentialRampToValueAtTime(1200, this.audioContext.currentTime + 0.1);
-                    oscillator.frequency.exponentialRampToValueAtTime(600, this.audioContext.currentTime + duration);
-                    oscillator.type = 'sine';
-                    
-                    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
-                    gainNode.gain.linearRampToValueAtTime(0.3, this.audioContext.currentTime + 0.05);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(this.audioContext.destination);
-                    
-                    oscillator.start(this.audioContext.currentTime);
-                    oscillator.stop(this.audioContext.currentTime + duration);
-                };
-            }
-
-            createErrorSound() {
-                // Som grave com eco (0.6s) - Vinho profundo
-                return () => {
-                    if (!this.audioContext) return;
-                    
-                    const duration = 0.6;
-                    const oscillator = this.audioContext.createOscillator();
-                    const gainNode = this.audioContext.createGain();
-                    const delayNode = this.audioContext.createDelay();
-                    const feedbackGain = this.audioContext.createGain();
-                    
-                    oscillator.frequency.setValueAtTime(150, this.audioContext.currentTime);
-                    oscillator.type = 'sawtooth';
-                    
-                    delayNode.delayTime.setValueAtTime(0.1, this.audioContext.currentTime);
-                    feedbackGain.gain.setValueAtTime(0.3, this.audioContext.currentTime);
-                    
-                    gainNode.gain.setValueAtTime(0.4, this.audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(delayNode);
-                    delayNode.connect(feedbackGain);
-                    feedbackGain.connect(delayNode);
-                    delayNode.connect(this.audioContext.destination);
-                    gainNode.connect(this.audioContext.destination);
-                    
-                    oscillator.start(this.audioContext.currentTime);
-                    oscillator.stop(this.audioContext.currentTime + duration);
-                };
-            }
-
-            createClickSound() {
-                // Clique seco agudo (0.1s) - Dourado solar
-                return () => {
-                    if (!this.audioContext) return;
-                    
-                    const duration = 0.1;
-                    const oscillator = this.audioContext.createOscillator();
-                    const gainNode = this.audioContext.createGain();
-                    
-                    oscillator.frequency.setValueAtTime(1000, this.audioContext.currentTime);
-                    oscillator.type = 'square';
-                    
-                    gainNode.gain.setValueAtTime(0.2, this.audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(this.audioContext.destination);
-                    
-                    oscillator.start(this.audioContext.currentTime);
-                    oscillator.stop(this.audioContext.currentTime + duration);
-                };
-            }
-
-            createDeleteSound() {
-                // Whoosh descendente (0.5s)
-                return () => {
-                    if (!this.audioContext) return;
-                    
-                    const duration = 0.5;
-                    const oscillator = this.audioContext.createOscillator();
-                    const gainNode = this.audioContext.createGain();
-                    
-                    oscillator.frequency.setValueAtTime(600, this.audioContext.currentTime);
-                    oscillator.frequency.exponentialRampToValueAtTime(100, this.audioContext.currentTime + duration);
-                    oscillator.type = 'sawtooth';
-                    
-                    gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(this.audioContext.destination);
-                    
-                    oscillator.start(this.audioContext.currentTime);
-                    oscillator.stop(this.audioContext.currentTime + duration);
-                };
-            }
-
-            createNudgeSound() {
-                // Duplo bip vibrante (0.4s)
-                return () => {
-                    if (!this.audioContext) return;
-                    
-                    // Primeiro bip
-                    setTimeout(() => {
-                        const osc1 = this.audioContext.createOscillator();
-                        const gain1 = this.audioContext.createGain();
-                        
-                        osc1.frequency.setValueAtTime(800, this.audioContext.currentTime);
-                        osc1.type = 'sine';
-                        gain1.gain.setValueAtTime(0.2, this.audioContext.currentTime);
-                        gain1.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
-                        
-                        osc1.connect(gain1);
-                        gain1.connect(this.audioContext.destination);
-                        osc1.start(this.audioContext.currentTime);
-                        osc1.stop(this.audioContext.currentTime + 0.1);
-                    }, 0);
-                    
-                    // Segundo bip
-                    setTimeout(() => {
-                        const osc2 = this.audioContext.createOscillator();
-                        const gain2 = this.audioContext.createGain();
-                        
-                        osc2.frequency.setValueAtTime(1000, this.audioContext.currentTime);
-                        osc2.type = 'sine';
-                        gain2.gain.setValueAtTime(0.2, this.audioContext.currentTime);
-                        gain2.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
-                        
-                        osc2.connect(gain2);
-                        gain2.connect(this.audioContext.destination);
-                        osc2.start(this.audioContext.currentTime);
-                        osc2.stop(this.audioContext.currentTime + 0.1);
-                    }, 150);
-                };
-            }
-
-            createMagicSound() {
-                // Som mágico para feitiços (0.8s)
-                return () => {
-                    if (!this.audioContext) return;
-                    
-                    const duration = 0.8;
-                    const oscillator1 = this.audioContext.createOscillator();
-                    const oscillator2 = this.audioContext.createOscillator();
-                    const gainNode = this.audioContext.createGain();
-                    
-                    oscillator1.frequency.setValueAtTime(440, this.audioContext.currentTime);
-                    oscillator1.frequency.exponentialRampToValueAtTime(880, this.audioContext.currentTime + duration/2);
-                    oscillator1.frequency.exponentialRampToValueAtTime(660, this.audioContext.currentTime + duration);
-                    
-                    oscillator2.frequency.setValueAtTime(660, this.audioContext.currentTime);
-                    oscillator2.frequency.exponentialRampToValueAtTime(1320, this.audioContext.currentTime + duration/2);
-                    oscillator2.frequency.exponentialRampToValueAtTime(990, this.audioContext.currentTime + duration);
-                    
-                    oscillator1.type = 'sine';
-                    oscillator2.type = 'triangle';
-                    
-                    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
-                    gainNode.gain.linearRampToValueAtTime(0.2, this.audioContext.currentTime + 0.1);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
-                    
-                    oscillator1.connect(gainNode);
-                    oscillator2.connect(gainNode);
-                    gainNode.connect(this.audioContext.destination);
-                    
-                    oscillator1.start(this.audioContext.currentTime);
-                    oscillator2.start(this.audioContext.currentTime);
-                    oscillator1.stop(this.audioContext.currentTime + duration);
-                    oscillator2.stop(this.audioContext.currentTime + duration);
-                };
-            }
-
-            createPlanetarySound() {
-                // Som de mudança planetária (0.6s)
-                return () => {
-                    if (!this.audioContext) return;
-                    
-                    const duration = 0.6;
-                    const oscillator = this.audioContext.createOscillator();
-                    const gainNode = this.audioContext.createGain();
-                    
-                    oscillator.frequency.setValueAtTime(523.25, this.audioContext.currentTime); // C5
-                    oscillator.frequency.linearRampToValueAtTime(783.99, this.audioContext.currentTime + duration/3); // G5
-                    oscillator.frequency.linearRampToValueAtTime(659.25, this.audioContext.currentTime + duration); // E5
-                    oscillator.type = 'sine';
-                    
-                    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
-                    gainNode.gain.linearRampToValueAtTime(0.25, this.audioContext.currentTime + 0.1);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(this.audioContext.destination);
-                    
-                    oscillator.start(this.audioContext.currentTime);
-                    oscillator.stop(this.audioContext.currentTime + duration);
-                };
-            }
-
-            createShieldSound() {
-                // Som de escudo ativado (0.3s)
-                return () => {
-                    if (!this.audioContext) return;
-                    
-                    const duration = 0.3;
-                    const oscillator = this.audioContext.createOscillator();
-                    const gainNode = this.audioContext.createGain();
-                    
-                    oscillator.frequency.setValueAtTime(400, this.audioContext.currentTime);
-                    oscillator.frequency.linearRampToValueAtTime(800, this.audioContext.currentTime + duration/2);
-                    oscillator.frequency.linearRampToValueAtTime(600, this.audioContext.currentTime + duration);
-                    oscillator.type = 'square';
-                    
-                    gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(this.audioContext.destination);
-                    
-                    oscillator.start(this.audioContext.currentTime);
-                    oscillator.stop(this.audioContext.currentTime + duration);
-                };
-            }
-
-            // Métodos públicos para tocar sons
-            play(soundName) {
-                if (this.sounds[soundName]) {
-                    try {
-                        this.sounds[soundName]();
-                    } catch (error) {
-                        console.warn(`Erro ao tocar som ${soundName}:`, error);
-                    }
-                }
-            }
-
-            // Método para ativar contexto de áudio (necessário após interação do usuário)
-            async activate() {
-                if (this.audioContext && this.audioContext.state === 'suspended') {
-                    await this.audioContext.resume();
-                }
-            }
-        }
-
-        // === INTEGRAÇÃO COM O SISTEMA ===
-        let auroraSounds;
-        class AstrologicalSystem {
-            constructor() {
-                this.currentPlanet = this.getCurrentPlanet();
-                this.lastCheck = Date.now();
-                this.threats = [];
-                this.init();
-            }
-
-            init() {
-                this.updatePlanetaryIndicator();
-                this.scheduleUpdates();
-                this.checkAstrologicalThreats();
-            }
-
-            getCurrentPlanet() {
-                const hour = new Date().getHours();
-                const planets = [
-                    { name: 'Sol', symbol: '☉', color: '#FFD700', hour: 6 },
-                    { name: 'Vênus', symbol: '♀', color: '#32CD32', hour: 7 },
-                    { name: 'Mercúrio', symbol: '☿', color: '#4169E1', hour: 8 },
-                    { name: 'Lua', symbol: '☽', color: '#C0C0C0', hour: 9 },
-                    { name: 'Saturno', symbol: '♄', color: '#696969', hour: 10 },
-                    { name: 'Júpiter', symbol: '♃', color: '#4169E1', hour: 11 },
-                    { name: 'Marte', symbol: '♂', color: '#DC143C', hour: 12 }
-                ];
-                
-                return planets[hour % 7];
-            }
-
-            updatePlanetaryIndicator() {
-                const indicator = document.getElementById('planetary-indicator');
-                if (indicator) {
-                    const planet = this.getCurrentPlanet();
-                    indicator.textContent = planet.symbol;
-                    indicator.style.color = planet.color;
-                    indicator.style.textShadow = `0 0 10px ${planet.color}`;
-                    indicator.title = `${planet.name} - Hora Planetária Ativa`;
-                    
-                    // Atualizar cor do escudo do AFAST!
-                    this.updateAFASTShield(planet);
-                }
-            }
-
-            updateAFASTShield(planet) {
-                const afastIcon = document.querySelector('[data-app="afast"] img');
-                if (afastIcon) {
-                    afastIcon.style.filter = `drop-shadow(0 0 15px ${planet.color}) hue-rotate(${this.getHueRotation(planet.name)}deg)`;
-                }
-            }
-
-            getHueRotation(planetName) {
-                const rotations = {
-                    'Sol': 0,
-                    'Lua': 180,
-                    'Marte': 300,
-                    'Mercúrio': 240,
-                    'Júpiter': 220,
-                    'Vênus': 120,
-                    'Saturno': 0
-                };
-                return rotations[planetName] || 0;
-            }
-
-            checkAstrologicalThreats() {
-                const threats = this.generateThreats();
-                
-                threats.forEach(threat => {
-                    if (!this.threats.includes(threat.id)) {
-                        this.threats.push(threat.id);
-                        this.triggerAFASTAlert(threat);
-                    }
-                });
-
-                // Limpar ameaças antigas
-                this.threats = this.threats.filter(id => 
-                    threats.some(threat => threat.id === id)
-                );
-            }
-
-            generateThreats() {
-                const threats = [];
-                const hour = new Date().getHours();
-                const minute = new Date().getMinutes();
-                
-                // Mercúrio Retrógrado (a cada 3 horas)
-                if (hour % 3 === 0 && minute < 5) {
-                    threats.push({
-                        id: 'mercury-retrograde',
-                        type: 'Mercúrio Retrógrado',
-                        message: 'AFÁSTI detectou Mercúrio retrógrado - risco de falhas de comunicação',
-                        severity: 'medium'
-                    });
-                }
-
-                // Lua Fora de Curso (23h-1h)
-                if (hour >= 23 || hour <= 1) {
-                    threats.push({
-                        id: 'void-moon',
-                        type: 'Lua Fora de Curso',
-                        message: 'AFÁSTI alerta: Lua fora de curso - evite decisões importantes',
-                        severity: 'low'
-                    });
-                }
-
-                // Marte em Tensão (6h, 12h, 18h)
-                if ([6, 12, 18].includes(hour) && minute < 10) {
-                    threats.push({
-                        id: 'mars-tension',
-                        type: 'Marte em Tensão',
-                        message: 'AFÁSTI detectou energia marcial agressiva - defesas ativadas',
-                        severity: 'high'
-                    });
-                }
-
-                // Eclipse Raro (1% de chance)
-                if (Math.random() < 0.01) {
-                    threats.push({
-                        id: 'eclipse',
-                        type: 'Eclipse Detectado',
-                        message: 'AFÁSTI alerta: Fenômeno eclipse ativo - cuidado redobrado!',
-                        severity: 'critical'
-                    });
-                }
-
-                return threats;
-            }
-
-            triggerAFASTAlert(threat) {
-                // Som de alerta baseado na severidade
-                if (auroraSounds) {
-                    switch(threat.severity) {
-                        case 'critical':
-                            auroraSounds.play('error');
-                            break;
-                        case 'high':
-                            auroraSounds.play('nudge');
-                            break;
-                        case 'medium':
-                            auroraSounds.play('notify');
-                            break;
-                        default:
-                            auroraSounds.play('magic');
-                    }
-                }
-                
-                // Notificação visual
-                auroraOS.showNotification(`🛡️ ${threat.type}`, threat.message);
-                
-                // Alerta sonoro + voz
-                setTimeout(() => {
-                    afastVoice.speak(threat.message);
-                }, 1000);
-
-                // Efeito visual no escudo
-                this.animateShieldAlert(threat.severity);
-            }
-
-            animateShieldAlert(severity) {
-                const afastIcon = document.querySelector('[data-app="afast"] img');
-                if (afastIcon) {
-                    const colors = {
-                        'low': '#32CD32',
-                        'medium': '#FFD700', 
-                        'high': '#DC143C',
-                        'critical': '#FF0000'
-                    };
-                    
-                    const color = colors[severity] || '#FFD700';
-                    afastIcon.style.animation = `shield-pulse 2s ease-in-out 3`;
-                    afastIcon.style.filter = `drop-shadow(0 0 20px ${color}) brightness(1.5)`;
-                    
-                    setTimeout(() => {
-                        afastIcon.style.animation = '';
-                        this.updateAFASTShield(this.getCurrentPlanet());
-                    }, 6000);
-                }
-            }
-
-            scheduleUpdates() {
-                // Atualizar planeta a cada minuto
-                setInterval(() => {
-                    const newPlanet = this.getCurrentPlanet();
-                    if (newPlanet.name !== this.currentPlanet.name) {
-                        this.currentPlanet = newPlanet;
-                        this.updatePlanetaryIndicator();
-                        
-                        // Notificar mudança planetária
-                        auroraOS.showNotification(
-                            `${newPlanet.symbol} ${newPlanet.name} Ativo`,
-                            `Proteção planetária atualizada - ${newPlanet.name} assume o comando`
-                        );
-                        
-                        setTimeout(() => {
-                            afastVoice.speak(`${newPlanet.name} assume a proteção do sistema`);
-                        }, 2000);
-                    }
-                }, 60000);
-
-                // Verificar ameaças a cada 5 minutos
-                setInterval(() => {
-                    this.checkAstrologicalThreats();
-                }, 300000);
-
-                // Primeira verificação após 10 segundos
-                setTimeout(() => {
-                    this.checkAstrologicalThreats();
-                }, 10000);
-            }
-
-            getPlanetaryStatus() {
-                const planet = this.getCurrentPlanet();
-                const protectionLevel = this.getProtectionLevel(planet.name);
-                
-                return {
-                    planet: planet,
-                    protection: protectionLevel,
-                    threats: this.threats.length,
-                    status: this.threats.length === 0 ? 'Protegido' : 'Alerta Ativo'
-                };
-            }
-
-            getProtectionLevel(planetName) {
-                const levels = {
-                    'Sol': 'Máxima - Harmonia Dourada',
-                    'Lua': 'Intuitiva - Proteção Lunar',
-                    'Marte': 'Agressiva - Modo Guerreiro',
-                    'Mercúrio': 'Comunicativa - Canais Seguros',
-                    'Júpiter': 'Expansiva - Proteção Majestosa',
-                    'Vênus': 'Harmoniosa - Equilíbrio Venusiano',
-                    'Saturno': 'Restritiva - Barreiras Sólidas'
-                };
-                return levels[planetName] || 'Padrão';
-            }
-        }
-
-        // === CSS PARA ANIMAÇÕES ===
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes shield-pulse {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.1); }
-            }
-            
-            #planetary-indicator {
-                animation: planet-glow 3s ease-in-out infinite;
-                cursor: pointer;
-                transition: all 0.3s ease;
-            }
-            
-            @keyframes planet-glow {
-                0%, 100% { opacity: 0.8; }
-                50% { opacity: 1; }
-            }
-            
-            #planetary-indicator:hover {
-                transform: scale(1.2);
-                filter: brightness(1.3);
-            }
-        `;
-        document.head.appendChild(style);
-
-        // === INICIALIZAÇÃO ===
-        let auroraOS;
-        let astrologicalSystem;
-        let auroraSounds;
-        
+        // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
-            // Inicializar sistema de sons primeiro
-            auroraSounds = new AuroraSounds();
-            
-            auroraOS = new AuroraOS();
-            
-            // Inicializar sistema astrológico após o boot
-            setTimeout(() => {
-                astrologicalSystem = new AstrologicalSystem();
-                // Adicionar evento de clique no indicador planetário
-                const planetaryIndicator = document.getElementById('planetary-indicator');
-                if (planetaryIndicator) {
-                    planetaryIndicator.addEventListener('click', () => {
-                        if (auroraSounds) auroraSounds.play('click');
-                        const status = astrologicalSystem.getPlanetaryStatus();
-                        auroraOS.showNotification(
-                            `${status.planet.symbol} ${status.planet.name}`,
-                            `Proteção: ${status.protection}\nStatus: ${status.status}\nAmeaças: ${status.threats}`
-                        );
-                    });
-                }
-            }, 5000);
-            
-        // === SISTEMA DE NOTIFICAÇÕES ESTILO MSN ===
-        class NotificationManager {
-            constructor() {
-                this.notifications = [];
-                this.history = [];
-                this.container = document.getElementById('notification-container');
-                this.maxNotifications = 5;
-                this.defaultDuration = 5000;
-                this.notificationId = 0;
-            }
-
-            show(title, message, type = 'info', duration = null, icon = null) {
-                const id = ++this.notificationId;
-                const notification = this.createNotification(id, title, message, type, icon);
-                
-                // Adicionar ao container
-                this.container.appendChild(notification);
-                this.notifications.push({ id, element: notification, type });
-                
-                // Adicionar ao histórico
-                this.addToHistory(title, message, type);
-                
-                // Limitar número de notificações
-                this.limitNotifications();
-                
-                // Auto-dismiss
-                if (duration !== 0) {
-                    setTimeout(() => this.remove(id), duration || this.defaultDuration);
-                }
-                
-                // Som baseado no tipo
-                this.playNotificationSound(type);
-                
-                return id;
-            }
-
-            createNotification(id, title, message, type, customIcon) {
-                const notification = document.createElement('div');
-                notification.className = `notification ${type}`;
-                notification.dataset.id = id;
-                
-                const icons = {
-                    info: '💬',
-                    success: '✅',
-                    warning: '⚠️',
-                    error: '❌',
-                    afast: '🛡️'
-                };
-                
-                const icon = customIcon || icons[type] || icons.info;
-                
-                notification.innerHTML = `
-                    <div class="notification-icon">${icon}</div>
-                    <div class="notification-content">
-                        <div class="notification-title">${title}</div>
-                        <div class="notification-message">${message}</div>
-                    </div>
-                    <div class="notification-close" onclick="notificationManager.remove(${id})">×</div>
-                `;
-                
-                // Clique para fechar
-                notification.addEventListener('click', (e) => {
-                    if (!e.target.classList.contains('notification-close')) {
-                        this.remove(id);
-                    }
-                });
-                
-                return notification;
-            }
-
-            remove(id) {
-                const notification = this.notifications.find(n => n.id === id);
-                if (notification) {
-                    notification.element.classList.add('removing');
-                    
-                    setTimeout(() => {
-                        if (notification.element.parentNode) {
-                            notification.element.parentNode.removeChild(notification.element);
-                        }
-                        this.notifications = this.notifications.filter(n => n.id !== id);
-                    }, 300);
-                }
-            }
-
-            limitNotifications() {
-                while (this.notifications.length > this.maxNotifications) {
-                    const oldest = this.notifications[0];
-                    this.remove(oldest.id);
-                }
-            }
-
-            addToHistory(title, message, type) {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('pt-BR', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                });
-                
-                this.history.unshift({
-                    title,
-                    message,
-                    type,
-                    time: timeString,
-                    timestamp: now
-                });
-                
-                // Limitar histórico a 50 itens
-                if (this.history.length > 50) {
-                    this.history = this.history.slice(0, 50);
-                }
-                
-                this.updateHistoryDisplay();
-            }
-
-            updateHistoryDisplay() {
-                const historyList = document.getElementById('notification-history-list');
-                historyList.innerHTML = '';
-                
-                this.history.forEach(item => {
-                    const historyItem = document.createElement('div');
-                    historyItem.className = 'notification-history-item';
-                    historyItem.innerHTML = `
-                        <div class="notification-history-time">${item.time}</div>
-                        <div class="notification-history-title">${item.title}</div>
-                        <div class="notification-history-message">${item.message}</div>
-                    `;
-                    historyList.appendChild(historyItem);
-                });
-            }
-
-            showHistory() {
-                document.getElementById('notification-history').style.display = 'block';
-            }
-
-            hideHistory() {
-                document.getElementById('notification-history').style.display = 'none';
-            }
-
-            playNotificationSound(type) {
-                if (auroraSounds) {
-                    switch (type) {
-                        case 'success':
-                            auroraSounds.play('notify');
-                            break;
-                        case 'error':
-                            auroraSounds.play('error');
-                            break;
-                        case 'warning':
-                            auroraSounds.play('nudge');
-                            break;
-                        case 'afast':
-                            auroraSounds.play('notify');
-                            break;
-                        default:
-                            auroraSounds.play('notify');
-                    }
-                }
-            }
-
-            // Métodos de conveniência
-            info(title, message, duration) {
-                return this.show(title, message, 'info', duration);
-            }
-
-            success(title, message, duration) {
-                return this.show(title, message, 'success', duration);
-            }
-
-            warning(title, message, duration) {
-                return this.show(title, message, 'warning', duration);
-            }
-
-            error(title, message, duration) {
-                return this.show(title, message, 'error', duration);
-            }
-
-            afast(title, message, duration) {
-                return this.show(title, message, 'afast', duration, '🛡️');
-            }
-        }
-
-        // Funções globais para o histórico
-        function closeNotificationHistory() {
-            notificationManager.hideHistory();
-        }
-
-        // === SISTEMA DE SONS RETRÔ/MÁGICOS ===
-        class AuroraSounds {
-            constructor() {
-                this.audioContext = null;
-                this.sounds = {};
-                this.initialized = false;
-                this.volume = 0.7;
-                this.init();
-            }
-
-            async init() {
-                try {
-                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    await this.generateSounds();
-                    this.initialized = true;
-                    console.log('🔊 Sistema de sons Aurora carregado');
-                } catch (error) {
-                    console.log('Erro ao inicializar áudio:', error);
-                }
-            }
-
-            async generateSounds() {
-                // Sons baseados na paleta Aurora Sagrada
-                this.sounds = {
-                    boot: await this.createBootSound(),
-                    shutdown: await this.createShutdownSound(),
-                    notify: await this.createNotifySound(),
-                    error: await this.createErrorSound(),
-                    nudge: await this.createNudgeSound(),
-                    click: await this.createClickSound(),
-                    delete: await this.createDeleteSound(),
-                    success: await this.createSuccessSound(),
-                    warning: await this.createWarningSound()
-                };
-            }
-
-            // Som de inicialização mística (2s)
-            async createBootSound() {
-                const duration = 2.0;
-                const sampleRate = this.audioContext.sampleRate;
-                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
-                const data = buffer.getChannelData(0);
-
-                for (let i = 0; i < data.length; i++) {
-                    const t = i / sampleRate;
-                    
-                    // Acorde mágico: Dó + Mi + Sol + Si (frequências douradas)
-                    const note1 = Math.sin(2 * Math.PI * 261.63 * t); // Dó
-                    const note2 = Math.sin(2 * Math.PI * 329.63 * t); // Mi
-                    const note3 = Math.sin(2 * Math.PI * 392.00 * t); // Sol
-                    const note4 = Math.sin(2 * Math.PI * 493.88 * t); // Si
-                    
-                    // Envelope de fade-in suave
-                    const envelope = Math.min(1, t * 2) * Math.max(0, 1 - (t - 1.5) * 2);
-                    
-                    // Reverb místico
-                    const reverb = Math.sin(2 * Math.PI * 880 * t) * 0.1 * envelope;
-                    
-                    data[i] = (note1 + note2 + note3 + note4) * 0.15 * envelope + reverb;
-                }
-
-                return buffer;
-            }
-
-            // Som de encerramento (1.5s)
-            async createShutdownSound() {
-                const duration = 1.5;
-                const sampleRate = this.audioContext.sampleRate;
-                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
-                const data = buffer.getChannelData(0);
-
-                for (let i = 0; i < data.length; i++) {
-                    const t = i / sampleRate;
-                    
-                    // Sino descendente
-                    const freq = 880 * Math.exp(-t * 2); // Frequência decrescente
-                    const sine = Math.sin(2 * Math.PI * freq * t);
-                    
-                    // Envelope de fade-out
-                    const envelope = Math.exp(-t * 3);
-                    
-                    data[i] = sine * 0.3 * envelope;
-                }
-
-                return buffer;
-            }
-
-            // Notificação cristalina (0.4s)
-            async createNotifySound() {
-                const duration = 0.4;
-                const sampleRate = this.audioContext.sampleRate;
-                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
-                const data = buffer.getChannelData(0);
-
-                for (let i = 0; i < data.length; i++) {
-                    const t = i / sampleRate;
-                    
-                    // Ping cristalino (verde sálvia)
-                    const freq = 1760; // Lá agudo
-                    const sine = Math.sin(2 * Math.PI * freq * t);
-                    
-                    // Envelope rápido
-                    const envelope = Math.exp(-t * 8);
-                    
-                    data[i] = sine * 0.4 * envelope;
-                }
-
-                return buffer;
-            }
-
-            // Som de erro (0.6s)
-            async createErrorSound() {
-                const duration = 0.6;
-                const sampleRate = this.audioContext.sampleRate;
-                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
-                const data = buffer.getChannelData(0);
-
-                for (let i = 0; i < data.length; i++) {
-                    const t = i / sampleRate;
-                    
-                    // Tom grave com eco (vinho profundo)
-                    const freq = 220; // Lá grave
-                    const sine = Math.sin(2 * Math.PI * freq * t);
-                    
-                    // Eco
-                    const echo = Math.sin(2 * Math.PI * freq * (t - 0.1)) * 0.3;
-                    
-                    // Envelope
-                    const envelope = Math.exp(-t * 4);
-                    
-                    data[i] = (sine + echo) * 0.5 * envelope;
-                }
-
-                return buffer;
-            }
-
-            // Nudge/chamar atenção (0.5s)
-            async createNudgeSound() {
-                const duration = 0.5;
-                const sampleRate = this.audioContext.sampleRate;
-                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
-                const data = buffer.getChannelData(0);
-
-                for (let i = 0; i < data.length; i++) {
-                    const t = i / sampleRate;
-                    
-                    // Duplo bip vibrante (dourado solar)
-                    let signal = 0;
-                    
-                    if (t < 0.15) {
-                        signal = Math.sin(2 * Math.PI * 1320 * t); // Primeiro bip
-                    } else if (t > 0.25 && t < 0.4) {
-                        signal = Math.sin(2 * Math.PI * 1320 * (t - 0.25)); // Segundo bip
-                    }
-                    
-                    // Vibração
-                    const vibration = 1 + Math.sin(2 * Math.PI * 20 * t) * 0.1;
-                    
-                    // Envelope
-                    const envelope = Math.exp(-t * 6);
-                    
-                    data[i] = signal * vibration * 0.4 * envelope;
-                }
-
-                return buffer;
-            }
-
-            // Clique seco (0.1s)
-            async createClickSound() {
-                const duration = 0.1;
-                const sampleRate = this.audioContext.sampleRate;
-                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
-                const data = buffer.getChannelData(0);
-
-                for (let i = 0; i < data.length; i++) {
-                    const t = i / sampleRate;
-                    
-                    // Clique agudo rápido
-                    const freq = 2640; // Muito agudo
-                    const sine = Math.sin(2 * Math.PI * freq * t);
-                    
-                    // Envelope muito rápido
-                    const envelope = Math.exp(-t * 50);
-                    
-                    data[i] = sine * 0.3 * envelope;
-                }
-
-                return buffer;
-            }
-
-            // Som de deletar (0.7s)
-            async createDeleteSound() {
-                const duration = 0.7;
-                const sampleRate = this.audioContext.sampleRate;
-                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
-                const data = buffer.getChannelData(0);
-
-                for (let i = 0; i < data.length; i++) {
-                    const t = i / sampleRate;
-                    
-                    // Whoosh descendente
-                    const freq = 1760 * Math.exp(-t * 3); // Frequência decrescente
-                    const noise = (Math.random() - 0.5) * 0.1; // Ruído branco sutil
-                    const sine = Math.sin(2 * Math.PI * freq * t);
-                    
-                    // Envelope
-                    const envelope = Math.exp(-t * 2);
-                    
-                    data[i] = (sine + noise) * 0.3 * envelope;
-                }
-
-                return buffer;
-            }
-
-            // Som de sucesso (0.5s)
-            async createSuccessSound() {
-                const duration = 0.5;
-                const sampleRate = this.audioContext.sampleRate;
-                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
-                const data = buffer.getChannelData(0);
-
-                for (let i = 0; i < data.length; i++) {
-                    const t = i / sampleRate;
-                    
-                    // Acorde ascendente (verde sálvia)
-                    let freq = 440; // Lá
-                    if (t > 0.15) freq = 554.37; // Dó#
-                    if (t > 0.3) freq = 659.25; // Mi
-                    
-                    const sine = Math.sin(2 * Math.PI * freq * t);
-                    
-                    // Envelope
-                    const envelope = Math.exp(-t * 4);
-                    
-                    data[i] = sine * 0.3 * envelope;
-                }
-
-                return buffer;
-            }
-
-            // Som de aviso (0.4s)
-            async createWarningSound() {
-                const duration = 0.4;
-                const sampleRate = this.audioContext.sampleRate;
-                const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
-                const data = buffer.getChannelData(0);
-
-                for (let i = 0; i < data.length; i++) {
-                    const t = i / sampleRate;
-                    
-                    // Tom de alerta (dourado)
-                    const freq = 880;
-                    const sine = Math.sin(2 * Math.PI * freq * t);
-                    
-                    // Modulação de amplitude
-                    const modulation = 1 + Math.sin(2 * Math.PI * 10 * t) * 0.3;
-                    
-                    // Envelope
-                    const envelope = Math.exp(-t * 6);
-                    
-                    data[i] = sine * modulation * 0.4 * envelope;
-                }
-
-                return buffer;
-            }
-
-            // Reproduzir som
-            play(soundName) {
-                if (!this.initialized || !this.sounds[soundName]) {
-                    return;
-                }
-
-                try {
-                    const source = this.audioContext.createBufferSource();
-                    const gainNode = this.audioContext.createGain();
-                    
-                    source.buffer = this.sounds[soundName];
-                    gainNode.gain.value = this.volume;
-                    
-                    source.connect(gainNode);
-                    gainNode.connect(this.audioContext.destination);
-                    
-                    source.start();
-                } catch (error) {
-                    console.log('Erro ao reproduzir som:', error);
-                }
-            }
-
-            // Obter URL base64 (para compatibilidade)
-            get(soundName) {
-                return null; // Não implementado para síntese em tempo real
-            }
-
-            // Ajustar volume
-            setVolume(volume) {
-                this.volume = Math.max(0, Math.min(1, volume));
-            }
-        }
-
-        // === SISTEMA DE VOZ PARA AFAST! ===
-        class AFASTVoice {
-            constructor() {
-                this.synth = window.speechSynthesis;
-                this.voice = null;
-                this.setupVoice();
-            }
-
-            setupVoice() {
-                const voices = this.synth.getVoices();
-                // Procurar voz em português
-                this.voice = voices.find(voice => 
-                    voice.lang.includes('pt') || 
-                    voice.lang.includes('BR')
-                ) || voices[0];
-            }
-
-            speak(text) {
-                if (!this.synth) return;
-
-                // Substituir AFAST! por AFASTE na pronúncia
-                const spokenText = text.replace(/AFAST!/g, 'AFASTE');
-
-                const utterance = new SpeechSynthesisUtterance(spokenText);
-                utterance.voice = this.voice;
-                utterance.rate = 0.9;
-                utterance.pitch = 1.0;
-                utterance.volume = 0.8;
-
-                this.synth.speak(utterance);
-            }
-        }
-        class WallpaperManager {
-            constructor() {
-                this.wallpapers = [
-                    { id: 'cosmic', name: 'Cósmico', gradient: 'radial-gradient(circle at 30% 70%, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #7209b7 100%)' },
-                    { id: 'mystical', name: 'Místico', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                    { id: 'aurora', name: 'Aurora', gradient: 'linear-gradient(45deg, #3e0a29 0%, #0b1836 50%, #f0aa53 100%)' },
-                    { id: 'forest', name: 'Floresta', gradient: 'linear-gradient(180deg, #2d5016 0%, #3e0a29 50%, #0b1836 100%)' },
-                    { id: 'sunset', name: 'Pôr do Sol', gradient: 'linear-gradient(to bottom, #ff7e5f 0%, #feb47b 50%, #3e0a29 100%)' },
-                    { id: 'ocean', name: 'Oceano', gradient: 'linear-gradient(to bottom, #0b1836 0%, #1e3c72 50%, #2a5298 100%)' }
-                ];
-                this.selectedWallpaper = null;
-                this.init();
-            }
-
-            init() {
-                this.loadSavedWallpaper();
-                this.setupContextMenu();
-                this.populateGallery();
-            }
-
-            setupContextMenu() {
-                const desktop = document.getElementById('desktop');
-                
-                desktop.addEventListener('contextmenu', (e) => {
-                    e.preventDefault();
-                    this.showContextMenu(e.clientX, e.clientY);
-                });
-
-                document.addEventListener('click', () => {
-                    this.hideContextMenu();
-                });
-            }
-
-            showContextMenu(x, y) {
-                const menu = document.getElementById('context-menu');
-                menu.style.display = 'block';
-                menu.style.left = x + 'px';
-                menu.style.top = y + 'px';
-            }
-
-            hideContextMenu() {
-                document.getElementById('context-menu').style.display = 'none';
-            }
-
-            populateGallery() {
-                const gallery = document.getElementById('wallpaper-gallery');
-                gallery.innerHTML = '';
-
-                this.wallpapers.forEach(wallpaper => {
-                    const option = document.createElement('div');
-                    option.className = 'wallpaper-option';
-                    option.style.background = wallpaper.gradient;
-                    option.dataset.id = wallpaper.id;
-                    option.title = wallpaper.name;
-                    
-                    option.addEventListener('click', () => {
-                        this.selectWallpaper(wallpaper.id);
-                    });
-
-                    gallery.appendChild(option);
-                });
-            }
-
-            selectWallpaper(id) {
-                // Remove seleção anterior
-                document.querySelectorAll('.wallpaper-option').forEach(opt => {
-                    opt.classList.remove('selected');
-                });
-
-                // Adiciona seleção atual
-                const option = document.querySelector(`[data-id="${id}"]`);
-                if (option) {
-                    option.classList.add('selected');
-                    this.selectedWallpaper = this.wallpapers.find(w => w.id === id);
-                }
-            }
-
-            applyWallpaper() {
-                if (this.selectedWallpaper) {
-                    const desktop = document.getElementById('desktop');
-                    desktop.style.background = this.selectedWallpaper.gradient;
-                    
-                    // Salvar no localStorage
-                    localStorage.setItem('mysticsoft_wallpaper', JSON.stringify(this.selectedWallpaper));
-                    
-                    // Som de confirmação
-                    if (auroraSounds) auroraSounds.play('notify');
-                    
-                    // Fechar janela
-                    this.closeWallpaperWindow();
-                    
-                    // Notificação
-                    auroraOS.showNotification('🖼️ Papel de Parede', `${this.selectedWallpaper.name} aplicado com sucesso!`);
-                }
-            }
-
-            uploadWallpaper(event) {
-                const file = event.target.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const customWallpaper = {
-                            id: 'custom',
-                            name: 'Personalizado',
-                            gradient: `url(${e.target.result})`,
-                            isCustom: true
-                        };
-                        
-                        // Adicionar à lista se não existir
-                        const existingIndex = this.wallpapers.findIndex(w => w.id === 'custom');
-                        if (existingIndex >= 0) {
-                            this.wallpapers[existingIndex] = customWallpaper;
-                        } else {
-                            this.wallpapers.push(customWallpaper);
-                        }
-                        
-                        this.populateGallery();
-                        this.selectWallpaper('custom');
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-
-            loadSavedWallpaper() {
-                const saved = localStorage.getItem('mysticsoft_wallpaper');
-                if (saved) {
-                    try {
-                        const wallpaper = JSON.parse(saved);
-                        const desktop = document.getElementById('desktop');
-                        desktop.style.background = wallpaper.gradient;
-                    } catch (e) {
-                        console.log('Erro ao carregar papel de parede salvo');
-                    }
-                }
-            }
-
-            openWallpaperWindow() {
-                document.getElementById('wallpaper-window').style.display = 'block';
-                this.hideContextMenu();
-            }
-
-            closeWallpaperWindow() {
-                document.getElementById('wallpaper-window').style.display = 'none';
-            }
-
-            refreshDesktop() {
-                // Recarregar ícones e atualizar
-                location.reload();
-            }
-
-            showProperties() {
-                auroraOS.showNotification('⚙️ Propriedades', 'MysticSoft v1.0 - Sistema Operacional Mágico');
-                this.hideContextMenu();
-            }
-        }
-
-        // Funções globais para os botões
-        function openWallpaperWindow() {
-            wallpaperManager.openWallpaperWindow();
-        }
-
-        function closeWallpaperWindow() {
-            wallpaperManager.closeWallpaperWindow();
-        }
-
-        function applyWallpaper() {
-            wallpaperManager.applyWallpaper();
-        }
-
-        function uploadWallpaper(event) {
-            wallpaperManager.uploadWallpaper(event);
-        }
-
-        function refreshDesktop() {
-            wallpaperManager.refreshDesktop();
-        }
-
-        function showProperties() {
-            wallpaperManager.showProperties();
-        }
-
-        // === INICIALIZAÇÃO DOS SISTEMAS ===
-        let wallpaperManager;
-        let auroraSounds;
-        let notificationManager;
-        let afastVoice;
-        let auroraOS;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Inicializar sistema principal primeiro
-            auroraOS = new AuroraOS();
-            
-            // Inicializar sistemas auxiliares
-            wallpaperManager = new WallpaperManager();
-            auroraSounds = new AuroraSounds();
-            notificationManager = new NotificationManager();
-            afastVoice = new AFASTVoice();
-            
-            // Aguardar carregamento das vozes
-            if (speechSynthesis.onvoiceschanged !== undefined) {
-                speechSynthesis.onvoiceschanged = () => {
-                    afastVoice.setupVoice();
-                };
-            }
-            
-            // Inicializar sistemas adicionais
-            setTimeout(() => {
-                // Inicializar gerenciador de papel de parede
-                if (typeof WallpaperManager !== 'undefined') {
-                    window.wallpaperManager = new WallpaperManager();
-                }
-                
-                // Inicializar gerenciador de barra de tarefas
-                if (typeof TaskbarManager !== 'undefined') {
-                    window.taskbarManager = new TaskbarManager();
-                }
-                
-                // Inicializar widget AstroMágick
-                if (typeof AstroMagickWidget !== 'undefined') {
-                    window.astroMagick = new AstroMagickWidget();
-                }
-            }, 2000);
-            
-            console.log('🌟 Todos os sistemas MysticSoft carregados com sucesso!');
+            window.auroraOS = new AuroraOS();
+            console.log('🌟 Aurora OS inicializado com sucesso!');
         });
-
-        // Função global para mostrar notificações (compatibilidade)
-        function showNotification(title, message, type = 'info') {
-            if (notificationManager) {
-                return notificationManager.show(title, message, type);
-            }
-        }
     </script>
+</body>
+</html>
 
-    <!-- Sistema de Papel de Parede -->
-    <script src="wallpaper-system.js"></script>
-    
-    <!-- Barra de Tarefas Aprimorada -->
-    <script src="taskbar-enhanced.js"></script>
-    
-    <!-- Dados Astronômicos -->
-    <script src="efemerides-completas-integrais.js"></script>
-    <script src="BasedeDadosdoguiaLunar.js"></script>
-    
-    <!-- Aurora Player Avançado -->
-    <link rel="stylesheet" href="aurora-player-styles.css">
-    <script src="astromagick-widget.js"></script>
-    <script src="aurora-player-advanced.js"></script>
-    <script src="playlist-sync.js"></script>
