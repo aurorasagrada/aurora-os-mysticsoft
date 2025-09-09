@@ -1433,7 +1433,12 @@
                 switch(appName) {
                     case 'aurora-player':
                         if (auroraSounds) auroraSounds.play('success');
-                        this.openWindow('aurora-player-window', 'Aurora Player');
+                        if (window.auroraPlayerAdvanced) {
+                            window.auroraPlayerAdvanced.show();
+                        } else {
+                            // Fallback para o player básico se o avançado não estiver disponível
+                            this.openWindow('aurora-player-window');
+                        }
                         break;
                     case 'afast':
                         if (auroraSounds) auroraSounds.play('shield');
@@ -3099,6 +3104,10 @@
     
     <!-- Barra de Tarefas Aprimorada -->
     <script src="taskbar-enhanced.js"></script>
+    
+    <!-- Aurora Player Avançado -->
+    <link rel="stylesheet" href="aurora-player-styles.css">
+    <script src="aurora-player-advanced.js"></script>
 </body>
 </html>
 
