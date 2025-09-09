@@ -120,10 +120,74 @@
             color: #000;
             cursor: pointer;
             margin-right: 10px;
+            position: relative;
         }
 
         .start-button:active {
             border: 2px inset #c0c0c0;
+        }
+
+        .start-button.active {
+            border: 2px inset #c0c0c0;
+        }
+
+        /* === MENU INICIAR === */
+        .start-menu {
+            position: absolute;
+            bottom: 60px;
+            left: 0;
+            width: 300px;
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border: 2px outset #c0c0c0;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 2000;
+        }
+
+        .start-menu.active {
+            display: block;
+        }
+
+        .start-menu-header {
+            background: linear-gradient(90deg, var(--azul), var(--vinho));
+            color: var(--pergaminho);
+            padding: 10px;
+            font-weight: bold;
+            border-bottom: 1px solid #808080;
+        }
+
+        .start-menu-items {
+            padding: 5px 0;
+        }
+
+        .start-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #000;
+        }
+
+        .start-menu-item:hover {
+            background: #0066cc;
+            color: white;
+        }
+
+        .start-menu-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .start-menu-separator {
+            height: 1px;
+            background: #808080;
+            margin: 5px 10px;
         }
 
         .clock {
@@ -666,8 +730,50 @@
 
         <!-- Barra de Tarefas -->
         <div class="taskbar">
-            <div class="start-button">Iniciar</div>
+            <div class="start-button" id="start-button">Iniciar</div>
             <div class="clock" id="clock">00:00</div>
+            
+            <!-- Menu Iniciar -->
+            <div class="start-menu" id="start-menu">
+                <div class="start-menu-header">
+                    🌟 Aurora OS • MysticSoft
+                </div>
+                <div class="start-menu-items">
+                    <div class="start-menu-item" data-app="astromagick">
+                        <div class="start-menu-icon">🌙</div>
+                        <span>AstroMágick</span>
+                    </div>
+                    <div class="start-menu-item" data-app="aurora-player">
+                        <div class="start-menu-icon">🎵</div>
+                        <span>Aurora Player</span>
+                    </div>
+                    <div class="start-menu-item" data-app="witch-tv">
+                        <div class="start-menu-icon">📺</div>
+                        <span>Witch.TV</span>
+                    </div>
+                    <div class="start-menu-item" data-app="afast">
+                        <div class="start-menu-icon">🗣️</div>
+                        <span>AFAST!</span>
+                    </div>
+                    <div class="start-menu-item" data-app="tarot">
+                        <div class="start-menu-icon">🔮</div>
+                        <span>Tarô Místico</span>
+                    </div>
+                    <div class="start-menu-item" data-app="books">
+                        <div class="start-menu-icon">📚</div>
+                        <span>Livros Interativos</span>
+                    </div>
+                    <div class="start-menu-separator"></div>
+                    <div class="start-menu-item" onclick="location.reload()">
+                        <div class="start-menu-icon">🔄</div>
+                        <span>Reiniciar Sistema</span>
+                    </div>
+                    <div class="start-menu-item" onclick="window.close()">
+                        <div class="start-menu-icon">⚡</div>
+                        <span>Desligar</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -893,9 +999,56 @@
                     });
                 });
 
+                // Botão Iniciar
+                document.getElementById('start-button').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.toggleStartMenu();
+                });
+
+                // Menu Iniciar - itens de aplicação
+                document.querySelectorAll('.start-menu-item[data-app]').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        const app = e.currentTarget.dataset.app;
+                        this.openApp(app);
+                        this.hideStartMenu();
+                    });
+                });
+
+                // Fechar menu ao clicar fora
+                document.addEventListener('click', () => {
+                    this.hideStartMenu();
+                });
+
                 // Inicializar relógio
                 this.updateClock();
                 setInterval(() => this.updateClock(), 1000);
+            }
+
+            toggleStartMenu() {
+                const startMenu = document.getElementById('start-menu');
+                const startButton = document.getElementById('start-button');
+                
+                if (startMenu.classList.contains('active')) {
+                    this.hideStartMenu();
+                } else {
+                    this.showStartMenu();
+                }
+            }
+
+            showStartMenu() {
+                const startMenu = document.getElementById('start-menu');
+                const startButton = document.getElementById('start-button');
+                
+                startMenu.classList.add('active');
+                startButton.classList.add('active');
+            }
+
+            hideStartMenu() {
+                const startMenu = document.getElementById('start-menu');
+                const startButton = document.getElementById('start-button');
+                
+                startMenu.classList.remove('active');
+                startButton.classList.remove('active');
             }
 
             updateClock() {
