@@ -1107,9 +1107,9 @@
                 <div class="icon-label">Roda do Ano</div>
             </div>
             
-            <div class="desktop-icon" data-app="horas-planetarias">
-                <div class="icon-image">🕐</div>
-                <div class="icon-label">Horas Planetárias</div>
+            <div class="desktop-icon" data-app="astromagick">
+                <div class="icon-image">🌙</div>
+                <div class="icon-label">AstroMágick</div>
             </div>
             
             <div class="desktop-icon" data-app="combina-ervas">
@@ -3060,9 +3060,13 @@
         let auroraSounds;
         let notificationManager;
         let afastVoice;
+        let auroraOS;
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Inicializar sistemas
+            // Inicializar sistema principal primeiro
+            auroraOS = new AuroraOS();
+            
+            // Inicializar sistemas auxiliares
             wallpaperManager = new WallpaperManager();
             auroraSounds = new AuroraSounds();
             notificationManager = new NotificationManager();
@@ -3086,6 +3090,11 @@
                 if (typeof TaskbarManager !== 'undefined') {
                     window.taskbarManager = new TaskbarManager();
                 }
+                
+                // Inicializar widget AstroMágick
+                if (typeof AstroMagickWidget !== 'undefined') {
+                    window.astroMagick = new AstroMagickWidget();
+                }
             }, 2000);
             
             console.log('🌟 Todos os sistemas MysticSoft carregados com sucesso!');
@@ -3105,7 +3114,12 @@
     <!-- Barra de Tarefas Aprimorada -->
     <script src="taskbar-enhanced.js"></script>
     
+    <!-- Dados Astronômicos -->
+    <script src="efemerides-completas-integrais.js"></script>
+    <script src="BasedeDadosdoguiaLunar.js"></script>
+    
     <!-- Aurora Player Avançado -->
     <link rel="stylesheet" href="aurora-player-styles.css">
+    <script src="astromagick-widget.js"></script>
     <script src="aurora-player-advanced.js"></script>
     <script src="playlist-sync.js"></script>
