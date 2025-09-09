@@ -109,6 +109,7 @@
             align-items: center;
             padding: 0 10px;
             box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #404040;
+            z-index: 1000;
         }
 
         .start-button {
@@ -891,6 +892,22 @@
                         this.openApp(app);
                     });
                 });
+
+                // Inicializar relógio
+                this.updateClock();
+                setInterval(() => this.updateClock(), 1000);
+            }
+
+            updateClock() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('pt-BR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                const clockElement = document.getElementById('clock');
+                if (clockElement) {
+                    clockElement.textContent = timeString;
+                }
             }
 
             startBoot() {
