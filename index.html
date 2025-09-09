@@ -1333,21 +1333,44 @@
                 // Desktop icons
                 document.querySelectorAll('.desktop-icon').forEach(icon => {
                     icon.addEventListener('dblclick', (e) => {
+                        // Som de clique
                         if (auroraSounds) auroraSounds.play('click');
+                        
                         const app = e.currentTarget.dataset.app;
                         this.openApp(app);
+                    });
+                    
+                    // Som de hover sutil
+                    icon.addEventListener('mouseenter', () => {
+                        if (auroraSounds) auroraSounds.play('nudge');
                     });
                 });
 
                 // Aurora Player controls
-                document.getElementById('play-btn').addEventListener('click', () => this.togglePlay());
-                document.getElementById('prev-btn').addEventListener('click', () => this.previousTrack());
-                document.getElementById('next-btn').addEventListener('click', () => this.nextTrack());
-                document.getElementById('shuffle-btn').addEventListener('click', () => this.toggleShuffle());
-                document.getElementById('repeat-btn').addEventListener('click', () => this.toggleRepeat());
+                document.getElementById('play-btn').addEventListener('click', () => {
+                    if (auroraSounds) auroraSounds.play('click');
+                    this.togglePlay();
+                });
+                document.getElementById('prev-btn').addEventListener('click', () => {
+                    if (auroraSounds) auroraSounds.play('click');
+                    this.previousTrack();
+                });
+                document.getElementById('next-btn').addEventListener('click', () => {
+                    if (auroraSounds) auroraSounds.play('click');
+                    this.nextTrack();
+                });
+                document.getElementById('shuffle-btn').addEventListener('click', () => {
+                    if (auroraSounds) auroraSounds.play('click');
+                    this.toggleShuffle();
+                });
+                document.getElementById('repeat-btn').addEventListener('click', () => {
+                    if (auroraSounds) auroraSounds.play('click');
+                    this.toggleRepeat();
+                });
                 
                 // Skin selector
                 document.getElementById('skin-select').addEventListener('change', (e) => {
+                    if (auroraSounds) auroraSounds.play('success');
                     this.changeSkin(e.target.value);
                 });
                 
@@ -1358,7 +1381,10 @@
                 
                 // Playlist
                 document.querySelectorAll('.playlist-item').forEach((item, index) => {
-                    item.addEventListener('click', () => this.selectTrack(index));
+                    item.addEventListener('click', () => {
+                        if (auroraSounds) auroraSounds.play('click');
+                        this.selectTrack(index);
+                    });
                 });
             }
 
@@ -1403,22 +1429,38 @@
             }
 
             openApp(appName) {
+                // Som específico baseado no app
                 switch(appName) {
                     case 'aurora-player':
+                        if (auroraSounds) auroraSounds.play('success');
                         this.openWindow('aurora-player-window', 'Aurora Player');
                         break;
                     case 'afast':
-                        this.showNotification("🛡️ AFAST!", "Guardiã Mística ativada - Sistema protegido");
+                        if (auroraSounds) auroraSounds.play('shield');
+                        this.showNotification("🛡️ AFAST!", "Guardiã Mística ativada - Sistema protegido", 'afast');
                         break;
                     case 'witch-tv':
-                        this.showNotification("📺 Witch.TV", "Plataforma de streaming em desenvolvimento");
+                        if (auroraSounds) auroraSounds.play('notify');
+                        this.showNotification("📺 Witch.TV", "Plataforma de streaming em desenvolvimento", 'info');
+                        break;
+                    case 'grimorio':
+                        if (auroraSounds) auroraSounds.play('success');
+                        this.showNotification("📜 Grimório", "Livro de anotações mágicas", 'info');
+                        break;
+                    case 'lixeira':
+                        if (auroraSounds) auroraSounds.play('delete');
+                        this.showNotification("🗑️ Lixeira", "Gerenciador de arquivos descartados", 'warning');
                         break;
                     default:
-                        this.showNotification("🔮 " + appName, "Aplicativo em desenvolvimento");
+                        if (auroraSounds) auroraSounds.play('notify');
+                        this.showNotification("🔮 " + appName, "Aplicativo em desenvolvimento", 'info');
                 }
             }
 
             openWindow(windowId, title) {
+                // Som de abertura de janela
+                if (auroraSounds) auroraSounds.play('success');
+                
                 const window = document.getElementById(windowId);
                 if (window) {
                     window.style.display = 'block';
@@ -1502,7 +1544,13 @@
                 document.getElementById('clock').textContent = timeString;
             }
 
-            showNotification(title, message) {
+            showNotification(title, message, type = 'info') {
+                // Usar o NotificationManager se disponível
+                if (typeof notificationManager !== 'undefined' && notificationManager) {
+                    return notificationManager.show(title, message, type);
+                }
+                
+                // Fallback para notificação simples
                 const notification = document.createElement('div');
                 notification.className = 'notification';
                 notification.innerHTML = `
