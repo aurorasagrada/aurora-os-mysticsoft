@@ -839,6 +839,7 @@
                 // Desktop icons
                 document.querySelectorAll('.desktop-icon').forEach(icon => {
                     icon.addEventListener('dblclick', (e) => {
+                        if (auroraSounds) auroraSounds.play('click');
                         const app = e.currentTarget.dataset.app;
                         this.openApp(app);
                     });
@@ -872,6 +873,13 @@
                 const desktop = document.getElementById('desktop');
                 const progressFill = document.getElementById('boot-progress');
                 
+                // Ativar contexto de áudio e tocar som de boot
+                if (auroraSounds) {
+                    auroraSounds.activate().then(() => {
+                        auroraSounds.play('boot');
+                    });
+                }
+                
                 let progress = 0;
                 const bootInterval = setInterval(() => {
                     progress += Math.random() * 20;
@@ -882,7 +890,18 @@
                         setTimeout(() => {
                             bootScreen.style.display = 'none';
                             desktop.style.display = 'block';
-                            this.showNotification("🌟 MysticSoft", "Sistema inicializado com sucesso!");
+                            
+                            // Som de notificação + notificação visual
+                            setTimeout(() => {
+                                if (auroraSounds) auroraSounds.play('notify');
+                                this.showNotification("🌟 MysticSoft", "Sistema inicializado com sucesso!");
+                            }, 500);
+                            
+                            // Inicializar AFAST! com som
+                            setTimeout(() => {
+                                if (auroraSounds) auroraSounds.play('shield');
+                                afastVoice.speak("Bem-vinda ao AFÁSTI, Guardiã Mística do MysticSoft. Seu sistema está protegido.");
+                            }, 4000);
                         }, 500);
                     }
                     progressFill.style.width = progress + '%';
@@ -1158,7 +1177,350 @@
             console.log('Maximizar:', windowId);
         }
 
-        // === SISTEMA ASTROLÓGICO INTEGRADO ===
+        // === SISTEMA DE SONS RETRÔ/MÁGICKOS ===
+        class AuroraSounds {
+            constructor() {
+                this.audioContext = null;
+                this.sounds = {};
+                this.init();
+            }
+
+            async init() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.generateSounds();
+                    console.log('🔊 Sistema de Sons Aurora Sagrada carregado!');
+                } catch (error) {
+                    console.warn('Áudio não disponível:', error);
+                }
+            }
+
+            generateSounds() {
+                // Sons baseados na paleta Aurora Sagrada
+                this.sounds = {
+                    boot: this.createBootSound(),
+                    shutdown: this.createShutdownSound(),
+                    notify: this.createNotifySound(),
+                    error: this.createErrorSound(),
+                    click: this.createClickSound(),
+                    delete: this.createDeleteSound(),
+                    nudge: this.createNudgeSound(),
+                    magic: this.createMagicSound(),
+                    planetary: this.createPlanetarySound(),
+                    shield: this.createShieldSound()
+                };
+            }
+
+            createBootSound() {
+                // Som de inicialização mística (2s)
+                return () => {
+                    if (!this.audioContext) return;
+                    
+                    const duration = 2;
+                    const oscillator1 = this.audioContext.createOscillator();
+                    const oscillator2 = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    // Acorde mágico: Dó + Sol + Mi (C + G + E)
+                    oscillator1.frequency.setValueAtTime(261.63, this.audioContext.currentTime); // C4
+                    oscillator2.frequency.setValueAtTime(392.00, this.audioContext.currentTime); // G4
+                    
+                    oscillator1.type = 'sine';
+                    oscillator2.type = 'triangle';
+                    
+                    // Envelope mágico
+                    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.3, this.audioContext.currentTime + 0.1);
+                    gainNode.gain.exponentialRampToValueAtTime(0.1, this.audioContext.currentTime + 1);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+                    
+                    oscillator1.connect(gainNode);
+                    oscillator2.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator1.start(this.audioContext.currentTime);
+                    oscillator2.start(this.audioContext.currentTime);
+                    oscillator1.stop(this.audioContext.currentTime + duration);
+                    oscillator2.stop(this.audioContext.currentTime + duration);
+                };
+            }
+
+            createShutdownSound() {
+                // Som de encerramento suave (1.5s)
+                return () => {
+                    if (!this.audioContext) return;
+                    
+                    const duration = 1.5;
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.frequency.setValueAtTime(440, this.audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(220, this.audioContext.currentTime + duration);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.2, this.audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + duration);
+                };
+            }
+
+            createNotifySound() {
+                // Ping cristalino (0.4s) - Verde sálvia
+                return () => {
+                    if (!this.audioContext) return;
+                    
+                    const duration = 0.4;
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.frequency.setValueAtTime(800, this.audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1200, this.audioContext.currentTime + 0.1);
+                    oscillator.frequency.exponentialRampToValueAtTime(600, this.audioContext.currentTime + duration);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.3, this.audioContext.currentTime + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + duration);
+                };
+            }
+
+            createErrorSound() {
+                // Som grave com eco (0.6s) - Vinho profundo
+                return () => {
+                    if (!this.audioContext) return;
+                    
+                    const duration = 0.6;
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    const delayNode = this.audioContext.createDelay();
+                    const feedbackGain = this.audioContext.createGain();
+                    
+                    oscillator.frequency.setValueAtTime(150, this.audioContext.currentTime);
+                    oscillator.type = 'sawtooth';
+                    
+                    delayNode.delayTime.setValueAtTime(0.1, this.audioContext.currentTime);
+                    feedbackGain.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                    
+                    gainNode.gain.setValueAtTime(0.4, this.audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(delayNode);
+                    delayNode.connect(feedbackGain);
+                    feedbackGain.connect(delayNode);
+                    delayNode.connect(this.audioContext.destination);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + duration);
+                };
+            }
+
+            createClickSound() {
+                // Clique seco agudo (0.1s) - Dourado solar
+                return () => {
+                    if (!this.audioContext) return;
+                    
+                    const duration = 0.1;
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.frequency.setValueAtTime(1000, this.audioContext.currentTime);
+                    oscillator.type = 'square';
+                    
+                    gainNode.gain.setValueAtTime(0.2, this.audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + duration);
+                };
+            }
+
+            createDeleteSound() {
+                // Whoosh descendente (0.5s)
+                return () => {
+                    if (!this.audioContext) return;
+                    
+                    const duration = 0.5;
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.frequency.setValueAtTime(600, this.audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(100, this.audioContext.currentTime + duration);
+                    oscillator.type = 'sawtooth';
+                    
+                    gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + duration);
+                };
+            }
+
+            createNudgeSound() {
+                // Duplo bip vibrante (0.4s)
+                return () => {
+                    if (!this.audioContext) return;
+                    
+                    // Primeiro bip
+                    setTimeout(() => {
+                        const osc1 = this.audioContext.createOscillator();
+                        const gain1 = this.audioContext.createGain();
+                        
+                        osc1.frequency.setValueAtTime(800, this.audioContext.currentTime);
+                        osc1.type = 'sine';
+                        gain1.gain.setValueAtTime(0.2, this.audioContext.currentTime);
+                        gain1.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
+                        
+                        osc1.connect(gain1);
+                        gain1.connect(this.audioContext.destination);
+                        osc1.start(this.audioContext.currentTime);
+                        osc1.stop(this.audioContext.currentTime + 0.1);
+                    }, 0);
+                    
+                    // Segundo bip
+                    setTimeout(() => {
+                        const osc2 = this.audioContext.createOscillator();
+                        const gain2 = this.audioContext.createGain();
+                        
+                        osc2.frequency.setValueAtTime(1000, this.audioContext.currentTime);
+                        osc2.type = 'sine';
+                        gain2.gain.setValueAtTime(0.2, this.audioContext.currentTime);
+                        gain2.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
+                        
+                        osc2.connect(gain2);
+                        gain2.connect(this.audioContext.destination);
+                        osc2.start(this.audioContext.currentTime);
+                        osc2.stop(this.audioContext.currentTime + 0.1);
+                    }, 150);
+                };
+            }
+
+            createMagicSound() {
+                // Som mágico para feitiços (0.8s)
+                return () => {
+                    if (!this.audioContext) return;
+                    
+                    const duration = 0.8;
+                    const oscillator1 = this.audioContext.createOscillator();
+                    const oscillator2 = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator1.frequency.setValueAtTime(440, this.audioContext.currentTime);
+                    oscillator1.frequency.exponentialRampToValueAtTime(880, this.audioContext.currentTime + duration/2);
+                    oscillator1.frequency.exponentialRampToValueAtTime(660, this.audioContext.currentTime + duration);
+                    
+                    oscillator2.frequency.setValueAtTime(660, this.audioContext.currentTime);
+                    oscillator2.frequency.exponentialRampToValueAtTime(1320, this.audioContext.currentTime + duration/2);
+                    oscillator2.frequency.exponentialRampToValueAtTime(990, this.audioContext.currentTime + duration);
+                    
+                    oscillator1.type = 'sine';
+                    oscillator2.type = 'triangle';
+                    
+                    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.2, this.audioContext.currentTime + 0.1);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+                    
+                    oscillator1.connect(gainNode);
+                    oscillator2.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator1.start(this.audioContext.currentTime);
+                    oscillator2.start(this.audioContext.currentTime);
+                    oscillator1.stop(this.audioContext.currentTime + duration);
+                    oscillator2.stop(this.audioContext.currentTime + duration);
+                };
+            }
+
+            createPlanetarySound() {
+                // Som de mudança planetária (0.6s)
+                return () => {
+                    if (!this.audioContext) return;
+                    
+                    const duration = 0.6;
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.frequency.setValueAtTime(523.25, this.audioContext.currentTime); // C5
+                    oscillator.frequency.linearRampToValueAtTime(783.99, this.audioContext.currentTime + duration/3); // G5
+                    oscillator.frequency.linearRampToValueAtTime(659.25, this.audioContext.currentTime + duration); // E5
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.25, this.audioContext.currentTime + 0.1);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + duration);
+                };
+            }
+
+            createShieldSound() {
+                // Som de escudo ativado (0.3s)
+                return () => {
+                    if (!this.audioContext) return;
+                    
+                    const duration = 0.3;
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.frequency.setValueAtTime(400, this.audioContext.currentTime);
+                    oscillator.frequency.linearRampToValueAtTime(800, this.audioContext.currentTime + duration/2);
+                    oscillator.frequency.linearRampToValueAtTime(600, this.audioContext.currentTime + duration);
+                    oscillator.type = 'square';
+                    
+                    gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + duration);
+                };
+            }
+
+            // Métodos públicos para tocar sons
+            play(soundName) {
+                if (this.sounds[soundName]) {
+                    try {
+                        this.sounds[soundName]();
+                    } catch (error) {
+                        console.warn(`Erro ao tocar som ${soundName}:`, error);
+                    }
+                }
+            }
+
+            // Método para ativar contexto de áudio (necessário após interação do usuário)
+            async activate() {
+                if (this.audioContext && this.audioContext.state === 'suspended') {
+                    await this.audioContext.resume();
+                }
+            }
+        }
+
+        // === INTEGRAÇÃO COM O SISTEMA ===
+        let auroraSounds;
         class AstrologicalSystem {
             constructor() {
                 this.currentPlanet = this.getCurrentPlanet();
@@ -1287,6 +1649,23 @@
             }
 
             triggerAFASTAlert(threat) {
+                // Som de alerta baseado na severidade
+                if (auroraSounds) {
+                    switch(threat.severity) {
+                        case 'critical':
+                            auroraSounds.play('error');
+                            break;
+                        case 'high':
+                            auroraSounds.play('nudge');
+                            break;
+                        case 'medium':
+                            auroraSounds.play('notify');
+                            break;
+                        default:
+                            auroraSounds.play('magic');
+                    }
+                }
+                
                 // Notificação visual
                 auroraOS.showNotification(`🛡️ ${threat.type}`, threat.message);
                 
@@ -1406,8 +1785,12 @@
         // === INICIALIZAÇÃO ===
         let auroraOS;
         let astrologicalSystem;
+        let auroraSounds;
         
         document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar sistema de sons primeiro
+            auroraSounds = new AuroraSounds();
+            
             auroraOS = new AuroraOS();
             
             // Inicializar sistema astrológico após o boot
@@ -1417,6 +1800,7 @@
                 const planetaryIndicator = document.getElementById('planetary-indicator');
                 if (planetaryIndicator) {
                     planetaryIndicator.addEventListener('click', () => {
+                        if (auroraSounds) auroraSounds.play('click');
                         const status = astrologicalSystem.getPlanetaryStatus();
                         auroraOS.showNotification(
                             `${status.planet.symbol} ${status.planet.name}`,
