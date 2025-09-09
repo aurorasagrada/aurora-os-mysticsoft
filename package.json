@@ -1,0 +1,40 @@
+{
+  "name": "aurora-os-mysticsoft",
+  "version": "1.0.0",
+  "description": "Um sistema operacional retrô-mágico que roda no navegador",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx live-server .",
+    "build": "echo 'Build não necessário - projeto estático'",
+    "test": "echo 'Testes não implementados ainda'"
+  },
+  "keywords": [
+    "retro",
+    "os",
+    "mystic",
+    "whimsigoth",
+    "windows-me",
+    "astrology",
+    "magic",
+    "browser-os"
+  ],
+  "author": "Aurora Sagrada <contato@aurorasagrada.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/aurorasagrada/aurora-os-mysticsoft#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aurorasagrada/aurora-os-mysticsoft.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aurorasagrada/aurora-os-mysticsoft/issues"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
+

@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora OS • MysticSoft</title>
+    <style>
+        :root {
+            --vinho: #3e0a29;
+            --verde: #b2d1b1;
+            --azul: #0b1836;
+            --dourado: #f0aa53;
+            --pergaminho: #f2eaff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--azul);
+            color: var(--pergaminho);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* === TELA DE BOOT === */
+        .boot-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, var(--azul), #1a2a4a);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            cursor: pointer;
+        }
+
+        .boot-logo {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 30px;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==') center/contain no-repeat;
+            filter: drop-shadow(0 0 20px var(--dourado));
+        }
+
+        .boot-text {
+            color: var(--dourado);
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px var(--dourado);
+        }
+
+        .boot-progress {
+            width: 300px;
+            height: 8px;
+            background: var(--vinho);
+            border-radius: 4px;
+            border: 2px solid var(--dourado);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .boot-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--dourado), #fff);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .boot-hint {
+            color: var(--verde);
+            font-size: 14px;
+            opacity: 0.8;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.4; }
+        }
+
+        /* === DESKTOP === */
+        .desktop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, var(--azul) 0%, #1a2a4a 50%, var(--vinho) 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .desktop::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(240, 170, 83, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(178, 209, 177, 0.1) 0%, transparent 50%);
+            animation: starTwinkle 15s ease-in-out infinite;
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+
+        /* === ÍCONES DO DESKTOP === */
+        .desktop-icons {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, 100px);
+            gap: 20px;
+            max-width: calc(100% - 40px);
+        }
+
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100px;
+        }
+
+        .desktop-icon:hover {
+            background: rgba(240, 170, 83, 0.2);
+            transform: scale(1.05);
+        }
+
+        .desktop-icon.selected {
+            background: rgba(240, 170, 83, 0.3);
+            border: 2px solid var(--dourado);
+        }
+
+        .icon-image {
+            width: 64px;
+            height: 64px;
+            background: var(--vinho);
+            border: 2px solid var(--dourado);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--dourado);
+            text-shadow: 0 0 10px var(--dourado);
+        }
+
+        .icon-label {
+            color: var(--pergaminho);
+            font-size: 12px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            font-weight: bold;
+        }
+
+        /* === BARRA DE TAREFAS === */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to bottom, #4a5568, var(--vinho));
+            border-top: 2px solid var(--dourado);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            z-index: 1000;
+        }
+
+        .start-button {
+            background: linear-gradient(to bottom, var(--dourado), #d4941f);
+            color: var(--vinho);
+            border: 2px outset var(--dourado);
+            padding: 4px 12px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .start-button:hover {
+            background: linear-gradient(to bottom, #fff, var(--dourado));
+        }
+
+        .start-button:active {
+            border: 2px inset var(--dourado);
+        }
+
+        .taskbar-apps {
+            flex: 1;
+            display: flex;
+            gap: 5px;
+        }
+
+        .taskbar-app {
+            background: var(--vinho);
+            color: var(--pergaminho);
+            border: 1px outset #666;
+            padding: 4px 8px;
+            font-size: 11px;
+            cursor: pointer;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .taskbar-app:hover {
+            background: var(--dourado);
+            color: var(--vinho);
+        }
+
+        .system-tray {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .tray-icon {
+            color: var(--dourado);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .tray-icon:hover {
+            background: rgba(240, 170, 83, 0.3);
+            transform: scale(1.1);
+        }
+
+        .clock {
+            color: var(--pergaminho);
+            font-size: 12px;
+            font-family: monospace;
+            padding: 4px 8px;
+            background: var(--vinho);
+            border: 1px inset #666;
+            cursor: pointer;
+        }
+
+        /* === JANELAS === */
+        .window {
+            position: absolute;
+            background: var(--pergaminho);
+            border: 3px outset #ccc;
+            border-radius: 0;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            min-width: 300px;
+            min-height: 200px;
+            z-index: 100;
+            display: none;
+        }
+
+        .window.active {
+            z-index: 200;
+        }
+
+        .window-header {
+            background: linear-gradient(to bottom, var(--dourado), #d4941f);
+            color: var(--vinho);
+            padding: 4px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .window-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 2px;
+        }
+
+        .window-control {
+            width: 18px;
+            height: 18px;
+            background: var(--pergaminho);
+            border: 1px outset #ccc;
+            color: var(--vinho);
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .window-control:hover {
+            background: var(--dourado);
+        }
+
+        .window-control:active {
+            border: 1px inset #ccc;
+        }
+
+        .window-content {
+            padding: 15px;
+            background: var(--pergaminho);
+            color: var(--vinho);
+            height: calc(100% - 30px);
+            overflow: auto;
+        }
+
+        /* === AURORA PLAYER === */
+        .aurora-player {
+            width: 480px;
+            height: 580px;
+            background: var(--azul);
+            color: var(--pergaminho);
+        }
+
+        .player-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: 100%;
+        }
+
+        .skin-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background: var(--vinho);
+            border-radius: 6px;
+            border: 1px solid var(--dourado);
+        }
+
+        .skin-selector label {
+            color: var(--dourado);
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .skin-selector select {
+            background: var(--pergaminho);
+            color: var(--vinho);
+            border: 1px solid var(--dourado);
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        .player-mask-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: var(--vinho);
+            border-radius: 12px;
+            border: 2px solid var(--dourado);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mask-frame {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player-viewport {
+            position: relative;
+            width: 80%;
+            height: 70%;
+            background: #000;
+            border-radius: 8px;
+            border: 2px solid var(--dourado);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #audio-visualizer {
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
+
+        .track-info {
+            text-align: center;
+            padding: 8px;
+            background: var(--vinho);
+            border-radius: 6px;
+            border: 1px solid var(--dourado);
+        }
+
+        .track-title {
+            color: var(--dourado);
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .track-artist {
+            color: var(--verde);
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .control-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px;
+        }
+
+        .control-buttons button {
+            width: 40px;
+            height: 40px;
+            background: var(--vinho);
+            color: var(--dourado);
+            border: 2px solid var(--dourado);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-buttons button:hover {
+            background: var(--dourado);
+            color: var(--vinho);
+            transform: scale(1.1);
+        }
+
+        .control-buttons button.active {
+            background: var(--dourado);
+            color: var(--vinho);
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px;
+        }
+
+        .time-display {
+            color: var(--dourado);
+            font-size: 11px;
+            font-family: monospace;
+            min-width: 35px;
+        }
+
+        .progress-bar {
+            flex-grow: 1;
+            position: relative;
+            height: 6px;
+            background: var(--vinho);
+            border-radius: 3px;
+            border: 1px solid var(--dourado);
+        }
+
+        .progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: var(--dourado);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px;
+        }
+
+        .volume-container span {
+            color: var(--dourado);
+            font-size: 12px;
+        }
+
+        .playlist-container {
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .playlist-container h4 {
+            color: var(--dourado);
+            margin: 0 0 8px 0;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .playlist {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .playlist-item {
+            padding: 6px 10px;
+            background: var(--vinho);
+            color: var(--pergaminho);
+            border-radius: 4px;
+            border: 1px solid var(--dourado);
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+
+        .playlist-item:hover {
+            background: var(--dourado);
+            color: var(--vinho);
+        }
+
+        .playlist-item.active {
+            background: var(--dourado);
+            color: var(--vinho);
+            font-weight: bold;
+        }
+
+        /* Máscaras */
+        .mask-classic {
+            background: radial-gradient(circle at center, var(--vinho) 0%, var(--azul) 70%);
+        }
+
+        .mask-mystical {
+            background: radial-gradient(ellipse at center, var(--dourado) 0%, var(--vinho) 40%, var(--azul) 100%);
+        }
+
+        .mask-celestial {
+            background: linear-gradient(45deg, var(--azul) 0%, var(--vinho) 50%, var(--dourado) 100%);
+        }
+
+        .mask-witch {
+            background: radial-gradient(circle at 30% 70%, var(--verde) 0%, var(--vinho) 50%, var(--azul) 100%);
+        }
+
+        /* === NOTIFICAÇÕES === */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--vinho);
+            color: var(--pergaminho);
+            border: 2px solid var(--dourado);
+            border-radius: 8px;
+            padding: 12px 16px;
+            max-width: 300px;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .notification-title {
+            color: var(--dourado);
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .notification-message {
+            font-size: 11px;
+            line-height: 1.3;
+        }
+
+        /* === RESPONSIVIDADE === */
+        @media (max-width: 768px) {
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fit, 80px);
+                gap: 15px;
+            }
+            
+            .desktop-icon {
+                width: 80px;
+            }
+            
+            .icon-image {
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+            }
+            
+            .aurora-player {
+                width: 90%;
+                height: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Boot -->
+    <div class="boot-screen" id="boot-screen">
+        <div class="boot-logo">
+            <img src="/home/ubuntu/upload/ChatGPTImage8deset.de2025,01_57_17.png" alt="MysticSoft" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
+        <div class="boot-text">MysticSoft</div>
+        <div class="boot-progress">
+            <div class="boot-progress-fill" id="boot-progress"></div>
+        </div>
+        <div class="boot-hint">Clique para iniciar a conjuração...</div>
+    </div>
+
+    <!-- Desktop -->
+    <div class="desktop" id="desktop">
+        <!-- Ícones do Desktop -->
+        <div class="desktop-icons">
+            <div class="desktop-icon" data-app="witch-tarot">
+                <div class="icon-image">🔮</div>
+                <div class="icon-label">Witch Tarot</div>
+            </div>
+            
+            <div class="desktop-icon" data-app="livros-interativos">
+                <div class="icon-image">📚</div>
+                <div class="icon-label">Livros Interativos</div>
+            </div>
+            
+            <div class="desktop-icon" data-app="estrelas-fixas">
+                <div class="icon-image">⭐</div>
+                <div class="icon-label">Estrelas Fixas</div>
+            </div>
+            
+            <div class="desktop-icon" data-app="roda-do-ano">
+                <div class="icon-image">🌙</div>
+                <div class="icon-label">Roda do Ano</div>
+            </div>
+            
+            <div class="desktop-icon" data-app="horas-planetarias">
+                <div class="icon-image">🕐</div>
+                <div class="icon-label">Horas Planetárias</div>
+            </div>
+            
+            <div class="desktop-icon" data-app="combina-ervas">
+                <div class="icon-image">🌿</div>
+                <div class="icon-label">Combina as Ervas</div>
+            </div>
+            
+            <div class="desktop-icon" data-app="arvore-vida">
+                <div class="icon-image">🌳</div>
+                <div class="icon-label">Árvore da Vida</div>
+            </div>
+            
+            <div class="desktop-icon" data-app="witch-tv">
+                <div class="icon-image">📺</div>
+                <div class="icon-label">Witch.TV</div>
+            </div>
+            
+            <div class="desktop-icon" data-app="aurora-player">
+                <div class="icon-image">🎵</div>
+                <div class="icon-label">Aurora Player</div>
+            </div>
+            
+            <div class="desktop-icon" data-app="afast">
+                <div class="icon-image">
+                    <img src="/home/ubuntu/upload/ChatGPTImage8deset.de2025,17_33_29.png" alt="AFAST!" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                <div class="icon-label">AFAST!</div>
+            </div>
+            
+            <div class="desktop-icon" data-app="grimorio">
+                <div class="icon-image">📜</div>
+                <div class="icon-label">Grimório</div>
+            </div>
+            
+            <div class="desktop-icon" data-app="lixeira">
+                <div class="icon-image">🗑️</div>
+                <div class="icon-label">Lixeira</div>
+            </div>
+        </div>
+
+        <!-- Barra de Tarefas -->
+        <div class="taskbar">
+            <button class="start-button" id="start-button">Iniciar</button>
+            <div class="taskbar-apps" id="taskbar-apps"></div>
+            <div class="system-tray">
+                <div class="tray-icon" id="planetary-indicator" title="Indicador Planetário">☉</div>
+                <div class="tray-icon" title="AFAST!">🛡️</div>
+                <div class="tray-icon" title="Volume">🔊</div>
+                <div class="tray-icon" title="Rede">📶</div>
+                <div class="clock" id="clock">00:00</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Janela do Aurora Player -->
+    <div class="window aurora-player" id="aurora-player-window">
+        <div class="window-header">
+            <div class="window-title">
+                <span>🎵</span>
+                <span>Aurora Player</span>
+            </div>
+            <div class="window-controls">
+                <button class="window-control" onclick="minimizeWindow('aurora-player-window')">_</button>
+                <button class="window-control" onclick="maximizeWindow('aurora-player-window')">□</button>
+                <button class="window-control" onclick="closeWindow('aurora-player-window')">×</button>
+            </div>
+        </div>
+        
+        <div class="window-content">
+            <div class="player-content">
+                <!-- Seletor de Skins -->
+                <div class="skin-selector">
+                    <label>Máscara:</label>
+                    <select id="skin-select">
+                        <option value="classic">Clássica Aurora</option>
+                        <option value="mystical">Orbe Místico</option>
+                        <option value="celestial">Portal Celestial</option>
+                        <option value="witch">Caldeirão da Bruxa</option>
+                    </select>
+                </div>
+                
+                <!-- Container da Máscara -->
+                <div class="player-mask-container" id="player-mask">
+                    <div class="mask-frame mask-classic" id="mask-frame">
+                        <div class="player-viewport" id="player-viewport">
+                            <canvas id="audio-visualizer" width="300" height="140"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Informações da Faixa -->
+                <div class="track-info" id="track-info">
+                    <div class="track-title" id="track-title">Moonlight Serenade</div>
+                    <div class="track-artist" id="track-artist">Aurora Sagrada</div>
+                </div>
+                
+                <!-- Controles -->
+                <div class="control-buttons">
+                    <button id="prev-btn" title="Anterior">⏮</button>
+                    <button id="play-btn" title="Play/Pause">▶</button>
+                    <button id="next-btn" title="Próxima">⏭</button>
+                    <button id="shuffle-btn" title="Aleatório">🔀</button>
+                    <button id="repeat-btn" title="Repetir">🔁</button>
+                </div>
+                
+                <!-- Progresso -->
+                <div class="progress-container">
+                    <span class="time-display" id="time-current">0:00</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <span class="time-display" id="time-total">3:00</span>
+                </div>
+                
+                <!-- Volume -->
+                <div class="volume-container">
+                    <span>🔊</span>
+                    <input type="range" id="volume-slider" min="0" max="100" value="70">
+                    <span id="volume-display">70%</span>
+                </div>
+                
+                <!-- Playlist -->
+                <div class="playlist-container">
+                    <h4>📜 Playlist Mística</h4>
+                    <div class="playlist" id="playlist">
+                        <div class="playlist-item active" data-track="0">🌙 Moonlight Serenade</div>
+                        <div class="playlist-item" data-track="1">⭐ Stellar Dreams</div>
+                        <div class="playlist-item" data-track="2">🔮 Crystal Meditation</div>
+                        <div class="playlist-item" data-track="3">🌿 Forest Whispers</div>
+                        <div class="playlist-item" data-track="4">🌟 Cosmic Dance</div>
+                        <div class="playlist-item" data-track="5">🔥 Phoenix Rising</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === SISTEMA PRINCIPAL ===
+        class AuroraOS {
+            constructor() {
+                this.windows = new Map();
+                this.zIndex = 100;
+                this.currentTrack = 0;
+                this.isPlaying = false;
+                this.playlist = [
+                    { title: "Moonlight Serenade", artist: "Aurora Sagrada" },
+                    { title: "Stellar Dreams", artist: "Aurora Sagrada" },
+                    { title: "Crystal Meditation", artist: "Aurora Sagrada" },
+                    { title: "Forest Whispers", artist: "Aurora Sagrada" },
+                    { title: "Cosmic Dance", artist: "Aurora Sagrada" },
+                    { title: "Phoenix Rising", artist: "Aurora Sagrada" }
+                ];
+                this.progressInterval = null;
+                this.currentTime = 0;
+                
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.updateClock();
+                this.initializeVisualizer();
+                setInterval(() => this.updateClock(), 1000);
+            }
+
+            setupEventListeners() {
+                // Boot screen
+                document.getElementById('boot-screen').addEventListener('click', () => this.startBoot());
+                
+                // Desktop icons
+                document.querySelectorAll('.desktop-icon').forEach(icon => {
+                    icon.addEventListener('dblclick', (e) => {
+                        const app = e.currentTarget.dataset.app;
+                        this.openApp(app);
+                    });
+                });
+
+                // Aurora Player controls
+                document.getElementById('play-btn').addEventListener('click', () => this.togglePlay());
+                document.getElementById('prev-btn').addEventListener('click', () => this.previousTrack());
+                document.getElementById('next-btn').addEventListener('click', () => this.nextTrack());
+                document.getElementById('shuffle-btn').addEventListener('click', () => this.toggleShuffle());
+                document.getElementById('repeat-btn').addEventListener('click', () => this.toggleRepeat());
+                
+                // Skin selector
+                document.getElementById('skin-select').addEventListener('change', (e) => {
+                    this.changeSkin(e.target.value);
+                });
+                
+                // Volume
+                document.getElementById('volume-slider').addEventListener('input', (e) => {
+                    document.getElementById('volume-display').textContent = e.target.value + '%';
+                });
+                
+                // Playlist
+                document.querySelectorAll('.playlist-item').forEach((item, index) => {
+                    item.addEventListener('click', () => this.selectTrack(index));
+                });
+            }
+
+            startBoot() {
+                const bootScreen = document.getElementById('boot-screen');
+                const desktop = document.getElementById('desktop');
+                const progressFill = document.getElementById('boot-progress');
+                
+                let progress = 0;
+                const bootInterval = setInterval(() => {
+                    progress += Math.random() * 20;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(bootInterval);
+                        
+                        setTimeout(() => {
+                            bootScreen.style.display = 'none';
+                            desktop.style.display = 'block';
+                            this.showNotification("🌟 Aurora OS", "Sistema inicializado com sucesso!");
+                        }, 500);
+                    }
+                    progressFill.style.width = progress + '%';
+                }, 200);
+            }
+
+            openApp(appName) {
+                switch(appName) {
+                    case 'aurora-player':
+                        this.openWindow('aurora-player-window', 'Aurora Player');
+                        break;
+                    case 'afast':
+                        this.showNotification("🛡️ AFAST!", "Guardiã Mística ativada - Sistema protegido");
+                        break;
+                    case 'witch-tv':
+                        this.showNotification("📺 Witch.TV", "Plataforma de streaming em desenvolvimento");
+                        break;
+                    default:
+                        this.showNotification("🔮 " + appName, "Aplicativo em desenvolvimento");
+                }
+            }
+
+            openWindow(windowId, title) {
+                const window = document.getElementById(windowId);
+                if (window) {
+                    window.style.display = 'block';
+                    window.style.zIndex = ++this.zIndex;
+                    window.style.left = '50px';
+                    window.style.top = '50px';
+                    
+                    this.windows.set(windowId, { title, element: window });
+                    this.updateTaskbar();
+                    
+                    // Make window draggable
+                    this.makeDraggable(window);
+                }
+            }
+
+            makeDraggable(element) {
+                const header = element.querySelector('.window-header');
+                let isDragging = false;
+                let currentX;
+                let currentY;
+                let initialX;
+                let initialY;
+                let xOffset = 0;
+                let yOffset = 0;
+
+                header.addEventListener('mousedown', (e) => {
+                    initialX = e.clientX - xOffset;
+                    initialY = e.clientY - yOffset;
+                    
+                    if (e.target === header || header.contains(e.target)) {
+                        isDragging = true;
+                        element.style.zIndex = ++this.zIndex;
+                    }
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (isDragging) {
+                        e.preventDefault();
+                        currentX = e.clientX - initialX;
+                        currentY = e.clientY - initialY;
+                        
+                        xOffset = currentX;
+                        yOffset = currentY;
+                        
+                        element.style.left = currentX + 'px';
+                        element.style.top = currentY + 'px';
+                    }
+                });
+
+                document.addEventListener('mouseup', () => {
+                    isDragging = false;
+                });
+            }
+
+            updateTaskbar() {
+                const taskbarApps = document.getElementById('taskbar-apps');
+                taskbarApps.innerHTML = '';
+                
+                this.windows.forEach((window, id) => {
+                    const button = document.createElement('button');
+                    button.className = 'taskbar-app';
+                    button.textContent = window.title;
+                    button.onclick = () => this.focusWindow(id);
+                    taskbarApps.appendChild(button);
+                });
+            }
+
+            focusWindow(windowId) {
+                const window = this.windows.get(windowId);
+                if (window) {
+                    window.element.style.zIndex = ++this.zIndex;
+                }
+            }
+
+            updateClock() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('pt-BR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                document.getElementById('clock').textContent = timeString;
+            }
+
+            showNotification(title, message) {
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.innerHTML = `
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 4000);
+            }
+
+            // === AURORA PLAYER ===
+            initializeVisualizer() {
+                this.canvas = document.getElementById('audio-visualizer');
+                this.ctx = this.canvas.getContext('2d');
+                this.drawVisualizer();
+            }
+
+            drawVisualizer() {
+                const width = this.canvas.width;
+                const height = this.canvas.height;
+                
+                this.ctx.fillStyle = '#000';
+                this.ctx.fillRect(0, 0, width, height);
+                
+                if (this.isPlaying) {
+                    const barCount = 32;
+                    const barWidth = width / barCount;
+                    
+                    for (let i = 0; i < barCount; i++) {
+                        const time = Date.now() * 0.001;
+                        const barHeight = (Math.sin(time + i * 0.5) * 0.5 + 0.5) * height * 0.8;
+                        
+                        const gradient = this.ctx.createLinearGradient(0, height, 0, height - barHeight);
+                        gradient.addColorStop(0, '#f0aa53');
+                        gradient.addColorStop(0.5, '#b2d1b1');
+                        gradient.addColorStop(1, '#3e0a29');
+                        
+                        this.ctx.fillStyle = gradient;
+                        this.ctx.fillRect(i * barWidth, height - barHeight, barWidth - 1, barHeight);
+                    }
+                } else {
+                    this.ctx.fillStyle = '#f0aa53';
+                    this.ctx.font = '14px Arial';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText('🎵 Aurora Player', width / 2, height / 2);
+                }
+                
+                requestAnimationFrame(() => this.drawVisualizer());
+            }
+
+            changeSkin(skinType) {
+                const maskFrame = document.getElementById('mask-frame');
+                maskFrame.className = 'mask-frame';
+                maskFrame.classList.add('mask-' + skinType);
+            }
+
+            togglePlay() {
+                this.isPlaying = !this.isPlaying;
+                const playBtn = document.getElementById('play-btn');
+                playBtn.textContent = this.isPlaying ? '⏸' : '▶';
+                
+                if (this.isPlaying) {
+                    this.simulatePlayback();
+                } else {
+                    if (this.progressInterval) {
+                        clearInterval(this.progressInterval);
+                    }
+                }
+            }
+
+            simulatePlayback() {
+                if (this.progressInterval) {
+                    clearInterval(this.progressInterval);
+                }
+                
+                this.currentTime = 0;
+                const duration = 180; // 3 minutos
+                
+                this.progressInterval = setInterval(() => {
+                    if (this.isPlaying) {
+                        this.currentTime += 1;
+                        const progress = (this.currentTime / duration) * 100;
+                        
+                        document.getElementById('progress-fill').style.width = progress + '%';
+                        document.getElementById('time-current').textContent = this.formatTime(this.currentTime);
+                        
+                        if (this.currentTime >= duration) {
+                            this.nextTrack();
+                        }
+                    }
+                }, 1000);
+            }
+
+            selectTrack(index) {
+                this.currentTrack = index;
+                const track = this.playlist[index];
+                
+                document.getElementById('track-title').textContent = track.title;
+                document.getElementById('track-artist').textContent = track.artist;
+                
+                // Update playlist visual
+                document.querySelectorAll('.playlist-item').forEach((item, i) => {
+                    item.classList.toggle('active', i === index);
+                });
+                
+                // Reset progress
+                this.currentTime = 0;
+                document.getElementById('progress-fill').style.width = '0%';
+                document.getElementById('time-current').textContent = '0:00';
+                
+                if (this.isPlaying) {
+                    this.simulatePlayback();
+                }
+            }
+
+            previousTrack() {
+                const newIndex = this.currentTrack > 0 ? this.currentTrack - 1 : this.playlist.length - 1;
+                this.selectTrack(newIndex);
+            }
+
+            nextTrack() {
+                const newIndex = this.currentTrack < this.playlist.length - 1 ? this.currentTrack + 1 : 0;
+                this.selectTrack(newIndex);
+            }
+
+            toggleShuffle() {
+                const btn = document.getElementById('shuffle-btn');
+                btn.classList.toggle('active');
+            }
+
+            toggleRepeat() {
+                const btn = document.getElementById('repeat-btn');
+                btn.classList.toggle('active');
+            }
+
+            formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs.toString().padStart(2, '0')}`;
+            }
+        }
+
+        // === FUNÇÕES GLOBAIS PARA CONTROLES DE JANELA ===
+        function closeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.style.display = 'none';
+                auroraOS.windows.delete(windowId);
+                auroraOS.updateTaskbar();
+            }
+        }
+
+        function minimizeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.style.display = 'none';
+            }
+        }
+
+        function maximizeWindow(windowId) {
+            // Implementar maximização se necessário
+            console.log('Maximizar:', windowId);
+        }
+
+        // === INICIALIZAÇÃO ===
+        let auroraOS;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            auroraOS = new AuroraOS();
+            console.log('🌟 Aurora OS • MysticSoft carregado com sucesso!');
+        });
+    </script>
+</body>
+</html>
+
