@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aurora OS • MysticSoft</title>
+    <title>MysticSoft • Sistema Operacional Mágico</title>
     <style>
         :root {
             --vinho: #3e0a29;
@@ -45,8 +45,9 @@
             width: 200px;
             height: 200px;
             margin-bottom: 30px;
-            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==') center/contain no-repeat;
+            background: url('assets/icons/MysticSoft.png') center/contain no-repeat;
             filter: drop-shadow(0 0 20px var(--dourado));
+            image-rendering: pixelated;
         }
 
         .boot-text {
@@ -627,10 +628,8 @@
 <body>
     <!-- Tela de Boot -->
     <div class="boot-screen" id="boot-screen">
-        <div class="boot-logo">
-            <img src="/home/ubuntu/upload/ChatGPTImage8deset.de2025,01_57_17.png" alt="MysticSoft" style="width: 100%; height: 100%; object-fit: contain;">
-        </div>
-        <div class="boot-text">MysticSoft</div>
+        <div class="boot-logo"></div>
+        <div class="boot-text">MysticSoft v1.0</div>
         <div class="boot-progress">
             <div class="boot-progress-fill" id="boot-progress"></div>
         </div>
@@ -677,8 +676,13 @@
             </div>
             
             <div class="desktop-icon" data-app="witch-tv">
-                <div class="icon-image">📺</div>
-                <div class="icon-label">Witch.TV</div>
+                <img src="assets/icons/Witch-TV.png" alt="Witch.TV" style="width: 84px; height: 84px; image-rendering: pixelated;">
+                <span>Witch.TV</span>
+            </div>
+            
+            <div class="desktop-icon" data-app="livros">
+                <img src="assets/icons/Livros-interativos.png" alt="Livros Interativos" style="width: 84px; height: 84px; image-rendering: pixelated;">
+                <span>Livros Interativos</span>
             </div>
             
             <div class="desktop-icon" data-app="aurora-player">
@@ -687,10 +691,8 @@
             </div>
             
             <div class="desktop-icon" data-app="afast">
-                <div class="icon-image">
-                    <img src="/home/ubuntu/upload/ChatGPTImage8deset.de2025,17_33_29.png" alt="AFAST!" style="width: 100%; height: 100%; object-fit: contain;">
-                </div>
-                <div class="icon-label">AFAST!</div>
+                <img src="assets/icons/Afast!.png" alt="AFAST!" style="width: 84px; height: 84px; image-rendering: pixelated;">
+                <span>AFAST!</span>
             </div>
             
             <div class="desktop-icon" data-app="grimorio">
@@ -880,7 +882,7 @@
                         setTimeout(() => {
                             bootScreen.style.display = 'none';
                             desktop.style.display = 'block';
-                            this.showNotification("🌟 Aurora OS", "Sistema inicializado com sucesso!");
+                            this.showNotification("🌟 MysticSoft", "Sistema inicializado com sucesso!");
                         }, 500);
                     }
                     progressFill.style.width = progress + '%';
