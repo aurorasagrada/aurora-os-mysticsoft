@@ -3070,6 +3070,19 @@
                 };
             }
             
+            // Inicializar sistemas adicionais
+            setTimeout(() => {
+                // Inicializar gerenciador de papel de parede
+                if (typeof WallpaperManager !== 'undefined') {
+                    window.wallpaperManager = new WallpaperManager();
+                }
+                
+                // Inicializar gerenciador de barra de tarefas
+                if (typeof TaskbarManager !== 'undefined') {
+                    window.taskbarManager = new TaskbarManager();
+                }
+            }, 2000);
+            
             console.log('🌟 Todos os sistemas MysticSoft carregados com sucesso!');
         });
 
@@ -3080,6 +3093,12 @@
             }
         }
     </script>
+
+    <!-- Sistema de Papel de Parede -->
+    <script src="wallpaper-system.js"></script>
+    
+    <!-- Barra de Tarefas Aprimorada -->
+    <script src="taskbar-enhanced.js"></script>
 </body>
 </html>
 
