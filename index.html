@@ -171,15 +171,15 @@
             font-weight: normal;
         }
 
-        /* === BARRA DE TAREFAS WINDOWS ME === */
+        /* === BARRA DE TAREFAS WINDOWS ME AUTÊNTICA === */
         .taskbar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 30px;
-            background: linear-gradient(to bottom, #d4d0c8 0%, #c0c0c0 50%, #a0a0a0 100%);
-            border-top: 1px solid #ffffff;
+            height: 28px;
+            background: linear-gradient(to bottom, #c0c0c0 0%, #c0c0c0 1px, #dfdfdf 1px, #dfdfdf 50%, #c0c0c0 50%, #a0a0a0 100%);
+            border-top: 1px solid #dfdfdf;
             border-bottom: 1px solid #404040;
             display: flex;
             align-items: center;
@@ -187,42 +187,48 @@
             padding: 0;
             z-index: 1000;
             box-shadow: inset 0 1px 0 #ffffff, inset 0 -1px 0 #808080;
-            font-family: 'MS Sans Serif', Tahoma, sans-serif;
+            font-family: 'MS Sans Serif', 'Microsoft Sans Serif', Tahoma, sans-serif;
             font-size: 11px;
         }
 
         .start-button {
-            background: linear-gradient(to bottom, #7fb069 0%, #6fa055 50%, #5a8a4a 100%);
-            border: 1px outset #7fb069;
-            border-left: 2px outset #7fb069;
-            border-top: 2px outset #7fb069;
+            background: linear-gradient(to bottom, #7fb069 0%, #7fb069 1px, #8fc079 1px, #8fc079 50%, #7fb069 50%, #5a8a4a 100%);
+            border-left: 1px solid #ffffff;
+            border-top: 1px solid #ffffff;
+            border-right: 1px solid #404040;
+            border-bottom: 1px solid #404040;
             color: white;
-            padding: 3px 8px 3px 20px;
+            padding: 2px 6px 2px 18px;
             font-weight: bold;
             font-size: 11px;
             cursor: pointer;
-            height: 24px;
-            margin: 3px 2px;
+            height: 22px;
+            margin: 3px 1px 3px 2px;
             position: relative;
-            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.5);
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.3);
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            min-width: 54px;
         }
 
         .start-button:before {
             content: "🌟";
             position: absolute;
-            left: 4px;
+            left: 3px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 10px;
+            font-size: 9px;
+            filter: drop-shadow(0 0 2px rgba(255,255,255,0.8));
         }
 
         .start-button:hover {
-            background: linear-gradient(to bottom, #8fc079 0%, #7fb065 50%, #6a9a5a 100%);
+            background: linear-gradient(to bottom, #8fc079 0%, #8fc079 1px, #9fd089 1px, #9fd089 50%, #8fc079 50%, #6a9a5a 100%);
         }
 
         .start-button:active {
-            border: 1px inset #7fb069;
+            border-left: 1px solid #404040;
+            border-top: 1px solid #404040;
+            border-right: 1px solid #ffffff;
+            border-bottom: 1px solid #ffffff;
             box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
         }
 
@@ -230,46 +236,64 @@
             flex: 1;
             display: flex;
             gap: 1px;
-            margin: 0 4px;
-            height: 24px;
+            margin: 0 2px;
+            height: 22px;
             align-items: center;
+            padding: 3px 0;
         }
 
         .taskbar-app {
-            background: linear-gradient(to bottom, #d4d0c8 0%, #c0c0c0 50%, #a0a0a0 100%);
-            border: 1px outset #c0c0c0;
-            padding: 2px 8px;
+            background: linear-gradient(to bottom, #c0c0c0 0%, #c0c0c0 1px, #dfdfdf 1px, #dfdfdf 50%, #c0c0c0 50%, #a0a0a0 100%);
+            border-left: 1px solid #ffffff;
+            border-top: 1px solid #ffffff;
+            border-right: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+            padding: 1px 6px;
             font-size: 11px;
             cursor: pointer;
-            max-width: 150px;
+            max-width: 160px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            height: 20px;
+            height: 18px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
+            color: #000000;
         }
 
         .taskbar-app:hover {
-            background: linear-gradient(to bottom, #e4e0d8 0%, #d0d0d0 50%, #b0b0b0 100%);
+            background: linear-gradient(to bottom, #d0d0d0 0%, #d0d0d0 1px, #efefef 1px, #efefef 50%, #d0d0d0 50%, #b0b0b0 100%);
         }
 
         .taskbar-app.active {
-            border: 1px inset #c0c0c0;
-            background: linear-gradient(to bottom, #a0a0a0 0%, #c0c0c0 50%, #d4d0c8 100%);
+            border-left: 1px solid #808080;
+            border-top: 1px solid #808080;
+            border-right: 1px solid #ffffff;
+            border-bottom: 1px solid #ffffff;
+            background: linear-gradient(to bottom, #a0a0a0 0%, #a0a0a0 1px, #b0b0b0 1px, #b0b0b0 50%, #c0c0c0 50%, #dfdfdf 100%);
+            box-shadow: inset 1px 1px 1px rgba(0,0,0,0.2);
         }
 
         .system-tray {
             display: flex;
             align-items: center;
-            gap: 4px;
-            padding: 0 4px;
-            height: 24px;
+            gap: 2px;
+            padding: 0 2px;
+            height: 22px;
             border-left: 1px solid #808080;
             border-right: 1px solid #ffffff;
-            background: linear-gradient(to bottom, #d4d0c8 0%, #c0c0c0 50%, #a0a0a0 100%);
-            margin: 3px 2px 3px 0;
+            background: linear-gradient(to bottom, #c0c0c0 0%, #c0c0c0 1px, #dfdfdf 1px, #dfdfdf 50%, #c0c0c0 50%, #a0a0a0 100%);
+            margin: 3px 1px 3px 0;
+            min-width: 120px;
+        }
+
+        .system-tray:before {
+            content: "";
+            width: 1px;
+            height: 16px;
+            background: linear-gradient(to bottom, #808080, #ffffff);
+            margin-right: 2px;
         }
 
         .system-tray-icon {
@@ -277,58 +301,83 @@
             height: 16px;
             cursor: pointer;
             border: 1px solid transparent;
-            padding: 1px;
-            border-radius: 1px;
+            padding: 0;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
         }
 
         .system-tray-icon:hover {
-            border: 1px outset #c0c0c0;
-            background: linear-gradient(to bottom, #e4e0d8, #d0d0d0);
+            border-left: 1px solid #ffffff;
+            border-top: 1px solid #ffffff;
+            border-right: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+            background: linear-gradient(to bottom, #d0d0d0, #c0c0c0);
         }
 
-        .planetary-indicator {
-            font-size: 12px;
-            color: #f0aa53;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-            animation: planetaryGlow 2s ease-in-out infinite alternate;
-            cursor: pointer;
-            padding: 2px;
-            border-radius: 2px;
-        }
-
-        .planetary-indicator:hover {
-            background: rgba(240, 170, 83, 0.2);
-            border: 1px solid rgba(240, 170, 83, 0.5);
-        }
-
-        .clock {
-            font-family: 'MS Sans Serif', Tahoma, sans-serif;
-            font-size: 11px;
-            color: #000000;
-            padding: 3px 8px;
-            background: linear-gradient(to bottom, #d4d0c8 0%, #c0c0c0 50%, #a0a0a0 100%);
-            border: 1px inset #c0c0c0;
+        .system-tray-icon:active {
             border-left: 1px solid #808080;
             border-top: 1px solid #808080;
             border-right: 1px solid #ffffff;
             border-bottom: 1px solid #ffffff;
-            min-width: 50px;
+            background: linear-gradient(to bottom, #a0a0a0, #c0c0c0);
+        }
+
+        .planetary-indicator {
+            font-size: 11px;
+            color: #f0aa53;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            animation: planetaryGlow 2s ease-in-out infinite alternate;
+            cursor: pointer;
+            padding: 1px;
+            border-radius: 0;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .planetary-indicator:hover {
+            background: rgba(240, 170, 83, 0.2);
+            border-left: 1px solid #ffffff;
+            border-top: 1px solid #ffffff;
+            border-right: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+        }
+
+        .clock {
+            font-family: 'MS Sans Serif', 'Microsoft Sans Serif', Tahoma, sans-serif;
+            font-size: 11px;
+            color: #000000;
+            padding: 2px 6px;
+            background: linear-gradient(to bottom, #a0a0a0 0%, #a0a0a0 1px, #b0b0b0 1px, #b0b0b0 50%, #c0c0c0 50%, #dfdfdf 100%);
+            border-left: 1px solid #808080;
+            border-top: 1px solid #808080;
+            border-right: 1px solid #ffffff;
+            border-bottom: 1px solid #ffffff;
+            min-width: 46px;
             text-align: center;
-            height: 24px;
+            height: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 3px 2px;
             cursor: pointer;
-            box-shadow: inset 1px 1px 1px rgba(128,128,128,0.5);
+            box-shadow: inset 1px 1px 1px rgba(0,0,0,0.2);
         }
 
         .clock:hover {
-            background: linear-gradient(to bottom, #e4e0d8 0%, #d0d0d0 50%, #b0b0b0 100%);
+            background: linear-gradient(to bottom, #b0b0b0 0%, #b0b0b0 1px, #c0c0c0 1px, #c0c0c0 50%, #d0d0d0 50%, #efefef 100%);
         }
 
         .clock:active {
-            border: 1px inset #c0c0c0;
+            border-left: 1px solid #404040;
+            border-top: 1px solid #404040;
+            border-right: 1px solid #dfdfdf;
+            border-bottom: 1px solid #dfdfdf;
             box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
         }
 
