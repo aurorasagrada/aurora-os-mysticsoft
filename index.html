@@ -109,7 +109,6 @@
             align-items: center;
             padding: 0 10px;
             box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #404040;
-            z-index: 1000;
         }
 
         .start-button {
@@ -120,74 +119,10 @@
             color: #000;
             cursor: pointer;
             margin-right: 10px;
-            position: relative;
         }
 
         .start-button:active {
             border: 2px inset #c0c0c0;
-        }
-
-        .start-button.active {
-            border: 2px inset #c0c0c0;
-        }
-
-        /* === MENU INICIAR === */
-        .start-menu {
-            position: absolute;
-            bottom: 60px;
-            left: 0;
-            width: 300px;
-            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border: 2px outset #c0c0c0;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-            display: none;
-            z-index: 2000;
-        }
-
-        .start-menu.active {
-            display: block;
-        }
-
-        .start-menu-header {
-            background: linear-gradient(90deg, var(--azul), var(--vinho));
-            color: var(--pergaminho);
-            padding: 10px;
-            font-weight: bold;
-            border-bottom: 1px solid #808080;
-        }
-
-        .start-menu-items {
-            padding: 5px 0;
-        }
-
-        .start-menu-item {
-            display: flex;
-            align-items: center;
-            padding: 8px 15px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #000;
-        }
-
-        .start-menu-item:hover {
-            background: #0066cc;
-            color: white;
-        }
-
-        .start-menu-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-
-        .start-menu-separator {
-            height: 1px;
-            background: #808080;
-            margin: 5px 10px;
         }
 
         .clock {
@@ -233,15 +168,15 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
+            image-rendering: pixelated;
+            object-fit: contain;
         }
 
         .icon-image img {
-            width: 48px;
-            height: 48px;
+            width: 100%;
+            height: 100%;
             image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-            border-radius: 8px;
+            object-fit: contain;
         }
 
         .icon-label {
@@ -672,196 +607,25 @@
             color: white;
         }
 
-        /* Estilos AstroMágick Preview */
-        .astromagick-preview {
-            padding: 20px;
-            font-family: 'MS Sans Serif', sans-serif;
-        }
-        
-        .astro-preview-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-            padding: 15px;
-            background: linear-gradient(135deg, #f2eaff 0%, #e6d7ff 100%);
-            border: 2px inset #c0c0c0;
-            border-radius: 8px;
-        }
-        
-        .astro-preview-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 10px;
-            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-            border: 1px outset #c0c0c0;
-            border-radius: 4px;
-            text-align: center;
-        }
-        
-        .preview-icon {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        
-        .preview-label {
-            font-size: 11px;
-            color: #666;
-            font-weight: bold;
-            margin-bottom: 3px;
-        }
-        
-        .preview-value {
-            font-size: 13px;
-            color: #3e0a29;
-            font-weight: bold;
-        }
-        
-        .astro-actions {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-            justify-content: center;
-        }
-        
-        .astro-btn {
-            padding: 8px 16px;
-            border: 2px outset #c0c0c0;
-            background: linear-gradient(135deg, #f0f0f0 0%, #d0d0d0 100%);
-            font-family: 'MS Sans Serif', sans-serif;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 3px;
-            transition: all 0.1s;
-        }
-        
-        .astro-btn:hover {
-            background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
-        }
-        
-        .astro-btn:active {
-            border: 2px inset #c0c0c0;
-        }
-        
-        .astro-btn.primary {
-            background: linear-gradient(135deg, #f0aa53 0%, #e09040 100%);
-            color: white;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
-        }
-        
-        .astro-btn.primary:hover {
-            background: linear-gradient(135deg, #e09040 0%, #d08030 100%);
-        }
-        
-        .astro-features {
-            margin-top: 20px;
-            padding: 15px;
-            background: linear-gradient(135deg, #b2d1b1 0%, #a0c0a0 100%);
-            border: 2px inset #c0c0c0;
-            border-radius: 8px;
-        }
-        
-        .astro-features h4 {
-            margin: 0 0 10px 0;
-            color: #0b1836;
-            font-size: 12px;
-        }
-        
-        .astro-features ul {
-            margin: 0;
-            padding-left: 20px;
-            font-size: 11px;
-            color: #0b1836;
-        }
-        
-        /* Estilos para notificações */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #f0aa53 0%, #e09040 100%);
-            color: white;
-            padding: 15px 20px;
-            border: 2px outset #c0c0c0;
-            border-radius: 8px;
-            font-family: 'MS Sans Serif', sans-serif;
-            font-size: 12px;
-            font-weight: bold;
-            box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
-            z-index: 10000;
-            animation: slideIn 0.3s ease-out;
-            max-width: 300px;
-        }
-        
-        .notification.success {
-            background: linear-gradient(135deg, #b2d1b1 0%, #a0c0a0 100%);
-            color: #0b1836;
-        }
-        
-        .notification.error {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-            color: white;
-        }
-        
-        .notification.info {
-            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-            color: white;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-        
-        .notification.hiding {
-            animation: slideOut 0.3s ease-in;
-        }
-
-        .astro-features li {
-            margin-bottom: 5px;
-        }
-
-        /* === ASTROMAGICK EXPANDIDO === */
+        /* Estilos AstroMágick Expandido */
         .astro-tabs {
             display: flex;
-            border-bottom: 2px solid var(--vinho);
+            border-bottom: 2px solid var(--dourado);
             margin-bottom: 15px;
-            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 100%);
-            border-radius: 8px 8px 0 0;
-            overflow: hidden;
+            background: linear-gradient(180deg, #f0f0f0 0%, #d0d0d0 100%);
+            border-radius: 5px 5px 0 0;
         }
 
         .astro-tab {
             flex: 1;
             padding: 10px 15px;
-            background: transparent;
             border: none;
-            color: var(--pergaminho);
-            font-family: 'MS Sans Serif', sans-serif;
-            font-size: 11px;
-            font-weight: bold;
+            background: linear-gradient(180deg, #e0e0e0 0%, #c0c0c0 100%);
+            border-right: 1px solid #999;
             cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
             transition: all 0.3s ease;
-            border-right: 1px solid rgba(255,255,255,0.2);
         }
 
         .astro-tab:last-child {
@@ -869,308 +633,182 @@
         }
 
         .astro-tab:hover {
-            background: rgba(255,255,255,0.1);
-            transform: translateY(-2px);
+            background: linear-gradient(180deg, #f0f0f0 0%, #d0d0d0 100%);
         }
 
         .astro-tab.active {
-            background: linear-gradient(135deg, var(--dourado) 0%, var(--verde) 100%);
-            color: var(--azul);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            background: linear-gradient(180deg, var(--dourado) 0%, #e6a000 100%);
+            color: white;
+            border-bottom: 2px solid var(--verde-salvia);
         }
 
         .astro-tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease-in;
+            min-height: 300px;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
-        .astro-tab-content.active {
+        .astro-tab-panel {
+            display: none;
+            padding: 15px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .astro-tab-panel.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Posições Planetárias */
         .planets-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-bottom: 15px;
+            margin-top: 10px;
         }
 
-        .planet-card {
-            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 100%);
-            border: 2px outset #c0c0c0;
-            border-radius: 8px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: transform 0.2s ease;
+        .planet-item {
+            padding: 8px;
+            background: linear-gradient(180deg, #f8f8f8 0%, #e8e8e8 100%);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
         }
 
-        .planet-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        .planet-symbol {
-            font-size: 24px;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--dourado) 0%, var(--verde) 100%);
-            border-radius: 50%;
-            color: var(--azul);
-            font-weight: bold;
-        }
-
-        .planet-info strong {
-            display: block;
-            color: var(--dourado);
-            font-size: 12px;
-            margin-bottom: 4px;
-        }
-
-        .planet-info div {
-            color: var(--pergaminho);
-            font-size: 11px;
-        }
-
-        /* Informações Lunares */
         .lunar-info {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 15px;
+            margin-top: 10px;
         }
 
-        .lunar-card {
-            background: linear-gradient(135deg, var(--vinho) 0%, var(--azul) 100%);
-            border: 2px outset #c0c0c0;
-            border-radius: 8px;
-            padding: 15px;
+        .lunar-phase, .lunar-calendar, .lunar-energy {
+            padding: 10px;
+            background: linear-gradient(180deg, #f0f8ff 0%, #e0f0ff 100%);
+            border: 1px solid var(--azul-marinho);
+            border-radius: 5px;
         }
 
-        .lunar-card h4 {
-            color: var(--dourado);
-            margin-bottom: 10px;
-            font-size: 12px;
+        .phase-display {
+            font-size: 18px;
+            text-align: center;
+            margin: 10px 0;
         }
 
-        .lunar-phase {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .moon-icon {
-            font-size: 32px;
-        }
-
-        #next-phases div {
-            margin-bottom: 5px;
-            font-size: 11px;
-            color: var(--pergaminho);
-        }
-
-        /* Trânsitos */
-        .transits-list, .aspects-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .transit-item, .aspect-item {
-            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 100%);
-            border: 2px outset #c0c0c0;
-            border-radius: 8px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .transit-icon, .aspect-symbol {
-            font-size: 20px;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--dourado) 0%, var(--verde) 100%);
-            border-radius: 50%;
-            color: var(--azul);
+        .illumination {
+            text-align: center;
             font-weight: bold;
-        }
-
-        .transit-info, .aspect-info {
-            flex: 1;
-        }
-
-        .transit-info strong, .aspect-info strong {
-            display: block;
             color: var(--dourado);
-            font-size: 12px;
-            margin-bottom: 4px;
         }
 
-        .transit-info div, .aspect-info div {
-            color: var(--pergaminho);
-            font-size: 11px;
+        .phase-item {
+            margin: 5px 0;
+            padding: 5px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 3px;
         }
 
-        .transit-level {
-            font-size: 16px;
+        .transits-list, .aspects-list, .alerts-section {
+            margin-top: 10px;
         }
 
-        /* Aspectos */
-        .aspect-item.harmonious {
-            border-left: 4px solid var(--verde);
+        .transit-item, .aspect-item, .alert-item {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
         }
 
-        .aspect-item.tense {
-            border-left: 4px solid #ff6b6b;
+        .transit-item.favorable, .aspect-item.harmonious, .alert-item.favorable {
+            background: linear-gradient(180deg, #f0fff0 0%, #e0ffe0 100%);
+            border-left-color: #00aa00;
         }
 
-        .aspect-item.neutral {
-            border-left: 4px solid var(--dourado);
+        .transit-item.attention, .aspect-item.neutral {
+            background: linear-gradient(180deg, #fffaf0 0%, #fff0e0 100%);
+            border-left-color: #ffaa00;
         }
 
-        /* Alertas */
-        .alerts-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .alert-item {
-            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 100%);
-            border: 2px outset #c0c0c0;
-            border-radius: 8px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .aspect-item.tense, .alert-item.attention {
+            background: linear-gradient(180deg, #fff8f0 0%, #ffe8e0 100%);
+            border-left-color: #ff6600;
         }
 
         .alert-item.critical {
-            border-left: 4px solid #ff4757;
-            background: linear-gradient(135deg, #ff4757 0%, #c44569 100%);
-        }
-
-        .alert-item.warning {
-            border-left: 4px solid #ffa502;
-            background: linear-gradient(135deg, #ffa502 0%, #ff6348 100%);
-        }
-
-        .alert-item.info {
-            border-left: 4px solid var(--verde);
-        }
-
-        .alert-icon {
-            font-size: 18px;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .alert-info strong {
-            display: block;
-            color: var(--pergaminho);
-            font-size: 12px;
-            margin-bottom: 4px;
-        }
-
-        .alert-info div {
-            color: var(--pergaminho);
-            font-size: 11px;
-            opacity: 0.9;
+            background: linear-gradient(180deg, #fff0f0 0%, #ffe0e0 100%);
+            border-left-color: #ff0000;
         }
 
         .alert-settings {
-            background: linear-gradient(135deg, var(--vinho) 0%, var(--azul) 100%);
-            border: 2px inset #c0c0c0;
-            border-radius: 8px;
+            margin-top: 20px;
             padding: 15px;
+            background: linear-gradient(180deg, #f8f8f8 0%, #e8e8e8 100%);
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
-        .alert-settings h4 {
-            color: var(--dourado);
-            margin-bottom: 10px;
-            font-size: 12px;
+        .setting-item {
+            margin: 8px 0;
+            padding: 5px;
         }
 
-        .alert-settings label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--pergaminho);
-            font-size: 11px;
+        .setting-item label {
+            display: flex;
+            align-items: center;
             cursor: pointer;
         }
 
-        .alert-settings input[type="checkbox"] {
+        .setting-item input[type="checkbox"] {
             margin-right: 8px;
         }
 
-        /* Footer */
-        .astro-footer {
+        .astro-actions {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 15px;
             padding-top: 15px;
-            border-top: 2px solid var(--vinho);
+            border-top: 1px solid #ccc;
         }
 
-        .astro-full-btn, .astro-refresh-btn {
+        .astro-btn {
             flex: 1;
-            padding: 12px 20px;
-            border: 2px outset #c0c0c0;
-            border-radius: 6px;
-            font-family: 'MS Sans Serif', sans-serif;
-            font-size: 11px;
-            font-weight: bold;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
 
-        .astro-full-btn {
-            background: linear-gradient(135deg, var(--dourado) 0%, var(--verde) 100%);
-            color: var(--azul);
+        .astro-btn.primary {
+            background: linear-gradient(180deg, var(--dourado) 0%, #e6a000 100%);
+            color: white;
         }
 
-        .astro-refresh-btn {
-            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 100%);
-            color: var(--pergaminho);
+        .astro-btn.secondary {
+            background: linear-gradient(180deg, var(--verde-salvia) 0%, #a0c0a0 100%);
+            color: white;
         }
 
-        .astro-full-btn:hover, .astro-refresh-btn:hover {
+        .astro-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        .astro-full-btn:active, .astro-refresh-btn:active {
-            transform: translateY(0);
-            border: 2px inset #c0c0c0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
     </style>
 </head>
 <body>
     <!-- Tela de Boot -->
     <div class="boot-screen" id="boot-screen">
-        <div class="boot-logo">🌟</div>
-        <div class="boot-title">MysticSoft v1.0</div>
-        <div class="boot-progress">
-            <div class="boot-progress-fill" id="boot-progress"></div>
+        <div class="boot-content">
+            <div class="boot-logo">
+                <img src="icons/MysticSoft.png" alt="MysticSoft" style="width: 80px; height: 80px; image-rendering: pixelated;">
+            </div>
+            <h1>MysticSoft v1.0</h1>
+            <div class="progress-bar">
+                <div class="progress-fill" id="boot-progress"></div>
+            </div>
+            <p>Clique para iniciar a conjuração...</p>
         </div>
-        <div class="boot-hint">Clique para iniciar a conjuração...</div>
     </div>
 
     <!-- Desktop -->
@@ -1178,7 +816,7 @@
         <!-- Ícones do Desktop -->
         <div class="desktop-icons">
             <div class="desktop-icon" data-app="astromagick">
-                <div class="icon-image"><img src="icons/Astromágick.png" alt="AstroMágick" style="width: 48px; height: 48px;"></div>
+                <img src="icons/Astromágick.png" alt="AstroMágick" class="icon-image">
                 <div class="icon-label">AstroMágick</div>
             </div>
             <div class="desktop-icon" data-app="aurora-player">
@@ -1186,11 +824,11 @@
                 <div class="icon-label">Aurora Player</div>
             </div>
             <div class="desktop-icon" data-app="witch-tv">
-                <div class="icon-image"><img src="icons/Witch-TV.png" alt="Witch.TV" style="width: 48px; height: 48px;"></div>
+                <img src="icons/Witch-TV.png" alt="Witch.TV" class="icon-image">
                 <div class="icon-label">Witch.TV</div>
             </div>
             <div class="desktop-icon" data-app="afast">
-                <div class="icon-image"><img src="icons/afast.png" alt="AFAST!" style="width: 48px; height: 48px;"></div>
+                <img src="icons/afast.png" alt="AFAST!" class="icon-image">
                 <div class="icon-label">AFAST!</div>
             </div>
             <div class="desktop-icon" data-app="tarot">
@@ -1198,63 +836,21 @@
                 <div class="icon-label">Tarô</div>
             </div>
             <div class="desktop-icon" data-app="books">
-                <div class="icon-image"><img src="icons/Livros-interativos.png" alt="Livros Interativos" style="width: 48px; height: 48px;"></div>
+                <img src="icons/Livros-interativos.png" alt="Livros Interativos" class="icon-image">
                 <div class="icon-label">Livros Interativos</div>
             </div>
         </div>
 
-        <!-- Widget AstroMágick removido - agora é um ícone clicável -->
+
 
         <!-- Barra de Tarefas -->
         <div class="taskbar">
-            <div class="start-button" id="start-button">Iniciar</div>
+            <div class="start-button">Iniciar</div>
             <div class="clock" id="clock">00:00</div>
-            
-            <!-- Menu Iniciar -->
-            <div class="start-menu" id="start-menu">
-                <div class="start-menu-header">
-                    🌟 Aurora OS • MysticSoft
-                </div>
-                <div class="start-menu-items">
-                    <div class="start-menu-item" data-app="astromagick">
-                        <div class="start-menu-icon">🌙</div>
-                        <span>AstroMágick</span>
-                    </div>
-                    <div class="start-menu-item" data-app="aurora-player">
-                        <div class="start-menu-icon">🎵</div>
-                        <span>Aurora Player</span>
-                    </div>
-                    <div class="start-menu-item" data-app="witch-tv">
-                        <div class="start-menu-icon">📺</div>
-                        <span>Witch.TV</span>
-                    </div>
-                    <div class="start-menu-item" data-app="afast">
-                        <div class="start-menu-icon">🗣️</div>
-                        <span>AFAST!</span>
-                    </div>
-                    <div class="start-menu-item" data-app="tarot">
-                        <div class="start-menu-icon">🔮</div>
-                        <span>Tarô Místico</span>
-                    </div>
-                    <div class="start-menu-item" data-app="books">
-                        <div class="start-menu-icon">📚</div>
-                        <span>Livros Interativos</span>
-                    </div>
-                    <div class="start-menu-separator"></div>
-                    <div class="start-menu-item" onclick="location.reload()">
-                        <div class="start-menu-icon">🔄</div>
-                        <span>Reiniciar Sistema</span>
-                    </div>
-                    <div class="start-menu-item" onclick="window.close()">
-                        <div class="start-menu-icon">⚡</div>
-                        <span>Desligar</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- Janela AstroMágick -->
+    <!-- Janela AstroMágick Expandida -->
     <div class="window" id="astromagick-window">
         <div class="window-header">
             <span class="window-title">🌙 AstroMágick - Portal Astrológico Completo</span>
@@ -1264,223 +860,120 @@
             </div>
         </div>
         <div class="window-content">
-            <!-- Abas de navegação -->
+            <!-- Sistema de Abas -->
             <div class="astro-tabs">
-                <button class="astro-tab active" onclick="showAstroTab('positions')">📊 Posições</button>
-                <button class="astro-tab" onclick="showAstroTab('lunar')">🌙 Lunar</button>
-                <button class="astro-tab" onclick="showAstroTab('transits')">⚡ Trânsitos</button>
-                <button class="astro-tab" onclick="showAstroTab('aspects')">🔮 Aspectos</button>
-                <button class="astro-tab" onclick="showAstroTab('alerts')">🚨 Alertas</button>
+                <button class="astro-tab active" onclick="switchAstroTab('positions')">📊 Posições</button>
+                <button class="astro-tab" onclick="switchAstroTab('lunar')">🌙 Lunar</button>
+                <button class="astro-tab" onclick="switchAstroTab('transits')">⚡ Trânsitos</button>
+                <button class="astro-tab" onclick="switchAstroTab('aspects')">🔮 Aspectos</button>
+                <button class="astro-tab" onclick="switchAstroTab('alerts')">🚨 Alertas</button>
             </div>
 
-            <!-- Conteúdo das abas -->
-            <div id="astro-tab-positions" class="astro-tab-content active">
-                <h3>📊 Posições Planetárias Atuais</h3>
-                <div class="planets-grid">
-                    <div class="planet-card">
-                        <div class="planet-symbol">☉</div>
-                        <div class="planet-info">
-                            <strong>Sol</strong>
-                            <div id="sun-position">♍ Virgem 18°</div>
-                        </div>
-                    </div>
-                    <div class="planet-card">
-                        <div class="planet-symbol">☽</div>
-                        <div class="planet-info">
-                            <strong>Lua</strong>
-                            <div id="moon-position">♓ Peixes 12°</div>
-                        </div>
-                    </div>
-                    <div class="planet-card">
-                        <div class="planet-symbol">☿</div>
-                        <div class="planet-info">
-                            <strong>Mercúrio</strong>
-                            <div id="mercury-position">♍ Virgem 25°</div>
-                        </div>
-                    </div>
-                    <div class="planet-card">
-                        <div class="planet-symbol">♀</div>
-                        <div class="planet-info">
-                            <strong>Vênus</strong>
-                            <div id="venus-position">♎ Libra 3°</div>
-                        </div>
-                    </div>
-                    <div class="planet-card">
-                        <div class="planet-symbol">♂</div>
-                        <div class="planet-info">
-                            <strong>Marte</strong>
-                            <div id="mars-position">♋ Câncer 28°</div>
-                        </div>
-                    </div>
-                    <div class="planet-card">
-                        <div class="planet-symbol">♃</div>
-                        <div class="planet-info">
-                            <strong>Júpiter</strong>
-                            <div id="jupiter-position">♊ Gêmeos 15°</div>
-                        </div>
-                    </div>
-                    <div class="planet-card">
-                        <div class="planet-symbol">♄</div>
-                        <div class="planet-info">
-                            <strong>Saturno</strong>
-                            <div id="saturn-position">♓ Peixes 19°</div>
-                        </div>
-                    </div>
-                    <div class="planet-card">
-                        <div class="planet-symbol">♅</div>
-                        <div class="planet-info">
-                            <strong>Urano</strong>
-                            <div id="uranus-position">♉ Touro 27°</div>
-                        </div>
-                    </div>
-                    <div class="planet-card">
-                        <div class="planet-symbol">♆</div>
-                        <div class="planet-info">
-                            <strong>Netuno</strong>
-                            <div id="neptune-position">♓ Peixes 29°</div>
-                        </div>
-                    </div>
-                    <div class="planet-card">
-                        <div class="planet-symbol">♇</div>
-                        <div class="planet-info">
-                            <strong>Plutão</strong>
-                            <div id="pluto-position">♑ Capricórnio 29°</div>
-                        </div>
+            <!-- Conteúdo das Abas -->
+            <div class="astro-tab-content">
+                <!-- Aba Posições -->
+                <div id="positions-tab" class="astro-tab-panel active">
+                    <h3>📊 Posições Planetárias</h3>
+                    <div class="planets-grid">
+                        <div class="planet-item">☉ <strong>Sol:</strong> Virgem 18°23'</div>
+                        <div class="planet-item">☽ <strong>Lua:</strong> Peixes 12°45'</div>
+                        <div class="planet-item">☿ <strong>Mercúrio:</strong> Virgem 25°12'</div>
+                        <div class="planet-item">♀ <strong>Vênus:</strong> Libra 3°08'</div>
+                        <div class="planet-item">♂ <strong>Marte:</strong> Câncer 28°33'</div>
+                        <div class="planet-item">♃ <strong>Júpiter:</strong> Gêmeos 15°27'</div>
+                        <div class="planet-item">♄ <strong>Saturno:</strong> Peixes 19°41'</div>
+                        <div class="planet-item">♅ <strong>Urano:</strong> Touro 27°15'</div>
+                        <div class="planet-item">♆ <strong>Netuno:</strong> Peixes 29°52'</div>
+                        <div class="planet-item">♇ <strong>Plutão:</strong> Capricórnio 29°38'</div>
                     </div>
                 </div>
-            </div>
 
-            <div id="astro-tab-lunar" class="astro-tab-content">
-                <h3>🌙 Informações Lunares Detalhadas</h3>
-                <div class="lunar-info">
-                    <div class="lunar-card">
-                        <h4>Fase Atual</h4>
+                <!-- Aba Lunar -->
+                <div id="lunar-tab" class="astro-tab-panel">
+                    <h3>🌙 Informações Lunares</h3>
+                    <div class="lunar-info">
                         <div class="lunar-phase">
-                            <span class="moon-icon" id="moon-phase-icon">🌖</span>
-                            <div>
-                                <strong id="moon-phase-name">Gibosa Minguante</strong>
-                                <div id="moon-illumination">87% iluminada</div>
-                            </div>
+                            <h4>Fase Atual</h4>
+                            <div class="phase-display">🌖 <strong>Gibosa Minguante</strong></div>
+                            <div class="illumination">87% iluminada</div>
                         </div>
-                    </div>
-                    <div class="lunar-card">
-                        <h4>Próximas Fases</h4>
-                        <div id="next-phases">
-                            <div>🌗 Quarto Minguante: 15/09 às 22:33</div>
-                            <div>🌑 Lua Nova: 29/09 às 20:53</div>
-                            <div>🌓 Quarto Crescente: 06/10 às 15:47</div>
-                            <div>🌕 Lua Cheia: 14/10 às 18:08</div>
+                        <div class="lunar-calendar">
+                            <h4>Próximas Fases</h4>
+                            <div class="phase-item">🌗 <strong>Quarto Minguante:</strong> 15/09 às 22:33</div>
+                            <div class="phase-item">🌑 <strong>Lua Nova:</strong> 28/09 às 20:53</div>
+                            <div class="phase-item">🌓 <strong>Quarto Crescente:</strong> 06/10 às 15:47</div>
+                            <div class="phase-item">🌕 <strong>Lua Cheia:</strong> 14/10 às 18:08</div>
                         </div>
-                    </div>
-                    <div class="lunar-card">
-                        <h4>Energia Lunar</h4>
-                        <div id="lunar-energy">
-                            <strong>Liberação e Purificação</strong>
+                        <div class="lunar-energy">
+                            <h4>Energia Lunar</h4>
+                            <p><strong>"Liberação e Purificação"</strong></p>
                             <p>Momento ideal para soltar o que não serve mais e fazer limpezas energéticas.</p>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="astro-tab-transits" class="astro-tab-content">
-                <h3>⚡ Trânsitos Importantes</h3>
-                <div class="transits-list">
-                    <div class="transit-item high">
-                        <span class="transit-icon">☿</span>
-                        <div class="transit-info">
-                            <strong>Mercúrio em Virgem</strong>
-                            <div>Comunicação precisa e detalhista até 26/09</div>
-                        </div>
-                        <span class="transit-level">🟢</span>
+                <!-- Aba Trânsitos -->
+                <div id="transits-tab" class="astro-tab-panel">
+                    <h3>⚡ Trânsitos Importantes</h3>
+                    <div class="transits-list">
+                        <div class="transit-item favorable">☿ <strong>Mercúrio em Virgem</strong> - Comunicação precisa e detalhista (até 26/09)</div>
+                        <div class="transit-item attention">♀ <strong>Vênus entrando em Libra</strong> - Harmonia nos relacionamentos (11/09 a 07/10)</div>
+                        <div class="transit-item favorable">♂ <strong>Marte em Câncer</strong> - Energia emocional e proteção familiar</div>
+                        <div class="transit-item attention">♃ <strong>Júpiter em Gêmeos</strong> - Expansão através do conhecimento</div>
+                        <div class="transit-item favorable">♄ <strong>Saturno em Peixes</strong> - Estruturação da espiritualidade</div>
                     </div>
-                    <div class="transit-item medium">
-                        <span class="transit-icon">♀</span>
-                        <div class="transit-info">
-                            <strong>Vênus entrando em Libra</strong>
-                            <div>Harmonia nos relacionamentos - 11/09 a 07/10</div>
-                        </div>
-                        <span class="transit-level">🟡</span>
+                </div>
+
+                <!-- Aba Aspectos -->
+                <div id="aspects-tab" class="astro-tab-panel">
+                    <h3>🔮 Aspectos Astrológicos</h3>
+                    <div class="aspects-list">
+                        <div class="aspect-item harmonious">△ <strong>Sol trígono Júpiter</strong> - Otimismo e expansão, energia positiva para crescimento</div>
+                        <div class="aspect-item tense">□ <strong>Marte quadratura Saturno</strong> - Tensão entre ação e disciplina, paciência necessária</div>
+                        <div class="aspect-item harmonious">△ <strong>Lua trígono Urano</strong> - Intuição e inovação, insights revolucionários</div>
+                        <div class="aspect-item tense">☍ <strong>Mercúrio oposição Netuno</strong> - Confusão mental possível, clareza necessária</div>
+                        <div class="aspect-item neutral">⚹ <strong>Vênus sextil Netuno</strong> - Inspiração artística e romântica, criatividade elevada</div>
                     </div>
-                    <div class="transit-item low">
-                        <span class="transit-icon">♂</span>
-                        <div class="transit-info">
-                            <strong>Marte em Câncer</strong>
-                            <div>Energia emocional e proteção familiar</div>
+                </div>
+
+                <!-- Aba Alertas -->
+                <div id="alerts-tab" class="astro-tab-panel">
+                    <h3>🚨 Sistema de Alertas Astrológicos</h3>
+                    <div class="alerts-section">
+                        <div class="alert-item critical">🌑 <strong>ECLIPSE LUNAR</strong> - Próximo eclipse em 28/09, prepare-se para mudanças importantes</div>
+                        <div class="alert-item attention">☿ <strong>MERCÚRIO RETRÓGRADO</strong> - Aproximando-se em 04/10, cuidado com comunicações e tecnologia</div>
+                        <div class="alert-item attention">♀ <strong>VÊNUS RETRÓGRADA</strong> - Revisão de relacionamentos e valores (12/10 a 21/11)</div>
+                        <div class="alert-item favorable">🌕 <strong>LUA CHEIA FAVORÁVEL</strong> - 14/10 em Áries, energia poderosa para novos projetos</div>
+                    </div>
+                    
+                    <div class="alert-settings">
+                        <h4>⚙️ Configurações de Alerta AFAST!</h4>
+                        <div class="setting-item">
+                            <label><input type="checkbox" checked> Notificações AFAST!</label>
                         </div>
-                        <span class="transit-level">🟢</span>
+                        <div class="setting-item">
+                            <label><input type="checkbox" checked> Alertas de Retrogradação</label>
+                        </div>
+                        <div class="setting-item">
+                            <label><input type="checkbox" checked> Eclipses e Eventos Raros</label>
+                        </div>
+                        <div class="setting-item">
+                            <label><input type="checkbox"> Aspectos Diários</label>
+                        </div>
+                        <div class="setting-item">
+                            <label><input type="checkbox"> Mudanças de Signo</label>
+                        </div>
+                        <div class="setting-item">
+                            <label><input type="checkbox"> Fases Lunares</label>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div id="astro-tab-aspects" class="astro-tab-content">
-                <h3>🔮 Aspectos Astrológicos</h3>
-                <div class="aspects-list">
-                    <div class="aspect-item harmonious">
-                        <span class="aspect-symbol">△</span>
-                        <div class="aspect-info">
-                            <strong>Sol trígono Júpiter</strong>
-                            <div>Otimismo e expansão - Energia positiva</div>
-                        </div>
-                    </div>
-                    <div class="aspect-item tense">
-                        <span class="aspect-symbol">□</span>
-                        <div class="aspect-info">
-                            <strong>Marte quadratura Saturno</strong>
-                            <div>Tensão entre ação e disciplina</div>
-                        </div>
-                    </div>
-                    <div class="aspect-item neutral">
-                        <span class="aspect-symbol">⚹</span>
-                        <div class="aspect-info">
-                            <strong>Vênus sextil Netuno</strong>
-                            <div>Inspiração artística e romântica</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="astro-tab-alerts" class="astro-tab-content">
-                <h3>🚨 Sistema de Alertas Astrológicos</h3>
-                <div class="alerts-container">
-                    <div class="alert-item critical">
-                        <span class="alert-icon">🔴</span>
-                        <div class="alert-info">
-                            <strong>ECLIPSE LUNAR</strong>
-                            <div>Próximo eclipse em 28/09 - Prepare-se para mudanças</div>
-                        </div>
-                    </div>
-                    <div class="alert-item warning">
-                        <span class="alert-icon">🟡</span>
-                        <div class="alert-info">
-                            <strong>MERCÚRIO RETRÓGRADO</strong>
-                            <div>Aproximando-se em 04/10 - Cuidado com comunicações</div>
-                        </div>
-                    </div>
-                    <div class="alert-item info">
-                        <span class="alert-icon">🟢</span>
-                        <div class="alert-info">
-                            <strong>LUA CHEIA FAVORÁVEL</strong>
-                            <div>14/10 em Áries - Energia para novos projetos</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="alert-settings">
-                    <h4>⚙️ Configurações de Alerta</h4>
-                    <label><input type="checkbox" checked> Notificações AFAST!</label>
-                    <label><input type="checkbox" checked> Alertas de Retrogradação</label>
-                    <label><input type="checkbox" checked> Eclipses e Eventos Raros</label>
-                    <label><input type="checkbox"> Aspectos Diários</label>
-                </div>
-            </div>
-
-            <!-- Botão para aplicação completa -->
-            <div class="astro-footer">
-                <button class="astro-full-btn" onclick="openFullAstroApp()">
-                    🔮 Abrir Aplicação Completa
-                </button>
-                <button class="astro-refresh-btn" onclick="refreshAstroData()">
-                    🔄 Atualizar Dados
-                </button>
+            <!-- Botões de Ação -->
+            <div class="astro-actions">
+                <button class="astro-btn primary" onclick="openCompleteApp()">🔮 Abrir Aplicação Completa</button>
+                <button class="astro-btn secondary" onclick="updateAstroData()">🔄 Atualizar Dados</button>
             </div>
         </div>
     </div>
@@ -1646,7 +1139,8 @@
         </div>
         <div class="window-content">
             <div class="speech-area" id="speech-area">
-                > AFAST! v2.0 - Sistema de Reconhecimento de Voz Iniciado
+                > AFÁSTE v2.0 - Sistema de Reconhecimento de Voz Iniciado
+                > Bem vindo ao AFÁSTE
                 > Aguardando comando de voz...
                 > Digite 'help' para ver comandos disponíveis
             </div>
@@ -1659,128 +1153,13 @@
         </div>
     </div>
 
-    <script src="efemerides-aurora-v2.js"></script>
     <script>
         // === SISTEMA PRINCIPAL ===
         class AuroraOS {
             constructor() {
-                this.currentWindow = null;
-                this.windowZIndex = 1000;
-                this.audioContext = null;
-                this.sounds = {};
-                this.initAudio();
-                this.initSounds();
-            }
-
-            initAudio() {
-                try {
-                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    console.log('🔊 Sistema de áudio inicializado');
-                } catch (error) {
-                    console.warn('⚠️ Áudio não suportado:', error);
-                }
-            }
-
-            initSounds() {
-                // Criar sons sintéticos para o sistema
-                this.sounds = {
-                    click: this.createTone(800, 0.1, 'square'),
-                    notification: this.createTone(600, 0.3, 'sine'),
-                    error: this.createTone(300, 0.5, 'sawtooth'),
-                    success: this.createTone(1000, 0.4, 'sine'),
-                    startup: this.createStartupSound(),
-                    recording: this.createTone(440, 0.2, 'triangle'),
-                    playback: this.createTone(660, 0.3, 'sine')
-                };
-            }
-
-            createTone(frequency, duration, waveType = 'sine') {
-                if (!this.audioContext) return null;
-                
-                return () => {
-                    const oscillator = this.audioContext.createOscillator();
-                    const gainNode = this.audioContext.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(this.audioContext.destination);
-                    
-                    oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
-                    oscillator.type = waveType;
-                    
-                    gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
-                    
-                    oscillator.start(this.audioContext.currentTime);
-                    oscillator.stop(this.audioContext.currentTime + duration);
-                };
-            }
-
-            createStartupSound() {
-                if (!this.audioContext) return null;
-                
-                return () => {
-                    const frequencies = [440, 554, 659, 880];
-                    frequencies.forEach((freq, index) => {
-                        setTimeout(() => {
-                            const oscillator = this.audioContext.createOscillator();
-                            const gainNode = this.audioContext.createGain();
-                            
-                            oscillator.connect(gainNode);
-                            gainNode.connect(this.audioContext.destination);
-                            
-                            oscillator.frequency.setValueAtTime(freq, this.audioContext.currentTime);
-                            oscillator.type = 'sine';
-                            
-                            gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
-                            gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.3);
-                            
-                            oscillator.start(this.audioContext.currentTime);
-                            oscillator.stop(this.audioContext.currentTime + 0.3);
-                        }, index * 200);
-                    });
-                };
-            }
-
-            playSound(soundName) {
-                if (this.sounds[soundName]) {
-                    try {
-                        this.sounds[soundName]();
-                    } catch (error) {
-                        console.warn('⚠️ Erro ao reproduzir som:', error);
-                    }
-                }
-            }
-
-            showNotification(message, type = 'info', duration = 3000) {
-                // Criar elemento de notificação
-                const notification = document.createElement('div');
-                notification.className = `notification ${type}`;
-                notification.textContent = message;
-                
-                // Adicionar ao DOM
-                document.body.appendChild(notification);
-                
-                // Reproduzir som baseado no tipo
-                switch (type) {
-                    case 'success':
-                        this.playSound('success');
-                        break;
-                    case 'error':
-                        this.playSound('error');
-                        break;
-                    default:
-                        this.playSound('notification');
-                }
-                
-                // Remover após duração especificada
-                setTimeout(() => {
-                    notification.classList.add('hiding');
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            notification.parentNode.removeChild(notification);
-                        }
-                    }, 300);
-                }, duration);
+                this.windows = new Map();
+                this.zIndex = 1000;
+                this.init();
             }
 
             init() {
@@ -1801,69 +1180,6 @@
                         this.openApp(app);
                     });
                 });
-
-                // Botão Iniciar
-                document.getElementById('start-button').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    this.toggleStartMenu();
-                });
-
-                // Menu Iniciar - itens de aplicação
-                document.querySelectorAll('.start-menu-item[data-app]').forEach(item => {
-                    item.addEventListener('click', (e) => {
-                        const app = e.currentTarget.dataset.app;
-                        this.openApp(app);
-                        this.hideStartMenu();
-                    });
-                });
-
-                // Fechar menu ao clicar fora
-                document.addEventListener('click', () => {
-                    this.hideStartMenu();
-                });
-
-                // Inicializar relógio
-                this.updateClock();
-                setInterval(() => this.updateClock(), 1000);
-            }
-
-            toggleStartMenu() {
-                const startMenu = document.getElementById('start-menu');
-                const startButton = document.getElementById('start-button');
-                
-                if (startMenu.classList.contains('active')) {
-                    this.hideStartMenu();
-                } else {
-                    this.showStartMenu();
-                }
-            }
-
-            showStartMenu() {
-                const startMenu = document.getElementById('start-menu');
-                const startButton = document.getElementById('start-button');
-                
-                startMenu.classList.add('active');
-                startButton.classList.add('active');
-            }
-
-            hideStartMenu() {
-                const startMenu = document.getElementById('start-menu');
-                const startButton = document.getElementById('start-button');
-                
-                startMenu.classList.remove('active');
-                startButton.classList.remove('active');
-            }
-
-            updateClock() {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('pt-BR', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                });
-                const clockElement = document.getElementById('clock');
-                if (clockElement) {
-                    clockElement.textContent = timeString;
-                }
             }
 
             startBoot() {
@@ -1899,48 +1215,31 @@
                 const now = new Date();
                 
                 // Data atual
-                document.getElementById('current-date').textContent = 
-                    now.toLocaleDateString('pt-BR');
-                
-                // Valores corretos para hoje (10/09/2025)
-                document.getElementById('current-sign').textContent = 'Virgem';
-                document.getElementById('lunar-phase').textContent = 'Gibosa Minguante';
-                document.getElementById('goddess-day').textContent = 'Freya';
-                
-                console.log('🌟 Widget AstroMágick atualizado com sucesso!');
-            }
-
-            // Funções específicas do AstroMágick
-            openFullAstroMagick() {
-                // Simula abertura de nova página/aba para ferramenta completa
-                const confirmed = confirm('🔮 Deseja acessar a ferramenta AstroMágick completa?\n\nIsso abrirá uma nova página com todas as funcionalidades avançadas.');
-                if (confirmed) {
-                    // Aqui você pode colocar o link para sua ferramenta completa
-                    alert('🌟 Redirecionando para AstroMágick Completo...\n\n(Em desenvolvimento - aqui seria o link para sua ferramenta completa)');
-                    // window.open('https://seusite.com/astromagick-completo', '_blank');
+                const currentDateEl = document.getElementById('current-date');
+                if (currentDateEl) {
+                    currentDateEl.textContent = now.toLocaleDateString('pt-BR');
                 }
-            }
-
-            refreshAstroData() {
-                // Simula atualização dos dados astrológicos
-                const loadingElements = ['preview-date', 'preview-sign', 'preview-moon', 'preview-goddess'];
                 
-                loadingElements.forEach(id => {
-                    const element = document.getElementById(id);
-                    if (element) {
-                        element.textContent = 'Atualizando...';
-                    }
-                });
-
-                setTimeout(() => {
-                    const now = new Date();
-                    document.getElementById('preview-date').textContent = now.toLocaleDateString('pt-BR');
-                    document.getElementById('preview-sign').textContent = 'Virgem';
-                    document.getElementById('preview-moon').textContent = 'Gibosa Minguante';
-                    document.getElementById('preview-goddess').textContent = 'Freya';
-                    
-                    alert('✨ Dados astrológicos atualizados com sucesso!');
-                }, 1500);
+                // Signo solar (simplificado)
+                const solarSign = this.getSolarSign(now);
+                const solarSignEl = document.getElementById('solar-sign');
+                if (solarSignEl) {
+                    solarSignEl.textContent = solarSign;
+                }
+                
+                // Fase lunar (simplificada)
+                const lunarPhase = this.getLunarPhase(now);
+                const lunarPhaseEl = document.getElementById('lunar-phase');
+                if (lunarPhaseEl) {
+                    lunarPhaseEl.textContent = lunarPhase;
+                }
+                
+                // Deusa do dia
+                const goddess = this.getGoddessOfDay(now);
+                const goddessEl = document.getElementById('goddess-day');
+                if (goddessEl) {
+                    goddessEl.textContent = goddess;
+                }
             }
 
             getSolarSign(date) {
@@ -1957,34 +1256,30 @@
             }
 
             getLunarPhase(date) {
-                // Usar Efemérides Aurora V2 para cálculo preciso da fase lunar
-                if (typeof EfemeridesAurora !== 'undefined') {
-                    const fase = EfemeridesAurora.calcularFaseLunar(date);
-                    return fase.fase;
-                }
+                // Cálculo mais preciso da fase lunar
+                // Baseado no ciclo lunar de 29.53 dias
+                const lunarCycle = 29.53058867; // dias
                 
-                // Fallback para setembro de 2025 (dados astronômicos precisos)
-                const year = date.getFullYear();
-                const month = date.getMonth() + 1;
-                const day = date.getDate();
+                // Data de referência para lua nova conhecida (1 de janeiro de 2000)
+                const referenceDate = new Date(2000, 0, 6, 18, 14); // 6 de janeiro de 2000, 18:14 UTC
                 
-                if (year === 2025 && month === 9) {
-                    if (day >= 1 && day <= 6) {
-                        return 'Crescente';
-                    } else if (day === 7) {
-                        return 'Cheia';
-                    } else if (day >= 8 && day <= 14) {
-                        return 'Gibosa Minguante';
-                    } else if (day >= 15 && day <= 21) {
-                        return 'Quarto Minguante';
-                    } else if (day >= 22 && day <= 28) {
-                        return 'Minguante';
-                    } else if (day >= 29 && day <= 30) {
-                        return 'Nova';
-                    }
-                }
+                // Diferença em milissegundos
+                const diffMs = date.getTime() - referenceDate.getTime();
+                const diffDays = diffMs / (1000 * 60 * 60 * 24);
                 
-                return 'Gibosa Minguante'; // Default para hoje
+                // Posição no ciclo lunar (0-1)
+                const lunarAge = (diffDays % lunarCycle) / lunarCycle;
+                
+                // Determinar fase baseada na idade lunar
+                if (lunarAge < 0.0625) return 'Nova';
+                else if (lunarAge < 0.1875) return 'Crescente';
+                else if (lunarAge < 0.3125) return 'Quarto Crescente';
+                else if (lunarAge < 0.4375) return 'Gibosa Crescente';
+                else if (lunarAge < 0.5625) return 'Cheia';
+                else if (lunarAge < 0.6875) return 'Gibosa Minguante';
+                else if (lunarAge < 0.8125) return 'Quarto Minguante';
+                else if (lunarAge < 0.9375) return 'Minguante';
+                else return 'Nova';
             }
 
             getGoddessOfDay(date) {
@@ -1997,18 +1292,6 @@
             }
 
             openApp(appName) {
-                this.playSound('click');
-                
-                // Nomes das aplicações para notificações
-                const appNames = {
-                    'astromagick': '🌙 AstroMágick',
-                    'aurora-player': '🎵 Aurora Player',
-                    'witch-tv': '📺 Witch.TV',
-                    'afast': '🗣️ AFAST!',
-                    'tarot': '🔮 Tarô Místico',
-                    'livros': '📚 Biblioteca Mística'
-                };
-                
                 switch(appName) {
                     case 'astromagick':
                         this.openWindow('astromagick-window');
@@ -2028,26 +1311,23 @@
                         break;
                     case 'afast':
                         this.openWindow('afast-window');
-                        if (!window.afast) {
-                            window.afast = new AFAST();
+                        if (!window.afastApp) {
+                            window.afastApp = new AFASTApp();
                         }
                         break;
                     case 'tarot':
                         this.openWindow('tarot-window');
-                        if (!window.tarot) {
-                            window.tarot = new TarotMystic();
+                        if (!window.tarotApp) {
+                            window.tarotApp = new TarotApp();
                         }
                         break;
-                    case 'livros':
-                        this.openWindow('livros-window');
-                        if (!window.biblioteca) {
-                            window.biblioteca = new BibliotecaMistica();
+                    case 'books':
+                        this.openWindow('books-window');
+                        if (!window.booksApp) {
+                            window.booksApp = new BooksApp();
                         }
                         break;
                 }
-                
-                // Mostrar notificação de sucesso
-                this.showNotification(`${appNames[appName] || appName} iniciado com sucesso!`, 'success', 2000);
             }
 
             openWindow(windowId) {
@@ -2062,6 +1342,11 @@
 
             loadDetailedAstroInfo() {
                 const content = document.getElementById('detailed-content');
+                if (!content) {
+                    console.log('Elemento detailed-content não encontrado');
+                    return;
+                }
+                
                 const now = new Date();
                 
                 content.innerHTML = `
@@ -2462,7 +1747,8 @@
             }
 
             init() {
-                this.addToLog('> AFAST! v2.0 - Sistema de Reconhecimento de Voz Iniciado');
+                this.addToLog('> AFÁSTE v2.0 - Sistema de Reconhecimento de Voz Iniciado');
+                this.addToLog('> Bem vindo ao AFÁSTE');
                 this.addToLog('> Aguardando comando de voz...');
                 this.addToLog('> Digite "help" para ver comandos disponíveis');
             }
@@ -2476,100 +1762,71 @@
                     recordBtn.textContent = '⏹️ Parar';
                     this.addToLog('> 🎤 GRAVANDO... Fale agora!');
                     
-                    // Som e notificação de início de gravação
-                    if (window.auroraOS) {
-                        window.auroraOS.playSound('recording');
-                        window.auroraOS.showNotification('🎤 Gravação iniciada!', 'info', 1500);
-                    }
-                    
                     // Simular reconhecimento de voz
                     setTimeout(() => {
                         if (this.isRecording) {
-                            const commands = [
-                                'Olá, Aurora OS!',
-                                'Abrir AstroMágick',
-                                'Mostrar fase lunar',
-                                'Reproduzir música',
-                                'Como está o tempo?',
-                                'Ativar modo místico'
-                            ];
-                            
-                            const randomCommand = commands[Math.floor(Math.random() * commands.length)];
-                            this.addToLog(`> 🎯 RECONHECIDO: "${randomCommand}"`);
-                            this.addToLog('> ✅ Comando processado com sucesso!');
-                            
-                            // Som e notificação de sucesso
-                            if (window.auroraOS) {
-                                window.auroraOS.playSound('success');
-                                window.auroraOS.showNotification(`🎯 Comando: "${randomCommand}"`, 'success', 3000);
-                            }
+                            this.addToLog('> Reconhecido: "Olá, AFAST!"');
+                            this.addToLog('> Resposta: Olá! Como posso ajudá-lo hoje?');
                         }
                     }, 3000);
                 } else {
                     recordBtn.classList.remove('recording');
                     recordBtn.textContent = '🎤 Gravar';
-                    this.addToLog('> ⏹️ Gravação interrompida');
-                    
-                    if (window.auroraOS) {
-                        window.auroraOS.showNotification('⏹️ Gravação interrompida', 'info', 1500);
-                    }
+                    this.addToLog('> ⏹️ Gravação finalizada');
                 }
             }
 
             playback() {
                 this.addToLog('> 🔊 Reproduzindo última gravação...');
-                
-                // Som e notificação de reprodução
-                if (window.auroraOS) {
-                    window.auroraOS.playSound('playback');
-                    window.auroraOS.showNotification('🔊 Reproduzindo gravação...', 'info', 2000);
-                }
-                
-                setTimeout(() => {
-                    this.addToLog('> ✅ Reprodução concluída');
-                    if (window.auroraOS) {
-                        window.auroraOS.showNotification('✅ Reprodução concluída', 'success', 1500);
-                    }
-                }, 2000);
+                this.addToLog('> "Olá, AFAST! Como você está?"');
             }
 
             clearLog() {
-                const terminal = document.getElementById('afast-terminal');
-                if (terminal) {
-                    terminal.innerHTML = '';
-                    this.speechLog = [];
-                    this.addToLog('> 🗑️ Log limpo - Sistema reiniciado');
-                    
-                    // Notificação de limpeza
-                    if (window.auroraOS) {
-                        window.auroraOS.showNotification('🗑️ Log do AFAST! limpo', 'info', 1500);
-                        window.auroraOS.playSound('click');
-                    }
-                }
+                const speechArea = document.getElementById('speech-area');
+                speechArea.textContent = '';
+                this.speechLog = [];
+                this.addToLog('> Log limpo - Sistema pronto');
             }
 
             showHelp() {
-                this.addToLog('> ❓ COMANDOS DISPONÍVEIS:');
-                this.addToLog('  🎤 Gravar - Iniciar reconhecimento de voz');
-                this.addToLog('  🔊 Reproduzir - Tocar última gravação');
-                this.addToLog('  🗑️ Limpar - Limpar histórico do terminal');
-                this.addToLog('  ❓ Ajuda - Mostrar esta mensagem');
-                this.addToLog('> Sistema pronto para comandos de voz!');
-                
-                // Notificação de ajuda
-                if (window.auroraOS) {
-                    window.auroraOS.showNotification('❓ Lista de comandos exibida', 'info', 2000);
-                    window.auroraOS.playSound('notification');
-                }
+                this.addToLog('> === COMANDOS DISPONÍVEIS ===');
+                this.addToLog('> 🎤 Gravar - Iniciar/parar gravação de voz');
+                this.addToLog('> 🔊 Reproduzir - Tocar última gravação');
+                this.addToLog('> 🗑️ Limpar - Limpar histórico');
+                this.addToLog('> ❓ Ajuda - Mostrar esta ajuda');
+                this.addToLog('> ========================');
             }
 
             addToLog(message) {
-                const speechArea = document.getElementById('afast-terminal');
-                if (speechArea) {
-                    speechArea.innerHTML += message + '\n';
-                    speechArea.scrollTop = speechArea.scrollHeight;
-                }
+                const speechArea = document.getElementById('speech-area');
                 this.speechLog.push(message);
+                speechArea.textContent = this.speechLog.join('\n');
+                speechArea.scrollTop = speechArea.scrollHeight;
+                
+                // Reproduzir áudio para mensagens específicas
+                this.playAudioForMessage(message);
+            }
+            
+            playAudioForMessage(message) {
+                let audioFile = null;
+                
+                if (message.includes('Bem vindo ao AFÁSTE')) {
+                    audioFile = 'audio/bem-vindo-afast.wav';
+                } else if (message.includes('Uma ameaça foi detectada')) {
+                    audioFile = 'audio/ameaca-detectada.wav';
+                }
+                
+                if (audioFile) {
+                    try {
+                        const audio = new Audio(audioFile);
+                        audio.volume = 0.7;
+                        audio.play().catch(e => {
+                            console.log('Erro ao reproduzir áudio:', e);
+                        });
+                    } catch (e) {
+                        console.log('Erro ao carregar áudio:', e);
+                    }
+                }
             }
         }
 
@@ -2582,156 +1839,127 @@
             document.getElementById(windowId).classList.remove('active');
         }
 
-        // === ASTROMAGICK FUNCTIONS ===
-        function showAstroTab(tabName) {
+        // Funções AstroMágick Expandido
+        function switchAstroTab(tabName) {
             // Remover classe active de todas as abas
             document.querySelectorAll('.astro-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
-            
-            // Remover classe active de todos os conteúdos
-            document.querySelectorAll('.astro-tab-content').forEach(content => {
-                content.classList.remove('active');
+            document.querySelectorAll('.astro-tab-panel').forEach(panel => {
+                panel.classList.remove('active');
             });
-            
-            // Ativar aba clicada
-            event.target.classList.add('active');
-            
-            // Mostrar conteúdo correspondente
-            document.getElementById(`astro-tab-${tabName}`).classList.add('active');
-            
-            // Som de clique
-            if (window.auroraOS) {
-                window.auroraOS.playSound('click');
-            }
-            
-            // Notificação de mudança de aba
-            const tabNames = {
-                'positions': '📊 Posições Planetárias',
-                'lunar': '🌙 Informações Lunares',
-                'transits': '⚡ Trânsitos Astrológicos',
-                'aspects': '🔮 Aspectos Planetários',
-                'alerts': '🚨 Sistema de Alertas'
+
+            // Ativar aba selecionada
+            document.querySelector(`[onclick="switchAstroTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+
+            // Mostrar notificação
+            showNotification(`🌟 Navegando para aba: ${getTabTitle(tabName)}`);
+        }
+
+        function getTabTitle(tabName) {
+            const titles = {
+                'positions': 'Posições Planetárias',
+                'lunar': 'Informações Lunares',
+                'transits': 'Trânsitos Importantes',
+                'aspects': 'Aspectos Astrológicos',
+                'alerts': 'Sistema de Alertas'
             };
-            
-            if (window.auroraOS) {
-                window.auroraOS.showNotification(`Navegando para: ${tabNames[tabName]}`, 'info', 1500);
+            return titles[tabName] || tabName;
+        }
+
+        function openCompleteApp() {
+            if (confirm('🔮 Deseja abrir a aplicação AstroMágick completa em uma nova janela?')) {
+                // Aqui você pode colocar o link para sua ferramenta completa
+                showNotification('🔮 Redirecionando para aplicação completa...');
+                // window.open('https://seu-site.com/astromagick-completo', '_blank');
             }
         }
 
-        function openFullAstroApp() {
-            // Notificação e som
-            if (window.auroraOS) {
-                window.auroraOS.playSound('notification');
-                window.auroraOS.showNotification('🔮 Redirecionando para aplicação completa...', 'info', 3000);
-            }
+        function updateAstroData() {
+            showNotification('🔄 Atualizando dados astrológicos...');
             
-            // Aqui você pode adicionar o link para sua aplicação completa
-            alert('🔮 Redirecionando para AstroMágick Completo!\n\nEsta funcionalidade será conectada à sua aplicação externa.');
-        }
-
-        function refreshAstroData() {
-            // Som e notificação
-            if (window.auroraOS) {
-                window.auroraOS.playSound('success');
-                window.auroraOS.showNotification('🔄 Atualizando dados astrológicos...', 'info', 2000);
-            }
-            
-            // Simular atualização de dados
+            // Simular atualização
             setTimeout(() => {
-                updatePlanetaryPositions();
-                updateLunarInfo();
-                updateTransits();
-                updateAspects();
-                checkAstrologicalAlerts();
+                showNotification('✅ Dados astrológicos atualizados com sucesso!');
                 
-                if (window.auroraOS) {
-                    window.auroraOS.showNotification('✅ Dados astrológicos atualizados!', 'success', 2000);
-                }
-            }, 1000);
-        }
-
-        function updatePlanetaryPositions() {
-            // Atualizar posições planetárias com dados simulados
-            const positions = {
-                'sun-position': '♍ Virgem 18°23\'',
-                'moon-position': '♓ Peixes 12°45\'',
-                'mercury-position': '♍ Virgem 25°12\'',
-                'venus-position': '♎ Libra 3°08\'',
-                'mars-position': '♋ Câncer 28°33\'',
-                'jupiter-position': '♊ Gêmeos 15°27\'',
-                'saturn-position': '♓ Peixes 19°41\'',
-                'uranus-position': '♉ Touro 27°15\'',
-                'neptune-position': '♓ Peixes 29°52\'',
-                'pluto-position': '♑ Capricórnio 29°38\''
-            };
-            
-            Object.entries(positions).forEach(([id, position]) => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.textContent = position;
-                }
-            });
-        }
-
-        function updateLunarInfo() {
-            // Atualizar informações lunares
-            const now = new Date();
-            const moonPhases = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
-            const phaseNames = ['Nova', 'Crescente', 'Quarto Crescente', 'Gibosa Crescente', 
-                              'Cheia', 'Gibosa Minguante', 'Quarto Minguante', 'Minguante'];
-            
-            // Calcular fase atual (simulado)
-            const dayOfMonth = now.getDate();
-            const phaseIndex = Math.floor((dayOfMonth / 29.5) * 8) % 8;
-            
-            document.getElementById('moon-phase-icon').textContent = moonPhases[phaseIndex];
-            document.getElementById('moon-phase-name').textContent = phaseNames[phaseIndex];
-            document.getElementById('moon-illumination').textContent = `${Math.floor(Math.random() * 100)}% iluminada`;
-        }
-
-        function updateTransits() {
-            // Atualizar trânsitos importantes
-            console.log('🌟 Trânsitos atualizados');
-        }
-
-        function updateAspects() {
-            // Atualizar aspectos astrológicos
-            console.log('🔮 Aspectos atualizados');
-        }
-
-        function checkAstrologicalAlerts() {
-            // Verificar alertas astrológicos e enviar para AFAST!
-            const alerts = [
-                {
-                    type: 'warning',
-                    title: 'MERCÚRIO RETRÓGRADO',
-                    message: 'Mercúrio entrará em retrogradação em 3 dias. Cuidado com comunicações!'
-                },
-                {
-                    type: 'info',
-                    title: 'LUA CHEIA',
-                    message: 'Lua Cheia em Áries aproximando-se. Energia intensa para novos projetos!'
-                },
-                {
-                    type: 'critical',
-                    title: 'ECLIPSE SOLAR',
-                    message: 'Eclipse Solar detectado para 28/09. Prepare-se para mudanças importantes!'
-                }
-            ];
-            
-            // Enviar alertas para AFAST! se estiver ativo
-            if (window.afast) {
-                alerts.forEach(alert => {
-                    const alertMessage = `🚨 ALERTA ASTROLÓGICO: ${alert.title} - ${alert.message}`;
-                    window.afast.addToLog(`> ${alertMessage}`);
-                });
+                // Simular detecção de ameaça astrológica (30% de chance)
+                const threatDetected = Math.random() < 0.3;
                 
-                // Notificação de integração
-                if (window.auroraOS) {
-                    window.auroraOS.showNotification('🔗 Alertas enviados para AFAST!', 'success', 2000);
+                // Enviar notificação para AFÁSTE se estiver ativo
+                if (window.afastApp) {
+                    window.afastApp.addToLog('🌟 ALERTA ASTROLÓGICO: Dados atualizados!');
+                    window.afastApp.addToLog('🔮 Novas informações planetárias disponíveis.');
+                    
+                    if (threatDetected) {
+                        setTimeout(() => {
+                            window.afastApp.addToLog('🚨 Uma ameaça foi detectada');
+                            window.afastApp.addToLog('⚠️ Eclipse lunar aproximando-se em 18 dias');
+                            window.afastApp.addToLog('🔴 Recomenda-se cautela e preparação espiritual');
+                            showNotification('🚨 AFÁSTE: Uma ameaça foi detectada!');
+                        }, 2000);
+                    }
                 }
+            }, 1500);
+        }
+
+        function detectAstronomicalThreat() {
+            if (window.afastApp) {
+                window.afastApp.addToLog('🚨 Uma ameaça foi detectada');
+                window.afastApp.addToLog('⚠️ Mercúrio retrógrado iniciando em 24 dias');
+                window.afastApp.addToLog('🔴 Cuidado com comunicações e tecnologia');
+                showNotification('🚨 AFÁSTE: Uma ameaça foi detectada!');
             }
+        }
+
+        function showNotification(message) {
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(180deg, var(--dourado) 0%, #e6a000 100%);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 10000;
+                font-weight: bold;
+                border: 2px outset #f0aa53;
+                animation: slideIn 0.3s ease-out;
+            `;
+
+            // Adicionar animação CSS
+            if (!document.querySelector('#notification-styles')) {
+                const style = document.createElement('style');
+                style.id = 'notification-styles';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(notification);
+
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
         }
 
         // Inicialização

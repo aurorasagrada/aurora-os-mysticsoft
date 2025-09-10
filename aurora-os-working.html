@@ -799,12 +799,16 @@
 <body>
     <!-- Tela de Boot -->
     <div class="boot-screen" id="boot-screen">
-        <div class="boot-logo">🌟</div>
-        <div class="boot-title">MysticSoft v1.0</div>
-        <div class="boot-progress">
-            <div class="boot-progress-fill" id="boot-progress"></div>
+        <div class="boot-content">
+            <div class="boot-logo">
+                <img src="icons/MysticSoft.png" alt="MysticSoft" style="width: 80px; height: 80px; image-rendering: pixelated;">
+            </div>
+            <h1>MysticSoft v1.0</h1>
+            <div class="progress-bar">
+                <div class="progress-fill" id="boot-progress"></div>
+            </div>
+            <p>Clique para iniciar a conjuração...</p>
         </div>
-        <div class="boot-hint">Clique para iniciar a conjuração...</div>
     </div>
 
     <!-- Desktop -->
@@ -1211,20 +1215,31 @@
                 const now = new Date();
                 
                 // Data atual
-                document.getElementById('current-date').textContent = 
-                    now.toLocaleDateString('pt-BR');
+                const currentDateEl = document.getElementById('current-date');
+                if (currentDateEl) {
+                    currentDateEl.textContent = now.toLocaleDateString('pt-BR');
+                }
                 
                 // Signo solar (simplificado)
                 const solarSign = this.getSolarSign(now);
-                document.getElementById('solar-sign').textContent = solarSign;
+                const solarSignEl = document.getElementById('solar-sign');
+                if (solarSignEl) {
+                    solarSignEl.textContent = solarSign;
+                }
                 
                 // Fase lunar (simplificada)
                 const lunarPhase = this.getLunarPhase(now);
-                document.getElementById('lunar-phase').textContent = lunarPhase;
+                const lunarPhaseEl = document.getElementById('lunar-phase');
+                if (lunarPhaseEl) {
+                    lunarPhaseEl.textContent = lunarPhase;
+                }
                 
                 // Deusa do dia
                 const goddess = this.getGoddessOfDay(now);
-                document.getElementById('goddess-day').textContent = goddess;
+                const goddessEl = document.getElementById('goddess-day');
+                if (goddessEl) {
+                    goddessEl.textContent = goddess;
+                }
             }
 
             getSolarSign(date) {
@@ -1241,9 +1256,30 @@
             }
 
             getLunarPhase(date) {
-                const phases = ['Nova', 'Crescente', 'Cheia', 'Minguante'];
-                const dayOfMonth = date.getDate();
-                return phases[Math.floor(dayOfMonth / 8)];
+                // Cálculo mais preciso da fase lunar
+                // Baseado no ciclo lunar de 29.53 dias
+                const lunarCycle = 29.53058867; // dias
+                
+                // Data de referência para lua nova conhecida (1 de janeiro de 2000)
+                const referenceDate = new Date(2000, 0, 6, 18, 14); // 6 de janeiro de 2000, 18:14 UTC
+                
+                // Diferença em milissegundos
+                const diffMs = date.getTime() - referenceDate.getTime();
+                const diffDays = diffMs / (1000 * 60 * 60 * 24);
+                
+                // Posição no ciclo lunar (0-1)
+                const lunarAge = (diffDays % lunarCycle) / lunarCycle;
+                
+                // Determinar fase baseada na idade lunar
+                if (lunarAge < 0.0625) return 'Nova';
+                else if (lunarAge < 0.1875) return 'Crescente';
+                else if (lunarAge < 0.3125) return 'Quarto Crescente';
+                else if (lunarAge < 0.4375) return 'Gibosa Crescente';
+                else if (lunarAge < 0.5625) return 'Cheia';
+                else if (lunarAge < 0.6875) return 'Gibosa Minguante';
+                else if (lunarAge < 0.8125) return 'Quarto Minguante';
+                else if (lunarAge < 0.9375) return 'Minguante';
+                else return 'Nova';
             }
 
             getGoddessOfDay(date) {
@@ -1306,6 +1342,11 @@
 
             loadDetailedAstroInfo() {
                 const content = document.getElementById('detailed-content');
+                if (!content) {
+                    console.log('Elemento detailed-content não encontrado');
+                    return;
+                }
+                
                 const now = new Date();
                 
                 content.innerHTML = `
@@ -1761,6 +1802,31 @@
                 this.speechLog.push(message);
                 speechArea.textContent = this.speechLog.join('\n');
                 speechArea.scrollTop = speechArea.scrollHeight;
+                
+                // Reproduzir áudio para mensagens específicas
+                this.playAudioForMessage(message);
+            }
+            
+            playAudioForMessage(message) {
+                let audioFile = null;
+                
+                if (message.includes('Bem vindo ao AFÁSTE')) {
+                    audioFile = 'audio/bem-vindo-afast.wav';
+                } else if (message.includes('Uma ameaça foi detectada')) {
+                    audioFile = 'audio/ameaca-detectada.wav';
+                }
+                
+                if (audioFile) {
+                    try {
+                        const audio = new Audio(audioFile);
+                        audio.volume = 0.7;
+                        audio.play().catch(e => {
+                            console.log('Erro ao reproduzir áudio:', e);
+                        });
+                    } catch (e) {
+                        console.log('Erro ao carregar áudio:', e);
+                    }
+                }
             }
         }
 
