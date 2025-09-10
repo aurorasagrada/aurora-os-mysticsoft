@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AstroMágick - Demo Expandido</title>
+    <style>
+        :root {
+            --vinho: #3e0a29;
+            --verde: #b2d1b1;
+            --azul: #0b1836;
+            --dourado: #f0aa53;
+            --pergaminho: #f2eaff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'MS Sans Serif', sans-serif;
+            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .astro-window {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .window-header {
+            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 100%);
+            color: var(--pergaminho);
+            padding: 8px 15px;
+            font-weight: bold;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .window-content {
+            padding: 20px;
+            background: #c0c0c0;
+        }
+
+        /* === ASTROMAGICK EXPANDIDO === */
+        .astro-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--vinho);
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 100%);
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+
+        .astro-tab {
+            flex: 1;
+            padding: 10px 15px;
+            background: transparent;
+            border: none;
+            color: var(--pergaminho);
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-right: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .astro-tab:last-child {
+            border-right: none;
+        }
+
+        .astro-tab:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .astro-tab.active {
+            background: linear-gradient(135deg, var(--dourado) 0%, var(--verde) 100%);
+            color: var(--azul);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .astro-tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .astro-tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Posições Planetárias */
+        .planets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .planet-card {
+            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 100%);
+            border: 2px outset #c0c0c0;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s ease;
+        }
+
+        .planet-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .planet-symbol {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--dourado) 0%, var(--verde) 100%);
+            border-radius: 50%;
+            color: var(--azul);
+            font-weight: bold;
+        }
+
+        .planet-info strong {
+            display: block;
+            color: var(--dourado);
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .planet-info div {
+            color: var(--pergaminho);
+            font-size: 11px;
+        }
+
+        /* Informações Lunares */
+        .lunar-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .lunar-card {
+            background: linear-gradient(135deg, var(--vinho) 0%, var(--azul) 100%);
+            border: 2px outset #c0c0c0;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .lunar-card h4 {
+            color: var(--dourado);
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .lunar-phase {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .moon-icon {
+            font-size: 32px;
+        }
+
+        #next-phases div {
+            margin-bottom: 5px;
+            font-size: 11px;
+            color: var(--pergaminho);
+        }
+
+        /* Trânsitos */
+        .transits-list, .aspects-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .transit-item, .aspect-item {
+            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 100%);
+            border: 2px outset #c0c0c0;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .transit-icon, .aspect-symbol {
+            font-size: 20px;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--dourado) 0%, var(--verde) 100%);
+            border-radius: 50%;
+            color: var(--azul);
+            font-weight: bold;
+        }
+
+        .transit-info, .aspect-info {
+            flex: 1;
+        }
+
+        .transit-info strong, .aspect-info strong {
+            display: block;
+            color: var(--dourado);
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .transit-info div, .aspect-info div {
+            color: var(--pergaminho);
+            font-size: 11px;
+        }
+
+        .transit-level {
+            font-size: 16px;
+        }
+
+        /* Aspectos */
+        .aspect-item.harmonious {
+            border-left: 4px solid var(--verde);
+        }
+
+        .aspect-item.tense {
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .aspect-item.neutral {
+            border-left: 4px solid var(--dourado);
+        }
+
+        /* Alertas */
+        .alerts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .alert-item {
+            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 100%);
+            border: 2px outset #c0c0c0;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-item.critical {
+            border-left: 4px solid #ff4757;
+            background: linear-gradient(135deg, #ff4757 0%, #c44569 100%);
+        }
+
+        .alert-item.warning {
+            border-left: 4px solid #ffa502;
+            background: linear-gradient(135deg, #ffa502 0%, #ff6348 100%);
+        }
+
+        .alert-item.info {
+            border-left: 4px solid var(--verde);
+        }
+
+        .alert-icon {
+            font-size: 18px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .alert-info strong {
+            display: block;
+            color: var(--pergaminho);
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .alert-info div {
+            color: var(--pergaminho);
+            font-size: 11px;
+            opacity: 0.9;
+        }
+
+        .alert-settings {
+            background: linear-gradient(135deg, var(--vinho) 0%, var(--azul) 100%);
+            border: 2px inset #c0c0c0;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .alert-settings h4 {
+            color: var(--dourado);
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .alert-settings label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--pergaminho);
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .alert-settings input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* Footer */
+        .astro-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid var(--vinho);
+        }
+
+        .astro-full-btn, .astro-refresh-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px outset #c0c0c0;
+            border-radius: 6px;
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .astro-full-btn {
+            background: linear-gradient(135deg, var(--dourado) 0%, var(--verde) 100%);
+            color: var(--azul);
+        }
+
+        .astro-refresh-btn {
+            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 100%);
+            color: var(--pergaminho);
+        }
+
+        .astro-full-btn:hover, .astro-refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .astro-full-btn:active, .astro-refresh-btn:active {
+            transform: translateY(0);
+            border: 2px inset #c0c0c0;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--dourado) 0%, var(--verde) 100%);
+            color: var(--azul);
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 2px outset #c0c0c0;
+            font-size: 11px;
+            font-weight: bold;
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="astro-window">
+        <div class="window-header">
+            <span>🌙 AstroMágick - Portal Astrológico Completo</span>
+            <span>Demo Expandido</span>
+        </div>
+        <div class="window-content">
+            <!-- Abas de navegação -->
+            <div class="astro-tabs">
+                <button class="astro-tab active" onclick="showAstroTab('positions')">📊 Posições</button>
+                <button class="astro-tab" onclick="showAstroTab('lunar')">🌙 Lunar</button>
+                <button class="astro-tab" onclick="showAstroTab('transits')">⚡ Trânsitos</button>
+                <button class="astro-tab" onclick="showAstroTab('aspects')">🔮 Aspectos</button>
+                <button class="astro-tab" onclick="showAstroTab('alerts')">🚨 Alertas</button>
+            </div>
+
+            <!-- Conteúdo das abas -->
+            <div id="astro-tab-positions" class="astro-tab-content active">
+                <h3>📊 Posições Planetárias Atuais</h3>
+                <div class="planets-grid">
+                    <div class="planet-card">
+                        <div class="planet-symbol">☉</div>
+                        <div class="planet-info">
+                            <strong>Sol</strong>
+                            <div id="sun-position">♍ Virgem 18°23'</div>
+                        </div>
+                    </div>
+                    <div class="planet-card">
+                        <div class="planet-symbol">☽</div>
+                        <div class="planet-info">
+                            <strong>Lua</strong>
+                            <div id="moon-position">♓ Peixes 12°45'</div>
+                        </div>
+                    </div>
+                    <div class="planet-card">
+                        <div class="planet-symbol">☿</div>
+                        <div class="planet-info">
+                            <strong>Mercúrio</strong>
+                            <div id="mercury-position">♍ Virgem 25°12'</div>
+                        </div>
+                    </div>
+                    <div class="planet-card">
+                        <div class="planet-symbol">♀</div>
+                        <div class="planet-info">
+                            <strong>Vênus</strong>
+                            <div id="venus-position">♎ Libra 3°08'</div>
+                        </div>
+                    </div>
+                    <div class="planet-card">
+                        <div class="planet-symbol">♂</div>
+                        <div class="planet-info">
+                            <strong>Marte</strong>
+                            <div id="mars-position">♋ Câncer 28°33'</div>
+                        </div>
+                    </div>
+                    <div class="planet-card">
+                        <div class="planet-symbol">♃</div>
+                        <div class="planet-info">
+                            <strong>Júpiter</strong>
+                            <div id="jupiter-position">♊ Gêmeos 15°27'</div>
+                        </div>
+                    </div>
+                    <div class="planet-card">
+                        <div class="planet-symbol">♄</div>
+                        <div class="planet-info">
+                            <strong>Saturno</strong>
+                            <div id="saturn-position">♓ Peixes 19°41'</div>
+                        </div>
+                    </div>
+                    <div class="planet-card">
+                        <div class="planet-symbol">♅</div>
+                        <div class="planet-info">
+                            <strong>Urano</strong>
+                            <div id="uranus-position">♉ Touro 27°15'</div>
+                        </div>
+                    </div>
+                    <div class="planet-card">
+                        <div class="planet-symbol">♆</div>
+                        <div class="planet-info">
+                            <strong>Netuno</strong>
+                            <div id="neptune-position">♓ Peixes 29°52'</div>
+                        </div>
+                    </div>
+                    <div class="planet-card">
+                        <div class="planet-symbol">♇</div>
+                        <div class="planet-info">
+                            <strong>Plutão</strong>
+                            <div id="pluto-position">♑ Capricórnio 29°38'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="astro-tab-lunar" class="astro-tab-content">
+                <h3>🌙 Informações Lunares Detalhadas</h3>
+                <div class="lunar-info">
+                    <div class="lunar-card">
+                        <h4>Fase Atual</h4>
+                        <div class="lunar-phase">
+                            <span class="moon-icon" id="moon-phase-icon">🌖</span>
+                            <div>
+                                <strong id="moon-phase-name">Gibosa Minguante</strong>
+                                <div id="moon-illumination">87% iluminada</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lunar-card">
+                        <h4>Próximas Fases</h4>
+                        <div id="next-phases">
+                            <div>🌗 Quarto Minguante: 15/09 às 22:33</div>
+                            <div>🌑 Lua Nova: 29/09 às 20:53</div>
+                            <div>🌓 Quarto Crescente: 06/10 às 15:47</div>
+                            <div>🌕 Lua Cheia: 14/10 às 18:08</div>
+                        </div>
+                    </div>
+                    <div class="lunar-card">
+                        <h4>Energia Lunar</h4>
+                        <div id="lunar-energy">
+                            <strong>Liberação e Purificação</strong>
+                            <p>Momento ideal para soltar o que não serve mais e fazer limpezas energéticas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="astro-tab-transits" class="astro-tab-content">
+                <h3>⚡ Trânsitos Importantes</h3>
+                <div class="transits-list">
+                    <div class="transit-item high">
+                        <span class="transit-icon">☿</span>
+                        <div class="transit-info">
+                            <strong>Mercúrio em Virgem</strong>
+                            <div>Comunicação precisa e detalhista até 26/09</div>
+                        </div>
+                        <span class="transit-level">🟢</span>
+                    </div>
+                    <div class="transit-item medium">
+                        <span class="transit-icon">♀</span>
+                        <div class="transit-info">
+                            <strong>Vênus entrando em Libra</strong>
+                            <div>Harmonia nos relacionamentos - 11/09 a 07/10</div>
+                        </div>
+                        <span class="transit-level">🟡</span>
+                    </div>
+                    <div class="transit-item low">
+                        <span class="transit-icon">♂</span>
+                        <div class="transit-info">
+                            <strong>Marte em Câncer</strong>
+                            <div>Energia emocional e proteção familiar</div>
+                        </div>
+                        <span class="transit-level">🟢</span>
+                    </div>
+                    <div class="transit-item medium">
+                        <span class="transit-icon">♃</span>
+                        <div class="transit-info">
+                            <strong>Júpiter em Gêmeos</strong>
+                            <div>Expansão através do conhecimento e comunicação</div>
+                        </div>
+                        <span class="transit-level">🟡</span>
+                    </div>
+                    <div class="transit-item high">
+                        <span class="transit-icon">♄</span>
+                        <div class="transit-info">
+                            <strong>Saturno em Peixes</strong>
+                            <div>Estruturação da espiritualidade e intuição</div>
+                        </div>
+                        <span class="transit-level">🟢</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="astro-tab-aspects" class="astro-tab-content">
+                <h3>🔮 Aspectos Astrológicos</h3>
+                <div class="aspects-list">
+                    <div class="aspect-item harmonious">
+                        <span class="aspect-symbol">△</span>
+                        <div class="aspect-info">
+                            <strong>Sol trígono Júpiter</strong>
+                            <div>Otimismo e expansão - Energia positiva para crescimento</div>
+                        </div>
+                    </div>
+                    <div class="aspect-item tense">
+                        <span class="aspect-symbol">□</span>
+                        <div class="aspect-info">
+                            <strong>Marte quadratura Saturno</strong>
+                            <div>Tensão entre ação e disciplina - Paciência necessária</div>
+                        </div>
+                    </div>
+                    <div class="aspect-item neutral">
+                        <span class="aspect-symbol">⚹</span>
+                        <div class="aspect-info">
+                            <strong>Vênus sextil Netuno</strong>
+                            <div>Inspiração artística e romântica - Criatividade elevada</div>
+                        </div>
+                    </div>
+                    <div class="aspect-item harmonious">
+                        <span class="aspect-symbol">△</span>
+                        <div class="aspect-info">
+                            <strong>Lua trígono Urano</strong>
+                            <div>Intuição e inovação - Insights revolucionários</div>
+                        </div>
+                    </div>
+                    <div class="aspect-item tense">
+                        <span class="aspect-symbol">☍</span>
+                        <div class="aspect-info">
+                            <strong>Mercúrio oposição Netuno</strong>
+                            <div>Confusão mental possível - Clareza necessária</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="astro-tab-alerts" class="astro-tab-content">
+                <h3>🚨 Sistema de Alertas Astrológicos</h3>
+                <div class="alerts-container">
+                    <div class="alert-item critical">
+                        <span class="alert-icon">🔴</span>
+                        <div class="alert-info">
+                            <strong>ECLIPSE LUNAR</strong>
+                            <div>Próximo eclipse em 28/09 - Prepare-se para mudanças importantes</div>
+                        </div>
+                    </div>
+                    <div class="alert-item warning">
+                        <span class="alert-icon">🟡</span>
+                        <div class="alert-info">
+                            <strong>MERCÚRIO RETRÓGRADO</strong>
+                            <div>Aproximando-se em 04/10 - Cuidado com comunicações e tecnologia</div>
+                        </div>
+                    </div>
+                    <div class="alert-item info">
+                        <span class="alert-icon">🟢</span>
+                        <div class="alert-info">
+                            <strong>LUA CHEIA FAVORÁVEL</strong>
+                            <div>14/10 em Áries - Energia poderosa para novos projetos</div>
+                        </div>
+                    </div>
+                    <div class="alert-item warning">
+                        <span class="alert-icon">🟡</span>
+                        <div class="alert-info">
+                            <strong>VÊNUS RETRÓGRADA</strong>
+                            <div>Revisão de relacionamentos e valores - 12/10 a 21/11</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert-settings">
+                    <h4>⚙️ Configurações de Alerta</h4>
+                    <label><input type="checkbox" checked> Notificações AFAST!</label>
+                    <label><input type="checkbox" checked> Alertas de Retrogradação</label>
+                    <label><input type="checkbox" checked> Eclipses e Eventos Raros</label>
+                    <label><input type="checkbox"> Aspectos Diários</label>
+                    <label><input type="checkbox"> Mudanças de Signo</label>
+                    <label><input type="checkbox"> Fases Lunares</label>
+                </div>
+            </div>
+
+            <!-- Botão para aplicação completa -->
+            <div class="astro-footer">
+                <button class="astro-full-btn" onclick="openFullAstroApp()">
+                    🔮 Abrir Aplicação Completa
+                </button>
+                <button class="astro-refresh-btn" onclick="refreshAstroData()">
+                    🔄 Atualizar Dados
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showAstroTab(tabName) {
+            // Remover classe active de todas as abas
+            document.querySelectorAll('.astro-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remover classe active de todos os conteúdos
+            document.querySelectorAll('.astro-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Ativar aba clicada
+            event.target.classList.add('active');
+            
+            // Mostrar conteúdo correspondente
+            document.getElementById(`astro-tab-${tabName}`).classList.add('active');
+            
+            // Notificação de mudança de aba
+            const tabNames = {
+                'positions': '📊 Posições Planetárias',
+                'lunar': '🌙 Informações Lunares',
+                'transits': '⚡ Trânsitos Astrológicos',
+                'aspects': '🔮 Aspectos Planetários',
+                'alerts': '🚨 Sistema de Alertas'
+            };
+            
+            showNotification(`Navegando para: ${tabNames[tabName]}`);
+        }
+
+        function openFullAstroApp() {
+            showNotification('🔮 Redirecionando para aplicação completa...');
+            alert('🔮 Redirecionando para AstroMágick Completo!\n\nEsta funcionalidade será conectada à sua aplicação externa.');
+        }
+
+        function refreshAstroData() {
+            showNotification('🔄 Atualizando dados astrológicos...');
+            
+            // Simular atualização de dados
+            setTimeout(() => {
+                updatePlanetaryPositions();
+                updateLunarInfo();
+                showNotification('✅ Dados astrológicos atualizados!');
+            }, 1000);
+        }
+
+        function updatePlanetaryPositions() {
+            // Atualizar posições planetárias com dados simulados
+            const positions = {
+                'sun-position': '♍ Virgem 18°23\'',
+                'moon-position': '♓ Peixes 12°45\'',
+                'mercury-position': '♍ Virgem 25°12\'',
+                'venus-position': '♎ Libra 3°08\'',
+                'mars-position': '♋ Câncer 28°33\'',
+                'jupiter-position': '♊ Gêmeos 15°27\'',
+                'saturn-position': '♓ Peixes 19°41\'',
+                'uranus-position': '♉ Touro 27°15\'',
+                'neptune-position': '♓ Peixes 29°52\'',
+                'pluto-position': '♑ Capricórnio 29°38\''
+            };
+            
+            Object.entries(positions).forEach(([id, position]) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = position;
+                }
+            });
+        }
+
+        function updateLunarInfo() {
+            // Atualizar informações lunares
+            const now = new Date();
+            const moonPhases = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
+            const phaseNames = ['Nova', 'Crescente', 'Quarto Crescente', 'Gibosa Crescente', 
+                              'Cheia', 'Gibosa Minguante', 'Quarto Minguante', 'Minguante'];
+            
+            // Calcular fase atual (simulado)
+            const dayOfMonth = now.getDate();
+            const phaseIndex = Math.floor((dayOfMonth / 29.5) * 8) % 8;
+            
+            document.getElementById('moon-phase-icon').textContent = moonPhases[phaseIndex];
+            document.getElementById('moon-phase-name').textContent = phaseNames[phaseIndex];
+            document.getElementById('moon-illumination').textContent = `${Math.floor(Math.random() * 100)}% iluminada`;
+        }
+
+        function showNotification(message) {
+            // Remover notificação existente
+            const existing = document.querySelector('.notification');
+            if (existing) {
+                existing.remove();
+            }
+            
+            // Criar nova notificação
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            showNotification('🌟 AstroMágick Demo carregado com sucesso!');
+        });
+    </script>
+</body>
+</html>
+
