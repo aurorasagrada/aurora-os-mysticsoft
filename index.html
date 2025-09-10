@@ -1126,9 +1126,39 @@
             }
 
             getLunarPhase(date) {
-                const phases = ['Nova', 'Crescente', 'Cheia', 'Minguante'];
-                const dayOfMonth = date.getDate();
-                return phases[Math.floor(dayOfMonth / 8)];
+                // Cálculo preciso da fase lunar baseado na idade lunar
+                // Referência: Nova Lua conhecida em 6 de janeiro de 2000, 18:14 UTC
+                const knownNewMoon = new Date(2000, 0, 6, 18, 14, 0);
+                const synodicMonth = 29.530588853; // Período sinódico lunar em dias
+                
+                // Calcular diferença em milissegundos
+                const timeDiff = date.getTime() - knownNewMoon.getTime();
+                const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+                
+                // Calcular idade lunar (dias desde a última lua nova)
+                const lunarAge = daysDiff % synodicMonth;
+                const normalizedAge = lunarAge < 0 ? lunarAge + synodicMonth : lunarAge;
+                
+                // Determinar fase baseada na idade lunar
+                if (normalizedAge < 1.84566) {
+                    return 'Nova';
+                } else if (normalizedAge < 5.53699) {
+                    return 'Crescente';
+                } else if (normalizedAge < 9.22831) {
+                    return 'Quarto Crescente';
+                } else if (normalizedAge < 12.91963) {
+                    return 'Gibosa Crescente';
+                } else if (normalizedAge < 16.61096) {
+                    return 'Cheia';
+                } else if (normalizedAge < 20.30228) {
+                    return 'Gibosa Minguante';
+                } else if (normalizedAge < 23.99361) {
+                    return 'Quarto Minguante';
+                } else if (normalizedAge < 27.68493) {
+                    return 'Minguante';
+                } else {
+                    return 'Nova';
+                }
             }
 
             getGoddessOfDay(date) {
