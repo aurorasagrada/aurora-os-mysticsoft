@@ -816,7 +816,7 @@
         <!-- Ícones do Desktop -->
         <div class="desktop-icons">
             <div class="desktop-icon" data-app="astromagick">
-                <img src="icons/Astromágick.png" alt="AstroMágick" class="icon-image">
+                <img src="icons/astromagick.png" alt="AstroMágick" class="icon-image">
                 <div class="icon-label">AstroMágick</div>
             </div>
             <div class="desktop-icon" data-app="aurora-player">
@@ -824,7 +824,7 @@
                 <div class="icon-label">Aurora Player</div>
             </div>
             <div class="desktop-icon" data-app="witch-tv">
-                <img src="icons/Witch-TV.png" alt="Witch.TV" class="icon-image">
+                <img src="icons/witch-tv.png" alt="Witch.TV" class="icon-image">
                 <div class="icon-label">Witch.TV</div>
             </div>
             <div class="desktop-icon" data-app="afast">
@@ -836,7 +836,7 @@
                 <div class="icon-label">Tarô</div>
             </div>
             <div class="desktop-icon" data-app="books">
-                <img src="icons/Livros-interativos.png" alt="Livros Interativos" class="icon-image">
+                <img src="icons/livros-interativos.png" alt="Livros Interativos" class="icon-image">
                 <div class="icon-label">Livros Interativos</div>
             </div>
         </div>
@@ -845,7 +845,7 @@
 
         <!-- Barra de Tarefas -->
         <div class="taskbar">
-            <div class="start-button">Iniciar</div>
+            <div class="start-button" id="start-button">Iniciar</div>
             <div class="clock" id="clock">00:00</div>
         </div>
     </div>
@@ -1965,8 +1965,65 @@
         // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
             window.auroraOS = new AuroraOS();
+            
+            // Inicializar AFÁSTE para notificações (mesmo sem janela aberta)
+            if (!window.afastApp) {
+                window.afastApp = new AFASTApp();
+            }
+            
+            // Configurar botão Iniciar
+            const startButton = document.getElementById('start-button');
+            if (startButton) {
+                startButton.addEventListener('click', () => {
+                    showStartMenu();
+                });
+            }
+            
             console.log('🌟 Aurora OS inicializado com sucesso!');
         });
+        
+        // Função para mostrar menu Iniciar
+        function showStartMenu() {
+            const apps = [
+                { name: 'AstroMágick', id: 'astromagick', icon: '🌙' },
+                { name: 'Aurora Player', id: 'aurora-player', icon: '🎵' },
+                { name: 'Witch.TV', id: 'witch-tv', icon: '📺' },
+                { name: 'AFÁSTE', id: 'afast', icon: '🗣️' },
+                { name: 'Tarô Místico', id: 'tarot', icon: '🔮' },
+                { name: 'Livros Interativos', id: 'books', icon: '📚' }
+            ];
+            
+            let menuHTML = '<div style="position: fixed; bottom: 60px; left: 10px; background: #c0c0c0; border: 2px outset #c0c0c0; padding: 10px; z-index: 10000; min-width: 200px;">';
+            menuHTML += '<div style="font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #808080; padding-bottom: 5px;">🌟 Aplicações Místicas</div>';
+            
+            apps.forEach(app => {
+                menuHTML += `<div style="padding: 5px; cursor: pointer; hover: background: #0000ff; color: white;" onclick="window.auroraOS.openApp('${app.id}'); closeStartMenu();">${app.icon} ${app.name}</div>`;
+            });
+            
+            menuHTML += '<div style="border-top: 1px solid #808080; margin-top: 10px; padding-top: 5px;">';
+            menuHTML += '<div style="padding: 5px; cursor: pointer;" onclick="closeStartMenu();">❌ Fechar</div>';
+            menuHTML += '</div></div>';
+            
+            // Remover menu existente se houver
+            const existingMenu = document.getElementById('start-menu');
+            if (existingMenu) {
+                existingMenu.remove();
+            }
+            
+            // Adicionar novo menu
+            const menuDiv = document.createElement('div');
+            menuDiv.id = 'start-menu';
+            menuDiv.innerHTML = menuHTML;
+            document.body.appendChild(menuDiv);
+        }
+        
+        // Função para fechar menu Iniciar
+        function closeStartMenu() {
+            const menu = document.getElementById('start-menu');
+            if (menu) {
+                menu.remove();
+            }
+        }
     </script>
 </body>
 </html>
