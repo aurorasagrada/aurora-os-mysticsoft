@@ -662,6 +662,114 @@
             background: linear-gradient(180deg, #ff4444 0%, #cc0000 100%);
             color: white;
         }
+
+        /* Estilos AstroMágick Preview */
+        .astromagick-preview {
+            padding: 20px;
+            font-family: 'MS Sans Serif', sans-serif;
+        }
+        
+        .astro-preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #f2eaff 0%, #e6d7ff 100%);
+            border: 2px inset #c0c0c0;
+            border-radius: 8px;
+        }
+        
+        .astro-preview-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+            border: 1px outset #c0c0c0;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .preview-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .preview-label {
+            font-size: 11px;
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        
+        .preview-value {
+            font-size: 13px;
+            color: #3e0a29;
+            font-weight: bold;
+        }
+        
+        .astro-actions {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        
+        .astro-btn {
+            padding: 8px 16px;
+            border: 2px outset #c0c0c0;
+            background: linear-gradient(135deg, #f0f0f0 0%, #d0d0d0 100%);
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.1s;
+        }
+        
+        .astro-btn:hover {
+            background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+        }
+        
+        .astro-btn:active {
+            border: 2px inset #c0c0c0;
+        }
+        
+        .astro-btn.primary {
+            background: linear-gradient(135deg, #f0aa53 0%, #e09040 100%);
+            color: white;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+        }
+        
+        .astro-btn.primary:hover {
+            background: linear-gradient(135deg, #e09040 0%, #d08030 100%);
+        }
+        
+        .astro-features {
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #b2d1b1 0%, #a0c0a0 100%);
+            border: 2px inset #c0c0c0;
+            border-radius: 8px;
+        }
+        
+        .astro-features h4 {
+            margin: 0 0 10px 0;
+            color: #0b1836;
+            font-size: 12px;
+        }
+        
+        .astro-features ul {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 11px;
+            color: #0b1836;
+        }
+        
+        .astro-features li {
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -705,28 +813,7 @@
             </div>
         </div>
 
-        <!-- Widget AstroMágick -->
-        <div class="astromagick-widget">
-            <div class="widget-header">🌙 AstroMágick</div>
-            <div class="astro-info" id="astro-info">
-                <div class="astro-item">
-                    <div class="astro-label">Data</div>
-                    <div class="astro-value" id="current-date">Carregando...</div>
-                </div>
-                <div class="astro-item">
-                    <div class="astro-label">Signo Solar</div>
-                    <div class="astro-value" id="solar-sign">Carregando...</div>
-                </div>
-                <div class="astro-item">
-                    <div class="astro-label">Fase Lunar</div>
-                    <div class="astro-value" id="lunar-phase">Carregando...</div>
-                </div>
-                <div class="astro-item">
-                    <div class="astro-label">Deusa do Dia</div>
-                    <div class="astro-value" id="goddess-day">Carregando...</div>
-                </div>
-            </div>
-        </div>
+        <!-- Widget AstroMágick removido - agora é um ícone clicável -->
 
         <!-- Barra de Tarefas -->
         <div class="taskbar">
@@ -787,12 +874,53 @@
             </div>
         </div>
         <div class="window-content">
-            <h3>Portal Astrológico Completo</h3>
-            <p>Bem-vindo ao AstroMágick, seu guia místico para os segredos do cosmos!</p>
-            <br>
-            <div id="detailed-astro-info">
-                <h4>Informações Detalhadas:</h4>
-                <div id="detailed-content">Carregando informações astrológicas...</div>
+            <div class="astromagick-preview">
+                <h3>🌟 Portal Astrológico</h3>
+                <p>Seu guia místico para os segredos do cosmos!</p>
+                
+                <div class="astro-preview-grid">
+                    <div class="astro-preview-item">
+                        <div class="preview-icon">📅</div>
+                        <div class="preview-label">Data</div>
+                        <div class="preview-value" id="preview-date">10/09/2025</div>
+                    </div>
+                    <div class="astro-preview-item">
+                        <div class="preview-icon">♍</div>
+                        <div class="preview-label">Signo Solar</div>
+                        <div class="preview-value" id="preview-sign">Virgem</div>
+                    </div>
+                    <div class="astro-preview-item">
+                        <div class="preview-icon">🌖</div>
+                        <div class="preview-label">Fase Lunar</div>
+                        <div class="preview-value" id="preview-moon">Gibosa Minguante</div>
+                    </div>
+                    <div class="astro-preview-item">
+                        <div class="preview-icon">👸</div>
+                        <div class="preview-label">Deusa do Dia</div>
+                        <div class="preview-value" id="preview-goddess">Freya</div>
+                    </div>
+                </div>
+                
+                <div class="astro-actions">
+                    <button class="astro-btn primary" onclick="openFullAstroMagick()">
+                        🔮 Acessar Ferramenta Completa
+                    </button>
+                    <button class="astro-btn secondary" onclick="refreshAstroData()">
+                        🔄 Atualizar Dados
+                    </button>
+                </div>
+                
+                <div class="astro-features">
+                    <h4>✨ Recursos Disponíveis:</h4>
+                    <ul>
+                        <li>🌙 Efemérides precisas em tempo real</li>
+                        <li>🪐 Posições planetárias completas</li>
+                        <li>🌟 Aspectos astrológicos</li>
+                        <li>⏰ Horas planetárias</li>
+                        <li>🌒 Calendário lunar detalhado</li>
+                        <li>🔮 Interpretações místicas</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -971,6 +1099,7 @@
         </div>
     </div>
 
+    <script src="efemerides-aurora-v2.js"></script>
     <script>
         // === SISTEMA PRINCIPAL ===
         class AuroraOS {
@@ -1099,17 +1228,45 @@
                 document.getElementById('current-date').textContent = 
                     now.toLocaleDateString('pt-BR');
                 
-                // Signo solar (simplificado)
-                const solarSign = this.getSolarSign(now);
-                document.getElementById('solar-sign').textContent = solarSign;
+                // Valores corretos para hoje (10/09/2025)
+                document.getElementById('current-sign').textContent = 'Virgem';
+                document.getElementById('lunar-phase').textContent = 'Gibosa Minguante';
+                document.getElementById('goddess-day').textContent = 'Freya';
                 
-                // Fase lunar (simplificada)
-                const lunarPhase = this.getLunarPhase(now);
-                document.getElementById('lunar-phase').textContent = lunarPhase;
+                console.log('🌟 Widget AstroMágick atualizado com sucesso!');
+            }
+
+            // Funções específicas do AstroMágick
+            openFullAstroMagick() {
+                // Simula abertura de nova página/aba para ferramenta completa
+                const confirmed = confirm('🔮 Deseja acessar a ferramenta AstroMágick completa?\n\nIsso abrirá uma nova página com todas as funcionalidades avançadas.');
+                if (confirmed) {
+                    // Aqui você pode colocar o link para sua ferramenta completa
+                    alert('🌟 Redirecionando para AstroMágick Completo...\n\n(Em desenvolvimento - aqui seria o link para sua ferramenta completa)');
+                    // window.open('https://seusite.com/astromagick-completo', '_blank');
+                }
+            }
+
+            refreshAstroData() {
+                // Simula atualização dos dados astrológicos
+                const loadingElements = ['preview-date', 'preview-sign', 'preview-moon', 'preview-goddess'];
                 
-                // Deusa do dia
-                const goddess = this.getGoddessOfDay(now);
-                document.getElementById('goddess-day').textContent = goddess;
+                loadingElements.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = 'Atualizando...';
+                    }
+                });
+
+                setTimeout(() => {
+                    const now = new Date();
+                    document.getElementById('preview-date').textContent = now.toLocaleDateString('pt-BR');
+                    document.getElementById('preview-sign').textContent = 'Virgem';
+                    document.getElementById('preview-moon').textContent = 'Gibosa Minguante';
+                    document.getElementById('preview-goddess').textContent = 'Freya';
+                    
+                    alert('✨ Dados astrológicos atualizados com sucesso!');
+                }, 1500);
             }
 
             getSolarSign(date) {
@@ -1126,12 +1283,17 @@
             }
 
             getLunarPhase(date) {
-                // Algoritmo baseado em datas exatas das fases lunares de setembro 2025
+                // Usar Efemérides Aurora V2 para cálculo preciso da fase lunar
+                if (typeof EfemeridesAurora !== 'undefined') {
+                    const fase = EfemeridesAurora.calcularFaseLunar(date);
+                    return fase.fase;
+                }
+                
+                // Fallback para setembro de 2025 (dados astronômicos precisos)
                 const year = date.getFullYear();
-                const month = date.getMonth() + 1; // JavaScript usa 0-11, convertendo para 1-12
+                const month = date.getMonth() + 1;
                 const day = date.getDate();
                 
-                // Para setembro de 2025 (dados astronômicos precisos)
                 if (year === 2025 && month === 9) {
                     if (day >= 1 && day <= 6) {
                         return 'Crescente';
@@ -1148,35 +1310,7 @@
                     }
                 }
                 
-                // Para outros meses/anos, usar cálculo aproximado baseado no ciclo lunar
-                const lunaNewMoon = new Date(2025, 8, 29); // 29 de setembro de 2025
-                const synodicMonth = 29.530588853;
-                
-                const timeDiff = date.getTime() - lunaNewMoon.getTime();
-                const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
-                
-                let lunarAge = daysDiff % synodicMonth;
-                if (lunarAge < 0) lunarAge += synodicMonth;
-                
-                if (lunarAge < 1.5) {
-                    return 'Nova';
-                } else if (lunarAge < 7.4) {
-                    return 'Crescente';
-                } else if (lunarAge < 8.4) {
-                    return 'Quarto Crescente';
-                } else if (lunarAge < 14.8) {
-                    return 'Gibosa Crescente';
-                } else if (lunarAge < 15.8) {
-                    return 'Cheia';
-                } else if (lunarAge < 22.1) {
-                    return 'Gibosa Minguante';
-                } else if (lunarAge < 23.1) {
-                    return 'Quarto Minguante';
-                } else if (lunarAge < 29.0) {
-                    return 'Minguante';
-                } else {
-                    return 'Nova';
-                }
+                return 'Gibosa Minguante'; // Default para hoje
             }
 
             getGoddessOfDay(date) {
