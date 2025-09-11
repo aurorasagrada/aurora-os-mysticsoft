@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aurora OS • MysticSoft</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&display=swap');
+        
         :root {
             --vinho: #3e0a29;
             --verde: #b2d1b1;
             --azul: #0b1836;
             --dourado: #f0aa53;
             --pergaminho: #f2eaff;
+            --roxo-mistico: #4a0e4e;
+            --prata: #c0c0c0;
+            --cinza-escuro: #808080;
         }
 
         * {
@@ -21,11 +26,12 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--azul);
             color: var(--pergaminho);
             height: 100vh;
             overflow: hidden;
+            font-size: 11px;
         }
 
         /* === TELA DE BOOT === */
@@ -44,73 +50,158 @@
             z-index: 10000;
             cursor: pointer;
             overflow: hidden;
+            animation: bootGlow 4s ease-in-out infinite alternate, tvStatic 0.1s infinite;
+        }
+
+        @keyframes bootGlow {
+            from { filter: brightness(1) contrast(1); }
+            to { filter: brightness(1.1) contrast(1.2); }
+        }
+
+        @keyframes tvStatic {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.98; }
         }
 
         .mystic-logo {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(45deg, #d4af37, #f0aa53, #d4af37);
+            width: 150px;
+            height: 150px;
+            background: 
+                radial-gradient(circle at 30% 30%, #d4af37, #f0aa53),
+                linear-gradient(45deg, #8a2be2, #4b0082);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
+            font-size: 64px;
             margin-bottom: 30px;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
-            animation: logoGlow 2s ease-in-out infinite alternate;
+            box-shadow: 
+                0 0 30px rgba(212, 175, 55, 0.6),
+                inset 0 0 20px rgba(255,255,255,0.2);
+            animation: logoGlow 3s ease-in-out infinite alternate;
+            position: relative;
+        }
+
+        .mystic-logo::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+            animation: rotate 4s linear infinite;
         }
 
         @keyframes logoGlow {
-            from { box-shadow: 0 0 30px rgba(212, 175, 55, 0.5); }
-            to { box-shadow: 0 0 50px rgba(212, 175, 55, 0.8); }
+            from { 
+                box-shadow: 0 0 30px rgba(212, 175, 55, 0.6), inset 0 0 20px rgba(255,255,255,0.2);
+                transform: scale(1);
+            }
+            to { 
+                box-shadow: 0 0 50px rgba(212, 175, 55, 0.9), inset 0 0 30px rgba(255,255,255,0.4);
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .boot-title {
-            font-size: 48px;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 56px;
             font-weight: bold;
             color: var(--dourado);
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 
+                2px 2px 4px rgba(0,0,0,0.8),
+                0 0 20px rgba(212, 175, 55, 0.5);
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 20px rgba(212, 175, 55, 0.5); }
+            to { text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 30px rgba(212, 175, 55, 0.8); }
         }
 
         .boot-subtitle {
-            font-size: 24px;
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            color: var(--pergaminho);
+            margin-bottom: 20px;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+        }
+
+        .boot-system-info {
+            font-size: 16px;
             color: var(--pergaminho);
             margin-bottom: 40px;
             opacity: 0.8;
+            text-align: center;
         }
 
         .boot-progress {
-            width: 400px;
-            height: 20px;
-            background: rgba(0,0,0,0.3);
-            border: 2px inset #c0c0c0;
+            width: 450px;
+            height: 24px;
+            background: #000;
+            border: 2px inset var(--prata);
             margin-bottom: 20px;
             overflow: hidden;
+            position: relative;
         }
 
         .boot-progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #0066cc, #0099ff);
+            background: linear-gradient(90deg, #0066cc, #0099ff, #00ccff);
             width: 0%;
             transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .boot-progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: progressShine 2s linear infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .boot-status {
             color: var(--pergaminho);
             font-size: 14px;
             margin-bottom: 40px;
+            min-height: 20px;
+            text-align: center;
         }
 
         .boot-click-hint {
             color: var(--dourado);
-            font-size: 16px;
+            font-size: 18px;
             animation: pulse 2s infinite;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .boot-copyright {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 12px;
+            width: 100%;
         }
 
         /* === DESKTOP === */
@@ -123,22 +214,337 @@
                 linear-gradient(135deg, #1a2a4a 0%, #2a1a4a 50%, #3a1a5a 100%);
             display: none;
             padding: 20px;
+            padding-bottom: 60px;
         }
 
         .desktop.active {
             display: block;
         }
 
+        /* Wallpapers */
+        .desktop.wallpaper-mystic {
+            background: 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23f0aa53" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23stars)"/></svg>'),
+                radial-gradient(circle at 30% 70%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                linear-gradient(135deg, #1a2a4a 0%, #2a1a4a 50%, #3a1a5a 100%);
+        }
+
+        .desktop.wallpaper-cosmic {
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(138, 43, 226, 0.4) 0%, transparent 30%),
+                radial-gradient(circle at 80% 80%, rgba(75, 0, 130, 0.4) 0%, transparent 30%),
+                linear-gradient(45deg, #0b1836 0%, #2a1a4a 50%, #4a0e4e 100%);
+        }
+
+        .desktop.wallpaper-classic {
+            background: 
+                linear-gradient(135deg, #008080 0%, #20b2aa 25%, #008080 50%, #20b2aa 75%, #008080 100%);
+        }
+
+        .desktop.wallpaper-aurora {
+            background: 
+                radial-gradient(ellipse at top, rgba(0, 255, 127, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
+                linear-gradient(180deg, #001122 0%, #002244 50%, #001133 100%);
+        }
+
+        .desktop.wallpaper-constellations {
+            background: 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="constellation" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="0.5" fill="%23f0aa53"/><circle cx="15" cy="10" r="0.8" fill="%23ffffff"/><circle cx="25" cy="8" r="0.3" fill="%23f0aa53"/><circle cx="35" cy="15" r="0.6" fill="%23ffffff"/><circle cx="10" cy="25" r="0.4" fill="%23f0aa53"/><circle cx="30" cy="30" r="0.7" fill="%23ffffff"/><line x1="5" y1="5" x2="15" y2="10" stroke="%23f0aa53" stroke-width="0.2" opacity="0.5"/><line x1="15" y1="10" x2="25" y2="8" stroke="%23f0aa53" stroke-width="0.2" opacity="0.5"/></pattern></defs><rect width="200" height="200" fill="url(%23constellation)"/></svg>'),
+                linear-gradient(135deg, #0a0a2e 0%, #16213e 50%, #0a0a2e 100%);
+        }
+
+        .desktop.wallpaper-moon {
+            background: 
+                radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 20%, transparent 40%),
+                radial-gradient(circle at 30% 70%, rgba(212, 175, 55, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #1a1a3a 0%, #2a2a4a 50%, #1a1a3a 100%);
+        }
+
+        .desktop.wallpaper-matrix {
+            background: 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="matrix" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse"><text x="2" y="8" font-family="monospace" font-size="6" fill="%2300ff00" opacity="0.3">0</text><text x="7" y="3" font-family="monospace" font-size="4" fill="%2300ff00" opacity="0.2">1</text></pattern></defs><rect width="100" height="100" fill="url(%23matrix)"/></svg>'),
+                linear-gradient(135deg, #000000 0%, #001100 50%, #000000 100%);
+        }
+
+        /* Wallpaper Selector */
+        .wallpaper-selector {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            padding: 15px;
+            z-index: 10000;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: none;
+            min-width: 400px;
+        }
+
+        .wallpaper-selector.show {
+            display: block;
+        }
+
+        .wallpaper-selector-header {
+            background: linear-gradient(90deg, #0066cc, #0099ff);
+            color: white;
+            padding: 4px 8px;
+            margin: -15px -15px 15px -15px;
+            font-weight: bold;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wallpaper-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .wallpaper-option {
+            width: 100px;
+            height: 60px;
+            border: 2px inset #c0c0c0;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wallpaper-option:hover {
+            border: 2px outset #c0c0c0;
+        }
+
+        .wallpaper-option.selected {
+            border: 2px solid #0066cc;
+            box-shadow: inset 0 0 0 1px #0066cc;
+        }
+
+        .wallpaper-option.mystic {
+            background: 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars-mini" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23f0aa53" opacity="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23stars-mini)"/></svg>'),
+                linear-gradient(135deg, #1a2a4a 0%, #3a1a5a 100%);
+        }
+
+        .wallpaper-option.cosmic {
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(138, 43, 226, 0.6) 0%, transparent 50%),
+                linear-gradient(45deg, #0b1836 0%, #4a0e4e 100%);
+        }
+
+        .wallpaper-option.classic {
+            background: linear-gradient(135deg, #008080 0%, #20b2aa 50%, #008080 100%);
+        }
+
+        .wallpaper-option.aurora {
+            background: 
+                radial-gradient(ellipse at top, rgba(0, 255, 127, 0.5) 0%, transparent 70%),
+                linear-gradient(180deg, #001122 0%, #002244 100%);
+        }
+
+        .wallpaper-option.constellations {
+            background: 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="%23ffffff"/><circle cx="40" cy="15" r="0.5" fill="%23f0aa53"/><circle cx="60" cy="25" r="0.8" fill="%23ffffff"/><line x1="20" y1="20" x2="40" y2="15" stroke="%23f0aa53" stroke-width="0.5"/></svg>'),
+                linear-gradient(135deg, #0a0a2e 0%, #16213e 100%);
+        }
+
+        .wallpaper-option.moon {
+            background: 
+                radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+                linear-gradient(135deg, #1a1a3a 0%, #2a2a4a 100%);
+        }
+
+        .wallpaper-option.matrix {
+            background: 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><text x="5" y="15" font-family="monospace" font-size="8" fill="%2300ff00" opacity="0.7">0</text><text x="25" y="35" font-family="monospace" font-size="6" fill="%2300ff00" opacity="0.5">1</text></svg>'),
+                linear-gradient(135deg, #000000 0%, #001100 100%);
+        }
+
+        .wallpaper-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            font-size: 9px;
+            padding: 2px 4px;
+            text-align: center;
+        }
+
+        .wallpaper-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .wallpaper-btn {
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border: 1px outset #c0c0c0;
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: 11px;
+            color: #000;
+        }
+
+        .wallpaper-btn:active {
+            border: 1px inset #c0c0c0;
+        }
+
+        .wallpaper-btn.primary {
+            background: linear-gradient(180deg, #0066cc 0%, #004499 100%);
+            color: white;
+        }
+
+        /* Janela Hora Planetária */
+        .planetary-hour-window {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 400px;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            z-index: 10000;
+            display: none;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .planetary-hour-window.show {
+            display: block;
+        }
+
+        .planetary-hour-header {
+            background: linear-gradient(90deg, #0066cc, #0099ff);
+            color: white;
+            padding: 4px 8px;
+            font-weight: bold;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+        }
+
+        .planetary-hour-content {
+            padding: 20px;
+            height: calc(100% - 60px);
+            overflow-y: auto;
+        }
+
+        .planetary-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            position: relative;
+            background: conic-gradient(from 0deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3, #54a0ff, #ff6b6b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .planetary-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .planetary-info h3 {
+            margin: 0 0 10px 0;
+            color: #0066cc;
+            font-size: 18px;
+        }
+
+        .planetary-info p {
+            margin: 5px 0;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .planetary-timer {
+            background: #f0f0f0;
+            border: 1px inset #c0c0c0;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .timer-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border: 1px inset #c0c0c0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #4ecdc4, #45b7d1);
+            transition: width 1s ease;
+        }
+
+        .planetary-schedule {
+            background: #f8f8f8;
+            border: 1px inset #c0c0c0;
+            padding: 10px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            font-size: 11px;
+            border-bottom: 1px dotted #ccc;
+        }
+
+        .schedule-item.current {
+            background: #e6f3ff;
+            font-weight: bold;
+            color: #0066cc;
+        }
+
+        .planetary-recommendations {
+            background: #fff8dc;
+            border: 1px inset #c0c0c0;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 11px;
+        }
+
+        .planetary-recommendations h4 {
+            margin: 0 0 8px 0;
+            color: #8b4513;
+            font-size: 12px;
+        }
+
         .desktop-icons {
             display: grid;
-            grid-template-columns: repeat(auto-fill, 80px);
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, 90px);
+            gap: 25px;
             padding: 20px;
         }
 
         .desktop-icon {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -147,51 +553,75 @@
             border-radius: 8px;
             transition: all 0.3s ease;
             text-align: center;
+            padding: 8px;
         }
 
         .desktop-icon:hover {
             background: rgba(255,255,255,0.1);
             transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .desktop-icon.selected {
+            background: rgba(0, 102, 204, 0.3);
+            border: 1px dotted var(--pergaminho);
         }
 
         .desktop-icon .icon {
-            font-size: 32px;
-            margin-bottom: 5px;
+            font-size: 36px;
+            margin-bottom: 8px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
         }
 
         .desktop-icon .label {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--pergaminho);
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            line-height: 1.2;
+            font-weight: bold;
         }
 
-        /* === TASKBAR === */
+        /* === BARRA DE TAREFAS WINDOWS ME === */
         .taskbar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 80px;
+            height: 40px;
             background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border-top: 2px outset #c0c0c0;
+            border-top: 1px solid #dfdfdf;
+            border-bottom: 1px solid #404040;
             display: flex;
             align-items: center;
-            padding: 0 10px;
             z-index: 1000;
+            font-size: 11px;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.2);
         }
 
         .start-button {
             background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border: 2px outset #c0c0c0;
-            padding: 8px 16px;
+            border: 1px outset #c0c0c0;
+            padding: 4px 8px;
             font-weight: bold;
             cursor: pointer;
-            margin-right: 10px;
+            margin: 2px;
             color: #000;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 60px;
+            height: 32px;
         }
 
         .start-button:active {
-            border: 2px inset #c0c0c0;
+            border: 1px inset #c0c0c0;
+            background: linear-gradient(180deg, #808080 0%, #c0c0c0 100%);
+        }
+
+        .start-button.active {
+            border: 1px inset #c0c0c0;
+            background: linear-gradient(180deg, #808080 0%, #c0c0c0 100%);
         }
 
         .taskbar-center {
@@ -199,41 +629,180 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 4px;
+            padding: 0 10px;
         }
 
-        .astro-chip {
-            background: rgba(212, 175, 55, 0.9);
+        .taskbar-window {
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border: 1px outset #c0c0c0;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 11px;
             color: #000;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 12px;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            height: 28px;
+            display: flex;
+            align-items: center;
+        }
+
+        .taskbar-window.active {
+            border: 1px inset #c0c0c0;
+            background: linear-gradient(180deg, #808080 0%, #c0c0c0 100%);
+        }
+
+        .taskbar-right {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding-right: 4px;
+        }
+
+        /* Chips Astrológicos Minimalistas */
+        .astro-chips-mini {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            margin-right: 4px;
+        }
+
+        .astro-chip-mini {
+            background: rgba(212, 175, 55, 0.8);
+            color: #000;
+            padding: 2px 4px;
+            border-radius: 8px;
+            font-size: 9px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(0,0,0,0.2);
         }
 
-        .astro-chip:hover {
+        .astro-chip-mini:hover {
             background: rgba(212, 175, 55, 1);
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
 
-        .astro-chip.critical {
-            background: rgba(255, 107, 107, 0.9);
+        .astro-chip-mini.critical {
+            background: rgba(255, 107, 107, 0.8);
             color: #fff;
-            animation: pulse 2s infinite;
+            animation: blink 2s infinite;
         }
 
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.6; }
+        }
+
+        /* Volume Control */
+        .volume-control {
+            position: relative;
+        }
+
+        .volume-icon {
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border: 1px outset #c0c0c0;
+            padding: 4px 6px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #000;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            min-width: 24px;
+            justify-content: center;
+        }
+
+        .volume-icon:active {
+            border: 1px inset #c0c0c0;
+        }
+
+        .volume-popup {
+            position: absolute;
+            bottom: 35px;
+            right: 0;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            padding: 15px;
+            min-width: 200px;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 10001;
+        }
+
+        .volume-popup.show {
+            display: block;
+        }
+
+        .volume-section {
+            margin-bottom: 15px;
+        }
+
+        .volume-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .volume-label {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #000;
+        }
+
+        .volume-slider {
+            width: 100%;
+            height: 20px;
+            background: #fff;
+            border: 1px inset #c0c0c0;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-test-btn {
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border: 1px outset #c0c0c0;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 10px;
+            color: #000;
+            margin-top: 5px;
+        }
+
+        .volume-test-btn:active {
+            border: 1px inset #c0c0c0;
+        }
+
+        /* Relógio */
         .clock {
             background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border: 2px inset #c0c0c0;
-            padding: 8px 12px;
+            border: 1px inset #c0c0c0;
+            padding: 4px 8px;
             font-weight: bold;
             color: #000;
             cursor: pointer;
+            font-size: 11px;
+            min-width: 60px;
+            text-align: center;
+            height: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 1;
         }
 
-        /* === JANELAS === */
+        .clock-time {
+            font-size: 11px;
+        }
+
+        .clock-date {
+            font-size: 9px;
+            opacity: 0.8;
+        }
+
+        /* === JANELAS WINDOWS ME === */
         .window {
             position: absolute;
             background: #c0c0c0;
@@ -241,62 +810,164 @@
             min-width: 400px;
             min-height: 300px;
             z-index: 1000;
+            font-size: 11px;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .window.active {
+            z-index: 1001;
         }
 
         .window-header {
             background: linear-gradient(90deg, #0066cc, #0099ff);
             color: white;
-            padding: 4px 8px;
+            padding: 2px 4px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: move;
+            height: 20px;
+            font-size: 11px;
+        }
+
+        .window.inactive .window-header {
+            background: linear-gradient(90deg, #808080, #a0a0a0);
         }
 
         .window-title {
             font-weight: bold;
-            font-size: 14px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        .window-close {
+        .window-controls {
+            display: flex;
+            gap: 2px;
+        }
+
+        .window-control {
             background: #c0c0c0;
             border: 1px outset #c0c0c0;
-            width: 20px;
-            height: 18px;
+            width: 16px;
+            height: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #000;
-            font-size: 12px;
+            font-size: 8px;
+            font-weight: bold;
         }
 
-        .window-close:active {
+        .window-control:active {
             border: 1px inset #c0c0c0;
         }
 
         .window-content {
-            padding: 20px;
-            height: calc(100% - 30px);
+            padding: 8px;
+            height: calc(100% - 20px);
             overflow-y: auto;
             background: #c0c0c0;
             color: #000;
+            font-size: 11px;
         }
 
-        /* === NOTIFICAÇÕES === */
+        /* === MENU INICIAR WINDOWS ME === */
+        .start-menu {
+            position: fixed;
+            bottom: 40px;
+            left: 0;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            width: 250px;
+            z-index: 10000;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .start-menu.show {
+            display: block;
+        }
+
+        .start-menu-header {
+            background: linear-gradient(90deg, #0066cc, #0099ff);
+            color: white;
+            padding: 8px;
+            font-weight: bold;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .start-menu-content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .start-menu-section {
+            border-bottom: 1px solid #808080;
+        }
+
+        .start-menu-item {
+            padding: 6px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #000;
+            border: 1px solid transparent;
+        }
+
+        .start-menu-item:hover {
+            background: #0066cc;
+            color: white;
+            border: 1px solid #004499;
+        }
+
+        .start-menu-item .icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .start-menu-separator {
+            height: 1px;
+            background: #808080;
+            margin: 2px 8px;
+        }
+
+        /* === NOTIFICAÇÕES AFÁST! === */
         .notification {
             position: fixed;
             top: 20px;
             right: 20px;
             background: linear-gradient(135deg, #4a0e4e, #81007f);
             color: white;
-            padding: 15px 20px;
+            padding: 12px 16px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
             z-index: 10000;
             font-weight: bold;
             border: 2px solid #d4af37;
             animation: slideIn 0.3s ease-out;
+            max-width: 300px;
+            font-size: 12px;
+        }
+
+        .notification-title {
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: #d4af37;
+        }
+
+        .notification-message {
+            font-size: 11px;
+            opacity: 0.9;
+            line-height: 1.3;
         }
 
         @keyframes slideIn {
@@ -308,6 +979,110 @@
             from { transform: translateX(0); opacity: 1; }
             to { transform: translateX(100%); opacity: 0; }
         }
+
+        /* === HORA PLANETÁRIA === */
+        .planetary-hour {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            color: var(--dourado);
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 2px solid var(--dourado);
+            font-size: 12px;
+            z-index: 999;
+            backdrop-filter: blur(10px);
+        }
+
+        .planetary-hour-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .planetary-hour-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .planetary-hour-timer {
+            width: 60px;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .planetary-hour-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--dourado), #fff);
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        /* === RESPONSIVIDADE === */
+        @media (max-width: 768px) {
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fill, 70px);
+                gap: 15px;
+            }
+            
+            .desktop-icon {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .desktop-icon .icon {
+                font-size: 28px;
+            }
+            
+            .start-menu {
+                width: 200px;
+            }
+        }
+
+        /* === EFEITOS ESPECIAIS === */
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--dourado);
+            border-radius: 50%;
+            animation: sparkle 2s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+            0% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+            100% { opacity: 0; transform: scale(0) rotate(360deg); }
+        }
+
+        /* === SCROLLBARS WINDOWS ME === */
+        ::-webkit-scrollbar {
+            width: 16px;
+            height: 16px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #c0c0c0;
+            border: 1px inset #c0c0c0;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #dfdfdf 0%, #808080 100%);
+            border: 1px outset #c0c0c0;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #e0e0e0 0%, #909090 100%);
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: #c0c0c0;
+        }
     </style>
 </head>
 <body>
@@ -316,7 +1091,10 @@
         <div class="mystic-logo">🔮</div>
         <div class="boot-title">MysticSoft</div>
         <div class="boot-subtitle">Millennium Edition</div>
-        <div style="color: var(--pergaminho); margin-bottom: 30px;">Sistema Operacional Místico</div>
+        <div class="boot-system-info">
+            Sistema Operacional Místico<br>
+            Versão 2025.09.11 Build 2001
+        </div>
         
         <div class="boot-progress">
             <div id="boot-progress" class="boot-progress-fill"></div>
@@ -325,14 +1103,27 @@
         
         <div class="boot-click-hint">Clique para iniciar</div>
         
-        <div style="position: absolute; bottom: 20px; text-align: center; color: rgba(255,255,255,0.6); font-size: 12px;">
+        <div class="boot-copyright">
             Copyright © 2025 MysticSoft Corporation<br>
-            Todos os direitos reservados
+            Todos os direitos reservados • Powered by Aurora Engine
         </div>
     </div>
 
     <!-- Desktop -->
-    <div id="desktop" class="desktop">
+    <div id="desktop" class="desktop wallpaper-mystic">
+        <!-- Hora Planetária -->
+        <div id="planetary-hour" class="planetary-hour">
+            <div class="planetary-hour-title">Hora Planetária</div>
+            <div class="planetary-hour-info">
+                <span id="planetary-planet">☉ Sol</span>
+                <div class="planetary-hour-timer">
+                    <div id="planetary-progress" class="planetary-hour-progress"></div>
+                </div>
+                <span id="planetary-time">45:32</span>
+            </div>
+        </div>
+
+        <!-- Ícones do Desktop -->
         <div class="desktop-icons">
             <div class="desktop-icon" data-app="astromagick">
                 <div class="icon">🔮</div>
@@ -354,6 +1145,10 @@
                 <div class="icon">💎</div>
                 <div class="label">Cristaloterapia</div>
             </div>
+            <div class="desktop-icon" data-app="carta-natal">
+                <div class="icon">🌟</div>
+                <div class="label">Carta Natal</div>
+            </div>
             <div class="desktop-icon" data-app="aurora-player">
                 <div class="icon">🎵</div>
                 <div class="label">Aurora Player</div>
@@ -366,77 +1161,387 @@
                 <div class="icon">🛡️</div>
                 <div class="label">AFÁST!</div>
             </div>
+            <div class="desktop-icon" data-app="tarot">
+                <div class="icon">🃏</div>
+                <div class="label">Tarô Místico</div>
+            </div>
+            <div class="desktop-icon" data-app="livros">
+                <div class="icon">📚</div>
+                <div class="label">Biblioteca</div>
+            </div>
+            <div class="desktop-icon" data-app="configuracoes">
+                <div class="icon">⚙️</div>
+                <div class="label">Configurações</div>
+            </div>
         </div>
 
-        <!-- Taskbar -->
+        <!-- Barra de Tarefas -->
         <div class="taskbar">
-            <div class="start-button" id="start-button">🌟 Iniciar</div>
+            <button class="start-button" id="start-button">
+                <span style="font-size: 14px;">🌟</span>
+                Iniciar
+            </button>
             
-            <div class="taskbar-center">
-                <div class="astro-chip">☉ Sol</div>
-                <div class="astro-chip">🌖 Minguante</div>
-                <div class="astro-chip critical">☿ R</div>
-                <div class="astro-chip">VOC até 23:45</div>
+            <div class="taskbar-center" id="taskbar-windows">
+                <!-- Janelas abertas aparecerão aqui -->
             </div>
             
-            <div class="clock" id="clock">00:00</div>
+            <div class="taskbar-right">
+                <!-- Chips Astrológicos Minimalistas -->
+                <div class="astro-chips-mini">
+                    <div class="astro-chip-mini" data-chip="moon" title="Lua Minguante">🌖</div>
+                    <div class="astro-chip-mini critical" data-chip="mercury" title="Mercúrio Retrógrado">☿R</div>
+                    <div class="astro-chip-mini" data-chip="voc" title="Lua Fora de Curso">VOC</div>
+                </div>
+                
+                <!-- Controle de Volume -->
+                <div class="volume-control">
+                    <div class="volume-icon" id="volume-icon">🔊</div>
+                    <div class="volume-popup" id="volume-popup">
+                        <div class="volume-section">
+                            <div class="volume-label">🎤 AFÁST! (Narradora)</div>
+                            <input type="range" class="volume-slider" id="afast-volume" min="0" max="100" value="75">
+                            <button class="volume-test-btn" onclick="testAFAST()">Testar Voz</button>
+                        </div>
+                        <div class="volume-section">
+                            <div class="volume-label">🔊 Sistema</div>
+                            <input type="range" class="volume-slider" id="system-volume" min="0" max="100" value="50">
+                            <button class="volume-test-btn" onclick="testSystemSound()">Testar Som</button>
+                        </div>
+                        <div class="volume-section">
+                            <div class="volume-label">🎵 Música</div>
+                            <input type="range" class="volume-slider" id="music-volume" min="0" max="100" value="60">
+                        </div>
+                        <div class="volume-section">
+                            <div class="volume-label">🔮 Rituais</div>
+                            <input type="range" class="volume-slider" id="ritual-volume" min="0" max="100" value="40">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Relógio -->
+                <div class="clock" id="clock">
+                    <div class="clock-time">00:00</div>
+                    <div class="clock-date">11/09</div>
+                </div>
+            </div>
         </div>
-    </div>
+
+        <!-- Menu Iniciar -->
+        <div class="start-menu" id="start-menu">
+            <div class="start-menu-header">
+                <span style="font-size: 16px;">🌟</span>
+                Aurora OS • MysticSoft
+            </div>
+            <div class="start-menu-content">
+                <div class="start-menu-section">
+                    <div class="start-menu-item" data-app="astromagick">
+                        <div class="icon">🔮</div>
+                        <span>AstroMágick - Portal Astrológico</span>
+                    </div>
+                    <div class="start-menu-item" data-app="numerologia">
+                        <div class="icon">🔢</div>
+                        <span>Numerologia Avançada</span>
+                    </div>
+                    <div class="start-menu-item" data-app="iching">
+                        <div class="icon">☯️</div>
+                        <span>I Ching - Oráculo Digital</span>
+                    </div>
+                    <div class="start-menu-item" data-app="runas">
+                        <div class="icon">ᚱ</div>
+                        <span>Runas Nórdicas</span>
+                    </div>
+                    <div class="start-menu-item" data-app="cristais">
+                        <div class="icon">💎</div>
+                        <span>Cristaloterapia Personalizada</span>
+                    </div>
+                    <div class="start-menu-item" data-app="carta-natal">
+                        <div class="icon">🌟</div>
+                        <span>Carta Natal Completa</span>
+                    </div>
+                </div>
+                <div class="start-menu-separator"></div>
+                <div class="start-menu-section">
+                    <div class="start-menu-item" data-app="aurora-player">
+                        <div class="icon">🎵</div>
+                        <span>Aurora Player</span>
+                    </div>
+                    <div class="start-menu-item" data-app="witch-tv">
+                        <div class="icon">📺</div>
+                        <span>Witch.TV</span>
+                    </div>
+                    <div class="start-menu-item" data-app="tarot">
+                        <div class="icon">🃏</div>
+                        <span>Tarô Místico</span>
+                    </div>
+                    <div class="start-menu-item" data-app="livros">
+                        <div class="icon">📚</div>
+                        <span>Biblioteca Mística</span>
+                    </div>
+                </div>
+                <div class="start-menu-separator"></div>
+                <div class="start-menu-section">
+                    <div class="start-menu-item" data-app="afast">
+                        <div class="icon">🛡️</div>
+                        <span>AFÁST! - Sistema de Proteção</span>
+                    </div>
+                    <div class="start-menu-item" data-app="configuracoes">
+                        <div class="icon">⚙️</div>
+                        <span>Configurações do Sistema</span>
+                    </div>
+                    <div class="start-menu-item" onclick="showWallpaperSelector()">
+                        <div class="icon">🖼️</div>
+                        <span>Personalizar Área de Trabalho</span>
+                    </div>
+                </div>
+                <div class="start-menu-separator"></div>
+                <div class="start-menu-section">
+                    <div class="start-menu-item" onclick="showCalendar()">
+                        <div class="icon">📅</div>
+                        <span>Calendário Astrológico</span>
+                    </div>
+                    <div class="start-menu-item" onclick="showAbout()">
+                        <div class="icon">ℹ️</div>
+                        <span>Sobre o Aurora OS</span>
+                    </div>
+                    <div class="start-menu-item" onclick="shutdown()">
+                        <div class="icon">⏻</div>
+                        <span>Desligar o Sistema</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Janela Hora Planetária -->
+        <div class="planetary-hour-window" id="planetary-hour-window">
+            <div class="planetary-hour-header">
+                <span>🕐 Hora Planetária - Aurora OS</span>
+                <span onclick="hidePlanetaryHourWindow()" style="cursor: pointer;">✕</span>
+            </div>
+            
+            <div class="planetary-hour-content">
+                <div class="planetary-circle" id="planetary-circle">
+                    ☉
+                </div>
+                
+                <div class="planetary-info" id="planetary-info">
+                    <h3>Hora do Sol</h3>
+                    <p><strong>Energia:</strong> Liderança, criatividade, vitalidade</p>
+                    <p><strong>Ideal para:</strong> Novos projetos, apresentações, decisões importantes</p>
+                </div>
+                
+                <div class="planetary-timer">
+                    <div class="timer-display" id="timer-display">58:42</div>
+                    <div class="timer-bar">
+                        <div class="timer-progress" id="timer-progress" style="width: 15%;"></div>
+                    </div>
+                    <p style="margin: 8px 0 0 0; font-size: 11px; color: #666;">Tempo restante da hora atual</p>
+                </div>
+                
+                <div class="planetary-schedule" id="planetary-schedule">
+                    <div class="schedule-item current">
+                        <span>19:00 - 20:00</span>
+                        <span>☉ Sol (Atual)</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span>20:00 - 21:00</span>
+                        <span>♀ Vênus</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span>21:00 - 22:00</span>
+                        <span>☿ Mercúrio</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span>22:00 - 23:00</span>
+                        <span>🌙 Lua</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span>23:00 - 00:00</span>
+                        <span>♄ Saturno</span>
+                    </div>
+                </div>
+                
+                <div class="planetary-recommendations" id="planetary-recommendations">
+                    <h4>🌟 Recomendações para a Hora do Sol:</h4>
+                    <p>• Inicie projetos importantes e tome decisões de liderança</p>
+                    <p>• Momento ideal para apresentações e reuniões</p>
+                    <p>• Foque em criatividade e expressão pessoal</p>
+                    <p>• Evite conflitos - use a energia solar para inspirar</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seletor de Wallpapers -->
+        <div class="wallpaper-selector" id="wallpaper-selector">
+            <div class="wallpaper-selector-header">
+                <span>🖼️ Personalizar Área de Trabalho</span>
+                <span onclick="hideWallpaperSelector()" style="cursor: pointer;">✕</span>
+            </div>
+            
+            <div class="wallpaper-grid">
+                <div class="wallpaper-option mystic selected" data-wallpaper="mystic">
+                    <div class="wallpaper-label">Místico</div>
+                </div>
+                <div class="wallpaper-option cosmic" data-wallpaper="cosmic">
+                    <div class="wallpaper-label">Cósmico</div>
+                </div>
+                <div class="wallpaper-option classic" data-wallpaper="classic">
+                    <div class="wallpaper-label">Clássico ME</div>
+                </div>
+                <div class="wallpaper-option aurora" data-wallpaper="aurora">
+                    <div class="wallpaper-label">Aurora Boreal</div>
+                </div>
+                <div class="wallpaper-option constellations" data-wallpaper="constellations">
+                    <div class="wallpaper-label">Constelações</div>
+                </div>
+                <div class="wallpaper-option moon" data-wallpaper="moon">
+                    <div class="wallpaper-label">Lua Cheia</div>
+                </div>
+                <div class="wallpaper-option matrix" data-wallpaper="matrix">
+                    <div class="wallpaper-label">Matrix</div>
+                </div>
+            </div>
+            
+            <div class="wallpaper-controls">
+                <button class="wallpaper-btn" onclick="hideWallpaperSelector()">Cancelar</button>
+                <button class="wallpaper-btn primary" onclick="applyWallpaper()">Aplicar</button>
+            </div>
+        </div>
 
     <script>
-        // === SISTEMA PRINCIPAL ===
+        // === SISTEMA PRINCIPAL AURORA OS ===
         class AuroraOS {
             constructor() {
                 this.windows = new Map();
                 this.zIndex = 1000;
+                this.volumes = {
+                    afast: 75,
+                    system: 50,
+                    music: 60,
+                    ritual: 40
+                };
+                this.planetaryHour = {
+                    current: 'Sol',
+                    startTime: new Date(),
+                    duration: 60 * 60 * 1000, // 1 hora em ms
+                    planets: ['Sol', 'Vênus', 'Mercúrio', 'Lua', 'Saturno', 'Júpiter', 'Marte']
+                };
+                this.afastEnabled = true;
                 this.init();
             }
 
             init() {
                 this.setupEventListeners();
                 this.updateClock();
-                setInterval(() => this.updateClock(), 1000);
+                this.updatePlanetaryHour();
+                this.loadSettings();
                 
-                // Mostrar notificação de boas-vindas após 3 segundos
+                // Timers
+                setInterval(() => this.updateClock(), 1000);
+                setInterval(() => this.updatePlanetaryHour(), 1000);
+                setInterval(() => this.checkAstrologicalEvents(), 30000); // A cada 30 segundos
+                
+                // Notificação de boas-vindas após 3 segundos
                 setTimeout(() => {
-                    this.showNotification('🌟 Aurora OS Iniciado', 'Sistema operacional místico carregado com sucesso!');
+                    this.showAFASTNotification('🌟 Sistema Iniciado', 'Aurora OS carregado com sucesso! Bem-vindo ao sistema operacional místico.');
                 }, 3000);
                 
-                // Alertas AFÁST! periódicos
-                setInterval(() => {
-                    if (Math.random() < 0.3) {
-                        const alerts = [
-                            '☿ Mercúrio Retrógrado detectado - Cuidado com comunicações',
-                            '🌙 Lua Fora de Curso - Evite decisões importantes',
-                            '🔮 Energia mística elevada - Momento favorável para rituais',
-                            '⭐ Aspecto harmonioso detectado - Boa hora para manifestações'
-                        ];
-                        const alert = alerts[Math.floor(Math.random() * alerts.length)];
-                        this.showNotification('🛡️ AFÁST! Alerta', alert);
-                    }
-                }, 30000); // A cada 30 segundos
+                // Primeira verificação astrológica
+                setTimeout(() => this.checkAstrologicalEvents(), 5000);
             }
 
             setupEventListeners() {
                 // Boot screen
                 document.getElementById('boot-screen').addEventListener('click', () => this.startBoot());
                 
-                // Desktop icons
+                // Desktop icons - duplo clique
                 document.querySelectorAll('.desktop-icon').forEach(icon => {
-                    icon.addEventListener('dblclick', (e) => {
-                        const app = e.currentTarget.dataset.app;
-                        this.openApp(app);
+                    let clickCount = 0;
+                    icon.addEventListener('click', (e) => {
+                        clickCount++;
+                        if (clickCount === 1) {
+                            // Primeiro clique - selecionar
+                            document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
+                            icon.classList.add('selected');
+                            setTimeout(() => {
+                                if (clickCount === 1) {
+                                    clickCount = 0;
+                                }
+                            }, 300);
+                        } else if (clickCount === 2) {
+                            // Duplo clique - abrir
+                            clickCount = 0;
+                            const app = icon.dataset.app;
+                            this.openApp(app);
+                        }
                     });
                 });
 
                 // Start button
                 document.getElementById('start-button').addEventListener('click', () => {
-                    this.showNotification('🌟 Menu Iniciar', 'Funcionalidade em desenvolvimento!');
+                    this.toggleStartMenu();
                 });
 
-                // Clock
-                document.getElementById('clock').addEventListener('click', () => {
-                    this.showNotification('📅 Calendário', 'Calendário astrológico em desenvolvimento!');
+                // Menu Iniciar items
+                document.querySelectorAll('.start-menu-item[data-app]').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const app = item.dataset.app;
+                        this.openApp(app);
+                        this.hideStartMenu();
+                    });
+                });
+
+                // Volume control
+                document.getElementById('volume-icon').addEventListener('click', () => {
+                    this.toggleVolumePopup();
+                });
+
+                // Volume sliders
+                document.getElementById('afast-volume').addEventListener('input', (e) => {
+                    this.volumes.afast = parseInt(e.target.value);
+                    this.updateVolumeIcon();
+                    this.saveSettings();
+                });
+
+                document.getElementById('system-volume').addEventListener('input', (e) => {
+                    this.volumes.system = parseInt(e.target.value);
+                    this.updateVolumeIcon();
+                    this.saveSettings();
+                });
+
+                document.getElementById('music-volume').addEventListener('input', (e) => {
+                    this.volumes.music = parseInt(e.target.value);
+                    this.saveSettings();
+                });
+
+                document.getElementById('ritual-volume').addEventListener('input', (e) => {
+                    this.volumes.ritual = parseInt(e.target.value);
+                    this.saveSettings();
+                });
+
+                // Chips astrológicos
+                document.querySelectorAll('.astro-chip-mini').forEach(chip => {
+                    chip.addEventListener('click', () => {
+                        const chipType = chip.dataset.chip;
+                        this.showChipInfo(chipType);
+                    });
+                            // Clock click
+                document.querySelector('.clock').addEventListener('click', () => {
+                    showPlanetaryHourWindow();
+                });              // Fechar menus ao clicar fora
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.start-menu') && !e.target.closest('.start-button')) {
+                        this.hideStartMenu();
+                    }
+                    if (!e.target.closest('.volume-popup') && !e.target.closest('.volume-icon')) {
+                        this.hideVolumePopup();
+                    }
+                });
+
+                // Planetary hour click
+                document.getElementById('planetary-hour').addEventListener('click', () => {
+                    this.showPlanetaryHourInfo();
                 });
             }
 
@@ -446,13 +1551,18 @@
                 const progressFill = document.getElementById('boot-progress');
                 const statusText = document.getElementById('boot-status');
                 
+                // Sons de inicialização
+                this.playBootSounds();
+                
                 const bootMessages = [
                     'Inicializando sistema...',
                     'Carregando drivers místicos...',
                     'Verificando conexões astrais...',
                     'Ativando proteções mágicas...',
+                    'Sincronizando com planos superiores...',
                     'Carregando interface gráfica...',
-                    'Conectando com planos superiores...',
+                    'Iniciando sistema AFÁST!...',
+                    'Conectando com cosmos...',
                     'Sistema pronto!'
                 ];
                 
@@ -460,12 +1570,17 @@
                 let messageIndex = 0;
                 
                 const bootInterval = setInterval(() => {
-                    progress += Math.random() * 15 + 5;
+                    progress += Math.random() * 12 + 3;
                     progressFill.style.width = Math.min(progress, 100) + '%';
                     
-                    if (messageIndex < bootMessages.length && progress > (messageIndex + 1) * 14) {
+                    if (messageIndex < bootMessages.length && progress > (messageIndex + 1) * 11) {
                         statusText.textContent = bootMessages[messageIndex];
                         messageIndex++;
+                    }
+                    
+                    // Efeitos sonoros ocasionais
+                    if (Math.random() < 0.3) {
+                        this.playTVStatic();
                     }
                     
                     if (progress >= 100) {
@@ -474,10 +1589,98 @@
                         setTimeout(() => {
                             bootScreen.style.display = 'none';
                             desktop.classList.add('active');
+                            this.playBootComplete();
                             console.log('🌟 Aurora OS carregado com sucesso!');
-                        }, 1000);
+                        }, 1500);
                     }
                 }, 200);
+            }
+
+            // Sons de inicialização
+            playBootSounds() {
+                // Som de dial-up
+                this.playDialUpSound();
+                setTimeout(() => this.playTVStatic(), 500);
+                setTimeout(() => this.playTVStatic(), 1500);
+            }
+
+            playDialUpSound() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const dialUpSequence = [
+                        { freq: 2100, duration: 0.3 },
+                        { freq: 1800, duration: 0.2 },
+                        { freq: 1200, duration: 0.4 },
+                        { freq: 2400, duration: 0.3 },
+                        { freq: 1650, duration: 0.5 }
+                    ];
+                    
+                    let currentTime = audioContext.currentTime;
+                    
+                    dialUpSequence.forEach((tone) => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        oscillator.frequency.value = tone.freq;
+                        oscillator.type = 'sine';
+                        gainNode.gain.value = (this.volumes.system / 100) * 0.1;
+                        
+                        oscillator.start(currentTime);
+                        oscillator.stop(currentTime + tone.duration);
+                        
+                        currentTime += tone.duration;
+                    });
+                } catch (e) {
+                    console.log('Audio não disponível');
+                }
+            }
+
+            playTVStatic() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const bufferSize = audioContext.sampleRate * 0.1; // 0.1 segundos
+                    const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    
+                    for (let i = 0; i < bufferSize; i++) {
+                        data[i] = (Math.random() * 2 - 1) * 0.1;
+                    }
+                    
+                    const source = audioContext.createBufferSource();
+                    const gainNode = audioContext.createGain();
+                    
+                    source.buffer = buffer;
+                    source.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    gainNode.gain.value = (this.volumes.system / 100) * 0.05;
+                    
+                    source.start();
+                } catch (e) {
+                    console.log('Audio não disponível');
+                }
+            }
+
+            playBootComplete() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.value = 800;
+                    oscillator.type = 'sine';
+                    gainNode.gain.value = (this.volumes.system / 100) * 0.2;
+                    
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.5);
+                } catch (e) {
+                    console.log('Audio não disponível');
+                }
             }
 
             updateClock() {
@@ -486,7 +1689,201 @@
                     hour: '2-digit', 
                     minute: '2-digit' 
                 });
-                document.getElementById('clock').textContent = timeString;
+                const dateString = now.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit'
+                });
+                
+                document.querySelector('.clock-time').textContent = timeString;
+                document.querySelector('.clock-date').textContent = dateString;
+            }
+
+            updatePlanetaryHour() {
+                const now = new Date();
+                const elapsed = now - this.planetaryHour.startTime;
+                const progress = (elapsed % this.planetaryHour.duration) / this.planetaryHour.duration;
+                const remaining = this.planetaryHour.duration - (elapsed % this.planetaryHour.duration);
+                
+                // Atualizar planeta se necessário
+                const hoursPassed = Math.floor(elapsed / this.planetaryHour.duration);
+                const currentPlanetIndex = hoursPassed % this.planetaryHour.planets.length;
+                this.planetaryHour.current = this.planetaryHour.planets[currentPlanetIndex];
+                
+                // Atualizar UI
+                const planetSymbols = {
+                    'Sol': '☉',
+                    'Lua': '☽',
+                    'Marte': '♂',
+                    'Mercúrio': '☿',
+                    'Júpiter': '♃',
+                    'Vênus': '♀',
+                    'Saturno': '♄'
+                };
+                
+                document.getElementById('planetary-planet').textContent = 
+                    `${planetSymbols[this.planetaryHour.current]} ${this.planetaryHour.current}`;
+                
+                document.getElementById('planetary-progress').style.width = `${progress * 100}%`;
+                
+                const minutes = Math.floor(remaining / (1000 * 60));
+                const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+                document.getElementById('planetary-time').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            checkAstrologicalEvents() {
+                if (!this.afastEnabled) return;
+                
+                const events = [
+                    {
+                        type: 'mercury_retrograde',
+                        title: '☿ Alerta AFÁST!',
+                        message: 'Mercúrio retrógrado detectado. Cuidado com comunicações e tecnologia.',
+                        probability: 0.2
+                    },
+                    {
+                        type: 'void_of_course',
+                        title: '🌙 Alerta AFÁST!',
+                        message: 'Lua fora de curso até 23:45. Evite decisões importantes.',
+                        probability: 0.15
+                    },
+                    {
+                        type: 'planetary_aspect',
+                        title: '🪐 Alerta AFÁST!',
+                        message: 'Aspecto tenso entre Marte e Saturno. Paciência recomendada.',
+                        probability: 0.1
+                    },
+                    {
+                        type: 'moon_phase',
+                        title: '🌖 Alerta AFÁST!',
+                        message: 'Lua Minguante favorece limpeza energética e liberação.',
+                        probability: 0.25
+                    },
+                    {
+                        type: 'protection',
+                        title: '🛡️ AFÁST! Proteção',
+                        message: 'Sistema de proteção ativo. Energias negativas neutralizadas.',
+                        probability: 0.3
+                    }
+                ];
+                
+                events.forEach(event => {
+                    if (Math.random() < event.probability) {
+                        this.showAFASTNotification(event.title, event.message);
+                    }
+                });
+            }
+
+            showAFASTNotification(title, message) {
+                // Criar notificação visual
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.innerHTML = `
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                `;
+
+                document.body.appendChild(notification);
+
+                // Síntese de voz em português
+                if ('speechSynthesis' in window && this.afastEnabled) {
+                    const utterance = new SpeechSynthesisUtterance(message);
+                    utterance.lang = 'pt-BR';
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1.1;
+                    utterance.volume = this.volumes.afast / 100;
+                    
+                    // Tentar usar voz feminina
+                    const voices = speechSynthesis.getVoices();
+                    const femaleVoice = voices.find(voice => 
+                        voice.lang.includes('pt') && 
+                        (voice.name.toLowerCase().includes('female') || 
+                         voice.name.toLowerCase().includes('feminina') ||
+                         voice.name.toLowerCase().includes('woman'))
+                    );
+                    
+                    if (femaleVoice) {
+                        utterance.voice = femaleVoice;
+                    }
+                    
+                    speechSynthesis.speak(utterance);
+                }
+
+                // Remover após 4 segundos
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease-in';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }, 4000);
+            }
+
+            toggleStartMenu() {
+                const menu = document.getElementById('start-menu');
+                const button = document.getElementById('start-button');
+                
+                if (menu.classList.contains('show')) {
+                    this.hideStartMenu();
+                } else {
+                    menu.classList.add('show');
+                    button.classList.add('active');
+                }
+            }
+
+            hideStartMenu() {
+                const menu = document.getElementById('start-menu');
+                const button = document.getElementById('start-button');
+                menu.classList.remove('show');
+                button.classList.remove('active');
+            }
+
+            toggleVolumePopup() {
+                const popup = document.getElementById('volume-popup');
+                popup.classList.toggle('show');
+            }
+
+            hideVolumePopup() {
+                const popup = document.getElementById('volume-popup');
+                popup.classList.remove('show');
+            }
+
+            updateVolumeIcon() {
+                const icon = document.getElementById('volume-icon');
+                const maxVolume = Math.max(this.volumes.afast, this.volumes.system);
+                
+                if (maxVolume === 0) {
+                    icon.textContent = '🔇';
+                } else if (maxVolume < 30) {
+                    icon.textContent = '🔈';
+                } else if (maxVolume < 70) {
+                    icon.textContent = '🔉';
+                } else {
+                    icon.textContent = '🔊';
+                }
+            }
+
+            showChipInfo(chipType) {
+                const chipData = {
+                    'moon': {
+                        title: '🌖 Lua Minguante',
+                        message: 'Fase de liberação e limpeza energética. Ideal para banhos de descarrego e meditação.'
+                    },
+                    'mercury': {
+                        title: '☿ Mercúrio Retrógrado',
+                        message: 'Período de cautela com comunicação, tecnologia e viagens. Revise contratos e faça backup.'
+                    },
+                    'voc': {
+                        title: '🌙 Lua Fora de Curso',
+                        message: 'Evite decisões importantes até 23:45. Momento para reflexão e planejamento.'
+                    }
+                };
+                
+                const data = chipData[chipType];
+                if (data) {
+                    this.showAFASTNotification(data.title, data.message);
+                }
             }
 
             openApp(appName) {
@@ -494,267 +1891,633 @@
                 
                 const apps = {
                     'astromagick': {
-                        title: 'AstroMágick - Portal Astrológico',
-                        content: `
-                            <h2 style="color: #d4af37; text-align: center; margin-bottom: 20px;">🔮 AstroMágick Portal 🔮</h2>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0;">
-                                    <h3>🌙 Fases Lunares</h3>
-                                    <p>Lua Minguante - 88% de energia de liberação</p>
-                                    <button style="background: #d4af37; border: 1px outset #d4af37; padding: 5px 10px; margin-top: 10px;">Ver Calendário</button>
-                                </div>
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0;">
-                                    <h3>☿ Mercúrio Retrógrado</h3>
-                                    <p>ATIVO até 15/09 - Cuidado com comunicação</p>
-                                    <button style="background: #ff6b6b; border: 1px outset #ff6b6b; padding: 5px 10px; margin-top: 10px; color: white;">Detalhes</button>
-                                </div>
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0;">
-                                    <h3>🪐 Trânsitos Planetários</h3>
-                                    <p>Júpiter em Gêmeos - Expansão mental</p>
-                                    <button style="background: #4ecdc4; border: 1px outset #4ecdc4; padding: 5px 10px; margin-top: 10px;">Ver Todos</button>
-                                </div>
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0;">
-                                    <h3>⭐ Previsões Personalizadas</h3>
-                                    <p>Baseadas na sua carta natal</p>
-                                    <button style="background: #9b59b6; border: 1px outset #9b59b6; padding: 5px 10px; margin-top: 10px; color: white;">Gerar</button>
-                                </div>
-                            </div>
-                        `
+                        title: '🔮 AstroMágick - Portal Astrológico',
+                        content: this.getAstroMagickContent()
                     },
                     'numerologia': {
-                        title: 'Numerologia Avançada',
-                        content: `
-                            <h2 style="color: #d4af37; text-align: center; margin-bottom: 20px;">🔢 Numerologia Sagrada 🔢</h2>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0;">
-                                    <h3>📅 Numerologia Diária</h3>
-                                    <p><strong>Dia Universal:</strong> 7 - Espiritualidade</p>
-                                    <p><strong>Números da Sorte:</strong> 3, 7, 11, 21</p>
-                                    <p><strong>Cores:</strong> Roxo, Violeta, Índigo</p>
-                                </div>
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0;">
-                                    <h3>🎯 Caminho de Vida</h3>
-                                    <p>Digite sua data de nascimento:</p>
-                                    <input type="date" style="width: 100%; padding: 5px; margin: 5px 0; border: 1px inset #c0c0c0;">
-                                    <button style="background: #d4af37; border: 1px outset #d4af37; padding: 5px 10px;">Calcular</button>
-                                </div>
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0;">
-                                    <h3>📝 Número do Nome</h3>
-                                    <p>Digite seu nome completo:</p>
-                                    <input type="text" placeholder="Nome completo" style="width: 100%; padding: 5px; margin: 5px 0; border: 1px inset #c0c0c0;">
-                                    <button style="background: #4ecdc4; border: 1px outset #4ecdc4; padding: 5px 10px;">Analisar</button>
-                                </div>
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0;">
-                                    <h3>🔮 Ano Pessoal</h3>
-                                    <p><strong>2025:</strong> Ano 9 - Conclusão</p>
-                                    <p>Tempo de finalizar ciclos e se preparar para novos começos</p>
-                                </div>
-                            </div>
-                        `
+                        title: '🔢 Numerologia Avançada',
+                        content: this.getNumerologiaContent()
                     },
                     'iching': {
-                        title: 'I Ching - Oráculo Digital',
-                        content: `
-                            <h2 style="color: #d4af37; text-align: center; margin-bottom: 20px;">☯️ I Ching - Livro das Mutações ☯️</h2>
-                            <div style="text-align: center; margin-bottom: 30px;">
-                                <p style="font-size: 18px; color: #d4af37; margin-bottom: 15px;">Faça sua pergunta ao oráculo milenar</p>
-                                <textarea placeholder="Digite sua pergunta..." style="width: 80%; height: 80px; padding: 10px; border: 1px inset #c0c0c0; resize: vertical;"></textarea>
-                                <br><br>
-                                <button style="background: #d4af37; border: 1px outset #d4af37; padding: 10px 20px; font-size: 16px;">🪙 Lançar Moedas</button>
-                            </div>
-                            <div style="background: #f0f0f0; padding: 20px; border: 1px inset #c0c0c0; margin: 20px 0;">
-                                <h3 style="text-align: center; color: #d4af37;">Hexagrama Principal</h3>
-                                <div style="text-align: center; font-size: 20px; margin: 20px 0; font-family: monospace;">
-                                    ═══════<br>
-                                    ═══════<br>
-                                    ═══ ═══<br>
-                                    ═══════<br>
-                                    ═══ ═══<br>
-                                    ═══════
-                                </div>
-                                <h4 style="text-align: center;">1. O Criativo (乾 Qián)</h4>
-                                <p><strong>Julgamento:</strong> O Criativo opera sublime sucesso, favorecendo através da perseverança.</p>
-                                <p><strong>Imagem:</strong> O movimento do céu é forte. Assim o homem superior torna-se incansável em sua atividade.</p>
-                            </div>
-                        `
+                        title: '☯️ I Ching - Oráculo Digital',
+                        content: this.getIChingContent()
                     },
                     'runas': {
-                        title: 'Oráculo das Runas Nórdicas',
-                        content: `
-                            <h2 style="color: #d4af37; text-align: center; margin-bottom: 20px;">ᚱ Oráculo das Runas Nórdicas ᚱ</h2>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0; text-align: center;">
-                                    <h3>🎯 Runa Única</h3>
-                                    <p>Para questões diretas e orientação imediata</p>
-                                    <button style="background: #d4af37; border: 1px outset #d4af37; padding: 10px 15px;">Sortear Runa</button>
-                                </div>
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0; text-align: center;">
-                                    <h3>🔮 Três Runas</h3>
-                                    <p>Passado, Presente e Futuro</p>
-                                    <button style="background: #9b59b6; border: 1px outset #9b59b6; padding: 10px 15px; color: white;">Tirada Completa</button>
-                                </div>
-                            </div>
-                            <div style="background: #f0f0f0; padding: 20px; border: 1px inset #c0c0c0;">
-                                <div style="text-align: center; margin-bottom: 20px;">
-                                    <div style="font-size: 48px; color: #d4af37;">ᚠ</div>
-                                    <h3>Fehu</h3>
-                                    <p>Elemento: Fogo | Divindade: Freyr</p>
-                                </div>
-                                <p><strong>Significado:</strong> Gado, riqueza, abundância material e espiritual</p>
-                                <p><strong>Orientação:</strong> Este é um momento favorável para novos empreendimentos e investimentos</p>
-                            </div>
-                        `
+                        title: 'ᚱ Runas Nórdicas',
+                        content: this.getRunasContent()
                     },
                     'cristais': {
-                        title: 'Cristaloterapia Personalizada',
-                        content: `
-                            <h2 style="color: #d4af37; text-align: center; margin-bottom: 20px;">💎 Cristaloterapia Sagrada 💎</h2>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0;">
-                                    <h3>🎯 Recomendação Personalizada</h3>
-                                    <p>Qual sua intenção hoje?</p>
-                                    <select style="width: 100%; padding: 5px; margin: 5px 0; border: 1px inset #c0c0c0;">
-                                        <option>Proteção Energética</option>
-                                        <option>Amor e Relacionamentos</option>
-                                        <option>Abundância e Prosperidade</option>
-                                        <option>Cura Emocional</option>
-                                        <option>Intuição e Espiritualidade</option>
-                                    </select>
-                                    <button style="background: #d4af37; border: 1px outset #d4af37; padding: 5px 10px;">Recomendar</button>
-                                </div>
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0;">
-                                    <h3>🔮 Grid de Cristais</h3>
-                                    <p>Crie um grid poderoso para manifestação</p>
-                                    <select style="width: 100%; padding: 5px; margin: 5px 0; border: 1px inset #c0c0c0;">
-                                        <option>Manifestação</option>
-                                        <option>Proteção do Lar</option>
-                                        <option>Cura e Harmonização</option>
-                                        <option>Meditação Profunda</option>
-                                    </select>
-                                    <button style="background: #9b59b6; border: 1px outset #9b59b6; padding: 5px 10px; color: white;">Criar Grid</button>
-                                </div>
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0;">
-                                    <h3>🌙 Cristal do Dia</h3>
-                                    <div style="text-align: center;">
-                                        <div style="font-size: 32px; margin: 10px 0;">💜</div>
-                                        <h4>Ametista</h4>
-                                        <p>Proteção espiritual e clareza mental</p>
-                                        <p><small>Perfeita para a energia de hoje</small></p>
-                                    </div>
-                                </div>
-                                <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0;">
-                                    <h3>⚖️ Compatibilidade</h3>
-                                    <p>Teste a harmonia entre cristais</p>
-                                    <select style="width: 100%; padding: 5px; margin: 2px 0; border: 1px inset #c0c0c0;">
-                                        <option>Ametista</option>
-                                        <option>Quartzo Rosa</option>
-                                        <option>Quartzo Transparente</option>
-                                    </select>
-                                    <select style="width: 100%; padding: 5px; margin: 2px 0; border: 1px inset #c0c0c0;">
-                                        <option>Quartzo Rosa</option>
-                                        <option>Ametista</option>
-                                        <option>Citrino</option>
-                                    </select>
-                                    <button style="background: #4ecdc4; border: 1px outset #4ecdc4; padding: 5px 10px;">Testar</button>
-                                </div>
-                            </div>
-                        `
+                        title: '💎 Cristaloterapia Personalizada',
+                        content: this.getCristaisContent()
+                    },
+                    'carta-natal': {
+                        title: '🌟 Carta Natal Completa',
+                        content: this.getCartaNatalContent()
                     },
                     'aurora-player': {
-                        title: 'Aurora Player - Música Mística',
-                        content: `
-                            <h2 style="color: #d4af37; text-align: center;">🎵 Aurora Player 🎵</h2>
-                            <div style="background: #f0f0f0; padding: 20px; border: 1px inset #c0c0c0; margin: 20px 0;">
-                                <h3>🎼 Tocando Agora</h3>
-                                <p><strong>Música:</strong> Moonlight Sonata - Beethoven (Versão Mística)</p>
-                                <p><strong>Álbum:</strong> Classical Mysticism</p>
-                                <div style="background: #333; height: 4px; border: 1px inset #c0c0c0; margin: 10px 0;">
-                                    <div style="background: #d4af37; height: 100%; width: 45%;"></div>
-                                </div>
-                                <p>2:15 / 5:03</p>
-                                <div style="text-align: center; margin: 20px 0;">
-                                    <button style="background: #c0c0c0; border: 1px outset #c0c0c0; font-size: 20px; margin: 0 5px; padding: 5px 10px;">⏮️</button>
-                                    <button style="background: #c0c0c0; border: 1px outset #c0c0c0; font-size: 24px; margin: 0 5px; padding: 5px 10px;">⏸️</button>
-                                    <button style="background: #c0c0c0; border: 1px outset #c0c0c0; font-size: 20px; margin: 0 5px; padding: 5px 10px;">⏭️</button>
-                                </div>
-                            </div>
-                        `
+                        title: '🎵 Aurora Player',
+                        content: this.getAuroraPlayerContent()
                     },
                     'witch-tv': {
-                        title: 'Witch.TV - Canal Místico',
-                        content: `
-                            <h2 style="color: #d4af37; text-align: center;">📺 Witch.TV 📺</h2>
-                            <div style="background: #000; height: 200px; border: 1px inset #c0c0c0; display: flex; align-items: center; justify-content: center; margin: 20px 0;">
-                                <div style="text-align: center; color: #d4af37;">
-                                    <div style="font-size: 48px;">🔮</div>
-                                    <p>Ao Vivo: Astrologia para Iniciantes</p>
-                                    <p>com Madame Luna</p>
-                                </div>
-                            </div>
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                <button style="background: #d4af37; border: 1px outset #d4af37; padding: 8px 12px;">🌙 Astrologia</button>
-                                <button style="background: #9b59b6; border: 1px outset #9b59b6; padding: 8px 12px; color: white;">🃏 Tarô</button>
-                                <button style="background: #4ecdc4; border: 1px outset #4ecdc4; padding: 8px 12px;">🔮 Cristais</button>
-                                <button style="background: #ff6b6b; border: 1px outset #ff6b6b; padding: 8px 12px; color: white;">🕯️ Rituais</button>
-                            </div>
-                        `
+                        title: '📺 Witch.TV',
+                        content: this.getWitchTVContent()
                     },
                     'afast': {
-                        title: 'AFÁST! - Sistema de Proteção',
-                        content: `
-                            <h2 style="color: #d4af37; text-align: center;">🛡️ AFÁST! Sistema 🛡️</h2>
-                            <div style="background: #f0f0f0; padding: 20px; border: 1px inset #c0c0c0; margin: 20px 0;">
-                                <h3>🔊 Status do Sistema</h3>
-                                <p><strong>Status:</strong> <span style="color: #4ecdc4;">Ativo</span></p>
-                                <p><strong>Última Verificação:</strong> Agora</p>
-                                <p><strong>Alertas Hoje:</strong> 3</p>
-                                <p><strong>Voz:</strong> Feminina (Português)</p>
-                                <div style="margin: 20px 0;">
-                                    <button onclick="testAFAST()" style="background: #4ecdc4; border: 1px outset #4ecdc4; padding: 8px 15px; margin: 5px;">🎤 Testar Voz</button>
-                                    <button style="background: #ff6b6b; border: 1px outset #ff6b6b; padding: 8px 15px; margin: 5px; color: white;">⏸️ Pausar</button>
-                                </div>
-                            </div>
-                        `
+                        title: '🛡️ AFÁST! - Sistema de Proteção',
+                        content: this.getAFASTContent()
+                    },
+                    'tarot': {
+                        title: '🃏 Tarô Místico',
+                        content: this.getTarotContent()
+                    },
+                    'livros': {
+                        title: '📚 Biblioteca Mística',
+                        content: this.getLivrosContent()
+                    },
+                    'configuracoes': {
+                        title: '⚙️ Configurações do Sistema',
+                        content: this.getConfiguracoesContent()
                     }
                 };
                 
                 const app = apps[appName];
                 if (app) {
-                    this.createWindow(app.title, app.content);
+                    this.createWindow(app.title, app.content, appName);
                 } else {
-                    this.showNotification('❌ Erro', `Aplicação "${appName}" não encontrada.`);
+                    this.showAFASTNotification('❌ Erro', `Aplicação "${appName}" não encontrada.`);
                 }
             }
 
-            createWindow(title, content) {
+            getAstroMagickContent() {
+                return `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; height: 100%;">
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                            <h3 style="color: #d4af37; margin-bottom: 10px;">🌙 Fases Lunares</h3>
+                            <div style="text-align: center; margin: 15px 0;">
+                                <div style="font-size: 32px;">🌖</div>
+                                <p><strong>Lua Minguante</strong></p>
+                                <p>88% de energia de liberação</p>
+                            </div>
+                            <p style="font-size: 10px;">Ideal para limpeza energética, banhos de descarrego e liberação de padrões antigos.</p>
+                            <button style="background: #d4af37; border: 1px outset #d4af37; padding: 4px 8px; margin-top: 8px; font-size: 10px;">Ver Calendário Lunar</button>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                            <h3 style="color: #ff6b6b; margin-bottom: 10px;">☿ Mercúrio Retrógrado</h3>
+                            <div style="text-align: center; margin: 15px 0;">
+                                <div style="font-size: 32px; color: #ff6b6b;">☿</div>
+                                <p><strong>ATIVO até 15/09</strong></p>
+                                <p style="color: #ff6b6b;">Cuidado com comunicação</p>
+                            </div>
+                            <p style="font-size: 10px;">Revise contratos, faça backup de dados e confirme compromissos por escrito.</p>
+                            <button style="background: #ff6b6b; border: 1px outset #ff6b6b; padding: 4px 8px; margin-top: 8px; font-size: 10px; color: white;">Ver Detalhes</button>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                            <h3 style="color: #4ecdc4; margin-bottom: 10px;">🪐 Trânsitos Planetários</h3>
+                            <div style="font-size: 10px;">
+                                <p><strong>Júpiter em Gêmeos:</strong> Expansão mental</p>
+                                <p><strong>Saturno em Peixes:</strong> Estruturação espiritual</p>
+                                <p><strong>Plutão em Aquário:</strong> Transformação coletiva</p>
+                            </div>
+                            <button style="background: #4ecdc4; border: 1px outset #4ecdc4; padding: 4px 8px; margin-top: 8px; font-size: 10px;">Ver Todos os Trânsitos</button>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                            <h3 style="color: #9b59b6; margin-bottom: 10px;">⭐ Previsões Personalizadas</h3>
+                            <p style="font-size: 10px; margin-bottom: 10px;">Baseadas na sua carta natal e trânsitos atuais</p>
+                            <div style="font-size: 10px;">
+                                <p><strong>Amor:</strong> ⭐⭐⭐⭐☆</p>
+                                <p><strong>Trabalho:</strong> ⭐⭐⭐☆☆</p>
+                                <p><strong>Saúde:</strong> ⭐⭐⭐⭐⭐</p>
+                            </div>
+                            <button style="background: #9b59b6; border: 1px outset #9b59b6; padding: 4px 8px; margin-top: 8px; font-size: 10px; color: white;">Gerar Relatório</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getNumerologiaContent() {
+                return `
+                    <div style="padding: 10px;">
+                        <h2 style="color: #d4af37; text-align: center; margin-bottom: 15px;">🔢 Numerologia Sagrada</h2>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                            <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                                <h4>📅 Numerologia Diária</h4>
+                                <p><strong>Dia Universal:</strong> 7 - Espiritualidade</p>
+                                <p><strong>Números da Sorte:</strong> 3, 7, 11, 21</p>
+                                <p><strong>Cores:</strong> Roxo, Violeta, Índigo</p>
+                            </div>
+                            
+                            <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                                <h4>🎯 Caminho de Vida</h4>
+                                <p>Digite sua data de nascimento:</p>
+                                <input type="date" style="width: 100%; padding: 3px; margin: 3px 0; border: 1px inset #c0c0c0; font-size: 10px;">
+                                <button style="background: #d4af37; border: 1px outset #d4af37; padding: 3px 6px; font-size: 10px;">Calcular</button>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0; text-align: center;">
+                            <h4>🔮 Análise Numerológica Completa</h4>
+                            <p style="font-size: 10px; margin: 10px 0;">Descubra os segredos dos números em sua vida</p>
+                            <button style="background: #9b59b6; border: 1px outset #9b59b6; padding: 6px 12px; font-size: 11px; color: white;">Iniciar Análise Completa</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getIChingContent() {
+                return `
+                    <div style="padding: 10px; text-align: center;">
+                        <h2 style="color: #d4af37; margin-bottom: 15px;">☯️ I Ching - Livro das Mutações</h2>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <p style="font-size: 12px; color: #d4af37; margin-bottom: 10px;">Faça sua pergunta ao oráculo milenar</p>
+                            <textarea placeholder="Digite sua pergunta..." style="width: 90%; height: 60px; padding: 5px; border: 1px inset #c0c0c0; resize: vertical; font-size: 10px;"></textarea>
+                        </div>
+                        
+                        <button style="background: #d4af37; border: 1px outset #d4af37; padding: 8px 16px; font-size: 12px; margin-bottom: 20px;">🪙 Lançar Moedas</button>
+                        
+                        <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0;">
+                            <h4 style="color: #d4af37;">Hexagrama Principal</h4>
+                            <div style="font-size: 16px; margin: 15px 0; font-family: monospace; line-height: 1.2;">
+                                ═══════<br>
+                                ═══════<br>
+                                ═══ ═══<br>
+                                ═══════<br>
+                                ═══ ═══<br>
+                                ═══════
+                            </div>
+                            <h5>1. O Criativo (乾 Qián)</h5>
+                            <p style="font-size: 10px; margin: 8px 0;"><strong>Julgamento:</strong> O Criativo opera sublime sucesso, favorecendo através da perseverança.</p>
+                            <p style="font-size: 10px;"><strong>Imagem:</strong> O movimento do céu é forte. Assim o homem superior torna-se incansável em sua atividade.</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getRunasContent() {
+                return `
+                    <div style="padding: 10px;">
+                        <h2 style="color: #d4af37; text-align: center; margin-bottom: 15px;">ᚱ Oráculo das Runas Nórdicas</h2>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                            <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0; text-align: center;">
+                                <h4>🎯 Runa Única</h4>
+                                <p style="font-size: 10px;">Para questões diretas e orientação imediata</p>
+                                <button style="background: #d4af37; border: 1px outset #d4af37; padding: 6px 10px; font-size: 10px;">Sortear Runa</button>
+                            </div>
+                            
+                            <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0; text-align: center;">
+                                <h4>🔮 Três Runas</h4>
+                                <p style="font-size: 10px;">Passado, Presente e Futuro</p>
+                                <button style="background: #9b59b6; border: 1px outset #9b59b6; padding: 6px 10px; font-size: 10px; color: white;">Tirada Completa</button>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0; text-align: center;">
+                            <div style="font-size: 36px; color: #d4af37; margin-bottom: 10px;">ᚠ</div>
+                            <h4>Fehu</h4>
+                            <p style="font-size: 10px; margin: 5px 0;">Elemento: Fogo | Divindade: Freyr</p>
+                            <p style="font-size: 10px; margin: 8px 0;"><strong>Significado:</strong> Gado, riqueza, abundância material e espiritual</p>
+                            <p style="font-size: 10px;"><strong>Orientação:</strong> Este é um momento favorável para novos empreendimentos e investimentos</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getCristaisContent() {
+                return `
+                    <div style="padding: 10px;">
+                        <h2 style="color: #d4af37; text-align: center; margin-bottom: 15px;">💎 Cristaloterapia Sagrada</h2>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                            <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                                <h4>🎯 Recomendação Personalizada</h4>
+                                <p style="font-size: 10px;">Qual sua intenção hoje?</p>
+                                <select style="width: 100%; padding: 3px; margin: 3px 0; border: 1px inset #c0c0c0; font-size: 10px;">
+                                    <option>Proteção Energética</option>
+                                    <option>Amor e Relacionamentos</option>
+                                    <option>Abundância e Prosperidade</option>
+                                    <option>Cura Emocional</option>
+                                    <option>Intuição e Espiritualidade</option>
+                                </select>
+                                <button style="background: #d4af37; border: 1px outset #d4af37; padding: 3px 6px; font-size: 10px;">Recomendar</button>
+                            </div>
+                            
+                            <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0; text-align: center;">
+                                <h4>🌙 Cristal do Dia</h4>
+                                <div style="font-size: 24px; margin: 8px 0;">💜</div>
+                                <h5>Ametista</h5>
+                                <p style="font-size: 10px;">Proteção espiritual e clareza mental</p>
+                                <p style="font-size: 9px; font-style: italic;">Perfeita para a energia de hoje</p>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                            <h4>🔮 Grid de Cristais</h4>
+                            <p style="font-size: 10px; margin-bottom: 8px;">Crie um grid poderoso para manifestação</p>
+                            <select style="width: 100%; padding: 3px; margin: 3px 0; border: 1px inset #c0c0c0; font-size: 10px;">
+                                <option>Manifestação</option>
+                                <option>Proteção do Lar</option>
+                                <option>Cura e Harmonização</option>
+                                <option>Meditação Profunda</option>
+                            </select>
+                            <button style="background: #9b59b6; border: 1px outset #9b59b6; padding: 3px 6px; font-size: 10px; color: white;">Criar Grid</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getCartaNatalContent() {
+                return `
+                    <div style="padding: 10px;">
+                        <h2 style="color: #d4af37; text-align: center; margin-bottom: 15px;">🌟 Carta Natal Completa</h2>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0; margin-bottom: 15px;">
+                            <h4>📋 Dados Natais</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <div>
+                                    <label style="font-size: 10px;">Data de Nascimento:</label>
+                                    <input type="date" style="width: 100%; padding: 2px; border: 1px inset #c0c0c0; font-size: 10px;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 10px;">Hora:</label>
+                                    <input type="time" style="width: 100%; padding: 2px; border: 1px inset #c0c0c0; font-size: 10px;">
+                                </div>
+                                <div style="grid-column: 1 / -1;">
+                                    <label style="font-size: 10px;">Local de Nascimento:</label>
+                                    <input type="text" placeholder="Cidade, Estado, País" style="width: 100%; padding: 2px; border: 1px inset #c0c0c0; font-size: 10px;">
+                                </div>
+                            </div>
+                            <button style="background: #d4af37; border: 1px outset #d4af37; padding: 4px 8px; font-size: 10px; margin-top: 8px;">Gerar Carta Natal</button>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                            <h4>🎯 Análise Rápida</h4>
+                            <div style="font-size: 10px;">
+                                <p><strong>Sol:</strong> ♍ Virgem - Perfeccionismo e análise</p>
+                                <p><strong>Lua:</strong> ♓ Peixes - Intuição e sensibilidade</p>
+                                <p><strong>Ascendente:</strong> ♊ Gêmeos - Comunicação e versatilidade</p>
+                                <p><strong>Elemento Dominante:</strong> Terra (40%)</p>
+                                <p><strong>Modalidade:</strong> Mutável</p>
+                            </div>
+                            <button style="background: #9b59b6; border: 1px outset #9b59b6; padding: 4px 8px; font-size: 10px; color: white; margin-top: 8px;">Ver Análise Completa</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getAuroraPlayerContent() {
+                return `
+                    <div style="padding: 10px;">
+                        <h2 style="color: #d4af37; text-align: center; margin-bottom: 15px;">🎵 Aurora Player</h2>
+                        
+                        <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0; margin-bottom: 15px; text-align: center;">
+                            <h4>🎼 Tocando Agora</h4>
+                            <p style="margin: 8px 0;"><strong>Música:</strong> Moonlight Sonata - Beethoven (Versão Mística)</p>
+                            <p style="margin: 8px 0;"><strong>Álbum:</strong> Classical Mysticism</p>
+                            
+                            <div style="background: #333; height: 6px; border: 1px inset #c0c0c0; margin: 10px 0; position: relative;">
+                                <div style="background: #d4af37; height: 100%; width: 45%; position: absolute; top: 0; left: 0;"></div>
+                            </div>
+                            <p style="font-size: 10px;">2:15 / 5:03</p>
+                            
+                            <div style="margin: 15px 0;">
+                                <button style="background: #c0c0c0; border: 1px outset #c0c0c0; font-size: 16px; margin: 0 3px; padding: 4px 8px;">⏮️</button>
+                                <button style="background: #c0c0c0; border: 1px outset #c0c0c0; font-size: 18px; margin: 0 3px; padding: 4px 8px;">⏸️</button>
+                                <button style="background: #c0c0c0; border: 1px outset #c0c0c0; font-size: 16px; margin: 0 3px; padding: 4px 8px;">⏭️</button>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                            <h4>🎶 Playlists Místicas</h4>
+                            <div style="font-size: 10px;">
+                                <p>🌙 Meditação Lunar</p>
+                                <p>🔮 Rituais e Magias</p>
+                                <p>⭐ Música das Esferas</p>
+                                <p>🕯️ Ambientes Sagrados</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getWitchTVContent() {
+                return `
+                    <div style="padding: 10px;">
+                        <h2 style="color: #d4af37; text-align: center; margin-bottom: 15px;">📺 Witch.TV</h2>
+                        
+                        <div style="background: #000; height: 150px; border: 1px inset #c0c0c0; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                            <div style="text-align: center; color: #d4af37;">
+                                <div style="font-size: 36px; margin-bottom: 8px;">🔮</div>
+                                <p style="font-size: 12px;">Ao Vivo: Astrologia para Iniciantes</p>
+                                <p style="font-size: 10px;">com Madame Luna</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 10px;">
+                            <button style="background: #d4af37; border: 1px outset #d4af37; padding: 4px 6px; font-size: 10px;">🌙 Astrologia</button>
+                            <button style="background: #9b59b6; border: 1px outset #9b59b6; padding: 4px 6px; font-size: 10px; color: white;">🃏 Tarô</button>
+                            <button style="background: #4ecdc4; border: 1px outset #4ecdc4; padding: 4px 6px; font-size: 10px;">🔮 Cristais</button>
+                            <button style="background: #ff6b6b; border: 1px outset #ff6b6b; padding: 4px 6px; font-size: 10px; color: white;">🕯️ Rituais</button>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 8px; border: 1px inset #c0c0c0;">
+                            <h4 style="font-size: 11px;">📅 Programação</h4>
+                            <div style="font-size: 9px;">
+                                <p>20:00 - Astrologia Básica</p>
+                                <p>21:00 - Tarô para Iniciantes</p>
+                                <p>22:00 - Rituais de Lua Cheia</p>
+                                <p>23:00 - Meditação Guiada</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getAFASTContent() {
+                return `
+                    <div style="padding: 10px;">
+                        <h2 style="color: #d4af37; text-align: center; margin-bottom: 15px;">🛡️ AFÁST! Sistema de Proteção</h2>
+                        
+                        <div style="background: #f0f0f0; padding: 15px; border: 1px inset #c0c0c0; margin-bottom: 15px;">
+                            <h4>🔊 Status do Sistema</h4>
+                            <div style="font-size: 11px;">
+                                <p><strong>Status:</strong> <span style="color: #4ecdc4;">● Ativo</span></p>
+                                <p><strong>Última Verificação:</strong> Agora</p>
+                                <p><strong>Alertas Hoje:</strong> 3</p>
+                                <p><strong>Voz:</strong> Feminina (Português)</p>
+                                <p><strong>Volume:</strong> ${this.volumes.afast}%</p>
+                            </div>
+                            
+                            <div style="margin: 15px 0;">
+                                <button onclick="testAFAST()" style="background: #4ecdc4; border: 1px outset #4ecdc4; padding: 6px 10px; margin: 3px; font-size: 10px;">🎤 Testar Voz</button>
+                                <button onclick="auroraOS.toggleAFAST()" style="background: ${this.afastEnabled ? '#ff6b6b' : '#4ecdc4'}; border: 1px outset; padding: 6px 10px; margin: 3px; font-size: 10px; color: white;">
+                                    ${this.afastEnabled ? '⏸️ Pausar' : '▶️ Ativar'}
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                            <h4>📊 Estatísticas de Proteção</h4>
+                            <div style="font-size: 10px;">
+                                <p>🛡️ Ameaças Neutralizadas: 127</p>
+                                <p>⚡ Energias Negativas Bloqueadas: 89</p>
+                                <p>🔮 Proteções Ativas: 15</p>
+                                <p>📡 Última Sincronização: 18:51</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getTarotContent() {
+                return `
+                    <div style="padding: 10px;">
+                        <h2 style="color: #d4af37; text-align: center; margin-bottom: 15px;">🃏 Tarô Místico</h2>
+                        
+                        <div style="text-align: center; margin-bottom: 15px;">
+                            <p style="font-size: 11px; margin-bottom: 10px;">Concentre-se em sua pergunta e escolha uma carta</p>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 200px; margin: 0 auto;">
+                                <div style="background: #4a0e4e; color: #d4af37; padding: 20px 10px; border: 2px solid #d4af37; cursor: pointer; text-align: center; font-size: 18px;">🃏</div>
+                                <div style="background: #4a0e4e; color: #d4af37; padding: 20px 10px; border: 2px solid #d4af37; cursor: pointer; text-align: center; font-size: 18px;">🃏</div>
+                                <div style="background: #4a0e4e; color: #d4af37; padding: 20px 10px; border: 2px solid #d4af37; cursor: pointer; text-align: center; font-size: 18px;">🃏</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                            <h4>🔮 Carta Revelada</h4>
+                            <div style="text-align: center; margin: 10px 0;">
+                                <div style="font-size: 24px; margin-bottom: 5px;">🌟</div>
+                                <h5>A Estrela</h5>
+                                <p style="font-size: 10px; margin: 5px 0;">Arcano Maior XVII</p>
+                            </div>
+                            <p style="font-size: 10px;"><strong>Significado:</strong> Esperança, inspiração, renovação espiritual e orientação divina.</p>
+                            <p style="font-size: 10px;"><strong>Conselho:</strong> Confie em sua intuição e mantenha a fé. Momentos de clareza e inspiração estão chegando.</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getLivrosContent() {
+                return `
+                    <div style="padding: 10px;">
+                        <h2 style="color: #d4af37; text-align: center; margin-bottom: 15px;">📚 Biblioteca Mística</h2>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0; margin-bottom: 10px;">
+                            <h4>📖 Livros Disponíveis</h4>
+                            <div style="font-size: 10px; line-height: 1.4;">
+                                <p>🔮 <strong>Astrologia Hermética</strong> - Dane Rudhyar</p>
+                                <p>🃏 <strong>O Tarô dos Magos</strong> - Oswald Wirth</p>
+                                <p>💎 <strong>O Poder dos Cristais</strong> - Michael Gienger</p>
+                                <p>ᚱ <strong>Runas: Alfabeto Sagrado</strong> - Ralph Blum</p>
+                                <p>☯️ <strong>I Ching: O Livro das Mutações</strong> - Richard Wilhelm</p>
+                                <p>🌙 <strong>Magia Lunar</strong> - Diane Ahlquist</p>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                            <h4>📑 Leitura Atual</h4>
+                            <p style="font-size: 11px; margin-bottom: 8px;"><strong>Astrologia Hermética</strong></p>
+                            <div style="background: #333; height: 4px; border: 1px inset #c0c0c0; margin: 5px 0;">
+                                <div style="background: #d4af37; height: 100%; width: 35%;"></div>
+                            </div>
+                            <p style="font-size: 9px;">Capítulo 3: Os Planetas como Símbolos (35%)</p>
+                            <button style="background: #d4af37; border: 1px outset #d4af37; padding: 4px 8px; font-size: 10px; margin-top: 5px;">Continuar Leitura</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getConfiguracoesContent() {
+                return `
+                    <div style="padding: 10px;">
+                        <h2 style="color: #d4af37; text-align: center; margin-bottom: 15px;">⚙️ Configurações do Sistema</h2>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0; margin-bottom: 10px;">
+                            <h4>🔊 Áudio e Notificações</h4>
+                            <div style="font-size: 10px;">
+                                <label>
+                                    <input type="checkbox" ${this.afastEnabled ? 'checked' : ''}> Ativar AFÁST! (Sistema de Proteção)
+                                </label><br>
+                                <label>
+                                    <input type="checkbox" checked> Notificações Astrológicas
+                                </label><br>
+                                <label>
+                                    <input type="checkbox" checked> Sons do Sistema
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0; margin-bottom: 10px;">
+                            <h4>🎨 Aparência</h4>
+                            <div style="font-size: 10px;">
+                                <p>Wallpaper: 
+                                    <select style="font-size: 10px;">
+                                        <option>Místico (Padrão)</option>
+                                        <option>Cósmico</option>
+                                        <option>Clássico</option>
+                                    </select>
+                                </p>
+                                <p>Tema: 
+                                    <select style="font-size: 10px;">
+                                        <option>Whimsigoth</option>
+                                        <option>Windows ME Clássico</option>
+                                    </select>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f0f0f0; padding: 10px; border: 1px inset #c0c0c0;">
+                            <h4>🌟 Sistema</h4>
+                            <div style="font-size: 10px;">
+                                <p><strong>Versão:</strong> Aurora OS 2025.09.11</p>
+                                <p><strong>Build:</strong> 2001 (Millennium Edition)</p>
+                                <p><strong>Memória:</strong> 512 MB Mística</p>
+                                <p><strong>Processador:</strong> Quantum Core Astral</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            createWindow(title, content, appName) {
                 const windowId = 'window-' + Date.now();
                 const window = document.createElement('div');
-                window.className = 'window';
+                window.className = 'window active';
                 window.id = windowId;
-                window.style.left = (100 + this.windows.size * 30) + 'px';
-                window.style.top = (100 + this.windows.size * 30) + 'px';
+                window.dataset.app = appName;
+                
+                // Posicionamento em cascata
+                const offset = this.windows.size * 30;
+                window.style.left = (100 + offset) + 'px';
+                window.style.top = (80 + offset) + 'px';
                 window.style.zIndex = ++this.zIndex;
 
                 window.innerHTML = `
                     <div class="window-header">
                         <div class="window-title">${title}</div>
-                        <div class="window-close" onclick="auroraOS.closeWindow('${windowId}')">✕</div>
+                        <div class="window-controls">
+                            <div class="window-control" onclick="auroraOS.minimizeWindow('${windowId}')">_</div>
+                            <div class="window-control" onclick="auroraOS.maximizeWindow('${windowId}')">□</div>
+                            <div class="window-control" onclick="auroraOS.closeWindow('${windowId}')">✕</div>
+                        </div>
                     </div>
                     <div class="window-content">${content}</div>
                 `;
 
                 document.body.appendChild(window);
-                this.windows.set(windowId, window);
+                this.windows.set(windowId, {
+                    element: window,
+                    title: title,
+                    appName: appName
+                });
+
+                // Adicionar à taskbar
+                this.addToTaskbar(windowId, title);
 
                 // Tornar janela arrastável
                 this.makeDraggable(window);
+
+                // Focar janela
+                this.focusWindow(windowId);
+            }
+
+            addToTaskbar(windowId, title) {
+                const taskbarWindows = document.getElementById('taskbar-windows');
+                const taskbarWindow = document.createElement('div');
+                taskbarWindow.className = 'taskbar-window active';
+                taskbarWindow.id = 'taskbar-' + windowId;
+                taskbarWindow.textContent = title.replace(/[🔮🔢☯️ᚱ💎🌟🎵📺🛡️🃏📚⚙️]/g, '').trim();
+                taskbarWindow.onclick = () => this.toggleWindow(windowId);
+                
+                taskbarWindows.appendChild(taskbarWindow);
+            }
+
+            removeFromTaskbar(windowId) {
+                const taskbarWindow = document.getElementById('taskbar-' + windowId);
+                if (taskbarWindow) {
+                    taskbarWindow.remove();
+                }
+            }
+
+            toggleWindow(windowId) {
+                const windowData = this.windows.get(windowId);
+                if (!windowData) return;
+
+                const window = windowData.element;
+                if (window.style.display === 'none') {
+                    window.style.display = 'block';
+                    this.focusWindow(windowId);
+                } else if (window.classList.contains('active')) {
+                    window.style.display = 'none';
+                    document.getElementById('taskbar-' + windowId).classList.remove('active');
+                } else {
+                    this.focusWindow(windowId);
+                }
+            }
+
+            focusWindow(windowId) {
+                // Remover foco de todas as janelas
+                this.windows.forEach((data, id) => {
+                    data.element.classList.remove('active');
+                    data.element.classList.add('inactive');
+                    document.getElementById('taskbar-' + id).classList.remove('active');
+                });
+
+                // Focar janela atual
+                const windowData = this.windows.get(windowId);
+                if (windowData) {
+                    windowData.element.classList.add('active');
+                    windowData.element.classList.remove('inactive');
+                    windowData.element.style.zIndex = ++this.zIndex;
+                    document.getElementById('taskbar-' + windowId).classList.add('active');
+                }
             }
 
             closeWindow(windowId) {
-                const window = this.windows.get(windowId);
-                if (window) {
-                    window.remove();
+                const windowData = this.windows.get(windowId);
+                if (windowData) {
+                    windowData.element.remove();
+                    this.removeFromTaskbar(windowId);
                     this.windows.delete(windowId);
+                }
+            }
+
+            minimizeWindow(windowId) {
+                const windowData = this.windows.get(windowId);
+                if (windowData) {
+                    windowData.element.style.display = 'none';
+                    document.getElementById('taskbar-' + windowId).classList.remove('active');
+                }
+            }
+
+            maximizeWindow(windowId) {
+                const windowData = this.windows.get(windowId);
+                if (windowData) {
+                    const window = windowData.element;
+                    if (window.dataset.maximized === 'true') {
+                        // Restaurar
+                        window.style.left = window.dataset.originalLeft;
+                        window.style.top = window.dataset.originalTop;
+                        window.style.width = window.dataset.originalWidth;
+                        window.style.height = window.dataset.originalHeight;
+                        window.dataset.maximized = 'false';
+                    } else {
+                        // Maximizar
+                        window.dataset.originalLeft = window.style.left;
+                        window.dataset.originalTop = window.style.top;
+                        window.dataset.originalWidth = window.style.width;
+                        window.dataset.originalHeight = window.style.height;
+                        
+                        window.style.left = '0px';
+                        window.style.top = '0px';
+                        window.style.width = '100vw';
+                        window.style.height = 'calc(100vh - 40px)';
+                        window.dataset.maximized = 'true';
+                    }
                 }
             }
 
@@ -769,14 +2532,17 @@
                 let yOffset = 0;
 
                 header.addEventListener('mousedown', (e) => {
-                    if (e.target.classList.contains('window-close')) return;
+                    if (e.target.classList.contains('window-control')) return;
                     
-                    window.style.zIndex = ++this.zIndex;
-                    initialX = e.clientX - xOffset;
-                    initialY = e.clientY - yOffset;
+                    this.focusWindow(window.id);
+                    
+                    const rect = window.getBoundingClientRect();
+                    initialX = e.clientX - rect.left;
+                    initialY = e.clientY - rect.top;
 
                     if (e.target === header || e.target.classList.contains('window-title')) {
                         isDragging = true;
+                        header.style.cursor = 'move';
                     }
                 });
 
@@ -786,64 +2552,401 @@
                         currentX = e.clientX - initialX;
                         currentY = e.clientY - initialY;
 
-                        xOffset = currentX;
-                        yOffset = currentY;
-
                         window.style.left = currentX + 'px';
-                        window.style.top = currentY + 'px';
+                        window.style.top = Math.max(0, currentY) + 'px';
                     }
                 });
 
                 document.addEventListener('mouseup', () => {
-                    initialX = currentX;
-                    initialY = currentY;
                     isDragging = false;
+                    header.style.cursor = 'move';
                 });
             }
 
-            showNotification(title, message) {
-                const notification = document.createElement('div');
-                notification.className = 'notification';
-                notification.innerHTML = `
-                    <div style="font-size: 14px; margin-bottom: 5px;">${title}</div>
-                    <div style="font-size: 12px; opacity: 0.9;">${message}</div>
-                `;
+            toggleAFAST() {
+                this.afastEnabled = !this.afastEnabled;
+                this.saveSettings();
+                
+                const message = this.afastEnabled ? 
+                    'Sistema AFÁST! ativado. Proteção energética em funcionamento.' :
+                    'Sistema AFÁST! pausado. Notificações desabilitadas temporariamente.';
+                
+                this.showAFASTNotification('🛡️ AFÁST! Sistema', message);
+            }
 
-                document.body.appendChild(notification);
+            showCalendar() {
+                this.showAFASTNotification('📅 Calendário', 'Calendário astrológico em desenvolvimento!');
+            }
 
-                // Síntese de voz para AFÁST!
-                if (title.includes('AFÁST!') && 'speechSynthesis' in window) {
-                    const utterance = new SpeechSynthesisUtterance(message);
-                    utterance.lang = 'pt-BR';
-                    utterance.rate = 0.9;
-                    utterance.pitch = 1.1;
-                    utterance.volume = 0.7;
-                    speechSynthesis.speak(utterance);
+            showPlanetaryHourInfo() {
+                const planet = this.planetaryHour.current;
+                const planetInfo = {
+                    'Sol': 'Hora da vitalidade, liderança e sucesso. Ideal para novos projetos.',
+                    'Lua': 'Hora da intuição, sonhos e magia. Perfeita para rituais lunares.',
+                    'Marte': 'Hora da ação, coragem e força. Boa para exercícios e competições.',
+                    'Mercúrio': 'Hora da comunicação, estudos e negócios. Ideal para aprendizado.',
+                    'Júpiter': 'Hora da expansão, sorte e abundância. Favorável para crescimento.',
+                    'Vênus': 'Hora do amor, beleza e harmonia. Perfeita para relacionamentos.',
+                    'Saturno': 'Hora da disciplina, estrutura e responsabilidade. Boa para organização.'
+                };
+                
+                this.showAFASTNotification(
+                    `🪐 Hora de ${planet}`,
+                    planetInfo[planet] || 'Energia planetária ativa.'
+                );
+            }
+
+            saveSettings() {
+                const settings = {
+                    volumes: this.volumes,
+                    afastEnabled: this.afastEnabled
+                };
+                localStorage.setItem('aurora-os-settings', JSON.stringify(settings));
+            }
+
+            loadSettings() {
+                const saved = localStorage.getItem('aurora-os-settings');
+                if (saved) {
+                    const settings = JSON.parse(saved);
+                    this.volumes = { ...this.volumes, ...settings.volumes };
+                    this.afastEnabled = settings.afastEnabled !== undefined ? settings.afastEnabled : true;
+                    
+                    // Aplicar aos sliders
+                    document.getElementById('afast-volume').value = this.volumes.afast;
+                    document.getElementById('system-volume').value = this.volumes.system;
+                    document.getElementById('music-volume').value = this.volumes.music;
+                    document.getElementById('ritual-volume').value = this.volumes.ritual;
+                    
+                    this.updateVolumeIcon();
                 }
-
-                // Remover após 4 segundos
-                setTimeout(() => {
-                    notification.style.animation = 'slideOut 0.3s ease-in';
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            notification.parentNode.removeChild(notification);
-                        }
-                    }, 300);
-                }, 4000);
             }
         }
 
-        // Função global para testar AFÁST!
+        // === FUNÇÕES GLOBAIS ===
+        
         function testAFAST() {
             if (window.auroraOS) {
-                auroraOS.showNotification('🎤 Teste AFÁST!', 'Sistema de proteção funcionando perfeitamente. Bem-vindo ao Aurora OS!');
+                auroraOS.showAFASTNotification('🎤 Teste AFÁST!', 'Sistema de proteção funcionando perfeitamente. Volume da narradora em ' + auroraOS.volumes.afast + '%. Bem-vindo ao Aurora OS!');
             }
         }
+
+        function testSystemSound() {
+            if (window.auroraOS) {
+                auroraOS.showAFASTNotification('🔊 Teste Sistema', 'Volume do sistema em ' + auroraOS.volumes.system + '%. Som de teste reproduzido.');
+                
+                // Gerar beep de teste
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.value = 800;
+                    oscillator.type = 'sine';
+                    gainNode.gain.value = (auroraOS.volumes.system / 100) * 0.1;
+                    
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.2);
+                } catch (e) {
+                    console.log('Audio context não disponível');
+                }
+            }
+        }
+
+        function showWallpaperSelector() {
+            if (window.auroraOS) {
+                auroraOS.showAFASTNotification('🖼️ Wallpapers', 'Seletor de papéis de parede em desenvolvimento!');
+            }
+        }
+
+        function showAbout() {
+            if (window.auroraOS) {
+                auroraOS.showAFASTNotification('ℹ️ Sobre', 'Aurora OS • MysticSoft Millennium Edition - Sistema Operacional Místico versão 2025.09.11');
+            }
+        }
+
+        function shutdown() {
+            if (window.auroraOS) {
+                auroraOS.showAFASTNotification('⏻ Sistema', 'Desligando Aurora OS... Que a magia esteja sempre com você!');
+                setTimeout(() => {
+                    document.body.style.background = '#000';
+                    document.body.innerHTML = '<div style="color: #d4af37; text-align: center; padding-top: 40vh; font-family: Cinzel, serif; font-size: 24px;">🌟 Aurora OS Desligado 🌟<br><small style="font-size: 14px; opacity: 0.7;">Recarregue a página para reiniciar</small></div>';
+                }, 2000);
+            }
+        }
+
+        // Criar efeitos de partículas
+        function createSparkles() {
+            setInterval(() => {
+                if (Math.random() < 0.1) {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = Math.random() * window.innerWidth + 'px';
+                    sparkle.style.top = Math.random() * window.innerHeight + 'px';
+                    document.body.appendChild(sparkle);
+                    
+                    setTimeout(() => {
+                        if (sparkle.parentNode) {
+                            sparkle.parentNode.removeChild(sparkle);
+                        }
+                    }, 2000);
+                }
+            }, 3000);
+        }
+
+        // === SISTEMA DE WALLPAPERS ===
+        let selectedWallpaper = 'mystic';
+
+        // === SISTEMA DE HORA PLANETÁRIA ===
+        const planetaryData = {
+            'Sol': {
+                symbol: '☉',
+                name: 'Sol',
+                energy: 'Liderança, criatividade, vitalidade',
+                ideal: 'Novos projetos, apresentações, decisões importantes',
+                recommendations: [
+                    'Inicie projetos importantes e tome decisões de liderança',
+                    'Momento ideal para apresentações e reuniões',
+                    'Foque em criatividade e expressão pessoal',
+                    'Evite conflitos - use a energia solar para inspirar'
+                ],
+                color: '#ff6b6b'
+            },
+            'Vênus': {
+                symbol: '♀',
+                name: 'Vênus',
+                energy: 'Amor, beleza, harmonia, relacionamentos',
+                ideal: 'Encontros românticos, arte, negociações diplomáticas',
+                recommendations: [
+                    'Momento perfeito para encontros românticos',
+                    'Dedique-se a atividades artísticas e criativas',
+                    'Resolva conflitos com diplomacia e charme',
+                    'Cuide da aparência e do bem-estar'
+                ],
+                color: '#ff9ff3'
+            },
+            'Mercúrio': {
+                symbol: '☿',
+                name: 'Mercúrio',
+                energy: 'Comunicação, aprendizado, viagens',
+                ideal: 'Estudos, escritas, comunicações importantes',
+                recommendations: [
+                    'Ideal para estudar e aprender coisas novas',
+                    'Escreva, comunique-se e faça contatos',
+                    'Planeje viagens e deslocamentos',
+                    'Organize documentos e informações'
+                ],
+                color: '#feca57'
+            },
+            'Lua': {
+                symbol: '🌙',
+                name: 'Lua',
+                energy: 'Intuição, emoções, família, lar',
+                ideal: 'Meditação, cuidados familiares, intuição',
+                recommendations: [
+                    'Conecte-se com sua intuição e emoções',
+                    'Dedique tempo à família e ao lar',
+                    'Pratique meditação e autoconhecimento',
+                    'Cuide de questões domésticas'
+                ],
+                color: '#96ceb4'
+            },
+            'Saturno': {
+                symbol: '♄',
+                name: 'Saturno',
+                energy: 'Disciplina, responsabilidade, estrutura',
+                ideal: 'Planejamento, organização, trabalho sério',
+                recommendations: [
+                    'Foque em planejamento e organização',
+                    'Assuma responsabilidades importantes',
+                    'Trabalhe com disciplina e método',
+                    'Estruture projetos de longo prazo'
+                ],
+                color: '#54a0ff'
+            },
+            'Júpiter': {
+                symbol: '♃',
+                name: 'Júpiter',
+                energy: 'Expansão, sabedoria, prosperidade',
+                ideal: 'Investimentos, ensino, crescimento',
+                recommendations: [
+                    'Momento para investimentos e expansão',
+                    'Compartilhe conhecimento e ensine',
+                    'Busque crescimento pessoal e profissional',
+                    'Seja generoso e otimista'
+                ],
+                color: '#4ecdc4'
+            },
+            'Marte': {
+                symbol: '♂',
+                name: 'Marte',
+                energy: 'Ação, coragem, energia física',
+                ideal: 'Exercícios, competições, iniciativas',
+                recommendations: [
+                    'Pratique exercícios e atividades físicas',
+                    'Tome iniciativas corajosas',
+                    'Compita e desafie-se',
+                    'Canalize a energia em ações produtivas'
+                ],
+                color: '#45b7d1'
+            }
+        };
+
+        function showPlanetaryHourWindow() {
+            document.getElementById('planetary-hour-window').classList.add('show');
+            updatePlanetaryHourWindow();
+        }
+
+        function hidePlanetaryHourWindow() {
+            document.getElementById('planetary-hour-window').classList.remove('show');
+        }
+
+        function updatePlanetaryHourWindow() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            
+            // Sequência planetária para o dia (começando ao nascer do sol ~6h)
+            const daySequence = ['Sol', 'Vênus', 'Mercúrio', 'Lua', 'Saturno', 'Júpiter', 'Marte'];
+            const currentPlanetIndex = (currentHour - 6) % 7;
+            const currentPlanet = daySequence[currentPlanetIndex >= 0 ? currentPlanetIndex : currentPlanetIndex + 7];
+            
+            const planetData = planetaryData[currentPlanet];
+            
+            // Atualizar círculo planetário
+            const circle = document.getElementById('planetary-circle');
+            circle.textContent = planetData.symbol;
+            circle.style.background = `conic-gradient(from 0deg, ${planetData.color}, ${planetData.color}aa, ${planetData.color})`;
+            
+            // Atualizar informações
+            const info = document.getElementById('planetary-info');
+            info.innerHTML = `
+                <h3>Hora ${planetData.name === 'Lua' ? 'da' : 'do'} ${planetData.name}</h3>
+                <p><strong>Energia:</strong> ${planetData.energy}</p>
+                <p><strong>Ideal para:</strong> ${planetData.ideal}</p>
+            `;
+            
+            // Atualizar timer
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            const remainingMinutes = 59 - minutes;
+            const remainingSeconds = 59 - seconds;
+            
+            document.getElementById('timer-display').textContent = 
+                `${remainingMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            
+            const progress = ((minutes * 60 + seconds) / 3600) * 100;
+            document.getElementById('timer-progress').style.width = `${progress}%`;
+            
+            // Atualizar cronograma
+            const schedule = document.getElementById('planetary-schedule');
+            let scheduleHTML = '';
+            
+            for (let i = 0; i < 7; i++) {
+                const hour = (currentHour + i) % 24;
+                const nextHour = (hour + 1) % 24;
+                const planetIndex = (currentPlanetIndex + i) % 7;
+                const planet = daySequence[planetIndex];
+                const planetSymbol = planetaryData[planet].symbol;
+                const isCurrent = i === 0;
+                
+                scheduleHTML += `
+                    <div class="schedule-item ${isCurrent ? 'current' : ''}">
+                        <span>${hour.toString().padStart(2, '0')}:00 - ${nextHour.toString().padStart(2, '0')}:00</span>
+                        <span>${planetSymbol} ${planet} ${isCurrent ? '(Atual)' : ''}</span>
+                    </div>
+                `;
+            }
+            
+            schedule.innerHTML = scheduleHTML;
+            
+            // Atualizar recomendações
+            const recommendations = document.getElementById('planetary-recommendations');
+            recommendations.innerHTML = `
+                <h4>🌟 Recomendações para a Hora ${planetData.name === 'Lua' ? 'da' : 'do'} ${planetData.name}:</h4>
+                ${planetData.recommendations.map(rec => `<p>• ${rec}</p>`).join('')}
+            `;
+        }
+
+        function showWallpaperSelector() {
+            document.getElementById('wallpaper-selector').classList.add('show');
+            // Marcar wallpaper atual como selecionado
+            const currentWallpaper = localStorage.getItem('aurora-wallpaper') || 'mystic';
+            document.querySelectorAll('.wallpaper-option').forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.wallpaper === currentWallpaper) {
+                    option.classList.add('selected');
+                    selectedWallpaper = currentWallpaper;
+                }
+            });
+        }
+
+        function hideWallpaperSelector() {
+            document.getElementById('wallpaper-selector').classList.remove('show');
+        }
+
+        function applyWallpaper() {
+            const desktop = document.querySelector('.desktop');
+            // Remover todas as classes de wallpaper
+            desktop.classList.remove('wallpaper-mystic', 'wallpaper-cosmic', 'wallpaper-classic', 
+                                   'wallpaper-aurora', 'wallpaper-constellations', 'wallpaper-moon', 'wallpaper-matrix');
+            // Aplicar novo wallpaper
+            desktop.classList.add(`wallpaper-${selectedWallpaper}`);
+            // Salvar preferência
+            localStorage.setItem('aurora-wallpaper', selectedWallpaper);
+            // Fechar seletor
+            hideWallpaperSelector();
+            // Notificação AFÁST!
+            if (window.auroraOS) {
+                const wallpaperNames = {
+                    'mystic': 'Místico',
+                    'cosmic': 'Cósmico', 
+                    'classic': 'Clássico ME',
+                    'aurora': 'Aurora Boreal',
+                    'constellations': 'Constelações',
+                    'moon': 'Lua Cheia',
+                    'matrix': 'Matrix'
+                };
+                window.auroraOS.showAFASTNotification('🖼️ Wallpaper Alterado', 
+                    `Papel de parede "${wallpaperNames[selectedWallpaper]}" aplicado com sucesso!`);
+            }
+        }
+
+        function loadWallpaper() {
+            const savedWallpaper = localStorage.getItem('aurora-wallpaper') || 'mystic';
+            const desktop = document.querySelector('.desktop');
+            desktop.classList.remove('wallpaper-mystic', 'wallpaper-cosmic', 'wallpaper-classic', 
+                                   'wallpaper-aurora', 'wallpaper-constellations', 'wallpaper-moon', 'wallpaper-matrix');
+            desktop.classList.add(`wallpaper-${savedWallpaper}`);
+        }
+
+        // Event listeners para seleção de wallpaper
+        document.addEventListener('DOMContentLoaded', () => {
+            // Carregar wallpaper salvo
+            loadWallpaper();
+            
+            // Event listeners para opções de wallpaper
+            document.querySelectorAll('.wallpaper-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.wallpaper-option').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    selectedWallpaper = option.dataset.wallpaper;
+                });
+            });
+
+            // Clique com botão direito no desktop para abrir seletor
+            document.querySelector('.desktop').addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                showWallpaperSelector();
+            });
+        });
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
             window.auroraOS = new AuroraOS();
-            console.log('🌟 Aurora OS • MysticSoft inicializado com sucesso!');
+            createSparkles();
+            console.log('🌟 Aurora OS • MysticSoft Millennium Edition inicializado com sucesso!');
         });
     </script>
 </body>
