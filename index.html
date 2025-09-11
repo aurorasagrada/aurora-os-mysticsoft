@@ -281,14 +281,106 @@
             border: 2px inset #c0c0c0;
         }
 
-        .clock {
+        .clock-container {
             margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .planetary-icon {
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border: 1px inset #c0c0c0;
+            padding: 6px;
+            font-size: 16px;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .clock {
             background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
             border: 1px inset #c0c0c0;
             padding: 8px 12px;
             font-size: 12px;
             color: #000;
             cursor: pointer;
+        }
+
+        /* === CALENDÁRIO ASTROLÓGICO === */
+        .astro-calendar {
+            position: fixed;
+            bottom: 50px;
+            right: 10px;
+            width: 350px;
+            height: 400px;
+            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            border: 2px outset #c0c0c0;
+            display: none;
+            z-index: 9999;
+            font-family: 'MS Sans Serif', sans-serif;
+        }
+
+        .calendar-header {
+            background: linear-gradient(180deg, #4169e1 0%, #0000cd 100%);
+            color: white;
+            padding: 8px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .calendar-content {
+            padding: 10px;
+            height: calc(100% - 40px);
+            overflow-y: auto;
+        }
+
+        .planetary-hour-info {
+            background: #f0f0f0;
+            border: 1px inset #c0c0c0;
+            padding: 8px;
+            margin-bottom: 10px;
+            font-size: 11px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            margin-bottom: 10px;
+        }
+
+        .calendar-day {
+            background: #f0f0f0;
+            border: 1px outset #c0c0c0;
+            padding: 4px;
+            text-align: center;
+            font-size: 10px;
+            cursor: pointer;
+            min-height: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-day:hover {
+            background: #e0e0e0;
+        }
+
+        .calendar-day.today {
+            background: #4169e1;
+            color: white;
+        }
+
+        .astro-indicator {
+            font-size: 8px;
+            margin-top: 1px;
         }
 
         /* === ÍCONES DO DESKTOP === */
@@ -1112,7 +1204,40 @@
         <!-- Barra de Tarefas -->
         <div class="taskbar">
             <div class="start-button" id="start-button">Iniciar</div>
-            <div class="clock" id="clock">00:00</div>
+            <div class="clock-container">
+                <div class="planetary-icon" id="planetary-icon" title="Hora Planetária">☉</div>
+                <div class="clock" id="clock">00:00</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendário Astrológico -->
+    <div class="astro-calendar" id="astro-calendar">
+        <div class="calendar-header">
+            Calendário Astrológico - <span id="calendar-month">Setembro 2025</span>
+        </div>
+        <div class="calendar-content">
+            <div class="planetary-hour-info" id="planetary-hour-info">
+                <strong>Hora Planetária Atual:</strong><br>
+                <span id="current-planetary-hour">☉ Sol - Hora da Vitalidade</span>
+            </div>
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- Dias da semana -->
+                <div style="font-weight: bold; background: #d0d0d0;">Dom</div>
+                <div style="font-weight: bold; background: #d0d0d0;">Seg</div>
+                <div style="font-weight: bold; background: #d0d0d0;">Ter</div>
+                <div style="font-weight: bold; background: #d0d0d0;">Qua</div>
+                <div style="font-weight: bold; background: #d0d0d0;">Qui</div>
+                <div style="font-weight: bold; background: #d0d0d0;">Sex</div>
+                <div style="font-weight: bold; background: #d0d0d0;">Sáb</div>
+                <!-- Dias do mês serão gerados dinamicamente -->
+            </div>
+            <div id="astro-events">
+                <strong>Eventos Astrológicos:</strong><br>
+                <small>🌑 Lua Nova: 28/09<br>
+                ☿ Mercúrio Retrógrado: 04/10<br>
+                🌕 Lua Cheia: 14/10</small>
+            </div>
         </div>
     </div>
 
@@ -1213,9 +1338,9 @@
                     </div>
                     
                     <div class="alert-settings">
-                        <h4>⚙️ Configurações de Alerta AFAST!</h4>
-                        <div class="setting-item">
-                            <label><input type="checkbox" checked> Notificações AFAST!</label>
+                        <h4>⚙️ Configurações de Alerta AFÁST!</h4>
+                        <div class="alert-config">
+                            <label><input type="checkbox" checked> Notificações AFÁST!</label>
                         </div>
                         <div class="setting-item">
                             <label><input type="checkbox" checked> Alertas de Retrogradação</label>
@@ -1405,8 +1530,8 @@
         </div>
         <div class="window-content">
             <div class="speech-area" id="speech-area">
-                > AFÁSTE v2.0 - Sistema de Reconhecimento de Voz Iniciado
-                > Bem vindo ao AFÁSTE
+                > AFÁST! v2.0 - Sistema de Reconhecimento de Voz Iniciado
+                > Bem vindo ao AFÁST!
                 > Aguardando comando de voz...
                 > Digite 'help' para ver comandos disponíveis
             </div>
@@ -1622,6 +1747,68 @@
                     minute: '2-digit' 
                 });
                 document.getElementById('clock').textContent = timeString;
+                
+                // Atualizar hora planetária
+                this.updatePlanetaryHour(now);
+            }
+
+            updatePlanetaryHour(now) {
+                // Planetas e seus símbolos
+                const planets = [
+                    { name: 'Sol', symbol: '☉', description: 'Hora da Vitalidade e Liderança' },
+                    { name: 'Vênus', symbol: '♀', description: 'Hora do Amor e Beleza' },
+                    { name: 'Mercúrio', symbol: '☿', description: 'Hora da Comunicação' },
+                    { name: 'Lua', symbol: '☽', description: 'Hora da Intuição' },
+                    { name: 'Saturno', symbol: '♄', description: 'Hora da Disciplina' },
+                    { name: 'Júpiter', symbol: '♃', description: 'Hora da Expansão' },
+                    { name: 'Marte', symbol: '♂', description: 'Hora da Ação' }
+                ];
+
+                // Sequência planetária para dias da semana (começando domingo)
+                const daySequences = [
+                    [0, 1, 2, 3, 4, 5, 6], // Domingo - Sol
+                    [3, 4, 5, 6, 0, 1, 2], // Segunda - Lua
+                    [6, 0, 1, 2, 3, 4, 5], // Terça - Marte
+                    [2, 3, 4, 5, 6, 0, 1], // Quarta - Mercúrio
+                    [5, 6, 0, 1, 2, 3, 4], // Quinta - Júpiter
+                    [1, 2, 3, 4, 5, 6, 0], // Sexta - Vênus
+                    [4, 5, 6, 0, 1, 2, 3]  // Sábado - Saturno
+                ];
+
+                const dayOfWeek = now.getDay();
+                const hour = now.getHours();
+                
+                // Calcular hora planetária (simplificado - cada planeta rege ~3.4 horas)
+                const planetaryHourIndex = Math.floor(hour / 3.43) % 7;
+                const sequence = daySequences[dayOfWeek];
+                const currentPlanetIndex = sequence[planetaryHourIndex];
+                const currentPlanet = planets[currentPlanetIndex];
+
+                // Atualizar ícone na barra de tarefas
+                const planetaryIcon = document.getElementById('planetary-icon');
+                if (planetaryIcon) {
+                    planetaryIcon.textContent = currentPlanet.symbol;
+                    planetaryIcon.title = `${currentPlanet.name} - ${currentPlanet.description}`;
+                }
+
+                // Atualizar informação no calendário
+                const planetaryHourInfo = document.getElementById('current-planetary-hour');
+                if (planetaryHourInfo) {
+                    planetaryHourInfo.textContent = `${currentPlanet.symbol} ${currentPlanet.name} - ${currentPlanet.description}`;
+                }
+
+                // Verificar se é uma hora desfavorável (Saturno ou Marte)
+                if (currentPlanet.name === 'Saturno' || currentPlanet.name === 'Marte') {
+                    // Enviar notificação de ameaça astrológica
+                    if (window.msnSystem && Math.random() < 0.3) { // 30% de chance
+                        setTimeout(() => {
+                            window.msnSystem.showThreatAlert(
+                                'Hora Planetária Desfavorável',
+                                `Hora de ${currentPlanet.name} - Evite decisões importantes`
+                            );
+                        }, 1000);
+                    }
+                }
             }
 
             updateAstroInfo() {
@@ -2160,8 +2347,8 @@
             }
 
             init() {
-                this.addToLog('> AFÁSTE v2.0 - Sistema de Reconhecimento de Voz Iniciado');
-                this.addToLog('> Bem vindo ao AFÁSTE');
+                this.addToLog('> AFÁST! v2.0 - Sistema de Reconhecimento de Voz Iniciado');
+                this.addToLog('> Bem vindo ao AFÁST!');
                 this.addToLog('> Aguardando comando de voz...');
                 this.addToLog('> Digite "help" para ver comandos disponíveis');
             }
@@ -2224,7 +2411,7 @@
                 // Tentar reproduzir áudio específico primeiro
                 let audioFile = null;
                 
-                if (message.includes('Bem vindo ao AFÁSTE')) {
+                if (message.includes('Bem vindo ao AFÁST!')) {
                     audioFile = 'audio/bem-vindo-afast.wav';
                 } else if (message.includes('Uma ameaça foi detectada')) {
                     audioFile = 'audio/ameaca-detectada.wav';
@@ -2518,604 +2705,359 @@
         
         // Função para abrir calendário astrológico
         function openAstrologicalCalendar() {
-            // Remover calendário existente se houver
-            const existingCalendar = document.getElementById('astrological-calendar');
-            if (existingCalendar) {
-                existingCalendar.remove();
-                return;
+            const calendar = document.getElementById('astro-calendar');
+            if (calendar.style.display === 'block') {
+                calendar.style.display = 'none';
+            } else {
+                calendar.style.display = 'block';
+                generateCalendarDays();
             }
-            
-            const currentDate = new Date();
-            const currentMonth = currentDate.getMonth();
-            const currentYear = currentDate.getFullYear();
-            
-            createCalendarWindow(currentMonth, currentYear);
         }
-        
-        // Função para criar janela do calendário
-        function createCalendarWindow(month, year) {
-            const monthNames = [
-                'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-                'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-            ];
+
+        // Função para gerar dias do calendário com indicadores astrológicos
+        function generateCalendarDays() {
+            const grid = document.getElementById('calendar-grid');
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
             
-            const calendarHTML = `
-                <div id="astrological-calendar" style="
-                    position: fixed;
-                    top: 50px;
-                    right: 50px;
-                    width: 600px;
-                    height: 500px;
-                    background: #c0c0c0;
-                    border: 2px outset #c0c0c0;
-                    z-index: 10000;
-                    font-family: 'MS Sans Serif', sans-serif;
-                ">
-                    <div style="
-                        background: linear-gradient(90deg, #0000ff, #000080);
-                        color: white;
-                        padding: 8px;
-                        font-weight: bold;
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                    ">
-                        <span>🌙 Calendário Astrológico - ${monthNames[month]} ${year}</span>
-                        <button onclick="closeAstrologicalCalendar()" style="
-                            background: #c0c0c0;
-                            border: 1px outset #c0c0c0;
-                            width: 20px;
-                            height: 20px;
-                            cursor: pointer;
-                        ">×</button>
-                    </div>
-                    <div style="padding: 10px; height: calc(100% - 40px); overflow-y: auto;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                            <button onclick="changeMonth(${month - 1}, ${year})" style="
-                                background: #c0c0c0;
-                                border: 1px outset #c0c0c0;
-                                padding: 5px 10px;
-                                cursor: pointer;
-                            ">◀ Anterior</button>
-                            <span style="font-weight: bold; font-size: 16px;">${monthNames[month]} ${year}</span>
-                            <button onclick="changeMonth(${month + 1}, ${year})" style="
-                                background: #c0c0c0;
-                                border: 1px outset #c0c0c0;
-                                padding: 5px 10px;
-                                cursor: pointer;
-                            ">Próximo ▶</button>
-                        </div>
-                        ${generateCalendarGrid(month, year)}
-                    </div>
-                </div>
-            `;
+            // Limpar dias existentes (manter cabeçalhos)
+            const headers = grid.querySelectorAll('div[style*="font-weight: bold"]');
+            grid.innerHTML = '';
+            headers.forEach(header => grid.appendChild(header));
             
-            document.body.insertAdjacentHTML('beforeend', calendarHTML);
-        }
-        
-        // Função para gerar grade do calendário
-        function generateCalendarGrid(month, year) {
+            // Primeiro dia do mês e quantos dias tem
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const today = new Date();
             
-            let html = `
-                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 10px;">
-                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Dom</div>
-                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Seg</div>
-                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Ter</div>
-                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Qua</div>
-                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Qui</div>
-                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Sex</div>
-                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Sáb</div>
-            `;
-            
-            // Células vazias antes do primeiro dia
+            // Adicionar dias vazios no início
             for (let i = 0; i < firstDay; i++) {
-                html += '<div style="padding: 10px;"></div>';
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day';
+                grid.appendChild(emptyDay);
             }
             
-            // Dias do mês
+            // Adicionar dias do mês
             for (let day = 1; day <= daysInMonth; day++) {
-                const isToday = today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
-                const dayData = getAstrologicalDataForDay(year, month, day);
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
                 
-                html += `
-                    <div onclick="showDayDetails(${year}, ${month}, ${day})" style="
-                        padding: 8px;
-                        text-align: center;
-                        cursor: pointer;
-                        background: ${isToday ? '#ffff00' : '#ffffff'};
-                        border: 1px solid #808080;
-                        min-height: 40px;
-                        position: relative;
-                    ">
-                        <div style="font-weight: bold;">${day}</div>
-                        <div style="font-size: 10px; color: #666;">${dayData.moonPhase}</div>
-                        <div style="font-size: 8px; color: #333;">${dayData.energy}</div>
-                    </div>
-                `;
+                if (day === now.getDate()) {
+                    dayElement.classList.add('today');
+                }
+                
+                // Número do dia
+                const dayNumber = document.createElement('div');
+                dayNumber.textContent = day;
+                dayElement.appendChild(dayNumber);
+                
+                // Indicador astrológico baseado no dia
+                const astroIndicator = document.createElement('div');
+                astroIndicator.className = 'astro-indicator';
+                
+                // Eventos especiais
+                if (day === 28 && month === 8) { // 28 de setembro
+                    astroIndicator.textContent = '🌑';
+                    astroIndicator.title = 'Lua Nova';
+                } else if (day === 4 && month === 9) { // 4 de outubro
+                    astroIndicator.textContent = '☿';
+                    astroIndicator.title = 'Mercúrio Retrógrado';
+                } else if (day === 14 && month === 9) { // 14 de outubro
+                    astroIndicator.textContent = '🌕';
+                    astroIndicator.title = 'Lua Cheia';
+                } else {
+                    // Indicador baseado na fase lunar aproximada
+                    const lunarPhase = (day % 29.5) / 29.5;
+                    if (lunarPhase < 0.125 || lunarPhase > 0.875) {
+                        astroIndicator.textContent = '🌑';
+                    } else if (lunarPhase < 0.375) {
+                        astroIndicator.textContent = '🌓';
+                    } else if (lunarPhase < 0.625) {
+                        astroIndicator.textContent = '🌕';
+                    } else {
+                        astroIndicator.textContent = '🌗';
+                    }
+                }
+                
+                dayElement.appendChild(astroIndicator);
+                grid.appendChild(dayElement);
+                
+                // Evento de clique para mostrar detalhes do dia
+                dayElement.addEventListener('click', () => {
+                    showDayDetails(day, month, year);
+                });
             }
-            
-            html += '</div>';
-            return html;
         }
-        
-        // Função para obter dados astrológicos do dia
-        function getAstrologicalDataForDay(year, month, day) {
+
+        // Função para mostrar detalhes astrológicos do dia
+        function showDayDetails(day, month, year) {
             const date = new Date(year, month, day);
-            const dayOfYear = Math.floor((date - new Date(year, 0, 0)) / 86400000);
+            const dayName = date.toLocaleDateString('pt-BR', { weekday: 'long' });
             
-            // Cálculo simplificado da fase lunar
-            const lunarCycle = 29.53;
-            const knownNewMoon = new Date(2024, 0, 11); // 11 de janeiro de 2024
-            const daysSinceNewMoon = Math.floor((date - knownNewMoon) / 86400000);
-            const lunarPhase = (daysSinceNewMoon % lunarCycle) / lunarCycle;
-            
-            let moonPhase, energy;
-            if (lunarPhase < 0.125) {
-                moonPhase = '🌑';
-                energy = 'Novo';
-            } else if (lunarPhase < 0.375) {
-                moonPhase = '🌓';
-                energy = 'Cresc';
-            } else if (lunarPhase < 0.625) {
-                moonPhase = '🌕';
-                energy = 'Cheia';
-            } else if (lunarPhase < 0.875) {
-                moonPhase = '🌗';
-                energy = 'Ming';
-            } else {
-                moonPhase = '🌑';
-                energy = 'Novo';
-            }
-            
-            return { moonPhase, energy };
-        }
-        
-        // Função para mostrar detalhes do dia
-        function showDayDetails(year, month, day) {
-            const date = new Date(year, month, day);
-            const dayData = getDetailedAstrologicalData(date);
-            
-            const detailsHTML = `
-                <div id="day-details" style="
-                    position: fixed;
-                    top: 100px;
-                    left: 100px;
-                    width: 500px;
-                    max-height: 600px;
-                    background: #c0c0c0;
-                    border: 2px outset #c0c0c0;
-                    z-index: 10001;
-                    overflow-y: auto;
-                ">
-                    <div style="
-                        background: linear-gradient(90deg, #800080, #400040);
-                        color: white;
-                        padding: 8px;
-                        font-weight: bold;
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                    ">
-                        <span>🔮 ${day}/${month + 1}/${year} - Informações Místicas</span>
-                        <button onclick="closeDayDetails()" style="
-                            background: #c0c0c0;
-                            border: 1px outset #c0c0c0;
-                            width: 20px;
-                            height: 20px;
-                            cursor: pointer;
-                        ">×</button>
-                    </div>
-                    <div style="padding: 15px; font-size: 12px;">
-                        <h3 style="margin: 0 0 10px 0; color: #800080;">🌙 Informações Lunares</h3>
-                        <p><strong>Fase:</strong> ${dayData.moonPhase} ${dayData.moonPhaseName}</p>
-                        <p><strong>Mansão Lunar:</strong> ${dayData.lunarMansion}</p>
-                        <p><strong>Energia:</strong> ${dayData.lunarEnergy}</p>
-                        
-                        <h3 style="margin: 15px 0 10px 0; color: #800080;">⚡ Trânsitos Planetários</h3>
-                        <p>${dayData.transits}</p>
-                        
-                        <h3 style="margin: 15px 0 10px 0; color: #800080;">🔮 Correspondências Místicas</h3>
-                        <p><strong>Invocação:</strong> ${dayData.invocation}</p>
-                        <p><strong>Mantra:</strong> ${dayData.mantra}</p>
-                        <p><strong>Runa:</strong> ${dayData.rune}</p>
-                        <p><strong>Carta de Tarô:</strong> ${dayData.tarotCard}</p>
-                        
-                        <h3 style="margin: 15px 0 10px 0; color: #800080;">🌿 Correspondências Naturais</h3>
-                        <p><strong>Ervas:</strong> ${dayData.herbs}</p>
-                        <p><strong>Cristais:</strong> ${dayData.crystals}</p>
-                        
-                        <h3 style="margin: 15px 0 10px 0; color: #800080;">✨ Uso Mágico</h3>
-                        <p><strong>Favorável:</strong> ${dayData.favorableMagic}</p>
-                        <p><strong>Desfavorável:</strong> ${dayData.unfavorableMagic}</p>
-                    </div>
-                </div>
-            `;
-            
-            // Remover detalhes existentes
-            const existing = document.getElementById('day-details');
-            if (existing) existing.remove();
-            
-            document.body.insertAdjacentHTML('beforeend', detailsHTML);
-        }
-        
-        // Função para obter dados astrológicos detalhados
-        function getDetailedAstrologicalData(date) {
-            const day = date.getDate();
-            const month = date.getMonth();
-            
-            // Arrays de correspondências místicas
-            const lunarMansions = [
-                "Al-Sharatain (O Signo)", "Al-Butain (O Ventre)", "Al-Thurayya (As Plêiades)",
-                "Al-Dabaran (O Seguidor)", "Al-Haq'ah (A Marca Branca)", "Al-Han'ah (A Marca)",
-                "Al-Dhira (O Braço)", "Al-Nathrah (A Ponta do Nariz)", "Al-Tarf (O Olhar)",
-                "Al-Jabhah (A Testa)", "Al-Zubrah (A Juba)", "Al-Sarfah (O Mudador)",
-                "Al-Awwa (O Ladrador)", "Al-Simak (O Desarmado)", "Al-Ghafr (A Cobertura)",
-                "Al-Zubana (As Garras)", "Al-Iklil (A Coroa)", "Al-Qalb (O Coração)",
-                "Al-Shaulah (O Ferrão)", "Al-Na'am (As Avestruzes)", "Al-Baldah (A Cidade)",
-                "Sa'd al-Dhabih (A Sorte do Matador)", "Sa'd Bula (A Sorte do Engolidor)",
-                "Sa'd al-Su'ud (A Sorte das Sortes)", "Sa'd al-Akhbiyah (A Sorte das Tendas)",
-                "Al-Fargh al-Mukdim (O Primeiro Balde)", "Al-Fargh al-Thani (O Segundo Balde)",
-                "Batn al-Hut (O Ventre do Peixe)"
-            ];
-            
-            const invocations = [
-                "Que a luz da Lua ilumine meu caminho",
-                "Pelos poderes dos elementos, eu invoco proteção",
-                "Que as estrelas guiem minha jornada",
-                "Pela sabedoria ancestral, eu busco conhecimento",
-                "Que a energia cósmica flua através de mim"
-            ];
-            
-            const mantras = [
-                "Om Mani Padme Hum", "So Hum", "Om Gam Ganapataye Namaha",
-                "Om Shanti Shanti Shanti", "Gate Gate Paragate Parasamgate Bodhi Svaha"
-            ];
-            
-            const runes = [
-                "ᚠ Fehu (Riqueza)", "ᚢ Uruz (Força)", "ᚦ Thurisaz (Gigante)",
-                "ᚨ Ansuz (Deus)", "ᚱ Raidho (Jornada)", "ᚲ Kenaz (Tocha)",
-                "ᚷ Gebo (Presente)", "ᚹ Wunjo (Alegria)", "ᚺ Hagalaz (Granizo)"
-            ];
-            
-            const tarotCards = [
-                "O Louco", "O Mago", "A Sacerdotisa", "A Imperatriz", "O Imperador",
-                "O Hierofante", "Os Amantes", "A Carruagem", "A Força", "O Eremita"
-            ];
-            
-            const herbs = [
-                "Lavanda, Alecrim, Sálvia", "Manjericão, Hortelã, Tomilho",
-                "Camomila, Melissa, Erva-cidreira", "Artemísia, Arruda, Guiné",
-                "Rosa, Jasmim, Ylang-ylang"
-            ];
-            
-            const crystals = [
-                "Quartzo Rosa, Ametista, Cristal", "Obsidiana, Hematita, Turmalina Negra",
-                "Citrino, Pirita, Olho de Tigre", "Sodalita, Lápis Lazúli, Amazonita",
-                "Selenita, Moonstone, Labradorita"
-            ];
-            
-            // Cálculos baseados na data
-            const dayIndex = day % 5;
-            const monthIndex = month % 28;
-            
-            // Determinar fase lunar
-            const lunarCycle = 29.53;
-            const knownNewMoon = new Date(2024, 0, 11);
-            const daysSinceNewMoon = Math.floor((date - knownNewMoon) / 86400000);
-            const lunarPhase = (daysSinceNewMoon % lunarCycle) / lunarCycle;
-            
-            let moonPhase, moonPhaseName, lunarEnergy;
-            if (lunarPhase < 0.125) {
-                moonPhase = '🌑';
-                moonPhaseName = 'Lua Nova';
-                lunarEnergy = 'Novos começos, intenções, plantio de sementes';
-            } else if (lunarPhase < 0.375) {
-                moonPhase = '🌓';
-                moonPhaseName = 'Lua Crescente';
-                lunarEnergy = 'Crescimento, expansão, manifestação';
-            } else if (lunarPhase < 0.625) {
-                moonPhase = '🌕';
-                moonPhaseName = 'Lua Cheia';
-                lunarEnergy = 'Plenitude, poder máximo, realização';
-            } else if (lunarPhase < 0.875) {
-                moonPhase = '🌗';
-                moonPhaseName = 'Lua Minguante';
-                lunarEnergy = 'Liberação, limpeza, banimento';
-            } else {
-                moonPhase = '🌑';
-                moonPhaseName = 'Lua Nova';
-                lunarEnergy = 'Novos começos, intenções, plantio de sementes';
-            }
-            
-            return {
-                moonPhase,
-                moonPhaseName,
-                lunarMansion: lunarMansions[monthIndex],
-                lunarEnergy,
-                transits: "Sol em trânsito harmonioso com Júpiter, Vênus em aspecto favorável com Lua",
-                invocation: invocations[dayIndex],
-                mantra: mantras[dayIndex],
-                rune: runes[dayIndex],
-                tarotCard: tarotCards[dayIndex],
-                herbs: herbs[dayIndex],
-                crystals: crystals[dayIndex],
-                favorableMagic: "Rituais de amor, prosperidade, proteção, cura espiritual",
-                unfavorableMagic: "Maldições, trabalhos destrutivos, magia negra"
-            };
-        }
-        
-        // Função para mudar mês
-        function changeMonth(newMonth, newYear) {
-            if (newMonth < 0) {
-                newMonth = 11;
-                newYear--;
-            } else if (newMonth > 11) {
-                newMonth = 0;
-                newYear++;
-            }
-            
-            closeAstrologicalCalendar();
-            createCalendarWindow(newMonth, newYear);
-        }
-        
-        // Função para fechar calendário
-        function closeAstrologicalCalendar() {
-            const calendar = document.getElementById('astrological-calendar');
-            if (calendar) calendar.remove();
-        }
-        
-        // Função para fechar detalhes do dia
-        function closeDayDetails() {
-            const details = document.getElementById('day-details');
-            if (details) details.remove();
-        }
-        
-        // Função para criar orbes flutuantes na tela de boot
-        function createBootOrbs() {
-            const orbsContainer = document.getElementById('boot-orbs');
-            if (!orbsContainer) return;
-            
-            // Criar 15 orbes com posições e delays aleatórios
-            for (let i = 0; i < 15; i++) {
-                const orb = document.createElement('div');
-                orb.className = 'boot-orb';
-                
-                // Posição horizontal aleatória
-                orb.style.left = Math.random() * 100 + '%';
-                
-                // Delay aleatório para animação
-                orb.style.animationDelay = Math.random() * 8 + 's';
-                
-                // Tamanho ligeiramente variado
-                const size = 3 + Math.random() * 3;
-                orb.style.width = size + 'px';
-                orb.style.height = size + 'px';
-                
-                // Cores variadas (dourado, branco, roxo)
-                const colors = [
-                    'rgba(255, 215, 0, 0.8)',
-                    'rgba(255, 255, 255, 0.6)',
-                    'rgba(138, 43, 226, 0.7)'
-                ];
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                orb.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
-                
-                orbsContainer.appendChild(orb);
-            }
+            alert(`${day}/${month + 1}/${year} - ${dayName}\n\nInfluências Astrológicas:\n• Energia do dia baseada na Lua\n• Hora planetária variável\n• Consulte o AstroMágick para detalhes completos`);
         }
 
         // === SISTEMA DE NOTIFICAÇÕES MSN ===
         class MSNNotificationSystem {
             constructor() {
-                this.container = document.getElementById('msn-notifications-container');
                 this.notifications = [];
-                this.notificationId = 0;
+                this.nextId = 1;
             }
 
-            showNotification(title, message, icon = '🔮', type = 'astrological') {
-                const notification = this.createNotification(title, message, icon, type);
-                this.container.appendChild(notification);
-                
-                // Animar entrada
-                setTimeout(() => {
-                    notification.classList.add('show');
-                }, 100);
-                
-                // Reproduzir voz feminina robótica
-                this.speakNotification(title, message, type);
-                
-                // Auto-remover após 8 segundos
-                setTimeout(() => {
-                    this.hideNotification(notification);
-                }, 8000);
-                
-                return notification;
+            showThreatAlert(title, message) {
+                this.createNotification('🚨', title, message, 'threat');
+                this.speakThreatMessage();
             }
 
-            createNotification(title, message, icon, type) {
+            showPlanetaryAlert(title, message) {
+                this.createNotification('🪐', title, message, 'planetary');
+                this.speakMessage(message);
+            }
+
+            showLunarAlert(title, message) {
+                this.createNotification('🌙', title, message, 'lunar');
+                this.speakMessage(message);
+            }
+
+            showAstrologicalAlert(title, message) {
+                this.createNotification('⚠️', title, message, 'astrological');
+                this.speakMessage(message);
+            }
+
+            createNotification(icon, title, message, type) {
                 const notification = document.createElement('div');
                 notification.className = 'msn-notification';
-                notification.id = `msn-notification-${this.notificationId++}`;
+                notification.id = `msn-${this.nextId++}`;
                 
                 const now = new Date();
-                const timeStr = now.toLocaleTimeString('pt-BR', { 
+                const timeString = now.toLocaleTimeString('pt-BR', { 
                     hour: '2-digit', 
                     minute: '2-digit' 
                 });
-                
+
                 notification.innerHTML = `
                     <div class="msn-header">
-                        <span>AFÁSTE - Sistema de Alertas</span>
-                        <button class="msn-close" onclick="msnSystem.hideNotification(this.closest('.msn-notification'))">×</button>
+                        <span class="msn-icon">${icon}</span>
+                        <span class="msn-title">AFÁST! - Sistema de Alertas</span>
+                        <button class="msn-close" onclick="this.parentElement.parentElement.remove()">×</button>
                     </div>
                     <div class="msn-content">
-                        <div class="msn-icon">${icon}</div>
-                        <div class="msn-text">
-                            <div class="msn-title">${title}</div>
-                            <div class="msn-message">${message}</div>
-                            <div class="msn-time">${timeStr}</div>
-                        </div>
+                        <div class="msn-message-title">${title}</div>
+                        <div class="msn-message">${message}</div>
+                        <div class="msn-time">${timeString}</div>
                     </div>
                 `;
-                
-                return notification;
-            }
 
-            hideNotification(notification) {
-                notification.classList.add('hide');
+                // Estilo da notificação
+                notification.style.cssText = `
+                    position: fixed;
+                    bottom: 60px;
+                    right: 20px;
+                    width: 300px;
+                    background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+                    border: 2px outset #c0c0c0;
+                    font-family: 'MS Sans Serif', sans-serif;
+                    font-size: 11px;
+                    z-index: 10001;
+                    animation: msnSlideUp 0.5s ease-out;
+                    box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+                `;
+
+                // Adicionar estilos internos
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes msnSlideUp {
+                        from { transform: translateY(100%); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
+                    .msn-header {
+                        background: linear-gradient(180deg, #4169e1 0%, #0000cd 100%);
+                        color: white;
+                        padding: 4px 8px;
+                        display: flex;
+                        align-items: center;
+                        font-weight: bold;
+                    }
+                    .msn-icon {
+                        margin-right: 8px;
+                        font-size: 14px;
+                    }
+                    .msn-title {
+                        flex: 1;
+                        font-size: 11px;
+                    }
+                    .msn-close {
+                        background: none;
+                        border: none;
+                        color: white;
+                        font-size: 14px;
+                        cursor: pointer;
+                        padding: 0 4px;
+                    }
+                    .msn-content {
+                        padding: 8px;
+                        background: #f0f0f0;
+                    }
+                    .msn-message-title {
+                        font-weight: bold;
+                        margin-bottom: 4px;
+                        color: #000080;
+                    }
+                    .msn-message {
+                        margin-bottom: 6px;
+                        line-height: 1.3;
+                    }
+                    .msn-time {
+                        font-size: 9px;
+                        color: #666;
+                        text-align: right;
+                    }
+                `;
+                
+                if (!document.querySelector('#msn-styles')) {
+                    style.id = 'msn-styles';
+                    document.head.appendChild(style);
+                }
+
+                document.body.appendChild(notification);
+
+                // Auto-remover após 8 segundos
                 setTimeout(() => {
                     if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
+                        notification.style.animation = 'msnSlideUp 0.3s ease-in reverse';
+                        setTimeout(() => notification.remove(), 300);
                     }
-                }, 500);
+                }, 8000);
+
+                // Reposicionar outras notificações
+                this.repositionNotifications();
             }
 
-            speakNotification(title, message, type) {
+            repositionNotifications() {
+                const notifications = document.querySelectorAll('.msn-notification');
+                notifications.forEach((notification, index) => {
+                    notification.style.bottom = `${60 + (index * 120)}px`;
+                });
+            }
+
+            speakThreatMessage() {
+                this.speakMessage('UMA AMEAÇA FOI DETECTADA', true);
+            }
+
+            speakMessage(text, isThreat = false) {
                 try {
+                    // Tentar síntese de voz feminina
                     if ('speechSynthesis' in window) {
-                        // Cancelar qualquer fala anterior
-                        speechSynthesis.cancel();
+                        const utterance = new SpeechSynthesisUtterance(text);
                         
-                        const utterance = new SpeechSynthesisUtterance();
-                        
-                        // Texto robótico estilo AVAST
-                        let roboticText = '';
-                        
-                        switch(type) {
-                            case 'astrological':
-                                roboticText = `Alerta astrológico detectado. ${title}. ${message}`;
-                                break;
-                            case 'threat':
-                                roboticText = `Ameaça cósmica identificada. ${title}. Ação recomendada: ${message}`;
-                                break;
-                            case 'lunar':
-                                roboticText = `Evento lunar detectado. ${title}. ${message}`;
-                                break;
-                            case 'planetary':
-                                roboticText = `Movimento planetário significativo. ${title}. ${message}`;
-                                break;
-                            default:
-                                roboticText = `Notificação do sistema. ${title}. ${message}`;
-                        }
-                        
-                        utterance.text = roboticText;
-                        utterance.lang = 'pt-BR';
-                        utterance.rate = 0.8; // Mais lento, robótico
-                        utterance.pitch = 1.2; // Mais agudo, feminino
-                        utterance.volume = 0.9;
-                        
-                        // Tentar encontrar voz feminina
+                        // Configurar voz feminina robótica
                         const voices = speechSynthesis.getVoices();
                         const femaleVoice = voices.find(voice => 
-                            (voice.lang.includes('pt') || voice.lang.includes('BR')) &&
-                            (voice.name.toLowerCase().includes('female') || 
-                             voice.name.toLowerCase().includes('feminina') ||
-                             voice.name.toLowerCase().includes('woman'))
+                            voice.name.includes('Female') || 
+                            voice.name.includes('female') ||
+                            voice.name.includes('Feminino') ||
+                            voice.gender === 'female'
                         );
                         
                         if (femaleVoice) {
                             utterance.voice = femaleVoice;
-                        } else {
-                            // Fallback para qualquer voz portuguesa
-                            const ptVoice = voices.find(voice => 
-                                voice.lang.includes('pt') || voice.lang.includes('BR')
-                            );
-                            if (ptVoice) {
-                                utterance.voice = ptVoice;
-                            }
                         }
+                        
+                        // Configurações para voz robótica feminina
+                        utterance.rate = 0.8;  // Mais lenta
+                        utterance.pitch = 1.2; // Mais aguda (feminina)
+                        utterance.volume = 0.8;
+                        utterance.lang = 'pt-BR';
                         
                         speechSynthesis.speak(utterance);
                     } else {
-                        // Fallback para beep robótico
-                        this.playRoboticBeep();
+                        // Fallback: beeps robóticos
+                        this.playRoboticBeeps(isThreat);
                     }
                 } catch (e) {
                     console.log('Erro na síntese de voz:', e);
-                    this.playRoboticBeep();
+                    this.playRoboticBeeps(isThreat);
                 }
             }
 
-            playRoboticBeep() {
+            playRoboticBeeps(isThreat = false) {
                 try {
                     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const frequencies = isThreat ? [800, 600, 800, 600] : [600, 800, 1000];
                     
-                    // Sequência de beeps robóticos
-                    const beepSequence = [
-                        { freq: 800, duration: 0.1 },
-                        { freq: 1000, duration: 0.1 },
-                        { freq: 800, duration: 0.1 }
-                    ];
-                    
-                    let currentTime = audioContext.currentTime;
-                    
-                    beepSequence.forEach((beep, index) => {
+                    frequencies.forEach((freq, index) => {
                         const oscillator = audioContext.createOscillator();
                         const gainNode = audioContext.createGain();
                         
                         oscillator.connect(gainNode);
                         gainNode.connect(audioContext.destination);
                         
-                        oscillator.frequency.setValueAtTime(beep.freq, currentTime);
-                        oscillator.type = 'square'; // Som mais robótico
+                        oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+                        oscillator.type = 'square'; // Som robótico
                         
-                        gainNode.gain.setValueAtTime(0, currentTime);
-                        gainNode.gain.linearRampToValueAtTime(0.1, currentTime + 0.01);
-                        gainNode.gain.linearRampToValueAtTime(0, currentTime + beep.duration);
+                        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                        gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
                         
-                        oscillator.start(currentTime);
-                        oscillator.stop(currentTime + beep.duration);
-                        
-                        currentTime += beep.duration + 0.05;
+                        oscillator.start(audioContext.currentTime + (index * 0.3));
+                        oscillator.stop(audioContext.currentTime + (index * 0.3) + 0.2);
                     });
                 } catch (e) {
-                    console.log('Erro ao reproduzir beep robótico:', e);
+                    console.log('Áudio não suportado:', e);
                 }
             }
-
-            // Métodos para diferentes tipos de alertas astrológicos
-            showAstrologicalAlert(title, message) {
-                return this.showNotification(title, message, '⚠️', 'astrological');
-            }
-
-            showLunarAlert(title, message) {
-                return this.showNotification(title, message, '🌙', 'lunar');
-            }
-
-            showPlanetaryAlert(title, message) {
-                return this.showNotification(title, message, '🪐', 'planetary');
-            }
-
-            showThreatAlert(title, message) {
-                return this.showNotification(title, message, '🚨', 'threat');
-            }
         }
 
-        // Inicializar sistema de notificações
-        let msnSystem;
-        
-        // Aguardar carregamento das vozes
-        if ('speechSynthesis' in window) {
-            speechSynthesis.onvoiceschanged = function() {
-                console.log('Vozes carregadas:', speechSynthesis.getVoices().length);
-            };
-        }
-        
-        // Inicializar sistema MSN quando desktop estiver ativo
-        function initializeMSNSystem() {
-            if (!msnSystem) {
-                msnSystem = new MSNNotificationSystem();
+        // Inicializar sistema MSN
+        window.msnSystem = new MSNNotificationSystem();
+
+        // Configurar eventos quando DOM estiver pronto
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🌟 Inicializando Aurora OS...');
+            
+            // Inicializar sistema principal
+            if (typeof AuroraOS !== 'undefined') {
+                window.auroraOS = new AuroraOS();
+            }
+            
+            // Configurar botão Iniciar
+            const startButton = document.getElementById('start-button');
+            if (startButton) {
+                startButton.addEventListener('click', () => {
+                    showStartMenu();
+                });
+            }
+            
+            // Configurar clique no relógio para abrir calendário astrológico
+            const clock = document.getElementById('clock');
+            if (clock) {
+                clock.addEventListener('click', () => {
+                    openAstrologicalCalendar();
+                });
+                clock.style.cursor = 'pointer';
+            }
+            
+            // Configurar clique no ícone planetário
+            const planetaryIcon = document.getElementById('planetary-icon');
+            if (planetaryIcon) {
+                planetaryIcon.addEventListener('click', () => {
+                    openAstrologicalCalendar();
+                });
+            }
+            
+            console.log('🌟 Aurora OS inicializado com sucesso!');
+            
+            // Inicializar AFÁST! para notificações (mesmo sem janela aberta)
+            setTimeout(() => {
+                if (typeof AFASTApp !== 'undefined') {
+                    window.afastApp = new AFASTApp();
+                }
                 
-                // Notificação de boas-vindas
+                // Mostrar notificação de boas-vindas
                 setTimeout(() => {
-                    msnSystem.showNotification(
-                        'Sistema AFÁSTE Ativado',
-                        'Monitoramento astrológico iniciado com sucesso.',
-                        '🛡️',
-                        'astrological'
+                    window.msnSystem.showAstrologicalAlert(
+                        'Sistema AFÁST! Ativado',
+                        'Monitoramento astrológico iniciado com sucesso.'
                     );
                 }, 2000);
                 
@@ -3162,8 +3104,8 @@
                         }
                     }
                 }, 25000); // A cada 25 segundos
-            }
-        }
+            }, 3000);
+        });
     </script>
 </body>
 </html>
