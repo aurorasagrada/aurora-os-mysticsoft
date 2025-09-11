@@ -437,9 +437,324 @@
             animation: ritualProgress 5s linear forwards;
         }
 
-        @keyframes ritualProgress {
-            to { width: 100%; }
-        }        .wallpaper-menu {
+        /* === ALTAR DIGITAL - MENU INICIAR MÍSTICO === */
+        .mystic-start-menu {
+            position: fixed;
+            bottom: 50px;
+            left: 10px;
+            width: 350px;
+            height: 500px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            z-index: 9999;
+            font-family: 'MS Sans Serif', sans-serif;
+            overflow: hidden;
+        }
+
+        .mystic-menu-header {
+            background: linear-gradient(90deg, #4a4a8a, #6a6aaa);
+            color: #ffd700;
+            padding: 10px;
+            text-align: center;
+            font-style: italic;
+            border-bottom: 1px solid #ffd700;
+        }
+
+        .oracle-phrase {
+            font-size: 11px;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+
+        .mystic-menu-content {
+            padding: 15px;
+            height: calc(100% - 60px);
+            overflow-y: auto;
+            color: #ffffff;
+        }
+
+        .panel-title {
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 8px;
+            font-size: 12px;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+        }
+
+        .afast-alerts-panel {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff4444;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .alert-item {
+            font-size: 10px;
+            margin: 3px 0;
+            color: #ffcccc;
+        }
+
+        .defense-button {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            margin-top: 5px;
+            width: 100%;
+        }
+
+        .defense-button:hover {
+            background: linear-gradient(135deg, #ff6666, #ff0000);
+        }
+
+        .pentacle {
+            animation: pentacleGlow 2s infinite alternate;
+        }
+
+        @keyframes pentacleGlow {
+            from { text-shadow: 0 0 5px #ffd700; }
+            to { text-shadow: 0 0 15px #ffd700, 0 0 25px #ffd700; }
+        }
+
+        .spell-box {
+            background: rgba(0, 100, 0, 0.1);
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        #spell-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .spell-hints {
+            font-size: 8px;
+            color: #88ff88;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .astro-agenda {
+            background: rgba(0, 0, 100, 0.1);
+            border: 1px solid #4444ff;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .agenda-item {
+            font-size: 10px;
+            margin: 3px 0;
+            color: #ccccff;
+        }
+
+        .mystic-shortcuts {
+            background: rgba(100, 0, 100, 0.1);
+            border: 1px solid #ff44ff;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .shortcuts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .mystic-shortcut {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 5px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mystic-shortcut:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            transform: scale(1.05);
+        }
+
+        .shortcut-icon {
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+
+        .shortcut-label {
+            font-size: 9px;
+            color: #ffffff;
+        }
+
+        .quick-map {
+            text-align: center;
+        }
+
+        .map-button {
+            background: linear-gradient(135deg, #4a4a8a, #6a6aaa);
+            color: #ffd700;
+            border: 1px solid #ffd700;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 10px;
+            width: 100%;
+        }
+
+        .map-button:hover {
+            background: linear-gradient(135deg, #6a6aaa, #8a8acc);
+        }
+
+        .cosmic-radar {
+            font-size: 14px;
+            animation: cosmicSpin 4s linear infinite;
+        }
+
+        @keyframes cosmicSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* === JANELAS MÍSTICAS === */
+        .ms-window {
+            position: fixed;
+            top: 12vh;
+            left: 10vw;
+            width: 70vw;
+            height: 70vh;
+            background: rgba(14, 10, 22, 0.95);
+            border: 2px solid #ffd700;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+            border-radius: 12px;
+            overflow: hidden;
+            backdrop-filter: blur(6px);
+            z-index: 8000;
+            font-family: 'MS Sans Serif', sans-serif;
+        }
+
+        .ms-titlebar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: linear-gradient(180deg, #4a4a8a, #2a2a5a);
+            color: #ffd700;
+            cursor: move;
+            user-select: none;
+            border-bottom: 1px solid #ffd700;
+        }
+
+        .ms-titlebar .ms-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .ms-btn {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1px solid #ffd700;
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            cursor: pointer;
+            font-size: 10px;
+            color: white;
+        }
+
+        .ms-btn:hover {
+            background: linear-gradient(135deg, #ff6666, #ff0000);
+        }
+
+        .ms-content {
+            position: relative;
+            width: 100%;
+            height: calc(100% - 38px);
+            background: #0b1836;
+        }
+
+        .ms-iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .ms-fallback {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            color: #ffd700;
+            padding: 2rem;
+            text-align: center;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(62, 10, 41, 0.25),
+                rgba(62, 10, 41, 0.25) 8px,
+                rgba(11, 24, 54, 0.25) 8px,
+                rgba(11, 24, 54, 0.25) 16px
+            );
+        }
+
+        .ms-link {
+            padding: 0.6rem 1rem;
+            border: 1px solid #ffd700;
+            color: #ffd700;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .ms-link:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        /* === ANIMAÇÕES ESPECIAIS === */
+        @keyframes starFall {
+            from {
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes spellCast {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
             display: none;
             position: fixed;
             top: 50%;
@@ -2993,7 +3308,7 @@
             const startButton = document.getElementById('start-button');
             if (startButton) {
                 startButton.addEventListener('click', () => {
-                    showStartMenu();
+                    showMysticStartMenu();
                 });
             }
             
@@ -3472,8 +3787,249 @@
             }, 60000); // Verificar a cada minuto
         }
 
-        // === SISTEMA DE NOTIFICAÇÕES MSN ===
-        const msnSystem = {
+        // === ALTAR DIGITAL - MENU INICIAR MÍSTICO ===
+        
+        // Frases oraculares aleatórias
+        const oracularPhrases = [
+            "Hoje a Lua te observa em silêncio.",
+            "Cuidado com as palavras, Mercúrio está atento.",
+            "A chama da vontade é tua defesa.",
+            "Os astros sussurram segredos ao vento.",
+            "Tua intuição é mais forte que qualquer carta.",
+            "O cosmos conspira a teu favor.",
+            "Cada escolha ecoa nas esferas celestes.",
+            "A magia flui onde a mente se aquieta.",
+            "Saturno ensina através da paciência.",
+            "Vênus desperta o que o coração deseja."
+        ];
+
+        // Comandos mágicos da Caixa de Feitiços
+        const magicCommands = {
+            '/banir': () => executeDigitalRitual('banimento'),
+            '/purificar': () => executeDigitalRitual('purificacao'),
+            '/harmonia': () => executeDigitalRitual('equilibrio'),
+            '/ver lua': () => showLunarInfo(),
+            '/protecao': () => activateProtection('Armadura Astral'),
+            '/portal': () => executeDigitalRitual('portal'),
+            '/manifestar': () => executeDigitalRitual('manifestacao'),
+            '/abracadabra': () => createStarRain(),
+            '/susto': () => afastThreatAlert(),
+            '/111': () => showSynchronicity(),
+            '/ouroboros': () => showOuroboros(),
+            '/witch': () => showPixelWitch()
+        };
+
+        // Função para mostrar Menu Iniciar Místico
+        function showMysticStartMenu() {
+            // Remover menu anterior se existir
+            const existingMenu = document.getElementById('mystic-start-menu');
+            if (existingMenu) {
+                existingMenu.remove();
+                return;
+            }
+
+            // Criar menu místico
+            const menu = document.createElement('div');
+            menu.id = 'mystic-start-menu';
+            menu.className = 'mystic-start-menu';
+            
+            // Frase oracular aleatória
+            const randomPhrase = oracularPhrases[Math.floor(Math.random() * oracularPhrases.length)];
+            
+            menu.innerHTML = `
+                <div class="mystic-menu-header">
+                    <div class="oracle-phrase">"${randomPhrase}"</div>
+                </div>
+                
+                <div class="mystic-menu-content">
+                    <!-- Painel de Alertas AFÁST! -->
+                    <div class="afast-alerts-panel">
+                        <div class="panel-title">🛡️ Alertas Ativos</div>
+                        <div class="alert-item">☿ Mercúrio retrógrado em curso</div>
+                        <div class="alert-item">🌑 Lua fora de curso até 19h45</div>
+                        <button class="defense-button" onclick="activateProtection('Armadura Astral')">
+                            <span class="pentacle">⭐</span> Defesa Rápida
+                        </button>
+                    </div>
+                    
+                    <!-- Caixa de Feitiços Rápidos -->
+                    <div class="spell-box">
+                        <div class="panel-title">🔮 Caixa de Feitiços</div>
+                        <input type="text" id="spell-input" placeholder="Digite comando mágico..." 
+                               onkeypress="handleSpellCommand(event)">
+                        <div class="spell-hints">
+                            /banir • /harmonia • /ver lua • /protecao
+                        </div>
+                    </div>
+                    
+                    <!-- Agenda Astromágicka -->
+                    <div class="astro-agenda">
+                        <div class="panel-title">🌙 Agenda Astromágicka</div>
+                        <div class="agenda-item">🌕 Fase: ${getCurrentMoonPhase()}</div>
+                        <div class="agenda-item">⚡ Hora: ${getCurrentPlanetaryHour()}</div>
+                        <div class="agenda-item">🜁 Elemento: ${getCurrentElement()}</div>
+                        <div class="agenda-item">🏰 Mansão: ${getCurrentLunarMansion()}</div>
+                    </div>
+                    
+                    <!-- Atalhos Personalizados -->
+                    <div class="mystic-shortcuts">
+                        <div class="panel-title">✨ Altar Pessoal</div>
+                        <div class="shortcuts-grid">
+                            <div class="mystic-shortcut" onclick="window.auroraOS.openApp('astromagick')">
+                                <div class="shortcut-icon">🌟</div>
+                                <div class="shortcut-label">AstroMágick</div>
+                            </div>
+                            <div class="mystic-shortcut" onclick="window.auroraOS.openApp('tarot')">
+                                <div class="shortcut-icon">🔮</div>
+                                <div class="shortcut-label">Tarô Místico</div>
+                            </div>
+                            <div class="mystic-shortcut" onclick="window.auroraOS.openApp('witch-tv')">
+                                <div class="shortcut-icon">📺</div>
+                                <div class="shortcut-label">Witch.TV</div>
+                            </div>
+                            <div class="mystic-shortcut" onclick="window.auroraOS.openApp('afast')">
+                                <div class="shortcut-icon">🗣️</div>
+                                <div class="shortcut-label">AFÁST!</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mapa Rápido -->
+                    <div class="quick-map">
+                        <button class="map-button" onclick="openQuickAstroMap()">
+                            <div class="cosmic-radar">🌌</div>
+                            Mapa Cósmico
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(menu);
+            
+            // Tocar música mística de fundo
+            playMysticAmbient();
+            
+            // Fechar menu ao clicar fora
+            setTimeout(() => {
+                document.addEventListener('click', closeMysticMenuOnOutsideClick);
+            }, 100);
+        }
+
+        // Função para processar comandos mágicos
+        function handleSpellCommand(event) {
+            if (event.key === 'Enter') {
+                const command = event.target.value.toLowerCase().trim();
+                event.target.value = '';
+                
+                if (magicCommands[command]) {
+                    // Efeito visual de execução
+                    showSpellEffect();
+                    // Executar comando
+                    setTimeout(() => {
+                        magicCommands[command]();
+                    }, 500);
+                } else {
+                    // Comando não reconhecido
+                    msnSystem.showAstrologicalAlert(
+                        '🔮 Feitiço Desconhecido',
+                        `Comando "${command}" não encontrado no grimório`
+                    );
+                }
+            }
+        }
+
+        // Efeitos visuais para comandos
+        function showSpellEffect() {
+            const effect = document.createElement('div');
+            effect.className = 'spell-effect';
+            effect.innerHTML = '✨';
+            effect.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 50px;
+                color: #ffd700;
+                z-index: 10000;
+                animation: spellCast 1s ease-out forwards;
+                pointer-events: none;
+            `;
+            document.body.appendChild(effect);
+            setTimeout(() => effect.remove(), 1000);
+        }
+
+        // Easter Eggs
+        function createStarRain() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const star = document.createElement('div');
+                    star.innerHTML = '⭐';
+                    star.style.cssText = `
+                        position: fixed;
+                        top: -50px;
+                        left: ${Math.random() * window.innerWidth}px;
+                        font-size: 20px;
+                        z-index: 9999;
+                        animation: starFall 3s linear forwards;
+                        pointer-events: none;
+                    `;
+                    document.body.appendChild(star);
+                    setTimeout(() => star.remove(), 3000);
+                }, i * 100);
+            }
+        }
+
+        function afastThreatAlert() {
+            speakAFASTAlert(
+                'Uma ameaça foi detectada.',
+                'A vibração é densa. Proteção recomendada.',
+                true
+            );
+        }
+
+        function showSynchronicity() {
+            msnSystem.showAstrologicalAlert(
+                '✨ Sincronicidade Detectada',
+                'O caminho está aberto. Os sinais se alinham.'
+            );
+        }
+
+        // Funções auxiliares para agenda
+        function getCurrentMoonPhase() {
+            const phases = ['Nova', 'Crescente', 'Cheia', 'Minguante'];
+            return phases[Math.floor(Math.random() * phases.length)];
+        }
+
+        function getCurrentPlanetaryHour() {
+            const planets = ['☉ Sol', '☽ Lua', '♂ Marte', '☿ Mercúrio', '♃ Júpiter', '♀ Vênus', '♄ Saturno'];
+            return planets[Math.floor(Math.random() * planets.length)];
+        }
+
+        function getCurrentElement() {
+            const elements = ['🔥 Fogo', '💨 Ar', '💧 Água', '🌍 Terra'];
+            return elements[Math.floor(Math.random() * elements.length)];
+        }
+
+        function getCurrentLunarMansion() {
+            return `${Math.floor(Math.random() * 28) + 1}ª Mansão`;
+        }
+
+        // Música ambiente
+        function playMysticAmbient() {
+            // Implementar sons místicos baseados no contexto astrológico
+            console.log('🎵 Tocando ambiente místico...');
+        }
+
+        // Fechar menu ao clicar fora
+        function closeMysticMenuOnOutsideClick(event) {
+            const menu = document.getElementById('mystic-start-menu');
+            const startButton = document.getElementById('start-button');
+            
+            if (menu && !menu.contains(event.target) && !startButton.contains(event.target)) {
+                menu.remove();
+                document.removeEventListener('click', closeMysticMenuOnOutsideClick);
+            }
+        }
             }
 
             showThreatAlert(title, message) {
@@ -3701,7 +4257,7 @@
             const startButton = document.getElementById('start-button');
             if (startButton) {
                 startButton.addEventListener('click', () => {
-                    showStartMenu();
+                    showMysticStartMenu();
                 });
             }
             
