@@ -1698,6 +1698,387 @@
                 document.querySelector('.clock-date').textContent = dateString;
             }
 
+            // === SISTEMA DE APLICAÇÕES ===
+            openApp(appName) {
+                console.log(`Abrindo aplicação: ${appName}`);
+                
+                // Criar janela da aplicação
+                const window = this.createWindow(appName);
+                
+                // Conteúdo específico de cada aplicação
+                switch(appName) {
+                    case 'astromagick':
+                        this.loadAstroMagickApp(window);
+                        break;
+                    case 'aurora-player':
+                        this.loadAuroraPlayerApp(window);
+                        break;
+                    case 'numerologia':
+                        this.loadNumerologiaApp(window);
+                        break;
+                    case 'i-ching':
+                        this.loadIChingApp(window);
+                        break;
+                    case 'runas':
+                        this.loadRunasApp(window);
+                        break;
+                    case 'cristaloterapia':
+                        this.loadCristaloterapiaApp(window);
+                        break;
+                    case 'carta-natal':
+                        this.loadCartaNatalApp(window);
+                        break;
+                    case 'witch-tv':
+                        this.loadWitchTVApp(window);
+                        break;
+                    case 'afast':
+                        this.loadAFASTApp(window);
+                        break;
+                    case 'taro':
+                        this.loadTaroApp(window);
+                        break;
+                    case 'biblioteca':
+                        this.loadBibliotecaApp(window);
+                        break;
+                    case 'configuracoes':
+                        this.loadConfiguracoesApp(window);
+                        break;
+                    default:
+                        window.querySelector('.window-content').innerHTML = `
+                            <div style="padding: 20px; text-align: center;">
+                                <h2>🔮 ${appName}</h2>
+                                <p>Aplicação em desenvolvimento...</p>
+                                <p>Em breve estará disponível!</p>
+                            </div>
+                        `;
+                }
+                
+                // Notificação AFÁST!
+                this.showAFASTNotification('🚀 Aplicação Aberta', `${appName} foi iniciada com sucesso!`);
+            }
+
+            createWindow(appName) {
+                const windowId = `window-${Date.now()}`;
+                const windowElement = document.createElement('div');
+                windowElement.className = 'window';
+                windowElement.id = windowId;
+                windowElement.innerHTML = `
+                    <div class="window-header">
+                        <span class="window-title">${this.getAppTitle(appName)}</span>
+                        <div class="window-controls">
+                            <button onclick="this.parentElement.parentElement.parentElement.style.display='none'">✕</button>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <div style="padding: 20px; text-align: center;">
+                            <div class="loading">Carregando...</div>
+                        </div>
+                    </div>
+                `;
+                
+                // Posição aleatória
+                windowElement.style.left = Math.random() * 200 + 50 + 'px';
+                windowElement.style.top = Math.random() * 100 + 50 + 'px';
+                
+                document.querySelector('.desktop').appendChild(windowElement);
+                
+                // Tornar arrastável
+                this.makeDraggable(windowElement);
+                
+                return windowElement;
+            }
+
+            getAppTitle(appName) {
+                const titles = {
+                    'astromagick': '🔮 AstroMágick - Portal Astrológico',
+                    'aurora-player': '🎵 Aurora Player',
+                    'numerologia': '🔢 Numerologia Avançada',
+                    'i-ching': '☯️ I Ching - Oráculo Digital',
+                    'runas': 'ᚱ Runas Nórdicas',
+                    'cristaloterapia': '💎 Cristaloterapia',
+                    'carta-natal': '🌟 Carta Natal',
+                    'witch-tv': '📺 Witch.TV',
+                    'afast': '🛡️ AFÁST! - Sistema de Proteção',
+                    'taro': '🃏 Tarô Místico',
+                    'biblioteca': '📚 Biblioteca Mística',
+                    'configuracoes': '⚙️ Configurações do Sistema'
+                };
+                return titles[appName] || appName;
+            }
+
+            makeDraggable(element) {
+                const header = element.querySelector('.window-header');
+                let isDragging = false;
+                let currentX;
+                let currentY;
+                let initialX;
+                let initialY;
+                let xOffset = 0;
+                let yOffset = 0;
+
+                header.addEventListener('mousedown', (e) => {
+                    initialX = e.clientX - xOffset;
+                    initialY = e.clientY - yOffset;
+
+                    if (e.target === header || e.target.classList.contains('window-title')) {
+                        isDragging = true;
+                    }
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (isDragging) {
+                        e.preventDefault();
+                        currentX = e.clientX - initialX;
+                        currentY = e.clientY - initialY;
+
+                        xOffset = currentX;
+                        yOffset = currentY;
+
+                        element.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                    }
+                });
+
+                document.addEventListener('mouseup', () => {
+                    initialX = currentX;
+                    initialY = currentY;
+                    isDragging = false;
+                });
+            }
+
+            // === APLICAÇÕES ESPECÍFICAS ===
+            
+            loadAstroMagickApp(window) {
+                window.querySelector('.window-content').innerHTML = `
+                    <div style="padding: 20px;">
+                        <h2>🔮 Portal Astrológico AstroMágick</h2>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                            <div class="astro-section" onclick="alert('🌙 Fases Lunares: Lua Minguante atual - Ideal para liberação e limpeza energética')">
+                                <h3>🌙 Fases Lunares</h3>
+                                <p>Lua Minguante</p>
+                                <small>Liberação e limpeza</small>
+                            </div>
+                            <div class="astro-section" onclick="alert('☿ Mercúrio Retrógrado até 15/09 - Revise comunicações e evite novos contratos')">
+                                <h3>☿ Mercúrio Retrógrado</h3>
+                                <p>Até 15/09</p>
+                                <small>Cuidado com comunicação</small>
+                            </div>
+                            <div class="astro-section" onclick="alert('🌙 Lua Fora de Curso até 23:45 - Evite decisões importantes')">
+                                <h3>🌙 Lua Fora de Curso</h3>
+                                <p>Até 23:45</p>
+                                <small>Evite decisões</small>
+                            </div>
+                            <div class="astro-section" onclick="alert('☉ Hora do Sol - Ideal para liderança, criatividade e novos projetos')">
+                                <h3>☉ Hora Planetária</h3>
+                                <p>Sol</p>
+                                <small>Liderança e criatividade</small>
+                            </div>
+                        </div>
+                    </div>
+                    <style>
+                        .astro-section {
+                            background: linear-gradient(135deg, #4a0e4e, #3e0a29);
+                            padding: 15px;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            transition: transform 0.2s;
+                            border: 1px solid var(--dourado);
+                        }
+                        .astro-section:hover {
+                            transform: scale(1.05);
+                        }
+                        .astro-section h3 {
+                            color: var(--dourado);
+                            margin-bottom: 8px;
+                        }
+                        .astro-section p {
+                            color: white;
+                            font-weight: bold;
+                        }
+                        .astro-section small {
+                            color: #ccc;
+                        }
+                    </style>
+                `;
+            }
+
+            loadAuroraPlayerApp(window) {
+                window.querySelector('.window-content').innerHTML = `
+                    <div style="padding: 20px;">
+                        <h2>🎵 Aurora Player</h2>
+                        <div class="player-controls" style="text-align: center; margin: 20px 0;">
+                            <div class="now-playing" style="margin-bottom: 20px;">
+                                <h3>🎶 Tocando Agora</h3>
+                                <p style="font-size: 16px; color: var(--dourado);">Música Cósmica Relaxante</p>
+                                <small>Aurora Sounds Collection</small>
+                            </div>
+                            <div class="controls" style="margin: 20px 0;">
+                                <button onclick="alert('⏮️ Faixa anterior')" style="margin: 0 10px; padding: 10px;">⏮️</button>
+                                <button onclick="this.textContent = this.textContent === '▶️' ? '⏸️' : '▶️'" style="margin: 0 10px; padding: 10px 15px; font-size: 20px;">▶️</button>
+                                <button onclick="alert('⏭️ Próxima faixa')" style="margin: 0 10px; padding: 10px;">⏭️</button>
+                            </div>
+                            <div class="progress-bar" style="background: #333; height: 6px; border-radius: 3px; margin: 20px 0;">
+                                <div style="background: var(--dourado); height: 100%; width: 35%; border-radius: 3px;"></div>
+                            </div>
+                            <div class="playlist" style="text-align: left; margin-top: 20px;">
+                                <h4>📜 Playlist Mística</h4>
+                                <div onclick="alert('🎵 Tocando: Meditação Lunar')" style="padding: 8px; cursor: pointer; border-bottom: 1px solid #333;">🌙 Meditação Lunar</div>
+                                <div onclick="alert('🎵 Tocando: Cristais Cantantes')" style="padding: 8px; cursor: pointer; border-bottom: 1px solid #333;">💎 Cristais Cantantes</div>
+                                <div onclick="alert('🎵 Tocando: Vento Cósmico')" style="padding: 8px; cursor: pointer; border-bottom: 1px solid #333;">🌌 Vento Cósmico</div>
+                                <div onclick="alert('🎵 Tocando: Mantras Tibetanos')" style="padding: 8px; cursor: pointer; border-bottom: 1px solid #333;">🕉️ Mantras Tibetanos</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadNumerologiaApp(window) {
+                window.querySelector('.window-content').innerHTML = `
+                    <div style="padding: 20px;">
+                        <h2>🔢 Numerologia Avançada</h2>
+                        <div style="margin: 20px 0;">
+                            <label>Digite seu nome completo:</label>
+                            <input type="text" id="nome-numerologia" style="width: 100%; padding: 8px; margin: 10px 0; background: #333; color: white; border: 1px solid var(--dourado);">
+                            <label>Data de nascimento:</label>
+                            <input type="date" id="data-numerologia" style="width: 100%; padding: 8px; margin: 10px 0; background: #333; color: white; border: 1px solid var(--dourado);">
+                            <button onclick="calcularNumerologia()" style="padding: 10px 20px; background: var(--dourado); color: black; border: none; border-radius: 4px; cursor: pointer;">✨ Calcular</button>
+                        </div>
+                        <div id="resultado-numerologia" style="margin-top: 20px; padding: 15px; background: rgba(74, 14, 78, 0.3); border-radius: 8px; display: none;">
+                            <h3>🌟 Seu Mapa Numerológico</h3>
+                            <div id="numeros-resultado"></div>
+                        </div>
+                    </div>
+                    <script>
+                        function calcularNumerologia() {
+                            const nome = document.getElementById('nome-numerologia').value;
+                            const data = document.getElementById('data-numerologia').value;
+                            
+                            if (!nome || !data) {
+                                alert('📝 Por favor, preencha todos os campos!');
+                                return;
+                            }
+                            
+                            // Cálculo simples do número da sorte
+                            const numeroNome = nome.length % 9 + 1;
+                            const numeroData = new Date(data).getDate() % 9 + 1;
+                            const numeroDestino = (numeroNome + numeroData) % 9 + 1;
+                            
+                            const significados = {
+                                1: 'Liderança e independência',
+                                2: 'Cooperação e diplomacia',
+                                3: 'Criatividade e comunicação',
+                                4: 'Estabilidade e organização',
+                                5: 'Liberdade e aventura',
+                                6: 'Responsabilidade e cuidado',
+                                7: 'Espiritualidade e introspecção',
+                                8: 'Ambição e sucesso material',
+                                9: 'Humanitarismo e sabedoria'
+                            };
+                            
+                            document.getElementById('numeros-resultado').innerHTML = \`
+                                <p><strong>🔢 Número do Nome:</strong> \${numeroNome} - \${significados[numeroNome]}</p>
+                                <p><strong>📅 Número da Data:</strong> \${numeroData} - \${significados[numeroData]}</p>
+                                <p><strong>✨ Número do Destino:</strong> \${numeroDestino} - \${significados[numeroDestino]}</p>
+                                <p style="margin-top: 15px; color: var(--dourado);"><strong>🌟 Sua missão de vida está ligada a \${significados[numeroDestino].toLowerCase()}!</strong></p>
+                            \`;
+                            
+                            document.getElementById('resultado-numerologia').style.display = 'block';
+                        }
+                    </script>
+                `;
+            }
+
+            loadIChingApp(window) {
+                window.querySelector('.window-content').innerHTML = `
+                    <div style="padding: 20px; text-align: center;">
+                        <h2>☯️ I Ching - Oráculo das Mutações</h2>
+                        <p>Faça uma pergunta e consulte a sabedoria milenar</p>
+                        <textarea placeholder="Digite sua pergunta..." style="width: 100%; height: 80px; margin: 20px 0; padding: 10px; background: #333; color: white; border: 1px solid var(--dourado); border-radius: 4px;"></textarea>
+                        <button onclick="consultarIChing()" style="padding: 12px 24px; background: var(--dourado); color: black; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">🎋 Consultar I Ching</button>
+                        <div id="resultado-iching" style="margin-top: 20px; display: none;">
+                            <div style="background: rgba(74, 14, 78, 0.3); padding: 20px; border-radius: 8px; margin-top: 20px;">
+                                <h3 id="hexagrama-nome">📿 Hexagrama</h3>
+                                <div id="hexagrama-visual" style="font-size: 24px; margin: 15px 0;"></div>
+                                <p id="hexagrama-significado"></p>
+                                <div id="hexagrama-conselho" style="margin-top: 15px; color: var(--dourado);"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function consultarIChing() {
+                            const hexagramas = [
+                                { nome: 'O Criativo', visual: '☰☰', significado: 'Força criativa primordial. Momento de ação e liderança.', conselho: 'Age com determinação, mas mantém a humildade.' },
+                                { nome: 'O Receptivo', visual: '☷☷', significado: 'Receptividade e aceitação. Tempo de paciência.', conselho: 'Aceita as circunstâncias e flui com elas.' },
+                                { nome: 'A Dificuldade Inicial', visual: '☳☵', significado: 'Novos começos enfrentam obstáculos.', conselho: 'Persevera através das dificuldades iniciais.' },
+                                { nome: 'A Loucura Juvenil', visual: '☶☵', significado: 'Inexperiência que busca orientação.', conselho: 'Busca sabedoria e aprende com os erros.' },
+                                { nome: 'A Espera', visual: '☰☵', significado: 'Paciência e preparação são necessárias.', conselho: 'Usa este tempo de espera para te fortalecer.' },
+                                { nome: 'O Conflito', visual: '☵☰', significado: 'Tensões e disputas estão presentes.', conselho: 'Evita confrontos desnecessários. Busca mediação.' }
+                            ];
+                            
+                            const hexagramaEscolhido = hexagramas[Math.floor(Math.random() * hexagramas.length)];
+                            
+                            document.getElementById('hexagrama-nome').textContent = \`📿 \${hexagramaEscolhido.nome}\`;
+                            document.getElementById('hexagrama-visual').textContent = hexagramaEscolhido.visual;
+                            document.getElementById('hexagrama-significado').textContent = hexagramaEscolhido.significado;
+                            document.getElementById('hexagrama-conselho').innerHTML = \`<strong>💫 Conselho:</strong> \${hexagramaEscolhido.conselho}\`;
+                            
+                            document.getElementById('resultado-iching').style.display = 'block';
+                        }
+                    </script>
+                `;
+            }
+
+            loadTaroApp(window) {
+                window.querySelector('.window-content').innerHTML = `
+                    <div style="padding: 20px; text-align: center;">
+                        <h2>🃏 Tarô Místico</h2>
+                        <p>Consulte as cartas sagradas para orientação</p>
+                        <div style="margin: 20px 0;">
+                            <button onclick="puxarCarta()" style="padding: 12px 24px; background: var(--dourado); color: black; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">🔮 Puxar Carta</button>
+                        </div>
+                        <div id="carta-resultado" style="display: none;">
+                            <div style="background: rgba(74, 14, 78, 0.3); padding: 20px; border-radius: 8px; margin: 20px 0;">
+                                <div id="carta-visual" style="font-size: 48px; margin: 15px 0;">🃏</div>
+                                <h3 id="carta-nome"></h3>
+                                <p id="carta-significado"></p>
+                                <div id="carta-conselho" style="margin-top: 15px; color: var(--dourado);"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function puxarCarta() {
+                            const cartas = [
+                                { nome: 'O Louco', significado: 'Novos começos, espontaneidade, fé no desconhecido.', conselho: 'Confie em sua intuição e dê o primeiro passo.' },
+                                { nome: 'O Mago', significado: 'Manifestação, poder pessoal, recursos disponíveis.', conselho: 'Você tem tudo que precisa para realizar seus objetivos.' },
+                                { nome: 'A Sacerdotisa', significado: 'Intuição, mistério, conhecimento oculto.', conselho: 'Olhe para dentro de si em busca de respostas.' },
+                                { nome: 'A Imperatriz', significado: 'Fertilidade, criatividade, abundância.', conselho: 'É tempo de nutrir seus projetos e relacionamentos.' },
+                                { nome: 'O Imperador', significado: 'Autoridade, estrutura, controle.', conselho: 'Assuma a liderança e organize sua vida.' },
+                                { nome: 'O Hierofante', significado: 'Tradição, ensino, orientação espiritual.', conselho: 'Busque sabedoria em fontes confiáveis.' },
+                                { nome: 'Os Amantes', significado: 'Relacionamentos, escolhas, harmonia.', conselho: 'Tome decisões baseadas no amor e na harmonia.' },
+                                { nome: 'O Carro', significado: 'Determinação, controle, vitória.', conselho: 'Mantenha o foco e siga em frente com determinação.' },
+                                { nome: 'A Força', significado: 'Coragem interior, paciência, compaixão.', conselho: 'Use sua força interior para superar desafios.' },
+                                { nome: 'O Eremita', significado: 'Introspecção, orientação interior, sabedoria.', conselho: 'Dedique tempo à reflexão e autoconhecimento.' }
+                            ];
+                            
+                            const cartaEscolhida = cartas[Math.floor(Math.random() * cartas.length)];
+                            
+                            document.getElementById('carta-nome').textContent = cartaEscolhida.nome;
+                            document.getElementById('carta-significado').textContent = cartaEscolhida.significado;
+                            document.getElementById('carta-conselho').innerHTML = \`<strong>✨ Mensagem:</strong> \${cartaEscolhida.conselho}\`;
+                            
+                            document.getElementById('carta-resultado').style.display = 'block';
+                            
+                            // Animação da carta
+                            const cartaVisual = document.getElementById('carta-visual');
+                            cartaVisual.style.transform = 'rotateY(180deg)';
+                            setTimeout(() => {
+                                cartaVisual.style.transform = 'rotateY(0deg)';
+                            }, 300);
+                        }
+                    </script>
+                `;
+            }
+        }
+
             updatePlanetaryHour() {
                 const now = new Date();
                 const elapsed = now - this.planetaryHour.startTime;
@@ -2946,6 +3327,31 @@
         document.addEventListener('DOMContentLoaded', () => {
             window.auroraOS = new AuroraOS();
             createSparkles();
+            
+            // Event listeners para ícones do desktop
+            const icons = document.querySelectorAll('.desktop-icon');
+            icons.forEach(icon => {
+                icon.addEventListener('dblclick', () => {
+                    const appName = icon.dataset.app;
+                    if (window.auroraOS && window.auroraOS.openApp) {
+                        window.auroraOS.openApp(appName);
+                    }
+                });
+            });
+
+            // Event listeners para menu Iniciar
+            const menuItems = document.querySelectorAll('.start-menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const appName = item.dataset.app;
+                    if (window.auroraOS && window.auroraOS.openApp) {
+                        window.auroraOS.openApp(appName);
+                    }
+                    // Fechar menu
+                    document.querySelector('.start-menu').classList.remove('show');
+                });
+            });
+            
             console.log('🌟 Aurora OS • MysticSoft Millennium Edition inicializado com sucesso!');
         });
     </script>
