@@ -129,6 +129,11 @@
             50% { opacity: 0.5; }
         }
 
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
         /* === DESKTOP === */
         .desktop {
             position: fixed;
@@ -711,6 +716,11 @@
     </div>
 
     <script>
+        // Variáveis globais
+        let selectedWallpaper = 'mystic';
+        let auroraOS = null;
+
+        // Classe principal do Aurora OS
         class AuroraOS {
             constructor() {
                 this.volumes = {
@@ -734,16 +744,28 @@
 
             setupEventListeners() {
                 // Boot screen
-                document.getElementById('boot-screen').addEventListener('click', () => this.startBoot());
+                const bootScreen = document.getElementById('boot-screen');
+                if (bootScreen) {
+                    bootScreen.addEventListener('click', () => this.startBoot());
+                }
                 
                 // Start button
-                document.getElementById('start-button').addEventListener('click', () => this.toggleStartMenu());
+                const startButton = document.getElementById('start-button');
+                if (startButton) {
+                    startButton.addEventListener('click', () => this.toggleStartMenu());
+                }
                 
                 // Volume icon
-                document.getElementById('volume-icon').addEventListener('click', () => this.toggleVolumePopup());
+                const volumeIcon = document.getElementById('volume-icon');
+                if (volumeIcon) {
+                    volumeIcon.addEventListener('click', () => this.toggleVolumePopup());
+                }
                 
                 // Clock
-                document.getElementById('clock').addEventListener('click', () => this.showPlanetaryHour());
+                const clock = document.getElementById('clock');
+                if (clock) {
+                    clock.addEventListener('click', () => this.showPlanetaryHour());
+                }
                 
                 // Desktop icons
                 document.querySelectorAll('.desktop-icon').forEach(icon => {
@@ -771,17 +793,29 @@
                 });
                 
                 // Volume sliders
-                document.getElementById('volume-afast').addEventListener('input', (e) => {
-                    this.volumes.afast = e.target.value;
-                    document.getElementById('volume-afast-value').textContent = e.target.value + '%';
-                    this.updateVolumeIcon();
-                });
+                const volumeAfast = document.getElementById('volume-afast');
+                if (volumeAfast) {
+                    volumeAfast.addEventListener('input', (e) => {
+                        this.volumes.afast = e.target.value;
+                        const valueSpan = document.getElementById('volume-afast-value');
+                        if (valueSpan) {
+                            valueSpan.textContent = e.target.value + '%';
+                        }
+                        this.updateVolumeIcon();
+                    });
+                }
                 
-                document.getElementById('volume-system').addEventListener('input', (e) => {
-                    this.volumes.system = e.target.value;
-                    document.getElementById('volume-system-value').textContent = e.target.value + '%';
-                    this.updateVolumeIcon();
-                });
+                const volumeSystem = document.getElementById('volume-system');
+                if (volumeSystem) {
+                    volumeSystem.addEventListener('input', (e) => {
+                        this.volumes.system = e.target.value;
+                        const valueSpan = document.getElementById('volume-system-value');
+                        if (valueSpan) {
+                            valueSpan.textContent = e.target.value + '%';
+                        }
+                        this.updateVolumeIcon();
+                    });
+                }
                 
                 // Wallpaper options
                 document.querySelectorAll('.wallpaper-option').forEach(option => {
@@ -793,10 +827,13 @@
                 });
                 
                 // Desktop right-click
-                document.getElementById('desktop').addEventListener('contextmenu', (e) => {
-                    e.preventDefault();
-                    this.showWallpaperSelector();
-                });
+                const desktop = document.getElementById('desktop');
+                if (desktop) {
+                    desktop.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        this.showWallpaperSelector();
+                    });
+                }
                 
                 // Click outside to close menus
                 document.addEventListener('click', (e) => {
@@ -813,14 +850,16 @@
                 const bootScreen = document.getElementById('boot-screen');
                 const desktop = document.getElementById('desktop');
                 
-                bootScreen.style.animation = 'fadeOut 1s ease-out forwards';
-                
-                setTimeout(() => {
-                    bootScreen.style.display = 'none';
-                    desktop.classList.add('show');
-                    this.playBootComplete();
-                    this.showAFASTNotification('🌟 Sistema Iniciado', 'Aurora OS • MysticSoft carregado com sucesso!');
-                }, 1000);
+                if (bootScreen && desktop) {
+                    bootScreen.style.animation = 'fadeOut 1s ease-out forwards';
+                    
+                    setTimeout(() => {
+                        bootScreen.style.display = 'none';
+                        desktop.classList.add('show');
+                        this.playBootComplete();
+                        this.showAFASTNotification('🌟 Sistema Iniciado', 'Aurora OS • MysticSoft carregado com sucesso!');
+                    }, 1000);
+                }
             }
 
             playBootComplete() {
@@ -854,51 +893,63 @@
                     month: '2-digit'
                 });
                 
-                document.querySelector('.clock-time').textContent = timeString;
-                document.querySelector('.clock-date').textContent = dateString;
+                const clockTime = document.querySelector('.clock-time');
+                const clockDate = document.querySelector('.clock-date');
+                
+                if (clockTime) clockTime.textContent = timeString;
+                if (clockDate) clockDate.textContent = dateString;
             }
 
             toggleStartMenu() {
                 const menu = document.getElementById('start-menu');
                 const button = document.getElementById('start-button');
                 
-                if (menu.classList.contains('show')) {
-                    this.hideStartMenu();
-                } else {
-                    menu.classList.add('show');
-                    button.classList.add('active');
+                if (menu && button) {
+                    if (menu.classList.contains('show')) {
+                        this.hideStartMenu();
+                    } else {
+                        menu.classList.add('show');
+                        button.classList.add('active');
+                    }
                 }
             }
 
             hideStartMenu() {
                 const menu = document.getElementById('start-menu');
                 const button = document.getElementById('start-button');
-                menu.classList.remove('show');
-                button.classList.remove('active');
+                
+                if (menu) menu.classList.remove('show');
+                if (button) button.classList.remove('active');
             }
 
             toggleVolumePopup() {
                 const popup = document.getElementById('volume-popup');
-                popup.classList.toggle('show');
+                if (popup) {
+                    popup.classList.toggle('show');
+                }
             }
 
             hideVolumePopup() {
                 const popup = document.getElementById('volume-popup');
-                popup.classList.remove('show');
+                if (popup) {
+                    popup.classList.remove('show');
+                }
             }
 
             updateVolumeIcon() {
                 const icon = document.getElementById('volume-icon');
-                const maxVolume = Math.max(this.volumes.afast, this.volumes.system);
-                
-                if (maxVolume === 0) {
-                    icon.textContent = '🔇';
-                } else if (maxVolume < 30) {
-                    icon.textContent = '🔈';
-                } else if (maxVolume < 70) {
-                    icon.textContent = '🔉';
-                } else {
-                    icon.textContent = '🔊';
+                if (icon) {
+                    const maxVolume = Math.max(this.volumes.afast, this.volumes.system);
+                    
+                    if (maxVolume === 0) {
+                        icon.textContent = '🔇';
+                    } else if (maxVolume < 30) {
+                        icon.textContent = '🔈';
+                    } else if (maxVolume < 70) {
+                        icon.textContent = '🔉';
+                    } else {
+                        icon.textContent = '🔊';
+                    }
                 }
             }
 
@@ -1007,22 +1058,6 @@
                                 <p id="carta-significado"></p>
                             </div>
                         </div>
-                        <script>
-                            function puxarCarta() {
-                                const cartas = [
-                                    { nome: 'O Louco', significado: 'Novos começos, espontaneidade, fé no desconhecido.' },
-                                    { nome: 'O Mago', significado: 'Manifestação, poder pessoal, recursos disponíveis.' },
-                                    { nome: 'A Sacerdotisa', significado: 'Intuição, mistério, conhecimento oculto.' },
-                                    { nome: 'O Imperador', significado: 'Autoridade, estrutura, controle.' },
-                                    { nome: 'A Força', significado: 'Coragem interior, paciência, compaixão.' }
-                                ];
-                                
-                                const carta = cartas[Math.floor(Math.random() * cartas.length)];
-                                document.getElementById('carta-nome').textContent = carta.nome;
-                                document.getElementById('carta-significado').textContent = carta.significado;
-                                document.getElementById('carta-resultado').style.display = 'block';
-                            }
-                        </script>
                     `
                 };
                 
@@ -1054,7 +1089,10 @@
                 windowElement.style.left = Math.random() * 200 + 50 + 'px';
                 windowElement.style.top = Math.random() * 100 + 50 + 'px';
                 
-                document.getElementById('desktop').appendChild(windowElement);
+                const desktop = document.getElementById('desktop');
+                if (desktop) {
+                    desktop.appendChild(windowElement);
+                }
                 
                 // Tornar arrastável
                 this.makeDraggable(windowElement);
@@ -1062,6 +1100,8 @@
 
             makeDraggable(element) {
                 const header = element.querySelector('.window-header');
+                if (!header) return;
+                
                 let isDragging = false;
                 let currentX;
                 let currentY;
@@ -1163,17 +1203,17 @@
             }
 
             showWallpaperSelector() {
-                document.getElementById('wallpaper-selector').classList.add('show');
+                const selector = document.getElementById('wallpaper-selector');
+                if (selector) {
+                    selector.classList.add('show');
+                }
             }
         }
 
-        // Variáveis globais
-        let selectedWallpaper = 'mystic';
-
         // Funções globais
         function testAFAST() {
-            if (window.auroraOS) {
-                window.auroraOS.showAFASTNotification('🧪 Teste AFÁST!', 'Sistema de proteção funcionando perfeitamente!');
+            if (auroraOS) {
+                auroraOS.showAFASTNotification('🧪 Teste AFÁST!', 'Sistema de proteção funcionando perfeitamente!');
             }
         }
 
@@ -1199,26 +1239,31 @@
 
         function applyWallpaper() {
             const desktop = document.getElementById('desktop');
-            desktop.classList.remove('wallpaper-mystic', 'wallpaper-cosmic', 'wallpaper-aurora');
-            desktop.classList.add(`wallpaper-${selectedWallpaper}`);
-            
-            localStorage.setItem('aurora-wallpaper', selectedWallpaper);
-            
-            if (window.auroraOS) {
-                const wallpaperNames = {
-                    'mystic': 'Místico',
-                    'cosmic': 'Cósmico',
-                    'aurora': 'Aurora Boreal'
-                };
-                window.auroraOS.showAFASTNotification('🖼️ Wallpaper Alterado', 
-                    `Papel de parede "${wallpaperNames[selectedWallpaper]}" aplicado com sucesso!`);
+            if (desktop) {
+                desktop.classList.remove('wallpaper-mystic', 'wallpaper-cosmic', 'wallpaper-aurora');
+                desktop.classList.add(`wallpaper-${selectedWallpaper}`);
+                
+                localStorage.setItem('aurora-wallpaper', selectedWallpaper);
+                
+                if (auroraOS) {
+                    const wallpaperNames = {
+                        'mystic': 'Místico',
+                        'cosmic': 'Cósmico',
+                        'aurora': 'Aurora Boreal'
+                    };
+                    auroraOS.showAFASTNotification('🖼️ Wallpaper Alterado', 
+                        `Papel de parede "${wallpaperNames[selectedWallpaper]}" aplicado com sucesso!`);
+                }
             }
             
             hideWallpaperSelector();
         }
 
         function hideWallpaperSelector() {
-            document.getElementById('wallpaper-selector').classList.remove('show');
+            const selector = document.getElementById('wallpaper-selector');
+            if (selector) {
+                selector.classList.remove('show');
+            }
         }
 
         function createSparkles() {
@@ -1240,29 +1285,40 @@
             }, 2000);
         }
 
+        function puxarCarta() {
+            const cartas = [
+                { nome: 'O Louco', significado: 'Novos começos, espontaneidade, fé no desconhecido.' },
+                { nome: 'O Mago', significado: 'Manifestação, poder pessoal, recursos disponíveis.' },
+                { nome: 'A Sacerdotisa', significado: 'Intuição, mistério, conhecimento oculto.' },
+                { nome: 'O Imperador', significado: 'Autoridade, estrutura, controle.' },
+                { nome: 'A Força', significado: 'Coragem interior, paciência, compaixão.' }
+            ];
+            
+            const carta = cartas[Math.floor(Math.random() * cartas.length)];
+            const nomeElement = document.getElementById('carta-nome');
+            const significadoElement = document.getElementById('carta-significado');
+            const resultadoElement = document.getElementById('carta-resultado');
+            
+            if (nomeElement) nomeElement.textContent = carta.nome;
+            if (significadoElement) significadoElement.textContent = carta.significado;
+            if (resultadoElement) resultadoElement.style.display = 'block';
+        }
+
         // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
-            window.auroraOS = new AuroraOS();
+            auroraOS = new AuroraOS();
             createSparkles();
             
             // Carregar wallpaper salvo
             const savedWallpaper = localStorage.getItem('aurora-wallpaper') || 'mystic';
             const desktop = document.getElementById('desktop');
-            desktop.classList.remove('wallpaper-mystic', 'wallpaper-cosmic', 'wallpaper-aurora');
-            desktop.classList.add(`wallpaper-${savedWallpaper}`);
+            if (desktop) {
+                desktop.classList.remove('wallpaper-mystic', 'wallpaper-cosmic', 'wallpaper-aurora');
+                desktop.classList.add(`wallpaper-${savedWallpaper}`);
+            }
             
             console.log('🌟 Aurora OS • MysticSoft Millennium Edition inicializado com sucesso!');
         });
-
-        // CSS adicional para fadeOut
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeOut {
-                from { opacity: 1; }
-                to { opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
