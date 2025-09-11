@@ -44,12 +44,20 @@
             z-index: 10000;
             cursor: pointer;
             overflow: hidden;
-            animation: bootGlow 4s ease-in-out infinite alternate;
+            animation: bootGlow 4s ease-in-out infinite alternate, tvStatic 0.1s infinite;
         }
 
         @keyframes bootGlow {
             0% { filter: brightness(1) saturate(1); }
             100% { filter: brightness(1.1) saturate(1.2); }
+        }
+
+        @keyframes tvStatic {
+            0% { filter: brightness(1) contrast(1); }
+            25% { filter: brightness(1.02) contrast(1.01); }
+            50% { filter: brightness(0.98) contrast(0.99); }
+            75% { filter: brightness(1.01) contrast(1.02); }
+            100% { filter: brightness(1) contrast(1); }
         }
 
         .boot-screen::before {
@@ -86,13 +94,19 @@
                 radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 0.2), transparent);
             background-repeat: repeat;
             background-size: 200px 100px;
-            animation: sparkle 8s linear infinite;
+            animation: sparkle 8s linear infinite, tvScanlines 0.05s infinite;
             pointer-events: none;
         }
 
         @keyframes sparkle {
             0% { transform: translateY(0px); }
             100% { transform: translateY(-100px); }
+        }
+
+        @keyframes tvScanlines {
+            0% { opacity: 0.8; }
+            50% { opacity: 0.9; }
+            100% { opacity: 0.8; }
         }
 
         .boot-logo {
@@ -273,23 +287,27 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 60px;
+            height: 40px;
             background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
             border-top: 2px solid #ffffff;
             display: flex;
             align-items: center;
             padding: 0 10px;
-            box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #404040;
-        }
-
+            z-index: 1000;
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 14px;
         .start-button {
             background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
             border: 2px outset #c0c0c0;
-            padding: 8px 16px;
+            padding: 10px 20px;
             font-weight: bold;
             color: #000;
             cursor: pointer;
             margin-right: 10px;
+            font-size: 14px;
+            height: 32px;
+            display: flex;
+            align-items: center;
         }
 
         .start-button:active {
@@ -303,6 +321,7 @@
             padding: 8px 12px;
             font-size: 12px;
             color: #000;
+            cursor: pointer;
         }
 
         /* === ÍCONES DO DESKTOP === */
@@ -1358,19 +1377,142 @@
                 const desktop = document.getElementById('desktop');
                 const progressFill = document.getElementById('boot-progress');
                 
+                // Iniciar sons nostálgicos
+                this.playBootSounds();
+                
                 let progress = 0;
                 const bootInterval = setInterval(() => {
-                    progress += Math.random() * 20;
+                    progress += Math.random() * 15 + 5; // Progresso mais lento para dar tempo dos sons
                     progressFill.style.width = Math.min(progress, 100) + '%';
+                    
+                    // Adicionar ruídos de TV antiga durante o carregamento
+                    if (Math.random() < 0.3) {
+                        this.playTVStatic();
+                    }
                     
                     if (progress >= 100) {
                         clearInterval(bootInterval);
                         setTimeout(() => {
                             bootScreen.style.display = 'none';
                             desktop.classList.add('active');
-                        }, 500);
+                            // Som de conclusão
+                            this.playBootComplete();
+                        }, 1000);
                     }
                 }, 200);
+            }
+            
+            // Função para reproduzir sons de boot nostálgicos
+            playBootSounds() {
+                // Som de dial-up da internet
+                this.playDialUpSound();
+                
+                // Ruído de TV antiga
+                setTimeout(() => this.playTVStatic(), 500);
+                setTimeout(() => this.playTVStatic(), 1500);
+                setTimeout(() => this.playTVStatic(), 2500);
+            }
+            
+            // Som de dial-up sintetizado
+            playDialUpSound() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    // Sequência de tons do dial-up
+                    const dialUpSequence = [
+                        { freq: 2100, duration: 0.3 },
+                        { freq: 1800, duration: 0.2 },
+                        { freq: 1200, duration: 0.4 },
+                        { freq: 2400, duration: 0.3 },
+                        { freq: 1650, duration: 0.5 },
+                        { freq: 300, duration: 0.2 },
+                        { freq: 3000, duration: 0.3 }
+                    ];
+                    
+                    let currentTime = audioContext.currentTime;
+                    
+                    dialUpSequence.forEach((tone, index) => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        oscillator.frequency.setValueAtTime(tone.freq, currentTime);
+                        oscillator.type = 'square';
+                        
+                        gainNode.gain.setValueAtTime(0, currentTime);
+                        gainNode.gain.linearRampToValueAtTime(0.1, currentTime + 0.01);
+                        gainNode.gain.linearRampToValueAtTime(0, currentTime + tone.duration);
+                        
+                        oscillator.start(currentTime);
+                        oscillator.stop(currentTime + tone.duration);
+                        
+                        currentTime += tone.duration + 0.1;
+                    });
+                } catch (e) {
+                    console.log('Áudio não suportado:', e);
+                }
+            }
+            
+            // Som de TV antiga com ruído
+            playTVStatic() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const bufferSize = audioContext.sampleRate * 0.1; // 0.1 segundos
+                    const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    
+                    // Gerar ruído branco
+                    for (let i = 0; i < bufferSize; i++) {
+                        data[i] = (Math.random() * 2 - 1) * 0.05; // Volume baixo
+                    }
+                    
+                    const source = audioContext.createBufferSource();
+                    const gainNode = audioContext.createGain();
+                    
+                    source.buffer = buffer;
+                    source.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    gainNode.gain.setValueAtTime(0.02, audioContext.currentTime);
+                    
+                    source.start();
+                } catch (e) {
+                    console.log('Áudio não suportado:', e);
+                }
+            }
+            
+            // Som de conclusão do boot
+            playBootComplete() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    // Acorde de conclusão (estilo Windows)
+                    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                    
+                    notes.forEach((freq, index) => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+                        oscillator.type = 'sine';
+                        
+                        const startTime = audioContext.currentTime + (index * 0.1);
+                        
+                        gainNode.gain.setValueAtTime(0, startTime);
+                        gainNode.gain.linearRampToValueAtTime(0.1, startTime + 0.01);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + 1);
+                        
+                        oscillator.start(startTime);
+                        oscillator.stop(startTime + 1);
+                    });
+                } catch (e) {
+                    console.log('Áudio não suportado:', e);
+                }
             }
 
             updateClock() {
@@ -1979,6 +2121,7 @@
             }
             
             playAudioForMessage(message) {
+                // Tentar reproduzir áudio específico primeiro
                 let audioFile = null;
                 
                 if (message.includes('Bem vindo ao AFÁSTE')) {
@@ -1988,15 +2131,80 @@
                 }
                 
                 if (audioFile) {
-                    try {
-                        const audio = new Audio(audioFile);
-                        audio.volume = 0.7;
-                        audio.play().catch(e => {
-                            console.log('Erro ao reproduzir áudio:', e);
-                        });
-                    } catch (e) {
-                        console.log('Erro ao carregar áudio:', e);
+                    const audio = new Audio(audioFile);
+                    audio.volume = 0.7;
+                    audio.play().catch(e => {
+                        console.log('Erro ao reproduzir áudio específico:', e);
+                        // Fallback para síntese de voz
+                        this.synthesizeVoice(message);
+                    });
+                } else {
+                    // Usar síntese de voz para outras mensagens
+                    this.synthesizeVoice(message);
+                }
+            }
+            
+            synthesizeVoice(message) {
+                try {
+                    // Usar Web Speech API para síntese de voz
+                    if ('speechSynthesis' in window) {
+                        const utterance = new SpeechSynthesisUtterance();
+                        
+                        // Limpar texto para síntese
+                        let cleanText = message.replace(/[>🎤🔊🗑️❓⏹️]/g, '').trim();
+                        
+                        // Traduzir algumas mensagens específicas
+                        if (cleanText.includes('AFÁSTE')) {
+                            cleanText = cleanText.replace('AFÁSTE', 'A-F-A-S-T-E');
+                        }
+                        
+                        utterance.text = cleanText;
+                        utterance.lang = 'pt-BR';
+                        utterance.rate = 0.9;
+                        utterance.pitch = 1.1;
+                        utterance.volume = 0.8;
+                        
+                        // Tentar encontrar voz em português
+                        const voices = speechSynthesis.getVoices();
+                        const ptVoice = voices.find(voice => 
+                            voice.lang.includes('pt') || voice.lang.includes('BR')
+                        );
+                        
+                        if (ptVoice) {
+                            utterance.voice = ptVoice;
+                        }
+                        
+                        speechSynthesis.speak(utterance);
+                    } else {
+                        // Fallback para beep sintético
+                        this.playNotificationBeep();
                     }
+                } catch (e) {
+                    console.log('Erro na síntese de voz:', e);
+                    this.playNotificationBeep();
+                }
+            }
+            
+            playNotificationBeep() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.01);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                } catch (e) {
+                    console.log('Erro ao reproduzir beep:', e);
                 }
             }
         }
