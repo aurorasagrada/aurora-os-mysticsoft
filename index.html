@@ -238,15 +238,73 @@
         /* === DESKTOP === */
         .desktop {
             display: none;
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100vw;
             height: 100vh;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
-            overflow: hidden;
+            z-index: 1;
         }
 
         .desktop.active {
             display: block;
+        }
+
+        /* === ÍCONES DO DESKTOP === */
+        .desktop-icons {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 2;
+        }
+
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+            transition: background 0.2s;
+            width: 70px;
+            height: 70px;
+            background: transparent;
+        }
+
+        .desktop-icon:hover {
+            background: rgba(0, 0, 255, 0.2);
+        }
+
+        .icon-image {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            image-rendering: pixelated;
+        }
+
+        .icon-image img {
+            width: 32px;
+            height: 32px;
+            image-rendering: pixelated;
+        }
+
+        .icon-label {
+            color: white;
+            font-size: 10px;
+            text-align: center;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.8);
+            font-weight: normal;
+            line-height: 1.1;
+            max-width: 65px;
+            word-wrap: break-word;
         }
 
         /* === BARRA DE TAREFAS === */
@@ -1188,28 +1246,28 @@
     <div class="desktop" id="desktop">
         <!-- Ícones do Desktop -->
         <div class="desktop-icons">
-            <div class="desktop-icon" data-app="astromagick">
+            <div class="desktop-icon" ondblclick="openApp('astromagick')">
                 <img src="icons/astromagick.png" alt="AstroMágick" class="icon-image">
                 <div class="icon-label">AstroMágick</div>
             </div>
-            <div class="desktop-icon" data-app="aurora-player">
+            <div class="desktop-icon" ondblclick="openApp('aurora-player')">
                 <div class="icon-image">🎵</div>
                 <div class="icon-label">Aurora Player</div>
             </div>
-            <div class="desktop-icon" data-app="witch-tv">
+            <div class="desktop-icon" ondblclick="openApp('witch-tv')">
                 <img src="icons/witch-tv.png" alt="Witch.TV" class="icon-image">
                 <div class="icon-label">Witch.TV</div>
             </div>
-            <div class="desktop-icon" data-app="afast">
-                <img src="icons/afast.png" alt="AFAST!" class="icon-image">
-                <div class="icon-label">AFAST!</div>
+            <div class="desktop-icon" ondblclick="openApp('afast')">
+                <img src="icons/afast.png" alt="AFÁST!" class="icon-image">
+                <div class="icon-label">AFÁST!</div>
             </div>
-            <div class="desktop-icon" data-app="tarot">
+            <div class="desktop-icon" ondblclick="openApp('tarot')">
                 <div class="icon-image">🔮</div>
                 <div class="icon-label">Tarô</div>
             </div>
-            <div class="desktop-icon" data-app="books">
-                <img src="icons/livros-interativos.png" alt="Livros Interativos" class="icon-image">
+            <div class="desktop-icon" ondblclick="openApp('books')">
+                <img src="icons/livros-interativos.png" alt="Livros" class="icon-image">
                 <div class="icon-label">Livros Interativos</div>
             </div>
         </div>
