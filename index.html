@@ -3040,13 +3040,201 @@
             const dayName = date.toLocaleDateString('pt-BR', { weekday: 'long' });
             
             alert(`${day}/${month + 1}/${year} - ${dayName}\n\nInfluências Astrológicas:\n• Energia do dia baseada na Lua\n• Hora planetária variável\n• Consulte o AstroMágick para detalhes completos`);
+                // === SISTEMA DE NOTIFICAÇÕES AFÁST! ===
+        const afastNotifications = {
+            // Eventos críticos - usam "Uma ameaça foi detectada"
+            critical: [
+                {
+                    type: 'retrograde',
+                    alert: 'Uma ameaça foi detectada.',
+                    explanation: 'Mercúrio está retrógrado. Comunicação e tecnologia exigem cautela.',
+                    icon: '☿'
+                },
+                {
+                    type: 'retrograde',
+                    alert: 'Uma ameaça foi detectada.',
+                    explanation: 'Vênus retrógrada revisa afetos, desejos e valores.',
+                    icon: '♀'
+                },
+                {
+                    type: 'retrograde',
+                    alert: 'Uma ameaça foi detectada.',
+                    explanation: 'Marte retrógrado pede cautela em conflitos e energia vital.',
+                    icon: '♂'
+                },
+                {
+                    type: 'void-moon',
+                    alert: 'Uma ameaça foi detectada.',
+                    explanation: 'A Lua está fora de curso até 23h45. Evite inícios importantes.',
+                    icon: '🌑'
+                },
+                {
+                    type: 'eclipse',
+                    alert: 'Uma ameaça foi detectada.',
+                    explanation: 'A Lua encobre o Sol. Portais de transformação estão ativos.',
+                    icon: '🌑'
+                },
+                {
+                    type: 'eclipse',
+                    alert: 'Uma ameaça foi detectada.',
+                    explanation: 'A sombra da Terra cobre a Lua. Revelações ocultas emergem.',
+                    icon: '🌕'
+                }
+            ],
+            
+            // Eventos neutros/positivos - usam frases específicas
+            neutral: [
+                {
+                    type: 'lunar-phase',
+                    alert: 'Uma mudança lunar foi detectada.',
+                    explanation: 'A Lua agora é Nova. Tempo de começos e intenções.',
+                    icon: '🌑'
+                },
+                {
+                    type: 'lunar-phase',
+                    alert: 'A Lua alterou sua face.',
+                    explanation: 'A Lua Cheia desperta revelações e plenitude.',
+                    icon: '🌕'
+                },
+                {
+                    type: 'planetary-ingress',
+                    alert: 'Um ingresso planetário foi detectado.',
+                    explanation: 'O Sol entrou em Virgem. Organização e clareza ganham força.',
+                    icon: '☉'
+                },
+                {
+                    type: 'planetary-ingress',
+                    alert: 'Os astros mudaram de signo.',
+                    explanation: 'Vênus ingressou em Escorpião. Paixões intensas e magnéticas emergem.',
+                    icon: '♀'
+                }
+            ]
+        };
+
+        // Função para falar com voz feminina estilo AVAST
+        function speakAFASTAlert(alert, explanation) {
+            if ('speechSynthesis' in window) {
+                // Cancelar qualquer fala anterior
+                speechSynthesis.cancel();
+                
+                // Configurar voz feminina grave
+                const utterance = new SpeechSynthesisUtterance(`${alert} ${explanation}`);
+                utterance.rate = 0.7; // Velocidade moderada
+                utterance.pitch = 0.8; // Tom mais grave
+                utterance.volume = 0.9;
+                
+                // Tentar encontrar voz feminina em português
+                const voices = speechSynthesis.getVoices();
+                const femaleVoice = voices.find(voice => 
+                    voice.lang.includes('pt') && voice.name.toLowerCase().includes('female')
+                ) || voices.find(voice => 
+                    voice.lang.includes('pt')
+                ) || voices[0];
+                
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                }
+                
+                // Falar com pausa entre alerta e explicação
+                const alertUtterance = new SpeechSynthesisUtterance(alert);
+                alertUtterance.rate = 0.6;
+                alertUtterance.pitch = 0.7;
+                alertUtterance.volume = 1.0;
+                if (femaleVoice) alertUtterance.voice = femaleVoice;
+                
+                const explanationUtterance = new SpeechSynthesisUtterance(explanation);
+                explanationUtterance.rate = 0.8;
+                explanationUtterance.pitch = 0.9;
+                explanationUtterance.volume = 0.8;
+                if (femaleVoice) explanationUtterance.voice = femaleVoice;
+                
+                // Falar alerta primeiro, depois explicação
+                speechSynthesis.speak(alertUtterance);
+                
+                alertUtterance.onend = () => {
+                    setTimeout(() => {
+                        speechSynthesis.speak(explanationUtterance);
+                    }, 500); // Pausa de 500ms entre alerta e explicação
+                };
+                
+            } else {
+                // Fallback: beep sintético
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 1);
+            }
+        }
+
+        // Função para mostrar notificação AFÁST! com voz
+        function showAFASTNotification(notification) {
+            // Mostrar notificação visual MSN
+            msnSystem.showAstrologicalAlert(
+                `${notification.icon} AFÁST! Sistema`,
+                `${notification.alert} ${notification.explanation}`
+            );
+            
+            // Reproduzir alerta de voz
+            setTimeout(() => {
+                speakAFASTAlert(notification.alert, notification.explanation);
+            }, 1000);
+        }
+
+        // Sistema de alertas astrológicos automáticos
+        function startAFASTAlerts() {
+            // Alerta de boas-vindas
+            setTimeout(() => {
+                const welcomeAlert = {
+                    alert: 'Sistema AFÁST ativado.',
+                    explanation: 'Monitoramento astrológico em funcionamento.',
+                    icon: '🗣️'
+                };
+                showAFASTNotification(welcomeAlert);
+            }, 5000);
+            
+            // Alertas periódicos baseados em eventos astrológicos
+            setInterval(() => {
+                const now = new Date();
+                const hour = now.getHours();
+                const minute = now.getMinutes();
+                
+                // Verificar eventos críticos em horários específicos
+                if (hour === 12 && minute === 0) { // Meio-dia
+                    const criticalAlert = afastNotifications.critical[
+                        Math.floor(Math.random() * afastNotifications.critical.length)
+                    ];
+                    showAFASTNotification(criticalAlert);
+                }
+                
+                // Verificar eventos neutros em outros horários
+                if (hour === 18 && minute === 0) { // 18h
+                    const neutralAlert = afastNotifications.neutral[
+                        Math.floor(Math.random() * afastNotifications.neutral.length)
+                    ];
+                    showAFASTNotification(neutralAlert);
+                }
+                
+                // Alertas aleatórios baseados em aspectos astrológicos
+                if (Math.random() < 0.1) { // 10% de chance a cada verificação
+                    const allAlerts = [...afastNotifications.critical, ...afastNotifications.neutral];
+                    const randomAlert = allAlerts[Math.floor(Math.random() * allAlerts.length)];
+                    showAFASTNotification(randomAlert);
+                }
+                
+            }, 60000); // Verificar a cada minuto
         }
 
         // === SISTEMA DE NOTIFICAÇÕES MSN ===
-        class MSNNotificationSystem {
-            constructor() {
-                this.notifications = [];
-                this.nextId = 1;
+        const msnSystem = {
             }
 
             showThreatAlert(title, message) {
@@ -3264,6 +3452,11 @@
             if (typeof AuroraOS !== 'undefined') {
                 window.auroraOS = new AuroraOS();
             }
+            
+            // Inicializar sistema AFÁST! de alertas
+            setTimeout(() => {
+                startAFASTAlerts();
+            }, 8000); // Iniciar após 8 segundos
             
             // Configurar botão Iniciar
             const startButton = document.getElementById('start-button');
