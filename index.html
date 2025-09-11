@@ -852,63 +852,153 @@
         }
 
         /* === BARRA DE TAREFAS === */
+           /* === NOVA BARRA DE TAREFAS WHIMSIGOTH === */
+        :root {
+            --vinho: #3e0a29;
+            --salvia: #b2d1b1;
+            --azul: #0b1836;
+            --dourado: #f0aa53;
+            --vidro: rgba(43, 25, 63, 0.7);
+            --borda: rgba(240, 170, 83, 0.35);
+            --bg: #0b0a12;
+            --txt: #e6e2ef;
+            --muted: #b2d1b1cc;
+        }
+
         .taskbar {
             position: fixed;
-            bottom: 0;
             left: 0;
             right: 0;
-            height: 40px;
-            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border-top: 2px solid #ffffff;
+            bottom: 0;
+            height: 46px;
             display: flex;
             align-items: center;
-            padding: 0 10px;
-            z-index: 1000;
+            gap: 8px;
+            padding: 6px 10px;
+            background: linear-gradient(180deg, rgba(62, 10, 41, 0.9), rgba(11, 24, 54, 0.9));
+            border-top: 1px solid var(--borda);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
             font-family: 'MS Sans Serif', sans-serif;
-            font-size: 14px;
-        .start-button {
-            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border: 2px outset #c0c0c0;
-            padding: 10px 20px;
-            font-weight: bold;
-            color: #000;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 1px solid var(--borda);
+            border-radius: 10px;
+            color: var(--salvia);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
             cursor: pointer;
-            margin-right: 10px;
-            font-size: 14px;
-            height: 32px;
+            user-select: none;
+            font-size: 12px;
+        }
+
+        .btn:hover {
+            border-color: var(--dourado);
+            color: #ffe9c2;
+        }
+
+        .start {
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .dock {
             display: flex;
             align-items: center;
+            gap: 6px;
+            flex: 1;
+            overflow: auto;
         }
 
-        .start-button:active {
-            border: 2px inset #c0c0c0;
+        .dock .icon {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--borda);
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 16px;
         }
 
-        .clock-container {
+        .dock .icon:hover {
+            border-color: var(--dourado);
+        }
+
+        .tray {
             margin-left: auto;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 10px;
         }
 
-        .planetary-icon {
-            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border: 1px inset #c0c0c0;
-            padding: 6px;
-            font-size: 16px;
-            color: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 32px;
+        .tray .sep {
+            width: 1px;
             height: 24px;
-            cursor: pointer;
+            background: var(--borda);
+            opacity: 0.6;
         }
 
         .clock {
-            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border: 1px inset #c0c0c0;
-            padding: 8px 12px;
+            min-width: 88px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+            color: var(--salvia);
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .clock:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--dourado);
+        }
+
+        /* Controles de Volume */
+        .vol {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .vol label {
+            font-size: 0.85rem;
+            color: var(--muted);
+            min-width: 50px;
+        }
+
+        input[type=range] {
+            accent-color: var(--dourado);
+            width: 60px;
+            height: 4px;
+        }
+
+        /* Ícone Planetário */
+        .planetary-icon {
+            font-size: 18px;
+            color: var(--dourado);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            animation: planetaryGlow 3s infinite alternate;
+        }
+
+        .planetary-icon:hover {
+            background: rgba(240, 170, 83, 0.2);
+            transform: scale(1.1);
+        }
+
+        @keyframes planetaryGlow {
+            from { text-shadow: 0 0 5px var(--dourado); }
+            to { text-shadow: 0 0 15px var(--dourado), 0 0 25px var(--dourado); }
+        }     padding: 8px 12px;
             font-size: 12px;
             color: #000;
             cursor: pointer;
@@ -1865,14 +1955,46 @@
 
 
 
-        <!-- Barra de Tarefas -->
-        <div class="taskbar">
-            <div class="start-button" id="start-button">Iniciar</div>
-            <div class="clock-container">
-                <div class="planetary-icon" id="planetary-icon" title="Hora Planetária">☉</div>
-                <div class="clock" id="clock">00:00</div>
+    <!-- NOVA BARRA DE TAREFAS WHIMSIGOTH -->
+    <div class="taskbar">
+        <!-- Botão Iniciar -->
+        <div class="btn start" id="startButton">
+            🌟 Iniciar
+        </div>
+
+        <!-- Dock de Aplicações -->
+        <div class="dock" id="dock">
+            <!-- Ícones das aplicações abertas aparecerão aqui -->
+        </div>
+
+        <!-- Bandeja do Sistema -->
+        <div class="tray">
+            <!-- Controles de Volume -->
+            <div class="vol">
+                <label>AFÁST!</label>
+                <input type="range" id="afastVolume" min="0" max="100" value="75">
+            </div>
+            
+            <div class="sep"></div>
+            
+            <div class="vol">
+                <label>Sistema</label>
+                <input type="range" id="systemVolume" min="0" max="100" value="50">
+            </div>
+
+            <div class="sep"></div>
+
+            <!-- Ícone Planetário -->
+            <div class="planetary-icon" id="planetaryIcon" title="Hora Planetária Atual">
+                ☉
+            </div>
+
+            <!-- Relógio -->
+            <div class="clock" id="clock" title="Clique para abrir Calendário Astrológico">
+                00:00
             </div>
         </div>
+    </div>
     </div>
 
     <!-- Calendário Astrológico -->
