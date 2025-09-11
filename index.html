@@ -110,52 +110,39 @@
         }
 
         .boot-logo {
-            width: 200px;
-            height: 200px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
             position: relative;
             animation: logoFloat 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
         }
 
         @keyframes logoFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(2deg); }
-        }
-
-        .boot-logo::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 50%;
-            animation: logoRing 4s linear infinite;
-        }
-
-        @keyframes logoRing {
-            0% { transform: rotate(0deg) scale(1); opacity: 0.3; }
-            50% { transform: rotate(180deg) scale(1.1); opacity: 0.6; }
-            100% { transform: rotate(360deg) scale(1); opacity: 0.3; }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
         }
 
         .boot-title {
-            font-size: 36px;
+            font-size: 48px;
             color: var(--dourado);
-            margin-bottom: 20px;
+            margin-bottom: 5px;
             text-shadow: 
-                0 0 10px var(--dourado),
-                0 0 20px rgba(255, 215, 0, 0.5),
-                0 0 30px rgba(255, 215, 0, 0.3);
-            animation: titlePulse 2s ease-in-out infinite;
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 10px var(--dourado);
             font-weight: bold;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            font-family: 'MS Sans Serif', sans-serif;
+        }
+
+        .boot-version {
+            font-size: 24px;
+            color: #c0c0c0;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            font-weight: normal;
+            letter-spacing: 1px;
+            font-family: 'MS Sans Serif', sans-serif;
         }
 
         @keyframes titlePulse {
@@ -164,83 +151,63 @@
         }
 
         .boot-subtitle {
-            font-size: 16px;
-            color: var(--pergaminho);
-            margin-bottom: 30px;
-            opacity: 0.9;
-            text-align: center;
-            animation: subtitleFade 3s ease-in-out infinite;
+            font-size: 18px;
+            color: #c0c0c0;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            font-family: 'MS Sans Serif', sans-serif;
         }
 
-        @keyframes subtitleFade {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
+        .boot-progress-container {
+            margin-bottom: 30px;
         }
 
         .boot-progress {
-            width: 350px;
-            height: 12px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 6px;
+            width: 400px;
+            height: 20px;
+            background: #000080;
+            border: 2px inset #c0c0c0;
+            margin-bottom: 10px;
+            position: relative;
             overflow: hidden;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            box-shadow: 
-                inset 0 0 10px rgba(0, 0, 0, 0.3),
-                0 0 10px rgba(255, 215, 0, 0.2);
         }
 
         .boot-progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, 
-                var(--dourado) 0%, 
-                #ffd700 25%, 
-                #ffed4e 50%, 
-                #ffd700 75%, 
-                var(--dourado) 100%);
+            background: linear-gradient(90deg, #0000ff 0%, #4040ff 50%, #8080ff 100%);
             width: 0%;
-            transition: width 0.3s ease;
-            animation: progressGlow 2s ease-in-out infinite;
+            transition: width 0.5s ease;
             position: relative;
         }
 
-        @keyframes progressGlow {
-            0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
-            50% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
-        }
-
-        .boot-progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.3) 50%, 
-                transparent 100%);
-            animation: progressShine 1.5s ease-in-out infinite;
-        }
-
-        @keyframes progressShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        .boot-status {
+            font-size: 14px;
+            color: #c0c0c0;
+            text-align: left;
+            margin: 0;
+            font-family: 'MS Sans Serif', sans-serif;
         }
 
         .boot-hint {
-            color: var(--pergaminho);
-            opacity: 0.8;
-            font-size: 16px;
-            text-align: center;
-            animation: hintBlink 2s ease-in-out infinite;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-            font-style: italic;
+            font-size: 14px;
+            color: #c0c0c0;
+            margin-bottom: 20px;
+            font-family: 'MS Sans Serif', sans-serif;
         }
 
-        @keyframes hintBlink {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
+        .boot-copyright {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        .boot-copyright p {
+            font-size: 12px;
+            color: #808080;
+            margin: 2px 0;
+            font-family: 'MS Sans Serif', sans-serif;
         }
 
         .boot-orbs {
@@ -990,14 +957,22 @@
         <div class="boot-orbs" id="boot-orbs"></div>
         <div class="boot-content">
             <div class="boot-logo">
-                <img src="icons/MysticSoft.png" alt="MysticSoft" style="width: 80px; height: 80px; image-rendering: pixelated;">
+                <img src="icons/MysticSoft.png" alt="MysticSoft" style="width: 120px; height: 120px; image-rendering: pixelated; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));">
             </div>
-            <h1 class="boot-title">MysticSoft v1.0</h1>
-            <p class="boot-subtitle">Sistema Operacional Místico<br>Desperte os Poderes Ancestrais</p>
-            <div class="boot-progress">
-                <div class="boot-progress-fill" id="boot-progress"></div>
+            <h1 class="boot-title">MysticSoft</h1>
+            <h2 class="boot-version">Millennium Edition</h2>
+            <p class="boot-subtitle">Sistema Operacional Místico</p>
+            <div class="boot-progress-container">
+                <div class="boot-progress">
+                    <div class="boot-progress-fill" id="boot-progress"></div>
+                </div>
+                <p class="boot-status" id="boot-status">Inicializando sistema...</p>
             </div>
-            <p class="boot-hint">✨ Clique para iniciar a conjuração mágica ✨</p>
+            <p class="boot-hint">Clique para iniciar</p>
+            <div class="boot-copyright">
+                <p>Copyright © 2025 MysticSoft Corporation</p>
+                <p>Todos os direitos reservados</p>
+            </div>
         </div>
     </div>
 
@@ -1376,30 +1351,52 @@
                 const bootScreen = document.getElementById('boot-screen');
                 const desktop = document.getElementById('desktop');
                 const progressFill = document.getElementById('boot-progress');
+                const statusText = document.getElementById('boot-status');
                 
                 // Iniciar sons nostálgicos
                 this.playBootSounds();
                 
+                // Mensagens de status do Windows ME
+                const bootMessages = [
+                    'Inicializando sistema...',
+                    'Carregando drivers de dispositivo...',
+                    'Verificando memória...',
+                    'Inicializando serviços místicos...',
+                    'Carregando interface gráfica...',
+                    'Conectando com planos astrais...',
+                    'Ativando proteções mágicas...',
+                    'Sistema pronto!'
+                ];
+                
                 let progress = 0;
+                let messageIndex = 0;
+                
                 const bootInterval = setInterval(() => {
-                    progress += Math.random() * 15 + 5; // Progresso mais lento para dar tempo dos sons
+                    progress += Math.random() * 12 + 3; // Progresso mais realista
                     progressFill.style.width = Math.min(progress, 100) + '%';
                     
-                    // Adicionar ruídos de TV antiga durante o carregamento
-                    if (Math.random() < 0.3) {
+                    // Atualizar mensagem de status
+                    if (messageIndex < bootMessages.length && progress > (messageIndex + 1) * 12.5) {
+                        statusText.textContent = bootMessages[messageIndex];
+                        messageIndex++;
+                    }
+                    
+                    // Adicionar ruídos de TV antiga ocasionalmente
+                    if (Math.random() < 0.2) {
                         this.playTVStatic();
                     }
                     
                     if (progress >= 100) {
                         clearInterval(bootInterval);
+                        statusText.textContent = 'Sistema pronto!';
                         setTimeout(() => {
                             bootScreen.style.display = 'none';
                             desktop.classList.add('active');
                             // Som de conclusão
                             this.playBootComplete();
-                        }, 1000);
+                        }, 1500);
                     }
-                }, 200);
+                }, 300);
             }
             
             // Função para reproduzir sons de boot nostálgicos
