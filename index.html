@@ -995,13 +995,94 @@
             transform: scale(1.1);
         }
 
-        @keyframes planetaryGlow {
-            from { text-shadow: 0 0 5px var(--dourado); }
-            to { text-shadow: 0 0 15px var(--dourado), 0 0 25px var(--dourado); }
-        }     padding: 8px 12px;
-            font-size: 12px;
-            color: #000;
+        /* === SISTEMA DE NOTIFICAÇÕES CONTROLADO === */
+        .toast {
+            position: fixed;
+            right: 16px;
+            bottom: 64px;
+            min-width: 260px;
+            max-width: 360px;
+            padding: 12px 14px;
+            border: 1px solid var(--borda);
+            border-radius: 12px;
+            background: rgba(18, 14, 26, 0.95);
+            color: var(--txt);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: 0.25s ease;
+            z-index: 10000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast .title {
+            font-family: "Cinzel Decorative", serif;
+            color: #ffe9c2;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .toast .meta {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .badge-dot {
+            display: inline-flex;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1px solid var(--borda);
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25) inset;
+        }
+
+        .badge-green {
+            background: #25d366;
+        }
+
+        .badge-red {
+            background: #dc3545;
+        }
+
+        /* Controles AFÁST! */
+        .afast-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .afast-btn {
+            padding: 4px 8px;
+            border: 1px solid var(--borda);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--salvia);
             cursor: pointer;
+            font-size: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .afast-btn:hover {
+            border-color: var(--dourado);
+            color: #ffe9c2;
+        }
+
+        .afast-btn.active {
+            background: var(--dourado);
+            color: #000;
+        }
+
+        .connection-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            color: var(--muted);
+        }
         }
 
         /* === CALENDÁRIO ASTROLÓGICO === */
@@ -1969,6 +2050,22 @@
 
         <!-- Bandeja do Sistema -->
         <div class="tray">
+            <!-- Controles AFÁST! -->
+            <div class="afast-controls">
+                <div class="afast-btn" id="afastToggle" title="Ligar/Desligar AFÁST!">
+                    AF
+                </div>
+                <div class="afast-btn" id="dndToggle" title="Não Perturbar">
+                    NPD
+                </div>
+                <div class="connection-indicator">
+                    <div class="badge-dot badge-red" id="connectionStatus"></div>
+                    <span>AstroMágick</span>
+                </div>
+            </div>
+
+            <div class="sep"></div>
+
             <!-- Controles de Volume -->
             <div class="vol">
                 <label>AFÁST!</label>
@@ -1994,6 +2091,12 @@
                 00:00
             </div>
         </div>
+    </div>
+
+    <!-- Toast de Notificação -->
+    <div class="toast" id="notificationToast">
+        <div class="title" id="toastTitle">AFÁST! Sistema</div>
+        <div class="meta" id="toastMessage">Mensagem de notificação</div>
     </div>
     </div>
 
@@ -2331,6 +2434,217 @@
     </div>
 
     <script>
+        // === NOTIFICATION CONTROLLER PARA AFÁST! ===
+        class NotificationController {
+            constructor() {
+                this.enabled = true;
+                this.doNotDisturb = false;
+                this.connected = false;
+                this.lastEvents = new Map();
+                this.cooldowns = new Map();
+                this.categoryLimits = {
+                    'moon-phase': 60000,      // 1 minuto
+                    'planet-ingress': 300000, // 5 minutos
+                    'retrograde': 3600000,    // 1 hora
+                    'void-of-course': 1800000, // 30 minutos
+                    'eclipse': 86400000,      // 24 horas
+                    'aspect': 600000          // 10 minutos
+                };
+                this.initializeControls();
+            }
+
+            initializeControls() {
+                const afastToggle = document.getElementById('afastToggle');
+                const dndToggle = document.getElementById('dndToggle');
+                const connectionStatus = document.getElementById('connectionStatus');
+
+                if (afastToggle) afastToggle.addEventListener('click', () => this.toggleEnabled());
+                if (dndToggle) dndToggle.addEventListener('click', () => this.toggleDoNotDisturb());
+
+                this.updateUI();
+            }
+
+            toggleEnabled() {
+                this.enabled = !this.enabled;
+                this.updateUI();
+                this.showToast(
+                    'AFÁST! Sistema',
+                    `Sistema ${this.enabled ? 'ATIVADO' : 'DESATIVADO'}`,
+                    'system'
+                );
+            }
+
+            toggleDoNotDisturb() {
+                this.doNotDisturb = !this.doNotDisturb;
+                this.updateUI();
+                this.showToast(
+                    'AFÁST! Sistema',
+                    `Modo ${this.doNotDisturb ? 'NÃO PERTURBAR ativado' : 'NORMAL ativado'}`,
+                    'system'
+                );
+            }
+
+            updateUI() {
+                const afastToggle = document.getElementById('afastToggle');
+                const dndToggle = document.getElementById('dndToggle');
+                const connectionStatus = document.getElementById('connectionStatus');
+
+                if (afastToggle) afastToggle.classList.toggle('active', this.enabled);
+                if (dndToggle) dndToggle.classList.toggle('active', this.doNotDisturb);
+                
+                if (connectionStatus) {
+                    connectionStatus.className = `badge-dot ${this.connected ? 'badge-green' : 'badge-red'}`;
+                }
+            }
+
+            connect() {
+                this.connected = true;
+                this.updateUI();
+                this.showToast('AstroMágick', 'Conexão estabelecida', 'system');
+            }
+
+            disconnect() {
+                this.connected = false;
+                this.updateUI();
+                this.showToast('AstroMágick', 'Conexão perdida', 'system');
+            }
+
+            canNotify(type, eventKey) {
+                if (!this.enabled || !this.connected) return false;
+
+                const now = Date.now();
+                const cooldownKey = `${type}-${eventKey}`;
+                const lastTime = this.cooldowns.get(cooldownKey) || 0;
+                const limit = this.categoryLimits[type] || 60000;
+
+                return (now - lastTime) >= limit;
+            }
+
+            emit(event) {
+                const { type, severity, message, planet, phase, sign } = event;
+                const eventKey = planet || phase || sign || 'general';
+
+                if (!this.canNotify(type, eventKey)) return;
+
+                this.cooldowns.set(`${type}-${eventKey}`, Date.now());
+
+                let title = 'AFÁST! Alerta';
+                let alertMessage = message;
+
+                // Determinar tipo de alerta baseado na severidade
+                if (severity === 'critical') {
+                    title = 'UMA AMEAÇA FOI DETECTADA';
+                } else if (type === 'moon-phase') {
+                    title = 'MUDANÇA LUNAR DETECTADA';
+                } else if (type === 'planet-ingress') {
+                    title = 'INGRESSO PLANETÁRIO DETECTADO';
+                } else if (type === 'aspect') {
+                    title = 'ASPECTO ASTROLÓGICO ATIVO';
+                }
+
+                this.showToast(title, alertMessage, severity);
+                this.playNotificationSound(severity);
+            }
+
+            showToast(title, message, severity = 'info') {
+                const toast = document.getElementById('notificationToast');
+                const toastTitle = document.getElementById('toastTitle');
+                const toastMessage = document.getElementById('toastMessage');
+
+                if (toast && toastTitle && toastMessage) {
+                    toastTitle.textContent = title;
+                    toastMessage.textContent = message;
+
+                    toast.classList.add('show');
+
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                    }, 4000);
+                }
+            }
+
+            playNotificationSound(severity) {
+                if (this.doNotDisturb) return;
+
+                const afastVolumeEl = document.getElementById('afastVolume');
+                const afastVolume = afastVolumeEl ? afastVolumeEl.value / 100 : 0.75;
+                
+                try {
+                    const utterance = new SpeechSynthesisUtterance();
+                    utterance.text = severity === 'critical' ? 'Uma ameaça foi detectada' : 'Alerta astrológico';
+                    utterance.rate = 0.8;
+                    utterance.pitch = 1.2;
+                    utterance.volume = afastVolume;
+                    
+                    // Tentar voz feminina
+                    const voices = speechSynthesis.getVoices();
+                    const femaleVoice = voices.find(voice => 
+                        voice.name.includes('Female') || 
+                        voice.name.includes('Feminino') ||
+                        voice.gender === 'female'
+                    );
+                    
+                    if (femaleVoice) {
+                        utterance.voice = femaleVoice;
+                    }
+                    
+                    speechSynthesis.speak(utterance);
+                } catch (error) {
+                    // Fallback para beep sintético
+                    this.playBeep(severity === 'critical' ? 800 : 600, afastVolume);
+                }
+            }
+
+            playBeep(frequency, volume) {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+
+                    oscillator.frequency.value = frequency;
+                    oscillator.type = 'sine';
+                    gainNode.gain.value = volume * 0.3;
+
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                } catch (error) {
+                    console.log('Audio não disponível');
+                }
+            }
+        }
+
+        // === INTEGRAÇÃO COM ASTROMÁGICK ===
+        const ASTRO = new NotificationController();
+
+        // Helpers para teste
+        const TEST_AF = {
+            retro: () => ASTRO.emit({
+                type: 'retrograde',
+                severity: 'critical',
+                planet: 'Mercúrio',
+                message: 'Mercúrio está retrógrado. Comunicação exige cautela.'
+            }),
+            voc: () => ASTRO.emit({
+                type: 'void-of-course',
+                severity: 'critical',
+                message: 'Lua fora de curso até 23:45. Evite decisões importantes.'
+            }),
+            ingress: () => ASTRO.emit({
+                type: 'planet-ingress',
+                planet: 'Vênus',
+                sign: 'Escorpião',
+                message: 'Vênus ingressou em Escorpião. Paixões intensas emergem.'
+            }),
+            phase: () => ASTRO.emit({
+                type: 'moon-phase',
+                phase: 'Lua Cheia',
+                message: 'Lua Cheia desperta revelações e plenitude.'
+            })
+        };
+
         // === SISTEMA PRINCIPAL ===
         class AuroraOS {
             constructor() {
@@ -2344,6 +2658,11 @@
                 this.updateClock();
                 this.updateAstroInfo();
                 setInterval(() => this.updateClock(), 1000);
+                
+                // Conectar AFÁST! após inicialização
+                setTimeout(() => {
+                    ASTRO.connect();
+                }, 2000);
             }
 
             setupEventListeners() {
