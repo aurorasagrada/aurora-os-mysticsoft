@@ -307,6 +307,131 @@
             word-wrap: break-word;
         }
 
+        /* === MENU DE CONTEXTO DO DESKTOP === */
+        .desktop-context-menu {
+            display: none;
+            position: absolute;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            z-index: 1000;
+            min-width: 180px;
+        }
+
+        .context-menu-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 11px;
+            border-bottom: 1px solid #808080;
+        }
+
+        .context-menu-item:hover {
+            background: #0078d4;
+            color: white;
+        }
+
+        .context-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        /* === MENU DE WALLPAPERS === */
+        .wallpaper-menu {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            z-index: 1001;
+            width: 400px;
+            max-height: 500px;
+        }
+
+        .wallpaper-header {
+            background: linear-gradient(90deg, #0078d4, #106ebe);
+            color: white;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .wallpaper-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+        }
+
+        .wallpaper-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .wallpaper-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            border: 2px inset #c0c0c0;
+            transition: all 0.2s;
+        }
+
+        .wallpaper-option:hover {
+            border: 2px outset #c0c0c0;
+            background: #e0e0e0;
+        }
+
+        .wallpaper-preview {
+            width: 120px;
+            height: 80px;
+            border: 1px solid #808080;
+            margin-bottom: 5px;
+        }
+
+        .wallpaper-option span {
+            font-size: 10px;
+            text-align: center;
+        }
+
+        /* === WALLPAPERS === */
+        .mystic-blue {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+        }
+
+        .cosmic-purple {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+        }
+
+        .aurora-green {
+            background: linear-gradient(135deg, #134e5e 0%, #71b280 50%, #134e5e 100%);
+        }
+
+        .sunset-orange {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #f093fb 100%);
+        }
+
+        .deep-space {
+            background: linear-gradient(135deg, #000428 0%, #004e92 50%, #000428 100%);
+        }
+
+        .lunar-silver {
+            background: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 50%, #bdc3c7 100%);
+        }
+
         /* === BARRA DE TAREFAS === */
         .taskbar {
             position: fixed;
@@ -1243,7 +1368,7 @@
     </div>
 
     <!-- Desktop -->
-    <div class="desktop" id="desktop">
+    <div class="desktop" id="desktop" oncontextmenu="showDesktopMenu(event)">
         <!-- Ícones do Desktop -->
         <div class="desktop-icons">
             <div class="desktop-icon" ondblclick="openApp('astromagick')">
@@ -1269,6 +1394,53 @@
             <div class="desktop-icon" ondblclick="openApp('books')">
                 <img src="icons/livros-interativos.png" alt="Livros" class="icon-image">
                 <div class="icon-label">Livros Interativos</div>
+            </div>
+        </div>
+
+        <!-- Menu de Contexto do Desktop -->
+        <div class="desktop-context-menu" id="desktop-context-menu">
+            <div class="context-menu-item" onclick="showWallpaperMenu()">
+                <span>🖼️ Alterar Plano de Fundo</span>
+            </div>
+            <div class="context-menu-item" onclick="showDesktopProperties()">
+                <span>⚙️ Propriedades</span>
+            </div>
+            <div class="context-menu-item" onclick="refreshDesktop()">
+                <span>🔄 Atualizar</span>
+            </div>
+        </div>
+
+        <!-- Menu de Wallpapers -->
+        <div class="wallpaper-menu" id="wallpaper-menu">
+            <div class="wallpaper-header">
+                <span>🌟 Escolha seu Wallpaper Místico</span>
+                <button onclick="closeWallpaperMenu()">×</button>
+            </div>
+            <div class="wallpaper-grid">
+                <div class="wallpaper-option" onclick="changeWallpaper('mystic-blue')" data-bg="mystic-blue">
+                    <div class="wallpaper-preview mystic-blue"></div>
+                    <span>Azul Místico</span>
+                </div>
+                <div class="wallpaper-option" onclick="changeWallpaper('cosmic-purple')" data-bg="cosmic-purple">
+                    <div class="wallpaper-preview cosmic-purple"></div>
+                    <span>Roxo Cósmico</span>
+                </div>
+                <div class="wallpaper-option" onclick="changeWallpaper('aurora-green')" data-bg="aurora-green">
+                    <div class="wallpaper-preview aurora-green"></div>
+                    <span>Aurora Verde</span>
+                </div>
+                <div class="wallpaper-option" onclick="changeWallpaper('sunset-orange')" data-bg="sunset-orange">
+                    <div class="wallpaper-preview sunset-orange"></div>
+                    <span>Pôr do Sol</span>
+                </div>
+                <div class="wallpaper-option" onclick="changeWallpaper('deep-space')" data-bg="deep-space">
+                    <div class="wallpaper-preview deep-space"></div>
+                    <span>Espaço Profundo</span>
+                </div>
+                <div class="wallpaper-option" onclick="changeWallpaper('lunar-silver')" data-bg="lunar-silver">
+                    <div class="wallpaper-preview lunar-silver"></div>
+                    <span>Prata Lunar</span>
+                </div>
             </div>
         </div>
 
@@ -3178,6 +3350,74 @@
                     }
                 }, 25000); // A cada 25 segundos
             }, 3000);
+        });
+
+        // === FUNÇÕES DE WALLPAPER ===
+        function showDesktopMenu(event) {
+            event.preventDefault();
+            const menu = document.getElementById('desktop-context-menu');
+            menu.style.display = 'block';
+            menu.style.left = event.clientX + 'px';
+            menu.style.top = event.clientY + 'px';
+            
+            // Fechar menu ao clicar fora
+            document.addEventListener('click', hideDesktopMenu);
+        }
+
+        function hideDesktopMenu() {
+            document.getElementById('desktop-context-menu').style.display = 'none';
+            document.removeEventListener('click', hideDesktopMenu);
+        }
+
+        function showWallpaperMenu() {
+            hideDesktopMenu();
+            document.getElementById('wallpaper-menu').style.display = 'block';
+        }
+
+        function closeWallpaperMenu() {
+            document.getElementById('wallpaper-menu').style.display = 'none';
+        }
+
+        function changeWallpaper(wallpaperType) {
+            const desktop = document.getElementById('desktop');
+            
+            // Remover classes de wallpaper existentes
+            desktop.classList.remove('mystic-blue', 'cosmic-purple', 'aurora-green', 'sunset-orange', 'deep-space', 'lunar-silver');
+            
+            // Adicionar nova classe de wallpaper
+            desktop.classList.add(wallpaperType);
+            
+            // Salvar preferência no localStorage
+            localStorage.setItem('aurora-wallpaper', wallpaperType);
+            
+            // Fechar menu
+            closeWallpaperMenu();
+            
+            // Mostrar notificação
+            showNotification('🖼️ Plano de fundo alterado com sucesso!');
+        }
+
+        function showDesktopProperties() {
+            hideDesktopMenu();
+            showNotification('⚙️ Propriedades do Desktop - Em desenvolvimento');
+        }
+
+        function refreshDesktop() {
+            hideDesktopMenu();
+            showNotification('🔄 Desktop atualizado');
+        }
+
+        // Carregar wallpaper salvo
+        function loadSavedWallpaper() {
+            const savedWallpaper = localStorage.getItem('aurora-wallpaper');
+            if (savedWallpaper) {
+                changeWallpaper(savedWallpaper);
+            }
+        }
+
+        // Carregar wallpaper ao inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(loadSavedWallpaper, 1000);
         });
     </script>
 </body>
