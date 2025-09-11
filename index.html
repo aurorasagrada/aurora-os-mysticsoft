@@ -332,10 +332,114 @@
 
         .context-menu-item:last-child {
             border-bottom: none;
+        }        /* === RITUAIS DIGITAIS AFÁST! === */
+        .ritual-window {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 300px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            z-index: 10000;
+            font-family: 'MS Sans Serif', sans-serif;
         }
 
-        /* === MENU DE WALLPAPERS === */
-        .wallpaper-menu {
+        .ritual-header {
+            background: linear-gradient(90deg, #4a4a8a, #6a6aaa);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .ritual-header button {
+            background: #ff4444;
+            color: white;
+            border: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .ritual-content {
+            padding: 20px;
+            text-align: center;
+            color: #ffd700;
+        }
+
+        .ritual-circle {
+            width: 80px;
+            height: 80px;
+            border: 3px solid #ffd700;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: ritualGlow 2s infinite alternate;
+        }
+
+        .ritual-symbol {
+            font-size: 30px;
+            color: #ffd700;
+            animation: ritualSpin 4s linear infinite;
+        }
+
+        @keyframes ritualGlow {
+            from { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+            to { box-shadow: 0 0 20px rgba(255, 215, 0, 1); }
+        }
+
+        @keyframes ritualSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .ritual-steps {
+            margin: 20px 0;
+        }
+
+        .ritual-step {
+            padding: 5px;
+            margin: 5px 0;
+            opacity: 0.5;
+            transition: all 0.5s ease;
+        }
+
+        .ritual-step.active {
+            opacity: 1;
+            color: #ffffff;
+            text-shadow: 0 0 10px #ffd700;
+        }
+
+        .ritual-progress {
+            width: 100%;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .ritual-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ffed4e);
+            width: 0%;
+            animation: ritualProgress 5s linear forwards;
+        }
+
+        @keyframes ritualProgress {
+            to { width: 100%; }
+        }        .wallpaper-menu {
             display: none;
             position: fixed;
             top: 50%;
@@ -1348,7 +1452,7 @@
         <div class="boot-orbs" id="boot-orbs"></div>
         <div class="boot-content">
             <div class="boot-logo">
-                <img src="icons/MysticSoft.png" alt="MysticSoft" style="width: 120px; height: 120px; image-rendering: pixelated; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));">
+                <img src="icons/MysticSoft-new.png" alt="MysticSoft" style="width: 120px; height: 120px; image-rendering: pixelated;">
             </div>
             <h1 class="boot-title">MysticSoft</h1>
             <h2 class="boot-version">Millennium Edition</h2>
@@ -3040,7 +3144,7 @@
             const dayName = date.toLocaleDateString('pt-BR', { weekday: 'long' });
             
             alert(`${day}/${month + 1}/${year} - ${dayName}\n\nInfluências Astrológicas:\n• Energia do dia baseada na Lua\n• Hora planetária variável\n• Consulte o AstroMágick para detalhes completos`);
-                // === SISTEMA DE NOTIFICAÇÕES AFÁST! ===
+                // === SISTEMA AFÁST! EXPANDIDO ===
         const afastNotifications = {
             // Eventos críticos - usam "Uma ameaça foi detectada"
             critical: [
@@ -3048,134 +3152,251 @@
                     type: 'retrograde',
                     alert: 'Uma ameaça foi detectada.',
                     explanation: 'Mercúrio está retrógrado. Comunicação e tecnologia exigem cautela.',
-                    icon: '☿'
+                    icon: '☿',
+                    protection: 'Firewall Planetário',
+                    ritual: 'banimento'
                 },
                 {
                     type: 'retrograde',
                     alert: 'Uma ameaça foi detectada.',
                     explanation: 'Vênus retrógrada revisa afetos, desejos e valores.',
-                    icon: '♀'
-                },
-                {
-                    type: 'retrograde',
-                    alert: 'Uma ameaça foi detectada.',
-                    explanation: 'Marte retrógrado pede cautela em conflitos e energia vital.',
-                    icon: '♂'
+                    icon: '♀',
+                    protection: 'Escudo do Coração',
+                    ritual: 'purificacao'
                 },
                 {
                     type: 'void-moon',
                     alert: 'Uma ameaça foi detectada.',
-                    explanation: 'A Lua está fora de curso até 23h45. Evite inícios importantes.',
-                    icon: '🌑'
+                    explanation: 'A Lua está fora de curso até 23h45. Evite decisões definitivas.',
+                    icon: '🌑',
+                    protection: 'Escudo Lunar',
+                    ritual: 'pausa'
                 },
                 {
                     type: 'eclipse',
-                    alert: 'Uma ameaça foi detectada.',
-                    explanation: 'A Lua encobre o Sol. Portais de transformação estão ativos.',
-                    icon: '🌑'
+                    alert: 'Um eclipse foi detectado.',
+                    explanation: 'A sombra abre portais de transformação.',
+                    icon: '🌑',
+                    protection: 'Véu do Eclipse',
+                    ritual: 'portal'
                 },
                 {
-                    type: 'eclipse',
+                    type: 'tense-aspect',
                     alert: 'Uma ameaça foi detectada.',
-                    explanation: 'A sombra da Terra cobre a Lua. Revelações ocultas emergem.',
-                    icon: '🌕'
+                    explanation: 'Conflito astral ativo. Aspectos tensos em formação.',
+                    icon: '⚡',
+                    protection: 'Armadura Astral',
+                    ritual: 'equilibrio'
                 }
             ],
             
-            // Eventos neutros/positivos - usam frases específicas
+            // Eventos neutros/positivos
             neutral: [
                 {
                     type: 'lunar-phase',
                     alert: 'Uma mudança lunar foi detectada.',
                     explanation: 'A Lua agora é Nova. Tempo de começos e intenções.',
-                    icon: '🌑'
+                    icon: '🌑',
+                    ritual: 'manifestacao'
                 },
                 {
                     type: 'lunar-phase',
                     alert: 'A Lua alterou sua face.',
                     explanation: 'A Lua Cheia desperta revelações e plenitude.',
-                    icon: '🌕'
+                    icon: '🌕',
+                    ritual: 'gratidao'
                 },
                 {
                     type: 'planetary-ingress',
                     alert: 'Um ingresso planetário foi detectado.',
                     explanation: 'O Sol entrou em Virgem. Organização e clareza ganham força.',
-                    icon: '☉'
+                    icon: '☉',
+                    ritual: 'organizacao'
                 },
                 {
-                    type: 'planetary-ingress',
-                    alert: 'Os astros mudaram de signo.',
-                    explanation: 'Vênus ingressou em Escorpião. Paixões intensas e magnéticas emergem.',
-                    icon: '♀'
+                    type: 'harmonic-aspect',
+                    alert: 'Uma oportunidade foi detectada.',
+                    explanation: 'Alinhamento favorável em curso. Aspectos harmônicos ativos.',
+                    icon: '✨',
+                    ritual: 'aproveitamento'
                 }
             ]
         };
 
-        // Função para falar com voz feminina estilo AVAST
-        function speakAFASTAlert(alert, explanation) {
+        // Modos de Proteção AFÁST!
+        const protectionModes = {
+            'Escudo Lunar': {
+                description: 'Proteção durante fases lunares instáveis',
+                color: '#silver',
+                effect: 'Pausa decisões importantes'
+            },
+            'Firewall Planetário': {
+                description: 'Proteção durante retrogradações',
+                color: '#red',
+                effect: 'Backup automático de projetos'
+            },
+            'Véu do Eclipse': {
+                description: 'Defesas especiais em eclipses',
+                color: '#purple',
+                effect: 'Portal de transformação ativo'
+            },
+            'Armadura Astral': {
+                description: 'Proteção contra aspectos tensos',
+                color: '#gold',
+                effect: 'Neutraliza conflitos astrais'
+            }
+        };
+
+        // Rituais Digitais AFÁST!
+        const digitalRituals = {
+            banimento: {
+                name: 'Ritual de Banimento',
+                description: 'Remove energias negativas',
+                steps: ['Acender vela virtual', 'Traçar pentáculo', 'Recitar banimento'],
+                duration: 3000
+            },
+            purificacao: {
+                name: 'Ritual de Purificação',
+                description: 'Limpa energias do coração',
+                steps: ['Água lustral virtual', 'Cristal de quartzo', 'Mantra de amor'],
+                duration: 4000
+            },
+            portal: {
+                name: 'Abertura de Portal',
+                description: 'Ativa transformações profundas',
+                steps: ['Círculo mágico', 'Invocação lunar', 'Portal astral'],
+                duration: 5000
+            },
+            manifestacao: {
+                name: 'Ritual de Manifestação',
+                description: 'Potencializa intenções',
+                steps: ['Vela dourada', 'Visualização', 'Decreto de poder'],
+                duration: 3500
+            }
+        };
+
+        // Função expandida para falar com voz feminina estilo AVAST
+        function speakAFASTAlert(alert, explanation, isUrgent = false) {
             if ('speechSynthesis' in window) {
-                // Cancelar qualquer fala anterior
                 speechSynthesis.cancel();
                 
-                // Configurar voz feminina grave
-                const utterance = new SpeechSynthesisUtterance(`${alert} ${explanation}`);
-                utterance.rate = 0.7; // Velocidade moderada
-                utterance.pitch = 0.8; // Tom mais grave
-                utterance.volume = 0.9;
+                // Configurar voz feminina grave e autoritária
+                const alertUtterance = new SpeechSynthesisUtterance(alert);
+                alertUtterance.rate = isUrgent ? 0.5 : 0.6; // Mais lenta se urgente
+                alertUtterance.pitch = 0.7; // Tom grave e firme
+                alertUtterance.volume = 1.0;
+                
+                const explanationUtterance = new SpeechSynthesisUtterance(explanation);
+                explanationUtterance.rate = 0.8; // Mais suave na explicação
+                explanationUtterance.pitch = 0.9; // Tom mais suave
+                explanationUtterance.volume = 0.8;
                 
                 // Tentar encontrar voz feminina em português
                 const voices = speechSynthesis.getVoices();
                 const femaleVoice = voices.find(voice => 
-                    voice.lang.includes('pt') && voice.name.toLowerCase().includes('female')
-                ) || voices.find(voice => 
-                    voice.lang.includes('pt')
-                ) || voices[0];
+                    voice.lang.includes('pt') && (
+                        voice.name.toLowerCase().includes('female') ||
+                        voice.name.toLowerCase().includes('feminina') ||
+                        voice.name.toLowerCase().includes('woman')
+                    )
+                ) || voices.find(voice => voice.lang.includes('pt')) || voices[0];
                 
                 if (femaleVoice) {
-                    utterance.voice = femaleVoice;
+                    alertUtterance.voice = femaleVoice;
+                    explanationUtterance.voice = femaleVoice;
                 }
                 
-                // Falar com pausa entre alerta e explicação
-                const alertUtterance = new SpeechSynthesisUtterance(alert);
-                alertUtterance.rate = 0.6;
-                alertUtterance.pitch = 0.7;
-                alertUtterance.volume = 1.0;
-                if (femaleVoice) alertUtterance.voice = femaleVoice;
-                
-                const explanationUtterance = new SpeechSynthesisUtterance(explanation);
-                explanationUtterance.rate = 0.8;
-                explanationUtterance.pitch = 0.9;
-                explanationUtterance.volume = 0.8;
-                if (femaleVoice) explanationUtterance.voice = femaleVoice;
-                
-                // Falar alerta primeiro, depois explicação
+                // Falar alerta primeiro (autoritário)
                 speechSynthesis.speak(alertUtterance);
                 
+                // Depois explicação (suave)
                 alertUtterance.onend = () => {
                     setTimeout(() => {
                         speechSynthesis.speak(explanationUtterance);
-                    }, 500); // Pausa de 500ms entre alerta e explicação
+                    }, 800); // Pausa dramática
                 };
-                
-            } else {
-                // Fallback: beep sintético
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 1);
             }
         }
 
-        // Função para mostrar notificação AFÁST! com voz
+        // Função para ativar modo de proteção
+        function activateProtection(protectionName) {
+            const protection = protectionModes[protectionName];
+            if (protection) {
+                // Mostrar notificação de ativação
+                msnSystem.showAstrologicalAlert(
+                    `🛡️ ${protectionName} Ativado`,
+                    protection.description
+                );
+                
+                // Efeito visual no desktop
+                const desktop = document.getElementById('desktop');
+                desktop.style.boxShadow = `inset 0 0 50px ${protection.color}40`;
+                
+                // Salvar estado de proteção
+                localStorage.setItem('afast-protection', protectionName);
+                
+                // Falar confirmação
+                speakAFASTAlert(
+                    `${protectionName} ativado.`,
+                    protection.effect,
+                    false
+                );
+            }
+        }
+
+        // Função para executar ritual digital
+        function executeDigitalRitual(ritualType) {
+            const ritual = digitalRituals[ritualType];
+            if (!ritual) return;
+            
+            // Criar janela de ritual
+            const ritualWindow = document.createElement('div');
+            ritualWindow.className = 'ritual-window';
+            ritualWindow.innerHTML = `
+                <div class="ritual-header">
+                    <span>🔮 ${ritual.name}</span>
+                    <button onclick="this.parentElement.parentElement.remove()">×</button>
+                </div>
+                <div class="ritual-content">
+                    <div class="ritual-circle">
+                        <div class="ritual-symbol">✦</div>
+                    </div>
+                    <div class="ritual-steps">
+                        ${ritual.steps.map((step, i) => 
+                            `<div class="ritual-step" id="step-${i}">${step}</div>`
+                        ).join('')}
+                    </div>
+                    <div class="ritual-progress">
+                        <div class="ritual-progress-bar"></div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(ritualWindow);
+            
+            // Animar ritual
+            let currentStep = 0;
+            const stepInterval = ritual.duration / ritual.steps.length;
+            
+            const ritualAnimation = setInterval(() => {
+                if (currentStep < ritual.steps.length) {
+                    document.getElementById(`step-${currentStep}`).classList.add('active');
+                    currentStep++;
+                } else {
+                    clearInterval(ritualAnimation);
+                    // Ritual completo
+                    setTimeout(() => {
+                        ritualWindow.remove();
+                        msnSystem.showAstrologicalAlert(
+                            '✨ Ritual Completo',
+                            `${ritual.name} executado com sucesso`
+                        );
+                    }, 1000);
+                }
+            }, stepInterval);
+        }
+
+        // Função expandida para mostrar notificação AFÁST!
         function showAFASTNotification(notification) {
             // Mostrar notificação visual MSN
             msnSystem.showAstrologicalAlert(
@@ -3185,8 +3406,26 @@
             
             // Reproduzir alerta de voz
             setTimeout(() => {
-                speakAFASTAlert(notification.alert, notification.explanation);
+                const isUrgent = notification.alert.includes('ameaça');
+                speakAFASTAlert(notification.alert, notification.explanation, isUrgent);
             }, 1000);
+            
+            // Ativar proteção se necessário
+            if (notification.protection) {
+                setTimeout(() => {
+                    activateProtection(notification.protection);
+                }, 3000);
+            }
+            
+            // Oferecer ritual se disponível
+            if (notification.ritual) {
+                setTimeout(() => {
+                    msnSystem.showAstrologicalAlert(
+                        '🔮 Ritual Disponível',
+                        `Clique para executar: ${digitalRituals[notification.ritual]?.name || 'Ritual Místico'}`
+                    );
+                }, 5000);
+            }
         }
 
         // Sistema de alertas astrológicos automáticos
