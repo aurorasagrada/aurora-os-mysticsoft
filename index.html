@@ -32,13 +32,67 @@
         .boot-screen {
             position: fixed;
             inset: 0;
-            background: linear-gradient(135deg, var(--azul), #1a2a4a);
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, var(--azul) 0%, #1a2a4a 50%, #2a1a4a 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 10000;
             cursor: pointer;
+            overflow: hidden;
+            animation: bootGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes bootGlow {
+            0% { filter: brightness(1) saturate(1); }
+            100% { filter: brightness(1.1) saturate(1.2); }
+        }
+
+        .boot-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(255, 215, 0, 0.1) 0%, transparent 30%),
+                radial-gradient(circle at 70% 30%, rgba(138, 43, 226, 0.1) 0%, transparent 30%);
+            animation: mysticalAura 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes mysticalAura {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.05); }
+        }
+
+        .boot-screen::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, rgba(255, 215, 0, 0.4), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.3), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(138, 43, 226, 0.4), transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255, 215, 0, 0.3), transparent),
+                radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 0.2), transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: sparkle 8s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-100px); }
         }
 
         .boot-logo {
@@ -49,35 +103,155 @@
             align-items: center;
             justify-content: center;
             font-size: 48px;
+            position: relative;
+            animation: logoFloat 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        .boot-logo::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+            animation: logoRing 4s linear infinite;
+        }
+
+        @keyframes logoRing {
+            0% { transform: rotate(0deg) scale(1); opacity: 0.3; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.6; }
+            100% { transform: rotate(360deg) scale(1); opacity: 0.3; }
         }
 
         .boot-title {
-            font-size: 32px;
+            font-size: 36px;
             color: var(--dourado);
             margin-bottom: 20px;
-            text-shadow: 0 0 10px var(--dourado);
+            text-shadow: 
+                0 0 10px var(--dourado),
+                0 0 20px rgba(255, 215, 0, 0.5),
+                0 0 30px rgba(255, 215, 0, 0.3);
+            animation: titlePulse 2s ease-in-out infinite;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .boot-subtitle {
+            font-size: 16px;
+            color: var(--pergaminho);
+            margin-bottom: 30px;
+            opacity: 0.9;
+            text-align: center;
+            animation: subtitleFade 3s ease-in-out infinite;
+        }
+
+        @keyframes subtitleFade {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
         }
 
         .boot-progress {
-            width: 300px;
-            height: 8px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 4px;
+            width: 350px;
+            height: 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
             overflow: hidden;
             margin-bottom: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 
+                inset 0 0 10px rgba(0, 0, 0, 0.3),
+                0 0 10px rgba(255, 215, 0, 0.2);
         }
 
         .boot-progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--dourado), #ffd700);
+            background: linear-gradient(90deg, 
+                var(--dourado) 0%, 
+                #ffd700 25%, 
+                #ffed4e 50%, 
+                #ffd700 75%, 
+                var(--dourado) 100%);
             width: 0%;
             transition: width 0.3s ease;
+            animation: progressGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes progressGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+        }
+
+        .boot-progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 100%);
+            animation: progressShine 1.5s ease-in-out infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .boot-hint {
             color: var(--pergaminho);
             opacity: 0.8;
-            font-size: 14px;
+            font-size: 16px;
+            text-align: center;
+            animation: hintBlink 2s ease-in-out infinite;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+            font-style: italic;
+        }
+
+        @keyframes hintBlink {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .boot-orbs {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .boot-orb {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: orbFloat 8s linear infinite;
+        }
+
+        @keyframes orbFloat {
+            0% { transform: translateY(100vh) translateX(0px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) translateX(50px); opacity: 0; }
         }
 
         /* === DESKTOP === */
@@ -794,15 +968,17 @@
 <body>
     <!-- Tela de Boot -->
     <div class="boot-screen" id="boot-screen">
+        <div class="boot-orbs" id="boot-orbs"></div>
         <div class="boot-content">
             <div class="boot-logo">
                 <img src="icons/MysticSoft.png" alt="MysticSoft" style="width: 80px; height: 80px; image-rendering: pixelated;">
             </div>
-            <h1>MysticSoft v1.0</h1>
-            <div class="progress-bar">
-                <div class="progress-fill" id="boot-progress"></div>
+            <h1 class="boot-title">MysticSoft v1.0</h1>
+            <p class="boot-subtitle">Sistema Operacional Místico<br>Desperte os Poderes Ancestrais</p>
+            <div class="boot-progress">
+                <div class="boot-progress-fill" id="boot-progress"></div>
             </div>
-            <p>Clique para iniciar a conjuração...</p>
+            <p class="boot-hint">✨ Clique para iniciar a conjuração mágica ✨</p>
         </div>
     </div>
 
@@ -1961,6 +2137,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             window.auroraOS = new AuroraOS();
             
+            // Criar orbes flutuantes na tela de boot
+            createBootOrbs();
+            
             // Inicializar AFÁSTE para notificações (mesmo sem janela aberta)
             if (!window.afastApp) {
                 window.afastApp = new AFASTApp();
@@ -2384,6 +2563,40 @@
         function closeDayDetails() {
             const details = document.getElementById('day-details');
             if (details) details.remove();
+        }
+        
+        // Função para criar orbes flutuantes na tela de boot
+        function createBootOrbs() {
+            const orbsContainer = document.getElementById('boot-orbs');
+            if (!orbsContainer) return;
+            
+            // Criar 15 orbes com posições e delays aleatórios
+            for (let i = 0; i < 15; i++) {
+                const orb = document.createElement('div');
+                orb.className = 'boot-orb';
+                
+                // Posição horizontal aleatória
+                orb.style.left = Math.random() * 100 + '%';
+                
+                // Delay aleatório para animação
+                orb.style.animationDelay = Math.random() * 8 + 's';
+                
+                // Tamanho ligeiramente variado
+                const size = 3 + Math.random() * 3;
+                orb.style.width = size + 'px';
+                orb.style.height = size + 'px';
+                
+                // Cores variadas (dourado, branco, roxo)
+                const colors = [
+                    'rgba(255, 215, 0, 0.8)',
+                    'rgba(255, 255, 255, 0.6)',
+                    'rgba(138, 43, 226, 0.7)'
+                ];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                orb.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
+                
+                orbsContainer.appendChild(orb);
+            }
         }
     </script>
 </body>
