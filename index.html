@@ -241,23 +241,12 @@
             position: relative;
             width: 100vw;
             height: 100vh;
-            background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 50%, var(--azul) 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
             overflow: hidden;
         }
 
         .desktop.active {
             display: block;
-        }
-
-        /* Remover qualquer pseudo-elemento que possa estar causando o chapéu */
-        .desktop::before,
-        .desktop::after,
-        .desktop *::before,
-        .desktop *::after {
-            display: none !important;
-            content: none !important;
-            background: none !important;
-            background-image: none !important;
         }
 
         /* === BARRA DE TAREFAS === */
