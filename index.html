@@ -826,30 +826,70 @@
             text-align: center;
         }
 
-        /* === WALLPAPERS === */
-        .mystic-blue {
+         /* === SISTEMA DE WALLPAPERS EXPANDIDO === */
+        .wallpaper-azul-mistico {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
         }
 
-        .cosmic-purple {
+        .wallpaper-roxo-cosmico {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
         }
 
-        .aurora-green {
+        .wallpaper-aurora-verde {
             background: linear-gradient(135deg, #134e5e 0%, #71b280 50%, #134e5e 100%);
         }
 
-        .sunset-orange {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #f093fb 100%);
+        .wallpaper-por-do-sol {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 50%, #fa709a 100%);
         }
 
-        .deep-space {
-            background: linear-gradient(135deg, #000428 0%, #004e92 50%, #000428 100%);
+        .wallpaper-espaco-profundo {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
         }
 
-        .lunar-silver {
+        .wallpaper-prata-lunar {
             background: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 50%, #bdc3c7 100%);
         }
+
+        .wallpaper-fogo-mistico {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 50%, #ff6b6b 100%);
+        }
+
+        .wallpaper-oceano-profundo {
+            background: linear-gradient(135deg, #0077be 0%, #00a8cc 50%, #0077be 100%);
+        }
+
+        .wallpaper-floresta-encantada {
+            background: linear-gradient(135deg, #2d5016 0%, #3e7b27 50%, #2d5016 100%);
+        }
+
+        .wallpaper-ametista {
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 50%, #8e44ad 100%);
+        }
+
+        .wallpaper-ouro-alquimico {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 50%, #f39c12 100%);
+        }
+
+        .wallpaper-cristal-azul {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 50%, #3498db 100%);
+        }
+
+        .wallpaper-nebulosa-rosa {
+            background: linear-gradient(135deg, #e91e63 0%, #ad1457 50%, #e91e63 100%);
+        }
+
+        .wallpaper-terra-mistica {
+            background: linear-gradient(135deg, #8b4513 0%, #a0522d 50%, #8b4513 100%);
+        }
+
+        .wallpaper-aurora-boreal {
+            background: linear-gradient(135deg, #00c9ff 0%, #92fe9d 50%, #00c9ff 100%);
+        }
+
+        .wallpaper-vinho-gotico {
+            background: linear-gradient(135deg, #3e0a29 0%, #5d1a3a 50%, #3e0a29 100%);
+        }    }
 
         /* === BARRA DE TAREFAS === */
            /* === NOVA BARRA DE TAREFAS WHIMSIGOTH === */
@@ -2000,46 +2040,78 @@
             </div>
         </div>
 
-        <!-- Menu de Wallpapers -->
-        <div class="wallpaper-menu" id="wallpaper-menu">
-            <div class="wallpaper-header">
-                <span>🌟 Escolha seu Wallpaper Místico</span>
-                <button onclick="closeWallpaperMenu()">×</button>
+        <!-- Menu de Wallpapers         <div class="wallpaper-modal" id="wallpaper-modal">
+            <div class="wallpaper-content">
+                <h3>🖼️ Alterar Plano de Fundo</h3>
+                <div class="wallpaper-grid">
+                    <div class="wallpaper-option" onclick="changeWallpaper('azul-mistico')" data-bg="azul-mistico">
+                        <div class="wallpaper-preview wallpaper-azul-mistico"></div>
+                        <span>🔵 Azul Místico</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('roxo-cosmico')" data-bg="roxo-cosmico">
+                        <div class="wallpaper-preview wallpaper-roxo-cosmico"></div>
+                        <span>🟣 Roxo Cósmico</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('aurora-verde')" data-bg="aurora-verde">
+                        <div class="wallpaper-preview wallpaper-aurora-verde"></div>
+                        <span>🟢 Aurora Verde</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('por-do-sol')" data-bg="por-do-sol">
+                        <div class="wallpaper-preview wallpaper-por-do-sol"></div>
+                        <span>🟠 Pôr do Sol</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('espaco-profundo')" data-bg="espaco-profundo">
+                        <div class="wallpaper-preview wallpaper-espaco-profundo"></div>
+                        <span>⚫ Espaço Profundo</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('prata-lunar')" data-bg="prata-lunar">
+                        <div class="wallpaper-preview wallpaper-prata-lunar"></div>
+                        <span>⚪ Prata Lunar</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('fogo-mistico')" data-bg="fogo-mistico">
+                        <div class="wallpaper-preview wallpaper-fogo-mistico"></div>
+                        <span>🔥 Fogo Místico</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('oceano-profundo')" data-bg="oceano-profundo">
+                        <div class="wallpaper-preview wallpaper-oceano-profundo"></div>
+                        <span>🌊 Oceano Profundo</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('floresta-encantada')" data-bg="floresta-encantada">
+                        <div class="wallpaper-preview wallpaper-floresta-encantada"></div>
+                        <span>🌲 Floresta Encantada</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('ametista')" data-bg="ametista">
+                        <div class="wallpaper-preview wallpaper-ametista"></div>
+                        <span>💜 Ametista</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('ouro-alquimico')" data-bg="ouro-alquimico">
+                        <div class="wallpaper-preview wallpaper-ouro-alquimico"></div>
+                        <span>🟡 Ouro Alquímico</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('cristal-azul')" data-bg="cristal-azul">
+                        <div class="wallpaper-preview wallpaper-cristal-azul"></div>
+                        <span>💎 Cristal Azul</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('nebulosa-rosa')" data-bg="nebulosa-rosa">
+                        <div class="wallpaper-preview wallpaper-nebulosa-rosa"></div>
+                        <span>🌸 Nebulosa Rosa</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('terra-mistica')" data-bg="terra-mistica">
+                        <div class="wallpaper-preview wallpaper-terra-mistica"></div>
+                        <span>🟤 Terra Mística</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('aurora-boreal')" data-bg="aurora-boreal">
+                        <div class="wallpaper-preview wallpaper-aurora-boreal"></div>
+                        <span>❄️ Aurora Boreal</span>
+                    </div>
+                    <div class="wallpaper-option" onclick="changeWallpaper('vinho-gotico')" data-bg="vinho-gotico">
+                        <div class="wallpaper-preview wallpaper-vinho-gotico"></div>
+                        <span>🍷 Vinho Gótico</span>
+                    </div>
+                </div>
+                <button class="close-btn" onclick="closeWallpaperModal()">×</button>
             </div>
-            <div class="wallpaper-grid">
-                <div class="wallpaper-option" onclick="changeWallpaper('mystic-blue')" data-bg="mystic-blue">
-                    <div class="wallpaper-preview mystic-blue"></div>
-                    <span>Azul Místico</span>
-                </div>
-                <div class="wallpaper-option" onclick="changeWallpaper('cosmic-purple')" data-bg="cosmic-purple">
-                    <div class="wallpaper-preview cosmic-purple"></div>
-                    <span>Roxo Cósmico</span>
-                </div>
-                <div class="wallpaper-option" onclick="changeWallpaper('aurora-green')" data-bg="aurora-green">
-                    <div class="wallpaper-preview aurora-green"></div>
-                    <span>Aurora Verde</span>
-                </div>
-                <div class="wallpaper-option" onclick="changeWallpaper('sunset-orange')" data-bg="sunset-orange">
-                    <div class="wallpaper-preview sunset-orange"></div>
-                    <span>Pôr do Sol</span>
-                </div>
-                <div class="wallpaper-option" onclick="changeWallpaper('deep-space')" data-bg="deep-space">
-                    <div class="wallpaper-preview deep-space"></div>
-                    <span>Espaço Profundo</span>
-                </div>
-                <div class="wallpaper-option" onclick="changeWallpaper('lunar-silver')" data-bg="lunar-silver">
-                    <div class="wallpaper-preview lunar-silver"></div>
-                    <span>Prata Lunar</span>
-                </div>
-            </div>
-        </div>
-
-
-
-    <!-- NOVA BARRA DE TAREFAS WHIMSIGOTH -->
-    <div class="taskbar">
-        <!-- Botão Iniciar -->
-        <div class="btn start" id="startButton">
+        </div>s="btn start" id="startButton">
             🌟 Iniciar
         </div>
 
@@ -4811,16 +4883,25 @@
             const desktop = document.getElementById('desktop');
             
             // Remover classes de wallpaper existentes
-            desktop.classList.remove('mystic-blue', 'cosmic-purple', 'aurora-green', 'sunset-orange', 'deep-space', 'lunar-silver');
+            const wallpaperClasses = [
+                'wallpaper-azul-mistico', 'wallpaper-roxo-cosmico', 'wallpaper-aurora-verde',
+                'wallpaper-por-do-sol', 'wallpaper-espaco-profundo', 'wallpaper-prata-lunar',
+                'wallpaper-fogo-mistico', 'wallpaper-oceano-profundo', 'wallpaper-floresta-encantada',
+                'wallpaper-ametista', 'wallpaper-ouro-alquimico', 'wallpaper-cristal-azul',
+                'wallpaper-nebulosa-rosa', 'wallpaper-terra-mistica', 'wallpaper-aurora-boreal',
+                'wallpaper-vinho-gotico'
+            ];
+            
+            wallpaperClasses.forEach(cls => desktop.classList.remove(cls));
             
             // Adicionar nova classe de wallpaper
-            desktop.classList.add(wallpaperType);
+            desktop.classList.add(`wallpaper-${wallpaperType}`);
             
             // Salvar preferência no localStorage
             localStorage.setItem('aurora-wallpaper', wallpaperType);
             
             // Fechar menu
-            closeWallpaperMenu();
+            closeWallpaperModal();
             
             // Mostrar notificação
             showNotification('🖼️ Plano de fundo alterado com sucesso!');
