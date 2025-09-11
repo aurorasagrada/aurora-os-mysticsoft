@@ -242,10 +242,17 @@
             width: 100vw;
             height: 100vh;
             background: linear-gradient(135deg, var(--azul) 0%, var(--vinho) 50%, var(--azul) 100%);
+            overflow: hidden;
         }
 
         .desktop.active {
             display: block;
+        }
+
+        /* Remover qualquer pseudo-elemento que possa estar causando o chapéu */
+        .desktop::before,
+        .desktop::after {
+            display: none !important;
         }
 
         /* === BARRA DE TAREFAS === */
