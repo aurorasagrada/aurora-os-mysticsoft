@@ -949,9 +949,110 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
+
+        /* === NOTIFICAÇÕES ESTILO MSN === */
+        .msn-notification {
+            position: fixed;
+            bottom: 50px;
+            right: 20px;
+            width: 300px;
+            background: linear-gradient(180deg, #e6e6fa 0%, #d8bfd8 100%);
+            border: 2px outset #c0c0c0;
+            border-radius: 8px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            font-family: 'MS Sans Serif', sans-serif;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: all 0.5s ease-out;
+        }
+
+        .msn-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .msn-notification.hide {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        .msn-header {
+            background: linear-gradient(180deg, #4169e1 0%, #0000cd 100%);
+            color: white;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 6px 6px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .msn-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 0;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .msn-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .msn-content {
+            padding: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .msn-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--azul);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .msn-text {
+            flex: 1;
+        }
+
+        .msn-title {
+            font-weight: bold;
+            font-size: 12px;
+            color: #000080;
+            margin-bottom: 4px;
+        }
+
+        .msn-message {
+            font-size: 11px;
+            color: #000;
+            line-height: 1.3;
+        }
+
+        .msn-time {
+            font-size: 10px;
+            color: #666;
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
+    <!-- Container de Notificações MSN -->
+    <div id="msn-notifications-container"></div>
     <!-- Tela de Boot -->
     <div class="boot-screen" id="boot-screen">
         <div class="boot-orbs" id="boot-orbs"></div>
@@ -1394,6 +1495,8 @@
                             desktop.classList.add('active');
                             // Som de conclusão
                             this.playBootComplete();
+                            // Inicializar sistema de notificações MSN
+                            initializeMSNSystem();
                         }, 1500);
                     }
                 }, 300);
@@ -2801,6 +2904,264 @@
                 orb.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
                 
                 orbsContainer.appendChild(orb);
+            }
+        }
+
+        // === SISTEMA DE NOTIFICAÇÕES MSN ===
+        class MSNNotificationSystem {
+            constructor() {
+                this.container = document.getElementById('msn-notifications-container');
+                this.notifications = [];
+                this.notificationId = 0;
+            }
+
+            showNotification(title, message, icon = '🔮', type = 'astrological') {
+                const notification = this.createNotification(title, message, icon, type);
+                this.container.appendChild(notification);
+                
+                // Animar entrada
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 100);
+                
+                // Reproduzir voz feminina robótica
+                this.speakNotification(title, message, type);
+                
+                // Auto-remover após 8 segundos
+                setTimeout(() => {
+                    this.hideNotification(notification);
+                }, 8000);
+                
+                return notification;
+            }
+
+            createNotification(title, message, icon, type) {
+                const notification = document.createElement('div');
+                notification.className = 'msn-notification';
+                notification.id = `msn-notification-${this.notificationId++}`;
+                
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('pt-BR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                
+                notification.innerHTML = `
+                    <div class="msn-header">
+                        <span>AFÁSTE - Sistema de Alertas</span>
+                        <button class="msn-close" onclick="msnSystem.hideNotification(this.closest('.msn-notification'))">×</button>
+                    </div>
+                    <div class="msn-content">
+                        <div class="msn-icon">${icon}</div>
+                        <div class="msn-text">
+                            <div class="msn-title">${title}</div>
+                            <div class="msn-message">${message}</div>
+                            <div class="msn-time">${timeStr}</div>
+                        </div>
+                    </div>
+                `;
+                
+                return notification;
+            }
+
+            hideNotification(notification) {
+                notification.classList.add('hide');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 500);
+            }
+
+            speakNotification(title, message, type) {
+                try {
+                    if ('speechSynthesis' in window) {
+                        // Cancelar qualquer fala anterior
+                        speechSynthesis.cancel();
+                        
+                        const utterance = new SpeechSynthesisUtterance();
+                        
+                        // Texto robótico estilo AVAST
+                        let roboticText = '';
+                        
+                        switch(type) {
+                            case 'astrological':
+                                roboticText = `Alerta astrológico detectado. ${title}. ${message}`;
+                                break;
+                            case 'threat':
+                                roboticText = `Ameaça cósmica identificada. ${title}. Ação recomendada: ${message}`;
+                                break;
+                            case 'lunar':
+                                roboticText = `Evento lunar detectado. ${title}. ${message}`;
+                                break;
+                            case 'planetary':
+                                roboticText = `Movimento planetário significativo. ${title}. ${message}`;
+                                break;
+                            default:
+                                roboticText = `Notificação do sistema. ${title}. ${message}`;
+                        }
+                        
+                        utterance.text = roboticText;
+                        utterance.lang = 'pt-BR';
+                        utterance.rate = 0.8; // Mais lento, robótico
+                        utterance.pitch = 1.2; // Mais agudo, feminino
+                        utterance.volume = 0.9;
+                        
+                        // Tentar encontrar voz feminina
+                        const voices = speechSynthesis.getVoices();
+                        const femaleVoice = voices.find(voice => 
+                            (voice.lang.includes('pt') || voice.lang.includes('BR')) &&
+                            (voice.name.toLowerCase().includes('female') || 
+                             voice.name.toLowerCase().includes('feminina') ||
+                             voice.name.toLowerCase().includes('woman'))
+                        );
+                        
+                        if (femaleVoice) {
+                            utterance.voice = femaleVoice;
+                        } else {
+                            // Fallback para qualquer voz portuguesa
+                            const ptVoice = voices.find(voice => 
+                                voice.lang.includes('pt') || voice.lang.includes('BR')
+                            );
+                            if (ptVoice) {
+                                utterance.voice = ptVoice;
+                            }
+                        }
+                        
+                        speechSynthesis.speak(utterance);
+                    } else {
+                        // Fallback para beep robótico
+                        this.playRoboticBeep();
+                    }
+                } catch (e) {
+                    console.log('Erro na síntese de voz:', e);
+                    this.playRoboticBeep();
+                }
+            }
+
+            playRoboticBeep() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    // Sequência de beeps robóticos
+                    const beepSequence = [
+                        { freq: 800, duration: 0.1 },
+                        { freq: 1000, duration: 0.1 },
+                        { freq: 800, duration: 0.1 }
+                    ];
+                    
+                    let currentTime = audioContext.currentTime;
+                    
+                    beepSequence.forEach((beep, index) => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        oscillator.frequency.setValueAtTime(beep.freq, currentTime);
+                        oscillator.type = 'square'; // Som mais robótico
+                        
+                        gainNode.gain.setValueAtTime(0, currentTime);
+                        gainNode.gain.linearRampToValueAtTime(0.1, currentTime + 0.01);
+                        gainNode.gain.linearRampToValueAtTime(0, currentTime + beep.duration);
+                        
+                        oscillator.start(currentTime);
+                        oscillator.stop(currentTime + beep.duration);
+                        
+                        currentTime += beep.duration + 0.05;
+                    });
+                } catch (e) {
+                    console.log('Erro ao reproduzir beep robótico:', e);
+                }
+            }
+
+            // Métodos para diferentes tipos de alertas astrológicos
+            showAstrologicalAlert(title, message) {
+                return this.showNotification(title, message, '⚠️', 'astrological');
+            }
+
+            showLunarAlert(title, message) {
+                return this.showNotification(title, message, '🌙', 'lunar');
+            }
+
+            showPlanetaryAlert(title, message) {
+                return this.showNotification(title, message, '🪐', 'planetary');
+            }
+
+            showThreatAlert(title, message) {
+                return this.showNotification(title, message, '🚨', 'threat');
+            }
+        }
+
+        // Inicializar sistema de notificações
+        let msnSystem;
+        
+        // Aguardar carregamento das vozes
+        if ('speechSynthesis' in window) {
+            speechSynthesis.onvoiceschanged = function() {
+                console.log('Vozes carregadas:', speechSynthesis.getVoices().length);
+            };
+        }
+        
+        // Inicializar sistema MSN quando desktop estiver ativo
+        function initializeMSNSystem() {
+            if (!msnSystem) {
+                msnSystem = new MSNNotificationSystem();
+                
+                // Notificação de boas-vindas
+                setTimeout(() => {
+                    msnSystem.showNotification(
+                        'Sistema AFÁSTE Ativado',
+                        'Monitoramento astrológico iniciado com sucesso.',
+                        '🛡️',
+                        'astrological'
+                    );
+                }, 2000);
+                
+                // Simular alertas astrológicos periódicos
+                setInterval(() => {
+                    const alerts = [
+                        {
+                            title: 'Mercúrio Retrógrado Detectado',
+                            message: 'Cuidado com comunicações e tecnologia.',
+                            type: 'planetary'
+                        },
+                        {
+                            title: 'Lua Cheia Aproximando',
+                            message: 'Energia intensa nas próximas 48 horas.',
+                            type: 'lunar'
+                        },
+                        {
+                            title: 'Aspecto Tenso Marte-Saturno',
+                            message: 'Evite conflitos e seja paciente.',
+                            type: 'threat'
+                        },
+                        {
+                            title: 'Vênus em Trígono com Júpiter',
+                            message: 'Momento favorável para relacionamentos.',
+                            type: 'astrological'
+                        }
+                    ];
+                    
+                    if (Math.random() < 0.4) { // 40% de chance a cada intervalo
+                        const alert = alerts[Math.floor(Math.random() * alerts.length)];
+                        
+                        switch(alert.type) {
+                            case 'planetary':
+                                msnSystem.showPlanetaryAlert(alert.title, alert.message);
+                                break;
+                            case 'lunar':
+                                msnSystem.showLunarAlert(alert.title, alert.message);
+                                break;
+                            case 'threat':
+                                msnSystem.showThreatAlert(alert.title, alert.message);
+                                break;
+                            default:
+                                msnSystem.showAstrologicalAlert(alert.title, alert.message);
+                        }
+                    }
+                }, 25000); // A cada 25 segundos
             }
         }
     </script>
