@@ -1974,6 +1974,15 @@
                 });
             }
             
+            // Configurar clique no relógio para abrir calendário astrológico
+            const clock = document.getElementById('clock');
+            if (clock) {
+                clock.addEventListener('click', () => {
+                    openAstrologicalCalendar();
+                });
+                clock.style.cursor = 'pointer';
+            }
+            
             console.log('🌟 Aurora OS inicializado com sucesso!');
         });
         
@@ -2018,6 +2027,363 @@
             if (menu) {
                 menu.remove();
             }
+        }
+        
+        // Função para abrir calendário astrológico
+        function openAstrologicalCalendar() {
+            // Remover calendário existente se houver
+            const existingCalendar = document.getElementById('astrological-calendar');
+            if (existingCalendar) {
+                existingCalendar.remove();
+                return;
+            }
+            
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+            
+            createCalendarWindow(currentMonth, currentYear);
+        }
+        
+        // Função para criar janela do calendário
+        function createCalendarWindow(month, year) {
+            const monthNames = [
+                'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+            ];
+            
+            const calendarHTML = `
+                <div id="astrological-calendar" style="
+                    position: fixed;
+                    top: 50px;
+                    right: 50px;
+                    width: 600px;
+                    height: 500px;
+                    background: #c0c0c0;
+                    border: 2px outset #c0c0c0;
+                    z-index: 10000;
+                    font-family: 'MS Sans Serif', sans-serif;
+                ">
+                    <div style="
+                        background: linear-gradient(90deg, #0000ff, #000080);
+                        color: white;
+                        padding: 8px;
+                        font-weight: bold;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    ">
+                        <span>🌙 Calendário Astrológico - ${monthNames[month]} ${year}</span>
+                        <button onclick="closeAstrologicalCalendar()" style="
+                            background: #c0c0c0;
+                            border: 1px outset #c0c0c0;
+                            width: 20px;
+                            height: 20px;
+                            cursor: pointer;
+                        ">×</button>
+                    </div>
+                    <div style="padding: 10px; height: calc(100% - 40px); overflow-y: auto;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <button onclick="changeMonth(${month - 1}, ${year})" style="
+                                background: #c0c0c0;
+                                border: 1px outset #c0c0c0;
+                                padding: 5px 10px;
+                                cursor: pointer;
+                            ">◀ Anterior</button>
+                            <span style="font-weight: bold; font-size: 16px;">${monthNames[month]} ${year}</span>
+                            <button onclick="changeMonth(${month + 1}, ${year})" style="
+                                background: #c0c0c0;
+                                border: 1px outset #c0c0c0;
+                                padding: 5px 10px;
+                                cursor: pointer;
+                            ">Próximo ▶</button>
+                        </div>
+                        ${generateCalendarGrid(month, year)}
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', calendarHTML);
+        }
+        
+        // Função para gerar grade do calendário
+        function generateCalendarGrid(month, year) {
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+            
+            let html = `
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 10px;">
+                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Dom</div>
+                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Seg</div>
+                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Ter</div>
+                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Qua</div>
+                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Qui</div>
+                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Sex</div>
+                    <div style="text-align: center; font-weight: bold; background: #808080; color: white; padding: 5px;">Sáb</div>
+            `;
+            
+            // Células vazias antes do primeiro dia
+            for (let i = 0; i < firstDay; i++) {
+                html += '<div style="padding: 10px;"></div>';
+            }
+            
+            // Dias do mês
+            for (let day = 1; day <= daysInMonth; day++) {
+                const isToday = today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
+                const dayData = getAstrologicalDataForDay(year, month, day);
+                
+                html += `
+                    <div onclick="showDayDetails(${year}, ${month}, ${day})" style="
+                        padding: 8px;
+                        text-align: center;
+                        cursor: pointer;
+                        background: ${isToday ? '#ffff00' : '#ffffff'};
+                        border: 1px solid #808080;
+                        min-height: 40px;
+                        position: relative;
+                    ">
+                        <div style="font-weight: bold;">${day}</div>
+                        <div style="font-size: 10px; color: #666;">${dayData.moonPhase}</div>
+                        <div style="font-size: 8px; color: #333;">${dayData.energy}</div>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            return html;
+        }
+        
+        // Função para obter dados astrológicos do dia
+        function getAstrologicalDataForDay(year, month, day) {
+            const date = new Date(year, month, day);
+            const dayOfYear = Math.floor((date - new Date(year, 0, 0)) / 86400000);
+            
+            // Cálculo simplificado da fase lunar
+            const lunarCycle = 29.53;
+            const knownNewMoon = new Date(2024, 0, 11); // 11 de janeiro de 2024
+            const daysSinceNewMoon = Math.floor((date - knownNewMoon) / 86400000);
+            const lunarPhase = (daysSinceNewMoon % lunarCycle) / lunarCycle;
+            
+            let moonPhase, energy;
+            if (lunarPhase < 0.125) {
+                moonPhase = '🌑';
+                energy = 'Novo';
+            } else if (lunarPhase < 0.375) {
+                moonPhase = '🌓';
+                energy = 'Cresc';
+            } else if (lunarPhase < 0.625) {
+                moonPhase = '🌕';
+                energy = 'Cheia';
+            } else if (lunarPhase < 0.875) {
+                moonPhase = '🌗';
+                energy = 'Ming';
+            } else {
+                moonPhase = '🌑';
+                energy = 'Novo';
+            }
+            
+            return { moonPhase, energy };
+        }
+        
+        // Função para mostrar detalhes do dia
+        function showDayDetails(year, month, day) {
+            const date = new Date(year, month, day);
+            const dayData = getDetailedAstrologicalData(date);
+            
+            const detailsHTML = `
+                <div id="day-details" style="
+                    position: fixed;
+                    top: 100px;
+                    left: 100px;
+                    width: 500px;
+                    max-height: 600px;
+                    background: #c0c0c0;
+                    border: 2px outset #c0c0c0;
+                    z-index: 10001;
+                    overflow-y: auto;
+                ">
+                    <div style="
+                        background: linear-gradient(90deg, #800080, #400040);
+                        color: white;
+                        padding: 8px;
+                        font-weight: bold;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    ">
+                        <span>🔮 ${day}/${month + 1}/${year} - Informações Místicas</span>
+                        <button onclick="closeDayDetails()" style="
+                            background: #c0c0c0;
+                            border: 1px outset #c0c0c0;
+                            width: 20px;
+                            height: 20px;
+                            cursor: pointer;
+                        ">×</button>
+                    </div>
+                    <div style="padding: 15px; font-size: 12px;">
+                        <h3 style="margin: 0 0 10px 0; color: #800080;">🌙 Informações Lunares</h3>
+                        <p><strong>Fase:</strong> ${dayData.moonPhase} ${dayData.moonPhaseName}</p>
+                        <p><strong>Mansão Lunar:</strong> ${dayData.lunarMansion}</p>
+                        <p><strong>Energia:</strong> ${dayData.lunarEnergy}</p>
+                        
+                        <h3 style="margin: 15px 0 10px 0; color: #800080;">⚡ Trânsitos Planetários</h3>
+                        <p>${dayData.transits}</p>
+                        
+                        <h3 style="margin: 15px 0 10px 0; color: #800080;">🔮 Correspondências Místicas</h3>
+                        <p><strong>Invocação:</strong> ${dayData.invocation}</p>
+                        <p><strong>Mantra:</strong> ${dayData.mantra}</p>
+                        <p><strong>Runa:</strong> ${dayData.rune}</p>
+                        <p><strong>Carta de Tarô:</strong> ${dayData.tarotCard}</p>
+                        
+                        <h3 style="margin: 15px 0 10px 0; color: #800080;">🌿 Correspondências Naturais</h3>
+                        <p><strong>Ervas:</strong> ${dayData.herbs}</p>
+                        <p><strong>Cristais:</strong> ${dayData.crystals}</p>
+                        
+                        <h3 style="margin: 15px 0 10px 0; color: #800080;">✨ Uso Mágico</h3>
+                        <p><strong>Favorável:</strong> ${dayData.favorableMagic}</p>
+                        <p><strong>Desfavorável:</strong> ${dayData.unfavorableMagic}</p>
+                    </div>
+                </div>
+            `;
+            
+            // Remover detalhes existentes
+            const existing = document.getElementById('day-details');
+            if (existing) existing.remove();
+            
+            document.body.insertAdjacentHTML('beforeend', detailsHTML);
+        }
+        
+        // Função para obter dados astrológicos detalhados
+        function getDetailedAstrologicalData(date) {
+            const day = date.getDate();
+            const month = date.getMonth();
+            
+            // Arrays de correspondências místicas
+            const lunarMansions = [
+                "Al-Sharatain (O Signo)", "Al-Butain (O Ventre)", "Al-Thurayya (As Plêiades)",
+                "Al-Dabaran (O Seguidor)", "Al-Haq'ah (A Marca Branca)", "Al-Han'ah (A Marca)",
+                "Al-Dhira (O Braço)", "Al-Nathrah (A Ponta do Nariz)", "Al-Tarf (O Olhar)",
+                "Al-Jabhah (A Testa)", "Al-Zubrah (A Juba)", "Al-Sarfah (O Mudador)",
+                "Al-Awwa (O Ladrador)", "Al-Simak (O Desarmado)", "Al-Ghafr (A Cobertura)",
+                "Al-Zubana (As Garras)", "Al-Iklil (A Coroa)", "Al-Qalb (O Coração)",
+                "Al-Shaulah (O Ferrão)", "Al-Na'am (As Avestruzes)", "Al-Baldah (A Cidade)",
+                "Sa'd al-Dhabih (A Sorte do Matador)", "Sa'd Bula (A Sorte do Engolidor)",
+                "Sa'd al-Su'ud (A Sorte das Sortes)", "Sa'd al-Akhbiyah (A Sorte das Tendas)",
+                "Al-Fargh al-Mukdim (O Primeiro Balde)", "Al-Fargh al-Thani (O Segundo Balde)",
+                "Batn al-Hut (O Ventre do Peixe)"
+            ];
+            
+            const invocations = [
+                "Que a luz da Lua ilumine meu caminho",
+                "Pelos poderes dos elementos, eu invoco proteção",
+                "Que as estrelas guiem minha jornada",
+                "Pela sabedoria ancestral, eu busco conhecimento",
+                "Que a energia cósmica flua através de mim"
+            ];
+            
+            const mantras = [
+                "Om Mani Padme Hum", "So Hum", "Om Gam Ganapataye Namaha",
+                "Om Shanti Shanti Shanti", "Gate Gate Paragate Parasamgate Bodhi Svaha"
+            ];
+            
+            const runes = [
+                "ᚠ Fehu (Riqueza)", "ᚢ Uruz (Força)", "ᚦ Thurisaz (Gigante)",
+                "ᚨ Ansuz (Deus)", "ᚱ Raidho (Jornada)", "ᚲ Kenaz (Tocha)",
+                "ᚷ Gebo (Presente)", "ᚹ Wunjo (Alegria)", "ᚺ Hagalaz (Granizo)"
+            ];
+            
+            const tarotCards = [
+                "O Louco", "O Mago", "A Sacerdotisa", "A Imperatriz", "O Imperador",
+                "O Hierofante", "Os Amantes", "A Carruagem", "A Força", "O Eremita"
+            ];
+            
+            const herbs = [
+                "Lavanda, Alecrim, Sálvia", "Manjericão, Hortelã, Tomilho",
+                "Camomila, Melissa, Erva-cidreira", "Artemísia, Arruda, Guiné",
+                "Rosa, Jasmim, Ylang-ylang"
+            ];
+            
+            const crystals = [
+                "Quartzo Rosa, Ametista, Cristal", "Obsidiana, Hematita, Turmalina Negra",
+                "Citrino, Pirita, Olho de Tigre", "Sodalita, Lápis Lazúli, Amazonita",
+                "Selenita, Moonstone, Labradorita"
+            ];
+            
+            // Cálculos baseados na data
+            const dayIndex = day % 5;
+            const monthIndex = month % 28;
+            
+            // Determinar fase lunar
+            const lunarCycle = 29.53;
+            const knownNewMoon = new Date(2024, 0, 11);
+            const daysSinceNewMoon = Math.floor((date - knownNewMoon) / 86400000);
+            const lunarPhase = (daysSinceNewMoon % lunarCycle) / lunarCycle;
+            
+            let moonPhase, moonPhaseName, lunarEnergy;
+            if (lunarPhase < 0.125) {
+                moonPhase = '🌑';
+                moonPhaseName = 'Lua Nova';
+                lunarEnergy = 'Novos começos, intenções, plantio de sementes';
+            } else if (lunarPhase < 0.375) {
+                moonPhase = '🌓';
+                moonPhaseName = 'Lua Crescente';
+                lunarEnergy = 'Crescimento, expansão, manifestação';
+            } else if (lunarPhase < 0.625) {
+                moonPhase = '🌕';
+                moonPhaseName = 'Lua Cheia';
+                lunarEnergy = 'Plenitude, poder máximo, realização';
+            } else if (lunarPhase < 0.875) {
+                moonPhase = '🌗';
+                moonPhaseName = 'Lua Minguante';
+                lunarEnergy = 'Liberação, limpeza, banimento';
+            } else {
+                moonPhase = '🌑';
+                moonPhaseName = 'Lua Nova';
+                lunarEnergy = 'Novos começos, intenções, plantio de sementes';
+            }
+            
+            return {
+                moonPhase,
+                moonPhaseName,
+                lunarMansion: lunarMansions[monthIndex],
+                lunarEnergy,
+                transits: "Sol em trânsito harmonioso com Júpiter, Vênus em aspecto favorável com Lua",
+                invocation: invocations[dayIndex],
+                mantra: mantras[dayIndex],
+                rune: runes[dayIndex],
+                tarotCard: tarotCards[dayIndex],
+                herbs: herbs[dayIndex],
+                crystals: crystals[dayIndex],
+                favorableMagic: "Rituais de amor, prosperidade, proteção, cura espiritual",
+                unfavorableMagic: "Maldições, trabalhos destrutivos, magia negra"
+            };
+        }
+        
+        // Função para mudar mês
+        function changeMonth(newMonth, newYear) {
+            if (newMonth < 0) {
+                newMonth = 11;
+                newYear--;
+            } else if (newMonth > 11) {
+                newMonth = 0;
+                newYear++;
+            }
+            
+            closeAstrologicalCalendar();
+            createCalendarWindow(newMonth, newYear);
+        }
+        
+        // Função para fechar calendário
+        function closeAstrologicalCalendar() {
+            const calendar = document.getElementById('astrological-calendar');
+            if (calendar) calendar.remove();
+        }
+        
+        // Função para fechar detalhes do dia
+        function closeDayDetails() {
+            const details = document.getElementById('day-details');
+            if (details) details.remove();
         }
     </script>
 </body>
