@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MysticSoft • Inicialização</title>
+    <style>
+        @font-face {
+            font-family: 'GothicPixel';
+            src: url('./gothic-pixel-font.ttf') format('truetype');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a3a 50%, #2a1a2a 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Estrelas simples */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #f0aa53, transparent),
+                radial-gradient(2px 2px at 40px 70px, #f0aa53, transparent),
+                radial-gradient(1px 1px at 90px 40px, #f0aa53, transparent),
+                radial-gradient(1px 1px at 130px 80px, #f0aa53, transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            opacity: 0.6;
+            animation: twinkle 4s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Container principal */
+        .boot-container {
+            text-align: center;
+            z-index: 10;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 2s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Logo */
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            position: relative;
+            image-rendering: pixelated;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 20px #f0aa53);
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px #f0aa53); }
+            50% { filter: drop-shadow(0 0 40px #f0aa53) drop-shadow(0 0 60px #f0aa53); }
+        }
+
+        /* Título MysticSoft */
+        .title {
+            font-family: 'GothicPixel', 'Courier New', monospace;
+            font-size: 48px;
+            color: #f0aa53;
+            text-shadow: 0 0 20px #f0aa53;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        /* Subtítulo */
+        .subtitle {
+            color: #b2d1b1;
+            font-size: 18px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        /* Barra de progresso */
+        .progress-container {
+            width: 400px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #1a1a1a;
+            border: 2px solid #f0aa53;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f0aa53, #b2d1b1, #f0aa53);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(240, 170, 83, 0.5);
+        }
+
+        .progress-text {
+            color: #f0aa53;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* Créditos */
+        .credits {
+            color: #888;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* Botão de início */
+        .start-btn {
+            background: linear-gradient(135deg, #2a1a2a, #1a1a3a);
+            border: 2px solid #f0aa53;
+            color: #f0aa53;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px #f0aa53;
+        }
+
+        .start-btn:hover {
+            background: linear-gradient(135deg, #3a2a3a, #2a2a4a);
+            box-shadow: 0 0 20px rgba(240, 170, 83, 0.5);
+        }
+
+        /* Estática de TV */
+        .tv-static {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 1px, transparent 1px),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px, 30px 30px;
+            opacity: 0;
+            z-index: 20;
+            animation: staticFlicker 0.1s infinite;
+        }
+
+        @keyframes staticFlicker {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Estados */
+        .boot-container.hidden { display: none; }
+        .tv-static.active { opacity: 1; }
+        
+        .loading .progress-fill {
+            animation: progressGlow 1s ease-in-out infinite;
+        }
+
+        @keyframes progressGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(240, 170, 83, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(240, 170, 83, 0.8); }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="tv-static" id="tvStatic"></div>
+    
+    <div class="boot-container" id="bootContainer">
+        <div class="logo">
+            <img src="./Designsemnome(14).png" alt="MysticSoft Logo">
+        </div>
+        
+        <div class="title">MysticSoft</div>
+        <div class="subtitle">Inicializando o Universo MysticSoft...</div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0%</div>
+        </div>
+        
+        <button class="start-btn" id="startBtn" onclick="startBoot()">
+            ✨ Conectar ao Cosmos ✨
+        </button>
+        
+        <div class="credits">Desenvolvido pela Aurora Sagrada</div>
+    </div>
+
+    <script>
+        let isBooting = false;
+
+        function playBootSound() {
+            // Som simples de boot
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Tom inicial
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(880, audioContext.currentTime + 0.5);
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.1);
+            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        function startBoot() {
+            if (isBooting) return;
+            isBooting = true;
+
+            const bootContainer = document.getElementById('bootContainer');
+            const tvStatic = document.getElementById('tvStatic');
+            const startBtn = document.getElementById('startBtn');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+
+            // Esconder botão
+            startBtn.style.display = 'none';
+
+            // Mostrar estática
+            tvStatic.classList.add('active');
+            
+            try {
+                playBootSound();
+            } catch (e) {
+                console.log('Áudio não disponível');
+            }
+
+            // Remover estática após 1s
+            setTimeout(() => {
+                tvStatic.classList.remove('active');
+                bootContainer.classList.add('loading');
+                
+                // Animar progresso
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 10 + 5;
+                    if (progress > 100) progress = 100;
+
+                    progressFill.style.width = progress + '%';
+                    progressText.textContent = Math.floor(progress) + '%';
+
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        
+                        // Finalizar
+                        setTimeout(() => {
+                            window.location.href = './index.html';
+                        }, 1000);
+                    }
+                }, 200);
+                
+            }, 1000);
+        }
+
+        // Auto-start após 3 segundos
+        setTimeout(() => {
+            if (!isBooting) {
+                startBoot();
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
+

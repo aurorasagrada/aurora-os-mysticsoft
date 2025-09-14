@@ -1395,66 +1395,136 @@
                 transform: scale(0.3) rotate(360deg) translateY(-30px); 
             }
         }
+
+        /* === TELA DE INICIALIZAÇÃO MYSTICSOFT MINIMALISTA === */
+        .mysticsoft-boot-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #4a1a4a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #f0aa53;
+            z-index: 10000;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Estática de TV */
+        .boot-tv-static {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.05) 1px, transparent 1px),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 20px 20px, 30px 30px;
+            opacity: 0.15;
+            animation: bootStaticAnim 0.08s infinite;
+        }
+
+        @keyframes bootStaticAnim {
+            0% { opacity: 0.05; }
+            50% { opacity: 0.2; }
+            100% { opacity: 0.1; }
+        }
+
+        /* Logo */
+        .boot-logo {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            width: 180px;
+            filter: drop-shadow(0 0 12px #f0aa53);
+            animation: bootLogoPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes bootLogoPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Marca */
+        .boot-brand {
+            font-family: 'GothicPixel', 'Courier New', monospace;
+            font-size: 48px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            text-shadow: 0 0 12px #f0aa53;
+            margin: 20px 0 10px;
+        }
+
+        /* Mensagem */
+        .boot-msg {
+            font-size: 16px;
+            color: #b2d1b1;
+            text-shadow: 0 0 8px #b2d1b1;
+            animation: bootMsgBlink 3s ease-in-out infinite;
+        }
+
+        @keyframes bootMsgBlink {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        /* Barra de progresso */
+        .boot-progress {
+            width: 400px;
+            height: 16px;
+            background: #111;
+            border: 2px solid #f0aa53;
+            border-radius: 8px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .boot-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #f0aa53, #b2d1b1, #8a2be2);
+            box-shadow: 0 0 12px #f0aa53;
+            transition: width 0.3s ease-out;
+        }
+
+        .boot-percent {
+            font-size: 14px;
+            margin-top: 8px;
+            text-shadow: 0 0 6px #f0aa53;
+        }
+
+        /* Efeito final */
+        .boot-final-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, rgba(240,170,83,0.25) 0%, transparent 70%);
+            opacity: 0;
+            animation: bootFadeOutGlow 2s ease-out forwards;
+            z-index: 10001;
+        }
+
+        @keyframes bootFadeOutGlow {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .mysticsoft-boot-screen.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 1s ease-out;
+        }
     </style>
 </head>
 <body>
-    <!-- === TELA DE INICIALIZAÇÃO MYSTICSOFT PIXEL ART WHIMSIGOTH === -->
+    <!-- === TELA DE INICIALIZAÇÃO MYSTICSOFT MINIMALISTA === -->
     <div class="mysticsoft-boot-screen" id="mysticsoft-boot-screen">
-        <!-- Estática de TV -->
-        <div class="tv-static" id="tv-static"></div>
-        
-        <!-- Fundo cósmico -->
-        <div class="cosmic-background">
-            <!-- Estrelas pixeladas -->
-            <div class="pixel-stars"></div>
-            
-            <!-- Símbolos esotéricos flutuantes -->
-            <div class="floating-symbols">
-                <span class="symbol">⚡</span>
-                <span class="symbol">☽</span>
-                <span class="symbol">△</span>
-                <span class="symbol">▽</span>
-                <span class="symbol">☉</span>
-                <span class="symbol">ᚱ</span>
-                <span class="symbol">✦</span>
-                <span class="symbol">◊</span>
-            </div>
+        <div class="boot-tv-static"></div>
+        <img src="./Designsemnome(14).png" class="boot-logo" alt="MysticSoft Logo" />
+        <div class="boot-brand">MysticSoft</div>
+        <div class="boot-msg">Inicializando o Universo...</div>
+        <div class="boot-progress">
+            <div class="boot-fill" id="boot-fill"></div>
         </div>
-        
-        <!-- Logo MysticSoft -->
-        <div class="mysticsoft-logo-container" id="mysticsoft-logo-container">
-            <div class="logo-glow-effect"></div>
-            <img src="./Designsemnome(14).png" alt="MysticSoft Logo" class="mysticsoft-logo-img" id="mysticsoft-logo-img">
-            <div class="logo-border-glow"></div>
-        </div>
-        
-        <!-- Interface de inicialização -->
-        <div class="boot-interface" id="boot-interface">
-            <!-- Título MysticSoft -->
-            <div class="mysticsoft-brand">MysticSoft</div>
-            
-            <!-- Texto de inicialização -->
-            <div class="boot-message">Inicializando o Universo MysticSoft...</div>
-            
-            <!-- Barra de progresso -->
-            <div class="progress-container">
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" id="progress-bar-fill"></div>
-                    <div class="progress-sparkles"></div>
-                </div>
-                <div class="progress-text" id="progress-text">0%</div>
-            </div>
-            
-            <!-- Créditos -->
-            <div class="credits">Desenvolvido pela Aurora Sagrada</div>
-        </div>
-        
-        <!-- Botão de início -->
-        <div class="start-button-container" id="start-button-container">
-            <button class="cosmic-start-button" onclick="startMysticSoftBoot()">
-                ✨ Conectar ao Cosmos ✨
-            </button>
-        </div>
+        <div class="boot-percent" id="boot-percent">0%</div>
     </div>
 
     <!-- DESKTOP WINDOWS ME -->
@@ -3794,10 +3864,80 @@
             console.log('🌟 Aurora OS • MysticSoft Millennium Edition inicializado com sucesso!');
         });
 
-        // Função para iniciar sequência de boot retro futurista
-        function startBootSequence() {
-            const bootScreen = document.getElementById('boot-screen');
-            const tvStatic = document.getElementById('tv-static');
+        // Função para iniciar sequência de boot minimalista
+        function startMysticSoftBoot() {
+            let progress = 0;
+            
+            function animateProgress() {
+                const fill = document.getElementById('boot-fill');
+                const percent = document.getElementById('boot-percent');
+                
+                const interval = setInterval(() => {
+                    progress += Math.random() * 8 + 3;
+                    if (progress > 100) progress = 100;
+                    
+                    fill.style.width = progress + '%';
+                    percent.textContent = Math.floor(progress) + '%';
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        
+                        setTimeout(() => {
+                            const glow = document.createElement('div');
+                            glow.className = 'boot-final-glow';
+                            document.body.appendChild(glow);
+                            
+                            setTimeout(() => {
+                                const bootScreen = document.getElementById('mysticsoft-boot-screen');
+                                bootScreen.classList.add('hidden');
+                                
+                                setTimeout(() => {
+                                    bootScreen.style.display = 'none';
+                                    document.getElementById('desktop').style.display = 'block';
+                                    
+                                    // Inicializar sistema astrológico
+                                    if (typeof auroraOS !== 'undefined') {
+                                        auroraOS.startAstrologicalNotifications();
+                                    }
+                                }, 1000);
+                            }, 1800);
+                        }, 1000);
+                    }
+                }, 200);
+            }
+
+            // Som dial-up simples
+            function playDialup() {
+                try {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    const ctx = new AudioContext();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    osc.type = 'square';
+                    osc.frequency.value = 440;
+                    gain.gain.value = 0.15;
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    osc.start();
+                    osc.stop(ctx.currentTime + 1.5);
+                } catch (e) {
+                    console.log('Áudio não disponível');
+                }
+            }
+
+            playDialup();
+            animateProgress();
+        }
+
+        // Auto-start da sequência de boot
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                startMysticSoftBoot();
+            }, 1000);
+        });
             const logo = document.getElementById('mysticsoft-logo');
             const bootUI = document.getElementById('boot-ui');
             const bootButton = document.getElementById('boot-button');
