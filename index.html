@@ -16,6 +16,8 @@
             --roxo-mistico: #4a0e4e;
             --prata: #c0c0c0;
             --cinza-escuro: #808080;
+            --azul-me: #316AC5;
+            --azul-me-escuro: #1e4176;
         }
 
         * {
@@ -26,7 +28,7 @@
         }
 
         body {
-            font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
             background: var(--azul);
             color: var(--pergaminho);
             height: 100vh;
@@ -34,48 +36,278 @@
             font-size: 11px;
         }
 
-        /* === TELA DE BOOT === */
+        /* === TELA DE BOOT MÁGICKA === */
+        /* === TELA DE BOOT RETRO FUTURISTA WHIMSIGOTH === */
         .boot-screen {
             position: fixed;
             inset: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%),
-                linear-gradient(135deg, var(--azul) 0%, #1a2a4a 50%, #2a1a4a 100%);
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 10000;
             cursor: pointer;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
         }
 
-        .boot-logo {
-            font-size: 64px;
-            margin-bottom: 20px;
-            animation: glow 2s ease-in-out infinite alternate;
+        /* Efeito de TV estática */
+        .tv-static {
+            position: absolute;
+            inset: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255,255,255,0.03) 2px,
+                    rgba(255,255,255,0.03) 4px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255,255,255,0.03) 2px,
+                    rgba(255,255,255,0.03) 4px
+                );
+            opacity: 0;
+            animation: staticNoise 0.1s infinite;
+            z-index: 1;
         }
 
-        .boot-title {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 48px;
-            color: var(--dourado);
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        .tv-static.active {
+            opacity: 1;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(255,255,255,0.1),
+                    rgba(255,255,255,0.1) 1px,
+                    rgba(0,0,0,0.1) 1px,
+                    rgba(0,0,0,0.1) 2px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.05),
+                    rgba(255,255,255,0.05) 1px,
+                    rgba(0,0,0,0.05) 1px,
+                    rgba(0,0,0,0.05) 2px
+                );
+            animation: staticNoise 0.05s infinite, staticFlicker 0.2s infinite;
         }
 
-        .boot-subtitle {
-            font-family: 'Cinzel', serif;
-            font-size: 18px;
-            color: var(--prata);
-            margin-bottom: 30px;
-            letter-spacing: 2px;
+        /* Logo MysticSoft */
+        .mysticsoft-logo {
+            position: relative;
+            z-index: 3;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1s ease-out;
         }
 
-        .boot-info {
+        .mysticsoft-logo.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .logo-image {
+            width: 120px;
+            height: 120px;
+            filter: drop-shadow(0 0 20px #f0aa53) drop-shadow(0 0 40px #f0aa53);
+            image-rendering: pixelated;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        .logo-glow {
+            position: absolute;
+            inset: -10px;
+            background: radial-gradient(circle, rgba(240,170,83,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        /* Interface de boot */
+        .boot-ui {
+            position: relative;
+            z-index: 3;
             text-align: center;
-            margin-bottom: 40px;
+            margin-top: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease-out 0.5s;
+        }
+
+        .boot-ui.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mysticsoft-title {
+            font-family: 'GothicPixel', 'Courier New', monospace;
+            font-size: 32px;
+            color: #f0aa53;
+            text-shadow: 0 0 15px #f0aa53, 0 0 30px #f0aa53;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        .boot-text {
+            color: #f0aa53;
+            font-size: 16px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #f0aa53;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        .progress-container {
+            width: 300px;
+            margin: 20px auto;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #1a1a2e;
+            border: 2px inset #c0c0c0;
+            border-radius: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f0aa53 0%, #b2d1b1 50%, #f0aa53 100%);
+            background-size: 200% 100%;
+            animation: progressFlow 2s linear infinite;
+            transition: width 0.3s ease-out;
+        }
+
+        .company-text {
+            color: #b2d1b1;
+            font-size: 12px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px;
+        }
+
+        /* Estrelas de fundo */
+        .stars-background {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: starTwinkle 3s ease-in-out infinite;
+        }
+
+        .star:nth-child(1) { top: 20%; left: 15%; animation-delay: 0s; }
+        .star:nth-child(2) { top: 30%; left: 80%; animation-delay: 0.5s; }
+        .star:nth-child(3) { top: 60%; left: 25%; animation-delay: 1s; }
+        .star:nth-child(4) { top: 70%; left: 70%; animation-delay: 1.5s; }
+        .star:nth-child(5) { top: 15%; left: 60%; animation-delay: 2s; }
+        .star:nth-child(6) { top: 80%; left: 40%; animation-delay: 2.5s; }
+        .star:nth-child(7) { top: 40%; left: 90%; animation-delay: 3s; }
+        .star:nth-child(8) { top: 85%; left: 10%; animation-delay: 3.5s; }
+
+        /* Botão de inicialização */
+        .boot-button {
+            position: relative;
+            z-index: 3;
+            margin-top: 60px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #4a0e4e 0%, #16213e 100%);
+            border: 2px outset #c0c0c0;
+            color: #f0aa53;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-shadow: 0 0 10px #f0aa53;
+            transition: all 0.3s ease;
+        }
+
+        .boot-button:hover {
+            background: linear-gradient(135deg, #5a1e5e 0%, #26314e 100%);
+            border: 2px inset #c0c0c0;
+            transform: scale(1.05);
+        }
+
+        .boot-button:active {
+            transform: scale(0.95);
+        }
+
+        .boot-button-text {
+            animation: buttonGlow 2s ease-in-out infinite;
+        }
+
+        /* Animações */
+        @keyframes staticNoise {
+            0% { transform: translateX(0); }
+            10% { transform: translateX(-1px); }
+            20% { transform: translateX(1px); }
+            30% { transform: translateX(-1px); }
+            40% { transform: translateX(1px); }
+            50% { transform: translateX(0); }
+            60% { transform: translateX(1px); }
+            70% { transform: translateX(-1px); }
+            80% { transform: translateX(1px); }
+            90% { transform: translateX(-1px); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes staticFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 20px #f0aa53) drop-shadow(0 0 40px #f0aa53);
+            }
+            50% { 
+                filter: drop-shadow(0 0 30px #f0aa53) drop-shadow(0 0 60px #f0aa53) drop-shadow(0 0 80px #f0aa53);
+            }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        @keyframes progressFlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        @keyframes buttonGlow {
+            0%, 100% { text-shadow: 0 0 10px #f0aa53; }
+            50% { text-shadow: 0 0 20px #f0aa53, 0 0 30px #f0aa53; }
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { 
+                text-shadow: 0 0 15px #f0aa53, 0 0 30px #f0aa53;
+                transform: scale(1);
+            }
+            50% { 
+                text-shadow: 0 0 25px #f0aa53, 0 0 50px #f0aa53, 0 0 75px #f0aa53;
+                transform: scale(1.02);
+            }
         }
 
         .boot-progress {
@@ -85,6 +317,8 @@
             border-radius: 4px;
             overflow: hidden;
             margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
         }
 
         .boot-progress-bar {
@@ -97,12 +331,16 @@
         .boot-text {
             color: var(--prata);
             margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
         }
 
         .boot-click {
             color: var(--dourado);
             font-size: 16px;
             animation: pulse 1.5s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
         }
 
         .boot-footer {
@@ -111,6 +349,27 @@
             text-align: center;
             color: var(--prata);
             font-size: 10px;
+            z-index: 2;
+        }
+
+        /* Partículas douradas mágickas */
+        .magic-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--dourado);
+            border-radius: 50%;
+            animation: floatUp 4s linear infinite;
+            box-shadow: 0 0 6px var(--dourado);
+        }
+
+        /* Glifos cabalísticos */
+        .mystic-glyph {
+            position: absolute;
+            font-size: 24px;
+            color: rgba(240, 170, 83, 0.3);
+            animation: glyphPulse 3s ease-in-out infinite;
+            font-family: 'Cinzel Decorative', serif;
         }
 
         @keyframes glow {
@@ -129,76 +388,155 @@
             50% { opacity: 0.5; }
         }
 
+        @keyframes floatUp {
+            0% { 
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-100px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes glyphPulse {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.4; }
+        }
+
         @keyframes fadeOut {
             from { opacity: 1; }
             to { opacity: 0; }
         }
 
-        /* === DESKTOP === */
+        /* === ANIMAÇÕES DOS SCREENSAVERS === */
+        @keyframes matrix-rain {
+            0% { transform: translateY(-100vh); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        @keyframes aurora-flow {
+            0% { transform: translateX(-100%) skewX(-15deg); opacity: 0.3; }
+            50% { opacity: 0.8; }
+            100% { transform: translateX(100%) skewX(-15deg); opacity: 0.3; }
+        }
+
+        @keyframes starfield-move {
+            0% { transform: translateZ(0) scale(0.5); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateZ(1000px) scale(2); opacity: 0; }
+        }
+
+        @keyframes pipes-flow {
+            0% { transform: rotate(0deg) scale(1); border-color: #f0aa53; }
+            25% { border-color: #b2d1b1; }
+            50% { transform: rotate(180deg) scale(1.2); border-color: #4a0e4e; }
+            75% { border-color: #f0aa53; }
+            100% { transform: rotate(360deg) scale(1); border-color: #b2d1b1; }
+        }
+
+        @keyframes maze-path {
+            0% { stroke-dashoffset: 1000; }
+            100% { stroke-dashoffset: 0; }
+        }
+
+        @keyframes mystical-glow {
+            0%, 100% { 
+                box-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+                filter: brightness(1);
+            }
+            50% { 
+                box-shadow: 0 0 20px currentColor, 0 0 40px currentColor, 0 0 60px currentColor;
+                filter: brightness(1.5);
+            }
+        }
+
+        @keyframes floating-symbols {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        /* === DESKTOP WINDOWS ME === */
         .desktop {
             position: fixed;
             inset: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, var(--azul) 0%, #1a2a4a 50%, #2a1a4a 100%);
+            background: linear-gradient(135deg, #4682B4 0%, #87CEEB 100%);
             display: none;
-            padding: 20px;
-            padding-bottom: 60px;
+            padding: 8px;
+            padding-bottom: 32px;
         }
 
         .desktop.show {
             display: block;
         }
 
-        /* Wallpapers */
-        .desktop.wallpaper-mystic {
+        /* Wallpapers temáticos */
+        .desktop.theme-astral {
             background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, var(--azul) 0%, #1a2a4a 50%, #2a1a4a 100%);
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #191970 0%, #4169E1 100%);
         }
 
-        .desktop.wallpaper-cosmic {
+        .desktop.theme-chthonian {
             background: 
-                radial-gradient(circle at 30% 70%, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 70% 30%, rgba(75, 0, 130, 0.3) 0%, transparent 50%),
-                linear-gradient(135deg, #0f0f23 0%, #1a0033 50%, #2d1b69 100%);
+                radial-gradient(circle at 30% 70%, rgba(139, 0, 0, 0.3) 0%, transparent 50%),
+                linear-gradient(135deg, var(--vinho) 0%, #2F0A1E 100%);
         }
 
-        .desktop.wallpaper-aurora {
+        .desktop.theme-alchemical {
             background: 
-                radial-gradient(ellipse at top, rgba(0, 255, 127, 0.2) 0%, transparent 50%),
-                radial-gradient(ellipse at bottom, rgba(138, 43, 226, 0.2) 0%, transparent 50%),
-                linear-gradient(180deg, #001122 0%, #003366 50%, #002244 100%);
+                radial-gradient(circle at 50% 50%, rgba(240, 170, 83, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #8B4513 0%, #DAA520 100%);
         }
 
-        /* === ÍCONES DO DESKTOP === */
+        .desktop.theme-cosmic {
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(0, 100, 200, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(100, 0, 200, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #000428 0%, #004e92 100%);
+        }
+
+        /* === ÍCONES DO DESKTOP WINDOWS ME === */
         .desktop-icons {
             display: grid;
-            grid-template-columns: repeat(auto-fill, 80px);
-            gap: 20px;
-            padding: 20px;
+            grid-template-columns: repeat(auto-fill, 75px);
+            gap: 8px;
+            padding: 8px;
         }
 
         .desktop-icon {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 4px;
             cursor: pointer;
             transition: all 0.2s;
+            border-radius: 2px;
         }
 
         .desktop-icon:hover {
-            background: rgba(255,255,255,0.1);
-            transform: scale(1.05);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .desktop-icon.selected {
+            background: rgba(49, 106, 197, 0.7);
+            border: 1px dotted white;
         }
 
         .desktop-icon .icon {
             font-size: 32px;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.5));
+            animation: iconBreathe 4s ease-in-out infinite;
         }
 
         .desktop-icon .label {
@@ -206,32 +544,67 @@
             text-align: center;
             color: white;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            max-width: 70px;
+            word-wrap: break-word;
         }
 
-        /* === TASKBAR === */
+        @keyframes iconBreathe {
+            0%, 100% { filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.5)); }
+            50% { filter: drop-shadow(1px 1px 8px rgba(240, 170, 83, 0.6)); }
+        }
+
+        /* === TASKBAR WINDOWS ME AUTÊNTICA === */
         .taskbar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 40px;
+            height: 28px;
             background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border-top: 2px outset #c0c0c0;
+            border-top: 1px solid #dfdfdf;
             display: flex;
             align-items: center;
-            padding: 0 8px;
+            padding: 0 4px;
             z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Gradiente aurora boreal na barra */
+        .taskbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(0, 255, 127, 0.5) 25%, 
+                rgba(138, 43, 226, 0.5) 50%, 
+                rgba(0, 255, 127, 0.5) 75%, 
+                transparent 100%);
+            animation: auroraFlow 8s linear infinite;
+        }
+
+        @keyframes auroraFlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .start-button {
             background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border: 2px outset #c0c0c0;
-            padding: 4px 12px;
+            border: 1px outset #c0c0c0;
+            padding: 2px 8px;
             font-weight: bold;
             font-size: 11px;
             color: black;
             cursor: pointer;
-            margin-right: 8px;
+            margin-right: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            height: 22px;
         }
 
         .start-button:hover {
@@ -240,79 +613,152 @@
 
         .start-button:active,
         .start-button.active {
-            border: 2px inset #c0c0c0;
+            border: 1px inset #c0c0c0;
+        }
+
+        .start-logo {
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
         }
 
         .taskbar-center {
             flex: 1;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 2px;
+            padding: 0 8px;
         }
 
         .taskbar-right {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
         }
 
+        /* === CHIPS ASTROLÓGICOS MINIMALISTAS === */
         .astro-chips {
             display: flex;
-            gap: 4px;
-            margin-right: 8px;
+            gap: 2px;
+            margin-right: 4px;
         }
 
         .astro-chip {
-            background: rgba(240, 170, 83, 0.2);
-            border: 1px solid var(--dourado);
-            border-radius: 12px;
-            padding: 2px 6px;
-            font-size: 10px;
+            background: rgba(240, 170, 83, 0.15);
+            border: 1px solid rgba(240, 170, 83, 0.4);
+            border-radius: 8px;
+            padding: 1px 4px;
+            font-size: 9px;
             color: var(--dourado);
             cursor: pointer;
             transition: all 0.2s;
+            position: relative;
         }
 
         .astro-chip:hover {
-            background: rgba(240, 170, 83, 0.3);
+            background: rgba(240, 170, 83, 0.25);
             transform: scale(1.05);
         }
 
         .astro-chip.critical {
-            animation: blink 1s infinite;
+            animation: criticalBlink 2s infinite;
+            border-color: #ff4444;
+            color: #ff6666;
         }
 
-        @keyframes blink {
+        @keyframes criticalBlink {
             0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.5; }
+            51%, 100% { opacity: 0.6; }
+        }
+
+        /* Tooltip mágicko */
+        .astro-chip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .astro-chip:hover::after {
+            opacity: 1;
+        }
+
+        /* === SISTEMA DE NOTIFICAÇÕES === */
+        .system-tray {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(180deg, #c0c0c0 0%, #a0a0a0 100%);
+            border: 1px inset #c0c0c0;
+            padding: 2px 4px;
+            height: 20px;
         }
 
         .volume-icon {
-            font-size: 16px;
+            font-size: 12px;
             cursor: pointer;
-            padding: 4px;
+            padding: 2px;
+            transition: all 0.2s;
+        }
+
+        .volume-icon:hover {
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+
+        .planetary-hour {
+            font-size: 12px;
+            color: var(--dourado);
+            margin: 0 4px;
+            cursor: pointer;
+            animation: planetGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes planetGlow {
+            0%, 100% { text-shadow: 0 0 2px var(--dourado); }
+            50% { text-shadow: 0 0 6px var(--dourado); }
         }
 
         .clock {
-            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            background: linear-gradient(180deg, #c0c0c0 0%, #a0a0a0 100%);
             border: 1px inset #c0c0c0;
-            padding: 4px 8px;
+            padding: 2px 6px;
             font-size: 11px;
             color: black;
             text-align: center;
             cursor: pointer;
+            min-width: 50px;
         }
 
-        /* === MENU INICIAR === */
+        /* === MENU INICIAR WINDOWS ME === */
         .start-menu {
             position: fixed;
-            bottom: 42px;
-            left: 8px;
-            width: 250px;
-            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
+            bottom: 29px;
+            left: 4px;
+            width: 300px;
+            background: linear-gradient(180deg, #c0c0c0 0%, #a0a0a0 100%);
             border: 2px outset #c0c0c0;
             display: none;
             z-index: 2000;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
         }
 
         .start-menu.show {
@@ -320,15 +766,20 @@
         }
 
         .start-menu-header {
-            background: linear-gradient(90deg, var(--azul), var(--roxo-mistico));
+            background: linear-gradient(90deg, var(--azul-me), var(--azul-me-escuro));
             color: white;
             padding: 8px;
             font-weight: bold;
             font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .start-menu-items {
             padding: 4px 0;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
         .start-menu-item {
@@ -338,19 +789,28 @@
             cursor: pointer;
             font-size: 11px;
             color: black;
+            transition: all 0.2s;
         }
 
         .start-menu-item:hover {
-            background: #316AC5;
+            background: var(--azul-me);
             color: white;
         }
 
         .start-menu-item .icon {
             margin-right: 8px;
             font-size: 16px;
+            width: 20px;
+            text-align: center;
         }
 
-        /* === JANELAS === */
+        .start-menu-separator {
+            height: 1px;
+            background: #808080;
+            margin: 2px 8px;
+        }
+
+        /* === JANELAS WINDOWS ME === */
         .window {
             position: absolute;
             background: #c0c0c0;
@@ -358,18 +818,25 @@
             min-width: 300px;
             min-height: 200px;
             z-index: 1500;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
         }
 
         .window-header {
-            background: linear-gradient(90deg, #316AC5, #1e4176);
+            background: linear-gradient(90deg, var(--azul-me), var(--azul-me-escuro));
             color: white;
-            padding: 4px 8px;
+            padding: 2px 4px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: move;
             font-size: 11px;
             font-weight: bold;
+            height: 18px;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 2px;
         }
 
         .window-controls button {
@@ -377,9 +844,11 @@
             border: 1px outset #c0c0c0;
             width: 16px;
             height: 14px;
-            font-size: 10px;
+            font-size: 8px;
             cursor: pointer;
-            margin-left: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .window-controls button:hover {
@@ -395,21 +864,22 @@
             background: #c0c0c0;
             color: black;
             font-size: 11px;
-            height: calc(100% - 24px);
+            height: calc(100% - 18px);
             overflow-y: auto;
         }
 
-        /* === VOLUME POPUP === */
+        /* === POPUPS E MODAIS === */
         .volume-popup {
             position: fixed;
-            bottom: 50px;
-            right: 100px;
-            width: 200px;
+            bottom: 35px;
+            right: 60px;
+            width: 220px;
             background: #c0c0c0;
             border: 2px outset #c0c0c0;
             padding: 8px;
             display: none;
             z-index: 2000;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
         }
 
         .volume-popup.show {
@@ -424,16 +894,41 @@
             font-size: 10px;
             margin-bottom: 2px;
             color: black;
+            font-weight: bold;
         }
 
         .volume-slider {
             width: 100%;
-            height: 4px;
-            background: #808080;
+            height: 20px;
+            background: #f0f0f0;
+            border: 1px inset #c0c0c0;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-buttons {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .volume-buttons button {
+            padding: 4px 8px;
+            font-size: 10px;
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            cursor: pointer;
+        }
+
+        .volume-buttons button:hover {
+            background: #d0d0d0;
+        }
+
+        .volume-buttons button:active {
             border: 1px inset #c0c0c0;
         }
 
-        /* === NOTIFICAÇÕES === */
+        /* === NOTIFICAÇÕES MÁGICKAS === */
         .notification {
             position: fixed;
             top: 20px;
@@ -446,12 +941,19 @@
             max-width: 300px;
             z-index: 3000;
             animation: slideIn 0.3s ease-out;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
 
         .notification-title {
             font-weight: bold;
             margin-bottom: 4px;
             color: var(--dourado);
+            font-family: 'Cinzel', serif;
+        }
+
+        .notification-message {
+            font-size: 11px;
+            line-height: 1.4;
         }
 
         @keyframes slideIn {
@@ -464,8 +966,53 @@
             to { transform: translateX(100%); opacity: 0; }
         }
 
-        /* === WALLPAPER SELECTOR === */
-        .wallpaper-selector {
+        /* === PAINEL DE NOTIFICAÇÕES === */
+        .notifications-panel {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 350px;
+            height: 100vh;
+            background: rgba(192, 192, 192, 0.95);
+            backdrop-filter: blur(10px);
+            border-left: 2px outset #c0c0c0;
+            z-index: 2500;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .notifications-panel.show {
+            right: 0;
+        }
+
+        .notifications-header {
+            background: linear-gradient(90deg, var(--azul-me), var(--azul-me-escuro));
+            color: white;
+            padding: 8px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-item {
+            padding: 8px;
+            border-bottom: 1px solid #a0a0a0;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .notification-time {
+            font-size: 9px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        /* === CENTRAL DE MAGIA === */
+        .magic-center {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -476,51 +1023,47 @@
             display: none;
             z-index: 2500;
             width: 400px;
+            box-shadow: 4px 4px 12px rgba(0,0,0,0.4);
         }
 
-        .wallpaper-selector.show {
+        .magic-center.show {
             display: block;
         }
 
-        .wallpaper-options {
+        .magic-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
             margin: 12px 0;
         }
 
-        .wallpaper-option {
-            width: 80px;
-            height: 60px;
-            border: 2px solid #808080;
-            cursor: pointer;
-            border-radius: 4px;
-            position: relative;
+        .magic-card {
+            background: #e0e0e0;
+            border: 1px inset #c0c0c0;
+            padding: 8px;
+            text-align: center;
         }
 
-        .wallpaper-option.selected {
-            border-color: var(--dourado);
-            box-shadow: 0 0 8px var(--dourado);
+        .magic-card h4 {
+            color: var(--azul-me);
+            margin-bottom: 4px;
+            font-family: 'Cinzel', serif;
         }
 
-        .wallpaper-option.mystic {
-            background: linear-gradient(135deg, var(--azul), #1a2a4a);
+        /* === FONTES PERSONALIZADAS === */
+        @font-face {
+            font-family: 'GothicPixel';
+            src: url('./gothic-pixel-font.ttf') format('truetype');
+            font-display: swap;
         }
 
-        .wallpaper-option.cosmic {
-            background: linear-gradient(135deg, #0f0f23, #2d1b69);
-        }
-
-        .wallpaper-option.aurora {
-            background: linear-gradient(180deg, #001122, #003366);
-        }
-
-        /* === SPARKLES === */
+        /* === CORES MÁGICKAS === */ */
         .sparkle {
             position: fixed;
             pointer-events: none;
             z-index: 100;
             animation: sparkle 3s linear infinite;
+            font-size: 12px;
         }
 
         @keyframes sparkle {
@@ -528,31 +1071,394 @@
             50% { opacity: 1; transform: scale(1) rotate(180deg); }
             100% { opacity: 0; transform: scale(0) rotate(360deg); }
         }
+
+        /* === PERFIS TEMÁTICOS === */
+        .theme-selector {
+            position: fixed;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            padding: 8px;
+            display: none;
+            z-index: 2000;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .theme-selector.show {
+            display: block;
+        }
+
+        .theme-options {
+            display: flex;
+            gap: 8px;
+        }
+
+        .theme-option {
+            width: 60px;
+            height: 40px;
+            border: 2px solid #808080;
+            cursor: pointer;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-option.selected {
+            border-color: var(--dourado);
+            box-shadow: 0 0 8px var(--dourado);
+        }
+
+        .theme-option.astral {
+            background: linear-gradient(135deg, #191970, #4169E1);
+        }
+
+        .theme-option.chthonian {
+            background: linear-gradient(135deg, var(--vinho), #2F0A1E);
+        }
+
+        .theme-option.alchemical {
+            background: linear-gradient(135deg, #8B4513, #DAA520);
+        }
+
+        /* === WALLPAPER SELECTOR === */
+        .wallpaper-selector {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            max-height: 500px;
+            background: var(--prata);
+            border: 2px outset var(--prata);
+            color: black;
+            z-index: 2000;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .wallpaper-header {
+            background: linear-gradient(90deg, var(--azul-me), var(--azul-me-escuro));
+            color: white;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .wallpaper-tabs {
+            display: flex;
+            background: var(--cinza-escuro);
+            border-bottom: 1px solid #808080;
+        }
+
+        .wallpaper-tab {
+            padding: 8px 16px;
+            background: var(--prata);
+            border-right: 1px solid #808080;
+            cursor: pointer;
+            color: black;
+        }
+
+        .wallpaper-tab.active {
+            background: white;
+            border-bottom: 1px solid white;
+        }
+
+        .wallpaper-section, .upload-section, .screensaver-section {
+            display: none;
+            padding: 16px;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .wallpaper-section.active, .upload-section.active, .screensaver-section.active {
+            display: block;
+        }
+
+        .wallpaper-grid, .screensaver-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+        }
+
+        .wallpaper-option, .screensaver-option {
+            text-align: center;
+            cursor: pointer;
+            padding: 8px;
+            border: 2px solid transparent;
+            border-radius: 4px;
+        }
+
+        .wallpaper-option:hover, .screensaver-option:hover {
+            border-color: var(--dourado);
+        }
+
+        .wallpaper-option.selected, .screensaver-option.selected {
+            border-color: var(--azul-me);
+            background: rgba(49, 106, 197, 0.1);
+        }
+
+        .wallpaper-preview, .screensaver-preview {
+            width: 100px;
+            height: 60px;
+            border: 1px solid #808080;
+            margin: 0 auto 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .astral-bg {
+            background: linear-gradient(135deg, var(--azul) 0%, #1a2a4a 50%, #2a1a4a 100%);
+        }
+
+        .chthonian-bg {
+            background: linear-gradient(135deg, var(--vinho), #2F0A1E);
+        }
+
+        .alchemical-bg {
+            background: linear-gradient(135deg, #8B4513, #DAA520);
+        }
+
+        .cosmic-bg {
+            background: linear-gradient(135deg, #000428, #004e92);
+        }
+
+        .upload-area {
+            border: 2px dashed #808080;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--dourado);
+            background: rgba(240, 170, 83, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .upload-preview {
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .upload-preview img {
+            max-width: 200px;
+            max-height: 120px;
+            border: 1px solid #808080;
+            border-radius: 4px;
+        }
+
+        .wallpaper-actions {
+            padding: 12px 16px;
+            border-top: 1px solid #808080;
+            text-align: right;
+            background: var(--prata);
+        }
+
+        /* === RESPONSIVIDADE === */
+        @media (max-width: 768px) {
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fill, 60px);
+                gap: 12px;
+            }
+            
+            .start-menu {
+                width: 250px;
+            }
+            
+            .notifications-panel {
+                width: 300px;
+            }
+        }
+
+        /* === MENUS CONTEXTUAIS MÁGICOS === */
+        .context-menu {
+            position: fixed;
+            background: linear-gradient(135deg, #c0c0c0, #e0e0e0);
+            border: 2px outset #c0c0c0;
+            border-radius: 4px;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            z-index: 10000;
+            min-width: 180px;
+            display: none;
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+            animation: contextMenuAppear 0.2s ease-out;
+        }
+
+        .context-menu-item {
+            padding: 6px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #a0a0a0;
+            transition: background 0.1s;
+            position: relative;
+        }
+
+        .context-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .context-menu-item:hover {
+            background: linear-gradient(90deg, var(--azul-me), var(--azul-me-escuro));
+            color: white;
+        }
+
+        .context-menu-item.disabled {
+            color: #808080;
+            cursor: not-allowed;
+        }
+
+        .context-menu-item.disabled:hover {
+            background: none;
+            color: #808080;
+        }
+
+        .context-menu-separator {
+            height: 1px;
+            background: #808080;
+            margin: 2px 0;
+        }
+
+        .context-menu-icon {
+            font-size: 14px;
+            width: 16px;
+            text-align: center;
+        }
+
+        .context-menu-submenu {
+            position: absolute;
+            left: 100%;
+            top: -2px;
+            background: linear-gradient(135deg, #c0c0c0, #e0e0e0);
+            border: 2px outset #c0c0c0;
+            border-radius: 4px;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            min-width: 160px;
+            display: none;
+            animation: contextMenuAppear 0.15s ease-out;
+        }
+
+        .context-menu-item:hover .context-menu-submenu {
+            display: block;
+        }
+
+        .context-menu-arrow {
+            margin-left: auto;
+            font-size: 8px;
+        }
+
+        .magic-effect {
+            position: absolute;
+            pointer-events: none;
+            font-size: 20px;
+            animation: magicSparkle 1s ease-out forwards;
+            z-index: 10001;
+        }
+
+        @keyframes contextMenuAppear {
+            from { 
+                opacity: 0; 
+                transform: scale(0.8) translateY(-10px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0); 
+            }
+        }
+
+        @keyframes magicSparkle {
+            0% { 
+                opacity: 1; 
+                transform: scale(0.5) rotate(0deg); 
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.2) rotate(180deg); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: scale(0.3) rotate(360deg) translateY(-30px); 
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- TELA DE BOOT -->
-    <div class="boot-screen" id="boot-screen">
-        <div class="boot-logo">🔮</div>
-        <div class="boot-title">MYSTICSOFT</div>
-        <div class="boot-subtitle">MILLENNIUM EDITION</div>
-        <div class="boot-info">
-            <div>Sistema Operacional Místico</div>
-            <div>Versão 2025.09.11 Build 2001</div>
+    <!-- === TELA DE INICIALIZAÇÃO MYSTICSOFT PIXEL ART WHIMSIGOTH === -->
+    <div class="mysticsoft-boot-screen" id="mysticsoft-boot-screen">
+        <!-- Estática de TV -->
+        <div class="tv-static" id="tv-static"></div>
+        
+        <!-- Fundo cósmico -->
+        <div class="cosmic-background">
+            <!-- Estrelas pixeladas -->
+            <div class="pixel-stars"></div>
+            
+            <!-- Símbolos esotéricos flutuantes -->
+            <div class="floating-symbols">
+                <span class="symbol">⚡</span>
+                <span class="symbol">☽</span>
+                <span class="symbol">△</span>
+                <span class="symbol">▽</span>
+                <span class="symbol">☉</span>
+                <span class="symbol">ᚱ</span>
+                <span class="symbol">✦</span>
+                <span class="symbol">◊</span>
+            </div>
         </div>
-        <div class="boot-progress">
-            <div class="boot-progress-bar"></div>
+        
+        <!-- Logo MysticSoft -->
+        <div class="mysticsoft-logo-container" id="mysticsoft-logo-container">
+            <div class="logo-glow-effect"></div>
+            <img src="./Designsemnome(14).png" alt="MysticSoft Logo" class="mysticsoft-logo-img" id="mysticsoft-logo-img">
+            <div class="logo-border-glow"></div>
         </div>
-        <div class="boot-text">Inicializando sistema...</div>
-        <div class="boot-click">Clique para iniciar</div>
-        <div class="boot-footer">
-            Copyright © 2025 MysticSoft Corporation<br>
-            Todos os direitos reservados • Powered by Aurora Engine
+        
+        <!-- Interface de inicialização -->
+        <div class="boot-interface" id="boot-interface">
+            <!-- Título MysticSoft -->
+            <div class="mysticsoft-brand">MysticSoft</div>
+            
+            <!-- Texto de inicialização -->
+            <div class="boot-message">Inicializando o Universo MysticSoft...</div>
+            
+            <!-- Barra de progresso -->
+            <div class="progress-container">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                    <div class="progress-sparkles"></div>
+                </div>
+                <div class="progress-text" id="progress-text">0%</div>
+            </div>
+            
+            <!-- Créditos -->
+            <div class="credits">Desenvolvido pela Aurora Sagrada</div>
+        </div>
+        
+        <!-- Botão de início -->
+        <div class="start-button-container" id="start-button-container">
+            <button class="cosmic-start-button" onclick="startMysticSoftBoot()">
+                ✨ Conectar ao Cosmos ✨
+            </button>
         </div>
     </div>
 
-    <!-- DESKTOP -->
-    <div class="desktop wallpaper-mystic" id="desktop">
+    <!-- DESKTOP WINDOWS ME -->
+    <div class="desktop theme-astral" id="desktop">
         <div class="desktop-icons">
             <div class="desktop-icon" data-app="astromagick">
                 <div class="icon">🔮</div>
@@ -598,41 +1504,45 @@
                 <div class="icon">📚</div>
                 <div class="label">Biblioteca</div>
             </div>
-            <div class="desktop-icon" data-app="configuracoes">
-                <div class="icon">⚙️</div>
-                <div class="label">Configurações</div>
+            <div class="desktop-icon" data-app="grimorio">
+                <div class="icon">📜</div>
+                <div class="label">Grimório</div>
             </div>
         </div>
     </div>
 
-    <!-- TASKBAR -->
+    <!-- TASKBAR WINDOWS ME AUTÊNTICA -->
     <div class="taskbar">
         <button class="start-button" id="start-button">
-            <span style="color: var(--dourado);">⭐</span> Iniciar
+            <div class="start-logo">🌟</div>
+            <span>Iniciar</span>
         </button>
         
-        <div class="taskbar-center"></div>
+        <div class="taskbar-center" id="taskbar-center"></div>
         
         <div class="taskbar-right">
             <div class="astro-chips">
-                <div class="astro-chip" data-chip="moon" title="Lua Minguante - Liberação">🌖</div>
-                <div class="astro-chip critical" data-chip="mercury" title="Mercúrio Retrógrado - Cuidado">☿R</div>
-                <div class="astro-chip" data-chip="voc" title="Lua Fora de Curso até 23:45">VOC</div>
+                <div class="astro-chip" data-chip="moon" data-tooltip="Lua Minguante - Liberação">🌖</div>
+                <div class="astro-chip critical" data-chip="mercury" data-tooltip="Mercúrio Retrógrado - Cuidado">☿R</div>
+                <div class="astro-chip" data-chip="voc" data-tooltip="Lua Fora de Curso até 23:45">VOC</div>
             </div>
             
-            <div class="volume-icon" id="volume-icon">🔊</div>
-            
-            <div class="clock" id="clock">
-                <div class="clock-time">20:30</div>
-                <div class="clock-date">11/09</div>
+            <div class="system-tray">
+                <div class="planetary-hour" id="planetary-hour" title="Hora Planetária">☉</div>
+                <div class="volume-icon" id="volume-icon">🔊</div>
+                <div class="clock" id="clock">
+                    <div class="clock-time">21:50</div>
+                    <div class="clock-date">11/09</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- MENU INICIAR -->
+    <!-- MENU INICIAR WINDOWS ME -->
     <div class="start-menu" id="start-menu">
         <div class="start-menu-header">
-            🌟 Aurora OS • MysticSoft
+            <span>🌟</span>
+            <span>Aurora OS • MysticSoft</span>
         </div>
         <div class="start-menu-items">
             <div class="start-menu-item" data-app="astromagick">
@@ -657,8 +1567,9 @@
             </div>
             <div class="start-menu-item" data-app="carta-natal">
                 <span class="icon">🌟</span>
-                <span>Carta Natal</span>
+                <span>Carta Natal Completa</span>
             </div>
+            <div class="start-menu-separator"></div>
             <div class="start-menu-item" data-app="aurora-player">
                 <span class="icon">🎵</span>
                 <span>Aurora Player</span>
@@ -673,18 +1584,33 @@
             </div>
             <div class="start-menu-item" data-app="biblioteca">
                 <span class="icon">📚</span>
-                <span>Biblioteca</span>
+                <span>Biblioteca Mística</span>
             </div>
-            <div class="start-menu-item" data-app="configuracoes">
-                <span class="icon">⚙️</span>
-                <span>Configurações</span>
+            <div class="start-menu-item" data-app="grimorio">
+                <span class="icon">📜</span>
+                <span>Grimório Digital</span>
+            </div>
+            <div class="start-menu-separator"></div>
+            <div class="start-menu-item" onclick="showMagicCenter()">
+                <span class="icon">🌙</span>
+                <span>Central de Magia</span>
+            </div>
+            <div class="start-menu-item" onclick="showThemeSelector()">
+                <span class="icon">🎨</span>
+                <span>Perfis Temáticos</span>
+            </div>
+            <div class="start-menu-item" onclick="showNotificationsPanel()">
+                <span class="icon">🔔</span>
+                <span>Histórico Mágicko</span>
             </div>
         </div>
     </div>
 
     <!-- VOLUME POPUP -->
     <div class="volume-popup" id="volume-popup">
-        <h3 style="margin-bottom: 8px; color: black;">🔊 Controles de Volume</h3>
+        <h3 style="margin-bottom: 8px; color: black;">🔊 Controles de Áudio Avançados</h3>
+        
+        <!-- Controles de Volume -->
         <div class="volume-control">
             <div class="volume-label">🎤 AFÁST! (Narradora)</div>
             <input type="range" class="volume-slider" min="0" max="100" value="75" id="volume-afast">
@@ -695,30 +1621,217 @@
             <input type="range" class="volume-slider" min="0" max="100" value="50" id="volume-system">
             <span id="volume-system-value">50%</span>
         </div>
-        <div style="margin-top: 8px;">
-            <button onclick="testAFAST()" style="padding: 4px 8px; margin-right: 4px;">Testar AFÁST!</button>
-            <button onclick="testSystem()" style="padding: 4px 8px;">Som Sistema</button>
+        
+        <!-- Configurações de Voz Inteligente -->
+        <div style="border-top: 1px solid #808080; margin: 8px 0; padding-top: 8px;">
+            <div class="volume-label">🧠 Sistema de Voz Inteligente</div>
+            <div style="display: flex; align-items: center; margin: 4px 0;">
+                <input type="checkbox" id="enable-ducking" checked>
+                <label for="enable-ducking" style="margin-left: 4px; font-size: 10px;">Ducking Automático</label>
+            </div>
+            <div style="display: flex; align-items: center; margin: 4px 0;">
+                <span style="font-size: 10px; margin-right: 4px;">Nível Ducking:</span>
+                <input type="range" min="0.1" max="0.8" step="0.1" value="0.3" id="ducking-level" style="width: 60px;">
+                <span id="ducking-value" style="font-size: 10px; margin-left: 4px;">30%</span>
+            </div>
+        </div>
+        
+        <!-- Status da Fila -->
+        <div style="border-top: 1px solid #808080; margin: 8px 0; padding-top: 8px;">
+            <div class="volume-label">📋 Status da Fila de Voz</div>
+            <div style="font-size: 10px; color: #333;">
+                <span>Alta: <span id="queue-high">0</span></span> |
+                <span>Média: <span id="queue-medium">0</span></span> |
+                <span>Baixa: <span id="queue-low">0</span></span>
+            </div>
+        </div>
+        
+        <!-- Botões de Controle -->
+        <div class="volume-buttons">
+            <button onclick="testAFAST()">Testar AFÁST!</button>
+            <button onclick="testSystem()">Som Sistema</button>
+            <button onclick="toggleDND()">🌙 DND</button>
+        </div>
+        <div class="volume-buttons" style="margin-top: 4px;">
+            <button onclick="clearAllQueues()">🗑️ Limpar Fila</button>
+            <button onclick="testVoicePriority()">🎯 Teste Prioridade</button>
         </div>
     </div>
 
-    <!-- WALLPAPER SELECTOR -->
+    <!-- CENTRAL DE MAGIA -->
+    <div class="magic-center" id="magic-center">
+        <div class="window-header">
+            <span>🌙 Central de Magia em Tempo Real</span>
+            <div class="window-controls">
+                <button onclick="hideMagicCenter()">✕</button>
+            </div>
+        </div>
+        <div class="magic-grid">
+            <div class="magic-card">
+                <h4>🌖 Fase Lunar</h4>
+                <p>Minguante</p>
+                <small>Liberação e limpeza</small>
+            </div>
+            <div class="magic-card">
+                <h4>🏠 Mansão Lunar</h4>
+                <p>Al-Dabaran</p>
+                <small>Proteção e força</small>
+            </div>
+            <div class="magic-card">
+                <h4>☉ Planeta Regente</h4>
+                <p>Sol</p>
+                <small>Liderança e criatividade</small>
+            </div>
+            <div class="magic-card">
+                <h4>🌙 Status VOC</h4>
+                <p>Até 23:45</p>
+                <small>Evite decisões</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAINEL DE NOTIFICAÇÕES -->
+    <div class="notifications-panel" id="notifications-panel">
+        <div class="notifications-header">
+            <span>🔔 Histórico Mágicko</span>
+            <button onclick="hideNotificationsPanel()" style="background: none; border: none; color: white; cursor: pointer;">✕</button>
+        </div>
+        <div id="notifications-list">
+            <!-- Notificações serão adicionadas aqui -->
+        </div>
+    </div>
+
+    <!-- SELETOR DE TEMAS -->
+    <div class="theme-selector" id="theme-selector">
+        <h3 style="margin-bottom: 8px; color: black;">🎨 Perfis Temáticos</h3>
+        <div class="theme-options">
+            <div class="theme-option astral selected" data-theme="astral" title="Astral"></div>
+            <div class="theme-option chthonian" data-theme="chthonian" title="Chthonian"></div>
+            <div class="theme-option alchemical" data-theme="alchemical" title="Alquímica"></div>
+        </div>
+        <div style="text-align: center; margin-top: 8px;">
+            <button onclick="applyTheme()" style="padding: 4px 8px; margin-right: 4px;">Aplicar</button>
+            <button onclick="hideThemeSelector()" style="padding: 4px 8px;">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- SELETOR DE WALLPAPERS -->
     <div class="wallpaper-selector" id="wallpaper-selector">
-        <h3 style="color: black; margin-bottom: 8px;">🖼️ Personalizar Papel de Parede</h3>
-        <div class="wallpaper-options">
-            <div class="wallpaper-option mystic selected" data-wallpaper="mystic" title="Místico"></div>
-            <div class="wallpaper-option cosmic" data-wallpaper="cosmic" title="Cósmico"></div>
-            <div class="wallpaper-option aurora" data-wallpaper="aurora" title="Aurora Boreal"></div>
+        <div class="wallpaper-header">
+            <span>🎨 Personalização de Wallpapers</span>
+            <button onclick="hideWallpaperSelector()" style="background: none; border: none; color: white; cursor: pointer;">✕</button>
         </div>
-        <div style="text-align: center; margin-top: 12px;">
-            <button onclick="applyWallpaper()" style="padding: 6px 12px; margin-right: 8px;">Aplicar</button>
-            <button onclick="hideWallpaperSelector()" style="padding: 6px 12px;">Cancelar</button>
+        <div class="wallpaper-tabs">
+            <div class="wallpaper-tab active" data-tab="wallpaper">Wallpapers</div>
+            <div class="wallpaper-tab" data-tab="upload">Upload</div>
+            <div class="wallpaper-tab" data-tab="screensaver">Screensavers</div>
         </div>
+        
+        <!-- Seção de Wallpapers -->
+        <div class="wallpaper-section active">
+            <div class="wallpaper-grid">
+                <div class="wallpaper-option" data-wallpaper="astral">
+                    <div class="wallpaper-preview astral-bg"></div>
+                    <span>Astral</span>
+                </div>
+                <div class="wallpaper-option" data-wallpaper="chthonian">
+                    <div class="wallpaper-preview chthonian-bg"></div>
+                    <span>Chthonian</span>
+                </div>
+                <div class="wallpaper-option" data-wallpaper="alchemical">
+                    <div class="wallpaper-preview alchemical-bg"></div>
+                    <span>Alquímico</span>
+                </div>
+                <div class="wallpaper-option" data-wallpaper="cosmic">
+                    <div class="wallpaper-preview cosmic-bg"></div>
+                    <span>Cósmico</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Seção de Upload -->
+        <div class="upload-section">
+            <div class="upload-area">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">
+                    <strong>Clique ou arraste uma imagem</strong><br>
+                    <small>Formatos suportados: JPG, PNG, GIF</small>
+                </div>
+            </div>
+            <input type="file" id="wallpaper-upload" accept="image/*" style="display: none;">
+            <div class="upload-preview" id="upload-preview"></div>
+        </div>
+        
+        <!-- Seção de Screensavers -->
+        <div class="screensaver-section">
+            <div class="screensaver-grid">
+                <div class="screensaver-option" data-screensaver="matrix">
+                    <div class="screensaver-preview">🌌</div>
+                    <span>Matrix Místico</span>
+                </div>
+                <div class="screensaver-option" data-screensaver="aurora">
+                    <div class="screensaver-preview">🌈</div>
+                    <span>Aurora Boreal</span>
+                </div>
+                <div class="screensaver-option" data-screensaver="starfield">
+                    <div class="screensaver-preview">⭐</div>
+                    <span>Campo Estelar</span>
+                </div>
+                <div class="screensaver-option" data-screensaver="pipes">
+                    <div class="screensaver-preview">🔮</div>
+                    <span>Tubos Mágicos</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="wallpaper-actions">
+            <button onclick="applyWallpaper()" style="padding: 8px 16px; margin-right: 8px;">Aplicar</button>
+            <button onclick="previewWallpaper()" style="padding: 8px 16px; margin-right: 8px;">Preview</button>
+            <button onclick="hideWallpaperSelector()" style="padding: 8px 16px;">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Screensaver Ativo -->
+    <div id="screensaver-active" style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 9999;
+        cursor: pointer;
+    "></div>
+
+    <!-- Menu Contextual Mágico -->
+    <div id="context-menu" class="context-menu">
+        <!-- Conteúdo será gerado dinamicamente -->
     </div>
 
     <script>
         // Variáveis globais
-        let selectedWallpaper = 'mystic';
+        let selectedTheme = 'astral';
         let auroraOS = null;
+        let speechQueue = [];
+        let isSpeaking = false;
+        let isDNDMode = false;
+        let notificationHistory = [];
+        
+        // Sistema de voz inteligente
+        let voiceQueue = {
+            high: [],    // Alertas críticos
+            medium: [],  // Notificações importantes
+            low: []      // Informações gerais
+        };
+        let currentUtterance = null;
+        let backgroundAudio = null;
+        let isDucking = false;
+        let voiceSettings = {
+            enableDucking: true,
+            duckingLevel: 0.3,
+            pauseBetweenMessages: 800,
+            maxQueueSize: 10
+        };
 
         // Classe principal do Aurora OS
         class AuroraOS {
@@ -728,18 +1841,24 @@
                     system: 50
                 };
                 this.afastEnabled = true;
+                this.voiceProfile = 'oracular'; // oracular, sacerdotisa, bibliotecaria
                 this.init();
             }
 
             init() {
                 this.setupEventListeners();
                 this.updateClock();
+                this.createMagicParticles();
+                this.createMysticGlyphs();
                 setInterval(() => this.updateClock(), 1000);
                 
                 // Iniciar notificações AFÁST! após 5 segundos
                 setTimeout(() => {
-                    this.startAFASTNotifications();
+                    this.startAstrologicalNotifications();
                 }, 5000);
+                
+                // Criar sparkles mágickos
+                this.createSparkles();
             }
 
             setupEventListeners() {
@@ -767,11 +1886,22 @@
                     clock.addEventListener('click', () => this.showPlanetaryHour());
                 }
                 
+                // Planetary hour
+                const planetaryHour = document.getElementById('planetary-hour');
+                if (planetaryHour) {
+                    planetaryHour.addEventListener('click', () => this.showMagicCenter());
+                }
+                
                 // Desktop icons
                 document.querySelectorAll('.desktop-icon').forEach(icon => {
                     icon.addEventListener('dblclick', () => {
                         const appName = icon.dataset.app;
                         this.openApp(appName);
+                    });
+                    
+                    icon.addEventListener('click', () => {
+                        document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
+                        icon.classList.add('selected');
                     });
                 });
                 
@@ -779,8 +1909,10 @@
                 document.querySelectorAll('.start-menu-item').forEach(item => {
                     item.addEventListener('click', () => {
                         const appName = item.dataset.app;
-                        this.openApp(appName);
-                        this.hideStartMenu();
+                        if (appName) {
+                            this.openApp(appName);
+                            this.hideStartMenu();
+                        }
                     });
                 });
                 
@@ -793,6 +1925,55 @@
                 });
                 
                 // Volume sliders
+                this.setupVolumeControls();
+                
+                // Theme options
+                document.querySelectorAll('.theme-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        selectedTheme = option.dataset.theme;
+                    });
+                });
+                
+                // Atalhos de teclado mágickos
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey) {
+                        switch(e.key) {
+                            case '☿':
+                            case 'm':
+                                e.preventDefault();
+                                this.openApp('astromagick');
+                                break;
+                            case '♄':
+                            case 's':
+                                e.preventDefault();
+                                this.showMagicCenter();
+                                break;
+                            case '☉':
+                            case 'o':
+                                e.preventDefault();
+                                this.showPlanetaryHour();
+                                break;
+                        }
+                    }
+                });
+                
+                // Click outside to close menus
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.start-button') && !e.target.closest('.start-menu')) {
+                        this.hideStartMenu();
+                    }
+                    if (!e.target.closest('.volume-icon') && !e.target.closest('.volume-popup')) {
+                        this.hideVolumePopup();
+                    }
+                    if (!e.target.closest('.theme-selector') && !e.target.closest('[onclick*="showThemeSelector"]')) {
+                        this.hideThemeSelector();
+                    }
+                });
+            }
+
+            setupVolumeControls() {
                 const volumeAfast = document.getElementById('volume-afast');
                 if (volumeAfast) {
                     volumeAfast.addEventListener('input', (e) => {
@@ -816,33 +1997,41 @@
                         this.updateVolumeIcon();
                     });
                 }
+            }
+
+            createMagicParticles() {
+                const bootScreen = document.getElementById('boot-screen');
+                if (!bootScreen) return;
                 
-                // Wallpaper options
-                document.querySelectorAll('.wallpaper-option').forEach(option => {
-                    option.addEventListener('click', () => {
-                        document.querySelectorAll('.wallpaper-option').forEach(opt => opt.classList.remove('selected'));
-                        option.classList.add('selected');
-                        selectedWallpaper = option.dataset.wallpaper;
-                    });
-                });
+                setInterval(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'magic-particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 2 + 's';
+                    bootScreen.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.parentNode.removeChild(particle);
+                        }
+                    }, 4000);
+                }, 300);
+            }
+
+            createMysticGlyphs() {
+                const bootScreen = document.getElementById('boot-screen');
+                if (!bootScreen) return;
                 
-                // Desktop right-click
-                const desktop = document.getElementById('desktop');
-                if (desktop) {
-                    desktop.addEventListener('contextmenu', (e) => {
-                        e.preventDefault();
-                        this.showWallpaperSelector();
-                    });
-                }
+                const glyphs = ['ᚱ', '☿', '♄', '☉', '☽', '♂', '♃', '♀', '⚡', '🜃', '🜂', '🜁', '🜀'];
                 
-                // Click outside to close menus
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('.start-button') && !e.target.closest('.start-menu')) {
-                        this.hideStartMenu();
-                    }
-                    if (!e.target.closest('.volume-icon') && !e.target.closest('.volume-popup')) {
-                        this.hideVolumePopup();
-                    }
+                glyphs.forEach((glyph, index) => {
+                    const glyphElement = document.createElement('div');
+                    glyphElement.className = 'mystic-glyph';
+                    glyphElement.textContent = glyph;
+                    glyphElement.style.left = Math.random() * 90 + '%';
+                    glyphElement.style.top = Math.random() * 90 + '%';
+                    glyphElement.style.animationDelay = index * 0.5 + 's';
+                    bootScreen.appendChild(glyphElement);
                 });
             }
 
@@ -851,14 +2040,55 @@
                 const desktop = document.getElementById('desktop');
                 
                 if (bootScreen && desktop) {
-                    bootScreen.style.animation = 'fadeOut 1s ease-out forwards';
+                    // Som ambiente de inicialização
+                    this.playBootSounds();
+                    
+                    bootScreen.style.animation = 'fadeOut 2s ease-out forwards';
                     
                     setTimeout(() => {
                         bootScreen.style.display = 'none';
                         desktop.classList.add('show');
                         this.playBootComplete();
-                        this.showAFASTNotification('🌟 Sistema Iniciado', 'Aurora OS • MysticSoft carregado com sucesso!');
+                    }, 2000);
+                }
+            }
+
+            playBootSounds() {
+                // Simular sons ambiente (vento, sinos)
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    // Som de vento (ruído branco filtrado)
+                    const windNoise = audioContext.createBufferSource();
+                    const windFilter = audioContext.createBiquadFilter();
+                    const windGain = audioContext.createGain();
+                    
+                    windFilter.type = 'lowpass';
+                    windFilter.frequency.value = 200;
+                    windGain.gain.value = 0.1;
+                    
+                    windNoise.connect(windFilter);
+                    windFilter.connect(windGain);
+                    windGain.connect(audioContext.destination);
+                    
+                    // Som de sino
+                    setTimeout(() => {
+                        const bell = audioContext.createOscillator();
+                        const bellGain = audioContext.createGain();
+                        
+                        bell.frequency.value = 800;
+                        bell.type = 'sine';
+                        bellGain.gain.value = 0.2;
+                        
+                        bell.connect(bellGain);
+                        bellGain.connect(audioContext.destination);
+                        
+                        bell.start();
+                        bell.stop(audioContext.currentTime + 1);
                     }, 1000);
+                    
+                } catch (e) {
+                    console.log('Audio não disponível');
                 }
             }
 
@@ -898,6 +2128,34 @@
                 
                 if (clockTime) clockTime.textContent = timeString;
                 if (clockDate) clockDate.textContent = dateString;
+                
+                // Atualizar planeta regente da hora
+                this.updatePlanetaryHour();
+            }
+
+            updatePlanetaryHour() {
+                const planets = ['☉', '☽', '♂', '☿', '♃', '♀', '♄'];
+                const hour = new Date().getHours();
+                const planetIndex = hour % 7;
+                const planetaryHour = document.getElementById('planetary-hour');
+                
+                if (planetaryHour) {
+                    planetaryHour.textContent = planets[planetIndex];
+                    planetaryHour.title = `Hora de ${this.getPlanetName(planets[planetIndex])}`;
+                }
+            }
+
+            getPlanetName(symbol) {
+                const names = {
+                    '☉': 'Sol',
+                    '☽': 'Lua',
+                    '♂': 'Marte',
+                    '☿': 'Mercúrio',
+                    '♃': 'Júpiter',
+                    '♀': 'Vênus',
+                    '♄': 'Saturno'
+                };
+                return names[symbol] || 'Desconhecido';
             }
 
             toggleStartMenu() {
@@ -954,28 +2212,48 @@
             }
 
             showPlanetaryHour() {
-                this.showAFASTNotification('☉ Hora Planetária', 'Hora do Sol - Ideal para liderança, criatividade e novos projetos. Tempo restante: 58:42');
+                const hour = new Date().getHours();
+                const planets = ['☉', '☽', '♂', '☿', '♃', '♀', '♄'];
+                const planetIndex = hour % 7;
+                const planet = planets[planetIndex];
+                const planetName = this.getPlanetName(planet);
+                
+                this.speakAstrological(`${planet} Hora Planetária`, 
+                    `Hora de ${planetName}. ${this.getPlanetaryAdvice(planet)}`);
+            }
+
+            getPlanetaryAdvice(planet) {
+                const advice = {
+                    '☉': 'Ideal para liderança, criatividade e novos projetos.',
+                    '☽': 'Momento para intuição, sonhos e trabalhos emocionais.',
+                    '♂': 'Energia para ação, coragem e superação de obstáculos.',
+                    '☿': 'Perfeito para comunicação, estudos e negociações.',
+                    '♃': 'Tempo de expansão, sabedoria e crescimento espiritual.',
+                    '♀': 'Favorece amor, arte, beleza e relacionamentos.',
+                    '♄': 'Disciplina, estrutura e trabalho com limitações.'
+                };
+                return advice[planet] || 'Momento de reflexão e equilíbrio.';
             }
 
             showChipInfo(chipType) {
                 const chipData = {
                     'moon': {
                         title: '🌖 Lua Minguante',
-                        message: 'Fase de liberação e limpeza energética. Ideal para banhos de descarrego e meditação.'
+                        message: 'Fase de liberação e limpeza energética. Ideal para banhos de descarrego, meditação e liberação de padrões antigos.'
                     },
                     'mercury': {
                         title: '☿ Mercúrio Retrógrado',
-                        message: 'Período de cautela com comunicação, tecnologia e viagens. Revise contratos e faça backup.'
+                        message: 'Período de cautela com comunicação, tecnologia e viagens. Revise contratos, faça backup de dados e evite decisões importantes.'
                     },
                     'voc': {
                         title: '🌙 Lua Fora de Curso',
-                        message: 'Evite decisões importantes até 23:45. Momento para reflexão e planejamento.'
+                        message: 'UMA AMEAÇA FOI DETECTADA, LUA FORA DE CURSO, EVITE RITUAIS'
                     }
                 };
                 
                 const data = chipData[chipType];
                 if (data) {
-                    this.showAFASTNotification(data.title, data.message);
+                    this.speakAstrological(data.title, data.message);
                 }
             }
 
@@ -994,12 +2272,13 @@
                     'afast': '🛡️ AFÁST! - Sistema de Proteção',
                     'taro': '🃏 Tarô Místico',
                     'biblioteca': '📚 Biblioteca Mística',
-                    'configuracoes': '⚙️ Configurações do Sistema'
+                    'grimorio': '📜 Grimório Digital'
                 };
                 
                 const title = appTitles[appName] || appName;
                 this.createWindow(title, this.getAppContent(appName));
-                this.showAFASTNotification('🚀 Aplicação Aberta', `${title} foi iniciada com sucesso!`);
+                this.addTaskbarButton(title, appName);
+                this.playWindowSound();
             }
 
             getAppContent(appName) {
@@ -1010,17 +2289,14 @@
                             <div style="background: #e0e0e0; padding: 10px; border: 1px inset #c0c0c0;">
                                 <h3>🌙 Fases Lunares</h3>
                                 <p><strong>Lua Minguante</strong></p>
-                                <small>Liberação e limpeza</small>
+                                <small>Liberação e limpeza energética</small>
                             </div>
-                            <div style="background: #e0e0e0; padding: 10px; border: 1px inset #c0c0c0;">
-                                <h3>☿ Mercúrio Retrógrado</h3>
-                                <p><strong>Até 15/09</strong></p>
-                                <small>Cuidado com comunicação</small>
+                            <div style="background: #e0e0e0; padding: 10px; border: 1px inset
                             </div>
                             <div style="background: #e0e0e0; padding: 10px; border: 1px inset #c0c0c0;">
                                 <h3>🌙 Lua Fora de Curso</h3>
                                 <p><strong>Até 23:45</strong></p>
-                                <small>Evite decisões</small>
+                                <small>Evite decisões importantes</small>
                             </div>
                             <div style="background: #e0e0e0; padding: 10px; border: 1px inset #c0c0c0;">
                                 <h3>☉ Hora Planetária</h3>
@@ -1038,24 +2314,23 @@
                                 <small>Aurora Sounds Collection</small>
                             </div>
                             <div style="margin: 15px 0;">
-                                <button onclick="alert('⏮️ Faixa anterior')" style="margin: 0 5px; padding: 8px;">⏮️</button>
-                                <button onclick="this.textContent = this.textContent === '▶️' ? '⏸️' : '▶️'" style="margin: 0 5px; padding: 8px 12px; font-size: 16px;">▶️</button>
-                                <button onclick="alert('⏭️ Próxima faixa')" style="margin: 0 5px; padding: 8px;">⏭️</button>
+                                <button onclick="playMagicSound('prev')" style="margin: 0 5px; padding: 8px;">⏮️</button>
+                                <button onclick="playMagicSound('play')" style="margin: 0 5px; padding: 8px 12px; font-size: 16px;">▶️</button>
+                                <button onclick="playMagicSound('next')" style="margin: 0 5px; padding: 8px;">⏭️</button>
                             </div>
                             <div style="background: #808080; height: 4px; border-radius: 2px; margin: 15px 0;">
                                 <div style="background: #316AC5; height: 100%; width: 35%; border-radius: 2px;"></div>
                             </div>
                         </div>
                     `,
-                    'taro': `
-                        <h2>🃏 Tarô Místico</h2>
-                        <div style="text-align: center; margin: 20px 0;">
-                            <p>Consulte as cartas sagradas para orientação</p>
-                            <button onclick="puxarCarta()" style="padding: 10px 20px; margin: 15px 0; background: #316AC5; color: white; border: none; cursor: pointer;">🔮 Puxar Carta</button>
-                            <div id="carta-resultado" style="display: none; margin-top: 15px; background: #e0e0e0; padding: 15px; border: 1px inset #c0c0c0;">
-                                <div style="font-size: 32px; margin: 10px 0;">🃏</div>
-                                <h3 id="carta-nome"></h3>
-                                <p id="carta-significado"></p>
+                    'grimorio': `
+                        <h2>📜 Grimório Digital</h2>
+                        <div style="margin: 15px 0;">
+                            <h3>✍️ Suas Anotações Mágickas</h3>
+                            <textarea id="grimorio-text" style="width: 100%; height: 200px; border: 1px inset #c0c0c0; padding: 8px; font-family: 'Cinzel', serif;" placeholder="Escreva suas reflexões, rituais e descobertas mágickas..."></textarea>
+                            <div style="margin-top: 8px;">
+                                <button onclick="saveGrimorio()" style="padding: 4px 8px; margin-right: 4px;">💾 Salvar</button>
+                                <button onclick="loadGrimorio()" style="padding: 4px 8px;">📖 Carregar</button>
                             </div>
                         </div>
                     `
@@ -1063,8 +2338,8 @@
                 
                 return contents[appName] || `
                     <h2>🔮 ${appName}</h2>
-                    <p>Aplicação em desenvolvimento...</p>
-                    <p>Em breve estará disponível!</p>
+                    <p>Aplicação mágicka em desenvolvimento...</p>
+                    <p>Em breve estará disponível com poderes expandidos!</p>
                 `;
             }
 
@@ -1077,7 +2352,9 @@
                     <div class="window-header">
                         <span class="window-title">${title}</span>
                         <div class="window-controls">
-                            <button onclick="this.parentElement.parentElement.parentElement.style.display='none'">✕</button>
+                            <button onclick="minimizeWindow('${windowId}')">_</button>
+                            <button onclick="maximizeWindow('${windowId}')">□</button>
+                            <button onclick="closeWindow('${windowId}')">✕</button>
                         </div>
                     </div>
                     <div class="window-content">
@@ -1139,59 +2416,352 @@
                 });
             }
 
-            startAFASTNotifications() {
-                // Primeira notificação
-                this.showAFASTNotification('🛡️ AFÁST! Ativo', 'Sistema de proteção energética iniciado com sucesso!');
+            addTaskbarButton(title, appName) {
+                const taskbarCenter = document.getElementById('taskbar-center');
+                if (!taskbarCenter) return;
                 
-                // Notificações periódicas
-                setInterval(() => {
-                    const notifications = [
-                        { title: '🌙 Alerta Lunar', message: 'Lua Minguante favorece limpeza energética e liberação.' },
-                        { title: '☿ Mercúrio Retrógrado', message: 'Cuidado com comunicações e tecnologia até 15/09.' },
-                        { title: '🛡️ Proteção Ativa', message: 'Energias negativas neutralizadas pelo sistema AFÁST!' },
-                        { title: '🌙 Lua Fora de Curso', message: 'Evite decisões importantes até 23:45.' }
-                    ];
-                    
-                    const notification = notifications[Math.floor(Math.random() * notifications.length)];
-                    this.showAFASTNotification(notification.title, notification.message);
-                }, 30000); // A cada 30 segundos
+                const button = document.createElement('button');
+                button.className = 'taskbar-app-button';
+                button.textContent = title.substring(0, 20) + (title.length > 20 ? '...' : '');
+                button.style.cssText = `
+                    background: linear-gradient(180deg, #c0c0c0 0%, #a0a0a0 100%);
+                    border: 1px outset #c0c0c0;
+                    padding: 2px 8px;
+                    margin-right: 2px;
+                    font-size: 10px;
+                    cursor: pointer;
+                    max-width: 120px;
+                    overflow: hidden;
+                `;
+                
+                taskbarCenter.appendChild(button);
             }
 
-            showAFASTNotification(title, message) {
+            playWindowSound() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.value = 600;
+                    oscillator.type = 'sine';
+                    gainNode.gain.value = (this.volumes.system / 100) * 0.1;
+                    
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.2);
+                } catch (e) {
+                    console.log('Audio não disponível');
+                }
+            }
+
+            startAstrologicalNotifications() {
+                // Notificações astrológicas periódicas (apenas eventos importantes)
+                setInterval(() => {
+                    if (isDNDMode) return;
+                    
+                    const astrologicalEvents = [
+                        { title: '🌖 Alerta Lunar', message: 'Lua Minguante favorece limpeza energética e liberação de padrões antigos.' },
+                        { title: '☿ Mercúrio Retrógrado', message: 'Cuidado com comunicações e tecnologia até quinze de setembro.' },
+                        { title: '🌙 Lua Fora de Curso', message: 'UMA AMEAÇA FOI DETECTADA, LUA FORA DE CURSO, EVITE RITUAIS' },
+                        { title: '♄ Trânsito de Saturno', message: 'Momento de disciplina e estruturação. Foque em responsabilidades.' }
+                    ];
+                    
+                    const event = astrologicalEvents[Math.floor(Math.random() * astrologicalEvents.length)];
+                    this.speakAstrological(event.title, event.message);
+                }, 60000); // A cada 60 segundos (reduzido para eventos importantes)
+            }
+
+            speakAstrological(title, message, priority = 'medium') {
+                if (!this.afastEnabled || isDNDMode) return;
+                
+                // Determinar prioridade baseada no conteúdo
+                const urgentKeywords = ['alerta', 'crítico', 'emergência', 'importante', 'atenção', 'ameaça', 'detectada', 'evite rituais'];
+                const lowPriorityKeywords = ['informação', 'dica', 'sugestão', 'lembrete'];
+                
+                let determinedPriority = priority;
+                
+                if (urgentKeywords.some(keyword => 
+                    title.toLowerCase().includes(keyword) || 
+                    message.toLowerCase().includes(keyword))) {
+                    determinedPriority = 'high';
+                } else if (lowPriorityKeywords.some(keyword => 
+                    title.toLowerCase().includes(keyword) || 
+                    message.toLowerCase().includes(keyword))) {
+                    determinedPriority = 'low';
+                }
+                
+                // Usar novo sistema de fila inteligente
+                this.addToVoiceQueue(title, message, determinedPriority);
+                
                 // Criar notificação visual
+                this.showNotification(title, message);
+                
+                // Adicionar ao histórico
+                this.addToHistory(title, message);
+            }
+
+            processQueue() {
+                if (isSpeaking) return;
+                
+                // Processar fila com prioridade
+                let nextMessage = null;
+                
+                if (voiceQueue.high.length > 0) {
+                    nextMessage = voiceQueue.high.shift();
+                } else if (voiceQueue.medium.length > 0) {
+                    nextMessage = voiceQueue.medium.shift();
+                } else if (voiceQueue.low.length > 0) {
+                    nextMessage = voiceQueue.low.shift();
+                } else if (speechQueue.length > 0) {
+                    // Compatibilidade com sistema antigo
+                    nextMessage = speechQueue.shift();
+                    nextMessage.priority = 'medium';
+                }
+                
+                if (!nextMessage) return;
+                
+                isSpeaking = true;
+                
+                // Aplicar ducking se necessário
+                if (voiceSettings.enableDucking && backgroundAudio) {
+                    this.applyDucking();
+                }
+                
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(nextMessage.message);
+                    utterance.lang = 'pt-BR';
+                    utterance.rate = 1.0;   // Velocidade normal e clara
+                    utterance.pitch = 1.1;  // Pitch ligeiramente elevado mas natural
+                    utterance.volume = this.volumes.afast / 100;
+                    
+                    // Selecionar voz feminina com prioridade
+                    let voices = speechSynthesis.getVoices();
+                    
+                    // Se as vozes ainda não carregaram, aguardar
+                    if (voices.length === 0) {
+                        speechSynthesis.addEventListener('voiceschanged', () => {
+                            voices = speechSynthesis.getVoices();
+                            this.selectBestVoice(utterance, voices);
+                        });
+                    } else {
+                        this.selectBestVoice(utterance, voices);
+                    }
+                    
+                    currentUtterance = utterance;
+                    
+                    utterance.onend = () => {
+                        isSpeaking = false;
+                        currentUtterance = null;
+                        
+                        // Remover ducking
+                        if (isDucking) {
+                            this.removeDucking();
+                        }
+                        
+                        // Pausa entre mensagens baseada na prioridade
+                        const pauseTime = nextMessage.priority === 'high' ? 300 : 
+                                        nextMessage.priority === 'medium' ? 500 : 800;
+                        
+                        setTimeout(() => this.processQueue(), pauseTime);
+                    };
+                    
+                    utterance.onerror = () => {
+                        isSpeaking = false;
+                        currentUtterance = null;
+                        if (isDucking) {
+                            this.removeDucking();
+                        }
+                        setTimeout(() => this.processQueue(), 1000);
+                    };
+                    
+                    speechSynthesis.speak(utterance);
+                } else {
+                    isSpeaking = false;
+                }
+            }
+
+            applyDucking() {
+                if (!backgroundAudio || isDucking) return;
+                
+                isDucking = true;
+                const originalVolume = backgroundAudio.volume;
+                const targetVolume = originalVolume * voiceSettings.duckingLevel;
+                
+                // Fade down suave
+                const fadeSteps = 10;
+                const stepSize = (originalVolume - targetVolume) / fadeSteps;
+                let currentStep = 0;
+                
+                const fadeInterval = setInterval(() => {
+                    currentStep++;
+                    backgroundAudio.volume = originalVolume - (stepSize * currentStep);
+                    
+                    if (currentStep >= fadeSteps) {
+                        clearInterval(fadeInterval);
+                    }
+                }, 50);
+            }
+
+            removeDucking() {
+                if (!backgroundAudio || !isDucking) return;
+                
+                isDucking = false;
+                const currentVolume = backgroundAudio.volume;
+                const targetVolume = this.volumes.system / 100;
+                
+                // Fade up suave
+                const fadeSteps = 10;
+                const stepSize = (targetVolume - currentVolume) / fadeSteps;
+                let currentStep = 0;
+                
+                const fadeInterval = setInterval(() => {
+                    currentStep++;
+                    backgroundAudio.volume = currentVolume + (stepSize * currentStep);
+                    
+                    if (currentStep >= fadeSteps) {
+                        clearInterval(fadeInterval);
+                        backgroundAudio.volume = targetVolume;
+                    }
+                }, 50);
+            }
+
+            addToVoiceQueue(title, message, priority = 'medium') {
+                const queueItem = { title, message, priority, timestamp: Date.now() };
+                
+                // Limitar tamanho da fila
+                if (voiceQueue[priority].length >= voiceSettings.maxQueueSize) {
+                    voiceQueue[priority].shift(); // Remove o mais antigo
+                }
+                
+                voiceQueue[priority].push(queueItem);
+                this.processQueue();
+            }
+
+            clearVoiceQueue(priority = null) {
+                if (priority) {
+                    voiceQueue[priority] = [];
+                } else {
+                    voiceQueue.high = [];
+                    voiceQueue.medium = [];
+                    voiceQueue.low = [];
+                    speechQueue = [];
+                }
+                
+                // Parar fala atual se necessário
+                if (currentUtterance && speechSynthesis.speaking) {
+                    speechSynthesis.cancel();
+                    isSpeaking = false;
+                    currentUtterance = null;
+                    if (isDucking) {
+                        this.removeDucking();
+                    }
+                }
+            }
+
+            getQueueStatus() {
+                return {
+                    high: voiceQueue.high.length,
+                    medium: voiceQueue.medium.length,
+                    low: voiceQueue.low.length,
+                    legacy: speechQueue.length,
+                    speaking: isSpeaking
+                };
+            }
+
+            selectBestVoice(utterance, voices) {
+                // Buscar vozes femininas de alta qualidade (estilo Avast)
+                let femaleVoice = null;
+                
+                console.log('🔍 Buscando vozes de alta qualidade...');
+                console.log('Vozes disponíveis:', voices.map(v => `${v.name} (${v.lang})`));
+                
+                // 1. PRIORIDADE: Vozes de sistema de alta qualidade
+                femaleVoice = voices.find(voice => 
+                    voice.lang.includes('pt') && 
+                    !voice.name.toLowerCase().includes('ricardo') &&
+                    !voice.name.toLowerCase().includes('daniel') &&
+                    !voice.name.toLowerCase().includes('helio') &&
+                    (voice.name.toLowerCase().includes('microsoft') ||
+                     voice.name.toLowerCase().includes('google') ||
+                     voice.name.toLowerCase().includes('system') ||
+                     voice.name.toLowerCase().includes('natural'))
+                );
+                
+                // 2. Vozes com nomes femininos conhecidos
+                if (!femaleVoice) {
+                    femaleVoice = voices.find(voice => 
+                        voice.lang.includes('pt') && 
+                        (voice.name.toLowerCase().includes('maria') ||
+                         voice.name.toLowerCase().includes('ana') ||
+                         voice.name.toLowerCase().includes('lucia') ||
+                         voice.name.toLowerCase().includes('fernanda') ||
+                         voice.name.toLowerCase().includes('camila') ||
+                         voice.name.toLowerCase().includes('vitoria') ||
+                         voice.name.toLowerCase().includes('beatriz'))
+                    );
+                }
+                
+                // 3. Vozes marcadas como femininas
+                if (!femaleVoice) {
+                    femaleVoice = voices.find(voice => 
+                        voice.lang.includes('pt') && 
+                        (voice.name.toLowerCase().includes('female') ||
+                         voice.name.toLowerCase().includes('feminina') ||
+                         voice.name.toLowerCase().includes('woman') ||
+                         voice.name.toLowerCase().includes('mulher'))
+                    );
+                }
+                
+                // 4. Primeira voz em português brasileiro disponível
+                if (!femaleVoice) {
+                    femaleVoice = voices.find(voice => 
+                        voice.lang.includes('pt-BR')
+                    );
+                }
+                
+                // 5. Qualquer voz em português
+                if (!femaleVoice) {
+                    femaleVoice = voices.find(voice => 
+                        voice.lang.includes('pt')
+                    );
+                }
+                
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                    console.log('🎤 Voz selecionada:', femaleVoice.name, femaleVoice.lang);
+                    
+                    // Configurações para voz limpa e profissional (estilo Avast)
+                    if (femaleVoice.name.toLowerCase().includes('microsoft') || 
+                        femaleVoice.name.toLowerCase().includes('google')) {
+                        utterance.rate = 0.95;  // Ligeiramente mais lenta para clareza
+                        utterance.pitch = 1.05; // Pitch natural e profissional
+                        console.log('🌟 Usando voz de sistema com configurações profissionais');
+                    } else {
+                        utterance.rate = 1.0;   // Velocidade padrão
+                        utterance.pitch = 1.1;  // Ligeiramente mais agudo
+                        console.log('⚙️ Usando voz alternativa com ajustes');
+                    }
+                    
+                } else {
+                    console.log('❌ Nenhuma voz encontrada, usando configurações padrão');
+                    utterance.rate = 0.9;   // Mais devagar para clareza
+                    utterance.pitch = 1.0;  // Pitch natural
+                }
+            }
+
+            showNotification(title, message) {
                 const notification = document.createElement('div');
                 notification.className = 'notification';
                 notification.innerHTML = `
                     <div class="notification-title">${title}</div>
-                    <div>${message}</div>
+                    <div class="notification-message">${message}</div>
                 `;
                 document.body.appendChild(notification);
 
-                // Síntese de voz em português
-                if ('speechSynthesis' in window && this.afastEnabled) {
-                    const utterance = new SpeechSynthesisUtterance(message);
-                    utterance.lang = 'pt-BR';
-                    utterance.rate = 0.9;
-                    utterance.pitch = 1.1;
-                    utterance.volume = this.volumes.afast / 100;
-                    
-                    // Tentar usar voz feminina
-                    const voices = speechSynthesis.getVoices();
-                    const femaleVoice = voices.find(voice => 
-                        voice.lang.includes('pt') && 
-                        (voice.name.toLowerCase().includes('female') || 
-                         voice.name.toLowerCase().includes('feminina') || 
-                         voice.name.toLowerCase().includes('woman'))
-                    );
-                    
-                    if (femaleVoice) {
-                        utterance.voice = femaleVoice;
-                    }
-                    
-                    speechSynthesis.speak(utterance);
-                }
-
-                // Remover após 4 segundos
+                // Remover após 5 segundos
                 setTimeout(() => {
                     notification.style.animation = 'slideOut 0.3s ease-in';
                     setTimeout(() => {
@@ -1199,13 +2769,74 @@
                             notification.parentNode.removeChild(notification);
                         }
                     }, 300);
-                }, 4000);
+                }, 5000);
             }
 
-            showWallpaperSelector() {
-                const selector = document.getElementById('wallpaper-selector');
+            addToHistory(title, message) {
+                const now = new Date();
+                notificationHistory.unshift({
+                    title,
+                    message,
+                    time: now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+                    date: now.toLocaleDateString('pt-BR')
+                });
+                
+                // Manter apenas os últimos 50 eventos
+                if (notificationHistory.length > 50) {
+                    notificationHistory = notificationHistory.slice(0, 50);
+                }
+                
+                this.updateNotificationsPanel();
+            }
+
+            updateNotificationsPanel() {
+                const list = document.getElementById('notifications-list');
+                if (!list) return;
+                
+                list.innerHTML = '';
+                
+                notificationHistory.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'notification-item';
+                    div.innerHTML = `
+                        <div class="notification-time">${item.time} - ${item.date}</div>
+                        <div style="font-weight: bold; color: #333;">${item.title}</div>
+                        <div style="font-size: 10px; color: #666;">${item.message}</div>
+                    `;
+                    list.appendChild(div);
+                });
+            }
+
+            createSparkles() {
+                setInterval(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.textContent = ['✨', '⭐', '🌟', '💫'][Math.floor(Math.random() * 4)];
+                    sparkle.style.left = Math.random() * window.innerWidth + 'px';
+                    sparkle.style.top = Math.random() * window.innerHeight + 'px';
+                    sparkle.style.fontSize = Math.random() * 16 + 8 + 'px';
+                    
+                    document.body.appendChild(sparkle);
+                    
+                    setTimeout(() => {
+                        if (sparkle.parentNode) {
+                            sparkle.parentNode.removeChild(sparkle);
+                        }
+                    }, 3000);
+                }, 3000);
+            }
+
+            showMagicCenter() {
+                const center = document.getElementById('magic-center');
+                if (center) {
+                    center.classList.add('show');
+                }
+            }
+
+            hideThemeSelector() {
+                const selector = document.getElementById('theme-selector');
                 if (selector) {
-                    selector.classList.add('show');
+                    selector.classList.remove('show');
                 }
             }
         }
@@ -1213,7 +2844,7 @@
         // Funções globais
         function testAFAST() {
             if (auroraOS) {
-                auroraOS.showAFASTNotification('🧪 Teste AFÁST!', 'Sistema de proteção funcionando perfeitamente!');
+                auroraOS.speakAstrological('🧪 Teste AFÁST!', 'Sistema de proteção funcionando perfeitamente! Voz feminina operacional.');
             }
         }
 
@@ -1237,88 +2868,1050 @@
             }
         }
 
-        function applyWallpaper() {
-            const desktop = document.getElementById('desktop');
-            if (desktop) {
-                desktop.classList.remove('wallpaper-mystic', 'wallpaper-cosmic', 'wallpaper-aurora');
-                desktop.classList.add(`wallpaper-${selectedWallpaper}`);
-                
-                localStorage.setItem('aurora-wallpaper', selectedWallpaper);
-                
-                if (auroraOS) {
-                    const wallpaperNames = {
-                        'mystic': 'Místico',
-                        'cosmic': 'Cósmico',
-                        'aurora': 'Aurora Boreal'
-                    };
-                    auroraOS.showAFASTNotification('🖼️ Wallpaper Alterado', 
-                        `Papel de parede "${wallpaperNames[selectedWallpaper]}" aplicado com sucesso!`);
-                }
-            }
+        function toggleDND() {
+            isDNDMode = !isDNDMode;
+            const button = event.target;
+            button.textContent = isDNDMode ? '🌙 DND ON' : '🌙 DND OFF';
+            button.style.background = isDNDMode ? '#666' : '';
             
-            hideWallpaperSelector();
+            if (auroraOS) {
+                const message = isDNDMode ? 'Modo Não Perturbar ativado.' : 'Modo Não Perturbar desativado.';
+                auroraOS.speakAstrological('🌙 Modo DND', message);
+            }
         }
 
-        function hideWallpaperSelector() {
-            const selector = document.getElementById('wallpaper-selector');
+        function showMagicCenter() {
+            const center = document.getElementById('magic-center');
+            if (center) {
+                center.classList.add('show');
+            }
+        }
+
+        function hideMagicCenter() {
+            const center = document.getElementById('magic-center');
+            if (center) {
+                center.classList.remove('show');
+            }
+        }
+
+        function showThemeSelector() {
+            const selector = document.getElementById('theme-selector');
+            if (selector) {
+                selector.classList.add('show');
+            }
+        }
+
+        function hideThemeSelector() {
+            const selector = document.getElementById('theme-selector');
             if (selector) {
                 selector.classList.remove('show');
             }
         }
 
-        function createSparkles() {
-            setInterval(() => {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.textContent = '✨';
-                sparkle.style.left = Math.random() * window.innerWidth + 'px';
-                sparkle.style.top = Math.random() * window.innerHeight + 'px';
-                sparkle.style.fontSize = Math.random() * 20 + 10 + 'px';
+        function applyTheme() {
+            const desktop = document.getElementById('desktop');
+            if (desktop) {
+                desktop.classList.remove('theme-astral', 'theme-chthonian', 'theme-alchemical');
+                desktop.classList.add(`theme-${selectedTheme}`);
                 
-                document.body.appendChild(sparkle);
+                localStorage.setItem('aurora-theme', selectedTheme);
                 
-                setTimeout(() => {
-                    if (sparkle.parentNode) {
-                        sparkle.parentNode.removeChild(sparkle);
-                    }
-                }, 3000);
-            }, 2000);
+                if (auroraOS) {
+                    const themeNames = {
+                        'astral': 'Astral',
+                        'chthonian': 'Chthonian',
+                        'alchemical': 'Alquímica'
+                    };
+                    auroraOS.speakAstrological('🎨 Tema Alterado', 
+                        `Perfil temático "${themeNames[selectedTheme]}" aplicado com sucesso!`);
+                }
+            }
+            
+            hideThemeSelector();
         }
 
-        function puxarCarta() {
-            const cartas = [
-                { nome: 'O Louco', significado: 'Novos começos, espontaneidade, fé no desconhecido.' },
-                { nome: 'O Mago', significado: 'Manifestação, poder pessoal, recursos disponíveis.' },
-                { nome: 'A Sacerdotisa', significado: 'Intuição, mistério, conhecimento oculto.' },
-                { nome: 'O Imperador', significado: 'Autoridade, estrutura, controle.' },
-                { nome: 'A Força', significado: 'Coragem interior, paciência, compaixão.' }
+        function showNotificationsPanel() {
+            const panel = document.getElementById('notifications-panel');
+            if (panel) {
+                panel.classList.add('show');
+            }
+        }
+
+        function hideNotificationsPanel() {
+            const panel = document.getElementById('notifications-panel');
+            if (panel) {
+                panel.classList.remove('show');
+            }
+        }
+
+        function closeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (window.parentNode) {
+                        window.parentNode.removeChild(window);
+                    }
+                }, 300);
+            }
+        }
+
+        function minimizeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.style.display = 'none';
+            }
+        }
+
+        function maximizeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                if (window.style.width === '100%') {
+                    window.style.width = '';
+                    window.style.height = '';
+                    window.style.left = '';
+                    window.style.top = '';
+                } else {
+                    window.style.width = 'calc(100% - 16px)';
+                    window.style.height = 'calc(100% - 40px)';
+                    window.style.left = '8px';
+                    window.style.top = '8px';
+                }
+            }
+        }
+
+        function playMagicSound(action) {
+            if (auroraOS) {
+                auroraOS.playWindowSound();
+            }
+        }
+
+        // Função principal para abrir aplicações
+        function openApp(appName) {
+            if (!auroraOS) return;
+            
+            // Usar o método openApp da instância auroraOS
+            auroraOS.openApp(appName);
+        }
+
+        // Sistema de Upload de Wallpaper
+        function showWallpaperSelector() {
+            const selector = document.getElementById('wallpaper-selector');
+            if (selector) {
+                selector.style.display = 'block';
+                setupWallpaperTabs();
+                setupUploadArea();
+                setupWallpaperOptions();
+            }
+        }
+
+        function hideWallpaperSelector() {
+            const selector = document.getElementById('wallpaper-selector');
+            if (selector) {
+                selector.style.display = 'none';
+            }
+        }
+
+        function setupWallpaperOptions() {
+            // Setup wallpaper options
+            document.querySelectorAll('.wallpaper-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.wallpaper-option').forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+
+            // Setup screensaver options
+            document.querySelectorAll('.screensaver-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.screensaver-option').forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+        }
+
+        function applyWallpaper(customUrl = null) {
+            const desktop = document.getElementById('desktop');
+            if (!desktop) return;
+
+            if (customUrl) {
+                // Aplicar wallpaper personalizado
+                desktop.style.backgroundImage = `url(${customUrl})`;
+                desktop.style.backgroundSize = 'cover';
+                desktop.style.backgroundPosition = 'center';
+                desktop.style.backgroundRepeat = 'no-repeat';
+                localStorage.setItem('aurora-custom-wallpaper', customUrl);
+            } else {
+                // Aplicar wallpaper predefinido
+                const selected = document.querySelector('.wallpaper-option.selected');
+                if (selected) {
+                    const wallpaperType = selected.dataset.wallpaper;
+                    applyPredefinedWallpaper(wallpaperType);
+                    localStorage.setItem('aurora-wallpaper', wallpaperType);
+                }
+            }
+
+            if (auroraOS) {
+                auroraOS.speakAstrological('🎨 Wallpaper', 'Wallpaper aplicado com sucesso!');
+            }
+            
+            hideWallpaperSelector();
+        }
+
+        function applyPredefinedWallpaper(type) {
+            const desktop = document.getElementById('desktop');
+            if (!desktop) return;
+
+            // Remover wallpaper personalizado
+            desktop.style.backgroundImage = '';
+            
+            // Aplicar classe do tema
+            desktop.classList.remove('theme-astral', 'theme-chthonian', 'theme-alchemical', 'theme-cosmic');
+            desktop.classList.add(`theme-${type}`);
+        }
+
+        function previewWallpaper() {
+            const selected = document.querySelector('.wallpaper-option.selected');
+            if (selected) {
+                const wallpaperType = selected.dataset.wallpaper;
+                applyPredefinedWallpaper(wallpaperType);
+                
+                if (auroraOS) {
+                    auroraOS.speakAstrological('👁️ Preview', 'Visualizando wallpaper selecionado.');
+                }
+            }
+        }
+
+        function setupWallpaperTabs() {
+            const tabs = document.querySelectorAll('.wallpaper-tab');
+            const sections = document.querySelectorAll('.wallpaper-section, .upload-section, .screensaver-section');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    sections.forEach(s => s.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    const target = tab.dataset.tab;
+                    const section = document.querySelector(`.${target}-section`);
+                    if (section) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        function setupUploadArea() {
+            const uploadArea = document.querySelector('.upload-area');
+            const fileInput = document.getElementById('wallpaper-upload');
+            
+            if (uploadArea && fileInput) {
+                uploadArea.addEventListener('click', () => fileInput.click());
+                uploadArea.addEventListener('dragover', handleDragOver);
+                uploadArea.addEventListener('drop', handleDrop);
+                fileInput.addEventListener('change', handleFileSelect);
+            }
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                processUploadedFile(files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                processUploadedFile(file);
+            }
+        }
+
+        function processUploadedFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor, selecione apenas arquivos de imagem.');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageUrl = e.target.result;
+                applyWallpaper(imageUrl);
+                saveCustomWallpaper(imageUrl);
+                
+                if (auroraOS) {
+                    auroraOS.speakAstrological('🖼️ Wallpaper', 'Seu wallpaper personalizado foi aplicado com sucesso!');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveCustomWallpaper(imageUrl) {
+            const customWallpapers = JSON.parse(localStorage.getItem('aurora-custom-wallpapers') || '[]');
+            customWallpapers.push({
+                id: Date.now(),
+                url: imageUrl,
+                name: 'Personalizado ' + (customWallpapers.length + 1)
+            });
+            localStorage.setItem('aurora-custom-wallpapers', JSON.stringify(customWallpapers));
+        }
+
+        // Sistema de Protetores de Tela
+        function showScreensaverSelector() {
+            const selector = document.getElementById('wallpaper-selector');
+            if (selector) {
+                selector.style.display = 'block';
+                // Ativar aba de screensaver
+                document.querySelector('[data-tab="screensaver"]').click();
+            }
+        }
+
+        function activateScreensaver(type) {
+            const screensaver = document.getElementById('screensaver-active');
+            if (screensaver) {
+                screensaver.style.display = 'block';
+                screensaver.innerHTML = generateScreensaverContent(type);
+                
+                // Fechar após 10 segundos ou ao clicar
+                setTimeout(() => {
+                    screensaver.style.display = 'none';
+                }, 10000);
+                
+                screensaver.addEventListener('click', () => {
+                    screensaver.style.display = 'none';
+                });
+            }
+        }
+
+        function generateScreensaverContent(type) {
+            switch(type) {
+                case 'matrix':
+                    return generateMatrixScreensaver();
+                case 'aurora':
+                    return generateAuroraScreensaver();
+                case 'starfield':
+                    return generateStarfieldScreensaver();
+                case 'pipes':
+                    return generatePipesScreensaver();
+                default:
+                    return '<div style="color: white; text-align: center; padding-top: 40vh;">Protetor de Tela Mágicko</div>';
+            }
+        }
+
+        function generateMatrixScreensaver() {
+            let html = '<div style="background: #000; width: 100%; height: 100%; overflow: hidden; position: relative;">';
+            
+            // Símbolos místicos para o Matrix
+            const symbols = ['☿', '♄', '♃', '♂', '☉', '♀', '☽', '⚹', '⚡', '✦', '◊', '△', '▽', '◈', '⬟', '⬢'];
+            
+            // Criar colunas de símbolos caindo
+            for (let i = 0; i < 60; i++) {
+                const delay = Math.random() * 5;
+                const duration = 3 + Math.random() * 4;
+                const left = (i * 100 / 60) + Math.random() * 2;
+                
+                html += `<div style="
+                    position: absolute; 
+                    left: ${left}%; 
+                    color: #0f0; 
+                    font-family: monospace; 
+                    font-size: ${12 + Math.random() * 8}px;
+                    animation: matrix-rain ${duration}s linear infinite;
+                    animation-delay: ${delay}s;
+                    text-shadow: 0 0 5px #0f0;
+                    opacity: ${0.7 + Math.random() * 0.3};
+                ">`;
+                
+                // Adicionar símbolos aleatórios
+                for (let j = 0; j < 25; j++) {
+                    const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+                    html += symbol + '<br>';
+                }
+                html += '</div>';
+            }
+            
+            // Adicionar efeito de brilho central
+            html += `<div style="
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: #00ff00;
+                font-size: 24px;
+                text-shadow: 0 0 20px #00ff00;
+                animation: mystical-glow 2s ease-in-out infinite;
+            ">🔮 MATRIX MÍSTICO 🔮</div>`;
+            
+            html += '</div>';
+            return html;
+        }
+
+        function generateAuroraScreensaver() {
+            return `
+                <div style="
+                    background: linear-gradient(45deg, #001122, #003344, #002233); 
+                    width: 100%; 
+                    height: 100%; 
+                    overflow: hidden;
+                    position: relative;
+                ">
+                    <!-- Aurora Boreal Principal -->
+                    <div style="
+                        position: absolute; 
+                        width: 100%; 
+                        height: 100%; 
+                        background: linear-gradient(90deg, transparent, #00ff88, #0088ff, transparent); 
+                        animation: aurora-flow 4s ease-in-out infinite;
+                        opacity: 0.7;
+                    "></div>
+                    
+                    <!-- Aurora Secundária -->
+                    <div style="
+                        position: absolute; 
+                        width: 100%; 
+                        height: 100%; 
+                        background: linear-gradient(45deg, transparent, #ff0088, #8800ff, transparent); 
+                        animation: aurora-flow 6s ease-in-out infinite reverse;
+                        opacity: 0.5;
+                    "></div>
+                    
+                    <!-- Estrelas de fundo -->
+                    <div style="
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        background-image: 
+                            radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+                            radial-gradient(2px 2px at 40px 70px, #fff, transparent),
+                            radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                            radial-gradient(1px 1px at 130px 80px, #fff, transparent),
+                            radial-gradient(2px 2px at 160px 30px, #fff, transparent);
+                        background-repeat: repeat;
+                        background-size: 200px 100px;
+                        animation: starfield-move 20s linear infinite;
+                    "></div>
+                    
+                    <!-- Texto Central -->
+                    <div style="
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        color: #ffffff;
+                        font-size: 28px;
+                        text-shadow: 0 0 20px #00ff88;
+                        animation: mystical-glow 3s ease-in-out infinite;
+                        font-family: 'Cinzel Decorative', serif;
+                    ">✨ AURORA BOREAL MÍSTICA ✨</div>
+                </div>
+            `;
+        }
+
+        function generateStarfieldScreensaver() {
+            let html = '<div style="background: radial-gradient(ellipse at center, #001122 0%, #000000 100%); width: 100%; height: 100%; overflow: hidden; position: relative;">';
+            
+            // Estrelas de diferentes tamanhos e velocidades
+            const starTypes = [
+                { symbol: '⭐', size: '16px', color: '#ffffff', count: 30 },
+                { symbol: '✦', size: '12px', color: '#f0aa53', count: 40 },
+                { symbol: '✧', size: '8px', color: '#b2d1b1', count: 50 },
+                { symbol: '·', size: '6px', color: '#ffffff', count: 80 }
             ];
             
-            const carta = cartas[Math.floor(Math.random() * cartas.length)];
-            const nomeElement = document.getElementById('carta-nome');
-            const significadoElement = document.getElementById('carta-significado');
-            const resultadoElement = document.getElementById('carta-resultado');
+            starTypes.forEach(type => {
+                for (let i = 0; i < type.count; i++) {
+                    const delay = Math.random() * 10;
+                    const duration = 2 + Math.random() * 4;
+                    const left = Math.random() * 100;
+                    const top = Math.random() * 100;
+                    
+                    html += `<div style="
+                        position: absolute; 
+                        left: ${left}%; 
+                        top: ${top}%; 
+                        color: ${type.color}; 
+                        font-size: ${type.size};
+                        animation: starfield-move ${duration}s linear infinite;
+                        animation-delay: ${delay}s;
+                        text-shadow: 0 0 10px ${type.color};
+                    ">${type.symbol}</div>`;
+                }
+            });
             
-            if (nomeElement) nomeElement.textContent = carta.nome;
-            if (significadoElement) significadoElement.textContent = carta.significado;
-            if (resultadoElement) resultadoElement.style.display = 'block';
+            // Constelações místicas
+            const constellations = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
+            for (let i = 0; i < 12; i++) {
+                const constellation = constellations[i];
+                const left = Math.random() * 80 + 10;
+                const top = Math.random() * 80 + 10;
+                
+                html += `<div style="
+                    position: absolute;
+                    left: ${left}%;
+                    top: ${top}%;
+                    color: #f0aa53;
+                    font-size: 24px;
+                    animation: floating-symbols ${8 + Math.random() * 4}s ease-in-out infinite;
+                    animation-delay: ${i * 0.5}s;
+                    text-shadow: 0 0 15px #f0aa53;
+                ">${constellation}</div>`;
+            }
+            
+            // Texto central
+            html += `<div style="
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: #ffffff;
+                font-size: 32px;
+                text-shadow: 0 0 25px #ffffff;
+                animation: mystical-glow 4s ease-in-out infinite;
+                font-family: 'Cinzel Decorative', serif;
+            ">🌌 CAMPO ESTELAR MÍSTICO 🌌</div>`;
+            
+            html += '</div>';
+            return html;
+        }
+
+        function generatePipesScreensaver() {
+            return `
+                <div style="
+                    background: radial-gradient(ellipse at center, #1a0033 0%, #000000 100%); 
+                    width: 100%; 
+                    height: 100%; 
+                    overflow: hidden;
+                    position: relative;
+                    perspective: 1000px;
+                ">
+                    <!-- Tubos Mágicos Principais -->
+                    <div style="
+                        position: absolute; 
+                        width: 200px; 
+                        height: 200px; 
+                        left: 50%; 
+                        top: 50%; 
+                        transform: translate(-50%, -50%) rotateX(45deg); 
+                        border: 12px solid #f0aa53; 
+                        border-radius: 50%; 
+                        animation: pipes-flow 3s linear infinite;
+                        box-shadow: 0 0 30px #f0aa53, inset 0 0 30px #f0aa53;
+                    "></div>
+                    
+                    <!-- Tubos Secundários -->
+                    <div style="
+                        position: absolute; 
+                        width: 150px; 
+                        height: 150px; 
+                        left: 25%; 
+                        top: 25%; 
+                        transform: rotateY(60deg);
+                        border: 10px solid #b2d1b1; 
+                        border-radius: 50%; 
+                        animation: pipes-flow 4s linear infinite reverse;
+                        box-shadow: 0 0 25px #b2d1b1, inset 0 0 25px #b2d1b1;
+                    "></div>
+                    
+                    <div style="
+                        position: absolute; 
+                        width: 120px; 
+                        height: 120px; 
+                        left: 70%; 
+                        top: 70%; 
+                        transform: rotateZ(30deg);
+                        border: 8px solid #4a0e4e; 
+                        border-radius: 50%; 
+                        animation: pipes-flow 2.5s linear infinite;
+                        box-shadow: 0 0 20px #4a0e4e, inset 0 0 20px #4a0e4e;
+                    "></div>
+                    
+                    <!-- Tubos Menores -->
+                    <div style="
+                        position: absolute; 
+                        width: 80px; 
+                        height: 80px; 
+                        left: 15%; 
+                        top: 75%; 
+                        border: 6px solid #f0aa53; 
+                        border-radius: 50%; 
+                        animation: pipes-flow 3.5s linear infinite reverse;
+                        box-shadow: 0 0 15px #f0aa53;
+                    "></div>
+                    
+                    <div style="
+                        position: absolute; 
+                        width: 100px; 
+                        height: 100px; 
+                        left: 80%; 
+                        top: 20%; 
+                        border: 7px solid #b2d1b1; 
+                        border-radius: 50%; 
+                        animation: pipes-flow 2.8s linear infinite;
+                        box-shadow: 0 0 18px #b2d1b1;
+                    "></div>
+                    
+                    <!-- Partículas Flutuantes -->
+                    <div style="
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                    ">
+                        <div style="position: absolute; left: 10%; top: 30%; color: #f0aa53; font-size: 20px; animation: floating-symbols 6s ease-in-out infinite;">◊</div>
+                        <div style="position: absolute; left: 60%; top: 15%; color: #b2d1b1; font-size: 16px; animation: floating-symbols 8s ease-in-out infinite; animation-delay: 1s;">△</div>
+                        <div style="position: absolute; left: 85%; top: 60%; color: #4a0e4e; font-size: 18px; animation: floating-symbols 7s ease-in-out infinite; animation-delay: 2s;">▽</div>
+                        <div style="position: absolute; left: 30%; top: 80%; color: #f0aa53; font-size: 14px; animation: floating-symbols 9s ease-in-out infinite; animation-delay: 3s;">◈</div>
+                    </div>
+                    
+                    <!-- Texto Central -->
+                    <div style="
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        color: #ffffff;
+                        font-size: 26px;
+                        text-shadow: 0 0 20px #ffffff;
+                        animation: mystical-glow 3.5s ease-in-out infinite;
+                        font-family: 'Cinzel Decorative', serif;
+                        z-index: 10;
+                    ">🔮 TUBOS MÁGICOS 3D 🔮</div>
+                </div>
+            `;
+        }
+
+        function saveGrimorio() {
+            const text = document.getElementById('grimorio-text');
+            if (text) {
+                localStorage.setItem('aurora-grimorio', text.value);
+                if (auroraOS) {
+                    auroraOS.speakAstrological('📜 Grimório', 'Suas anotações mágickas foram salvas com sucesso!');
+                }
+            }
+        }
+
+        function loadGrimorio() {
+            const text = document.getElementById('grimorio-text');
+            const saved = localStorage.getItem('aurora-grimorio');
+            if (text && saved) {
+                text.value = saved;
+                if (auroraOS) {
+                    auroraOS.speakAstrological('📜 Grimório', 'Suas anotações mágickas foram carregadas!');
+                }
+            }
+        }
+
+        // Funções do Sistema de Voz Inteligente (escopo global)
+        function clearAllQueues() {
+            if (auroraOS) {
+                auroraOS.clearVoiceQueue();
+                auroraOS.speakAstrological('🗑️ Fila Limpa', 'Todas as filas de voz foram limpas.', 'high');
+                updateQueueStatus();
+            }
+        }
+
+        function testVoicePriority() {
+            if (auroraOS) {
+                auroraOS.addToVoiceQueue('🔴 Teste Alta', 'Esta é uma mensagem de alta prioridade.', 'high');
+                auroraOS.addToVoiceQueue('🟡 Teste Média', 'Esta é uma mensagem de prioridade média.', 'medium');
+                auroraOS.addToVoiceQueue('🟢 Teste Baixa', 'Esta é uma mensagem de baixa prioridade.', 'low');
+                updateQueueStatus();
+            }
+        }
+
+        function updateQueueStatus() {
+            if (auroraOS) {
+                const status = auroraOS.getQueueStatus();
+                const highEl = document.getElementById('queue-high');
+                const mediumEl = document.getElementById('queue-medium');
+                const lowEl = document.getElementById('queue-low');
+                
+                if (highEl) highEl.textContent = status.high;
+                if (mediumEl) mediumEl.textContent = status.medium;
+                if (lowEl) lowEl.textContent = status.low;
+            }
+        }
+
+        function setupVoiceControls() {
+            // Controle de ducking
+            const duckingCheckbox = document.getElementById('enable-ducking');
+            const duckingSlider = document.getElementById('ducking-level');
+            const duckingValue = document.getElementById('ducking-value');
+
+            if (duckingCheckbox) {
+                duckingCheckbox.addEventListener('change', (e) => {
+                    voiceSettings.enableDucking = e.target.checked;
+                });
+            }
+
+            if (duckingSlider) {
+                duckingSlider.addEventListener('input', (e) => {
+                    voiceSettings.duckingLevel = parseFloat(e.target.value);
+                    if (duckingValue) {
+                        duckingValue.textContent = Math.round(voiceSettings.duckingLevel * 100) + '%';
+                    }
+                });
+            }
+
+            // Atualizar status da fila periodicamente
+            setInterval(updateQueueStatus, 1000);
         }
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
             auroraOS = new AuroraOS();
-            createSparkles();
             
-            // Carregar wallpaper salvo
-            const savedWallpaper = localStorage.getItem('aurora-wallpaper') || 'mystic';
+            // Configurar controles de voz inteligente
+            setupVoiceControls();
+            
+            // Carregar tema salvo
+            const savedTheme = localStorage.getItem('aurora-theme') || 'astral';
             const desktop = document.getElementById('desktop');
             if (desktop) {
-                desktop.classList.remove('wallpaper-mystic', 'wallpaper-cosmic', 'wallpaper-aurora');
-                desktop.classList.add(`wallpaper-${savedWallpaper}`);
+                desktop.classList.remove('theme-astral', 'theme-chthonian', 'theme-alchemical');
+                desktop.classList.add(`theme-${savedTheme}`);
             }
+            
+            // === SISTEMA DE MENUS CONTEXTUAIS MÁGICOS ===
+            let currentContextMenu = null;
+
+            // Definições dos menus contextuais
+            const contextMenus = {
+                desktop: [
+                    { icon: '🔮', text: 'Invocar Aplicação', action: 'invokeApp' },
+                    { icon: '🌟', text: 'Consagrar Área', action: 'consecrateArea' },
+                    { separator: true },
+                    { icon: '🎨', text: 'Alterar Wallpaper', action: 'changeWallpaper' },
+                    { icon: '🌙', text: 'Ativar Proteção', submenu: [
+                        { icon: '🛡️', text: 'Círculo de Proteção', action: 'protectionCircle' },
+                        { icon: '⚡', text: 'Barreira Energética', action: 'energyBarrier' },
+                        { icon: '🔥', text: 'Purificação', action: 'purification' }
+                    ]},
+                    { separator: true },
+                    { icon: '📊', text: 'Propriedades Místicas', action: 'mysticProperties' }
+                ],
+                icon: [
+                    { icon: '▶️', text: 'Abrir', action: 'openApp' },
+                    { icon: '🔮', text: 'Invocar com Poder', action: 'invokeWithPower' },
+                    { separator: true },
+                    { icon: '⭐', text: 'Adicionar aos Favoritos', action: 'addToFavorites' },
+                    { icon: '🌙', text: 'Consagrar Ícone', action: 'consecrateIcon' },
+                    { separator: true },
+                    { icon: '📊', text: 'Propriedades', action: 'showProperties' }
+                ],
+                taskbar: [
+                    { icon: '🌟', text: 'Central de Magia', action: 'showMagicCenter' },
+                    { icon: '🔊', text: 'Controles de Áudio', action: 'showVolumeControls' },
+                    { separator: true },
+                    { icon: '🎨', text: 'Personalizar Taskbar', action: 'customizeTaskbar' },
+                    { icon: '⚙️', text: 'Configurações do Sistema', action: 'systemSettings' }
+                ]
+            };
+
+            function showContextMenu(e, menuType, target = null) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                hideContextMenu();
+                
+                const menu = document.getElementById('context-menu');
+                const menuItems = contextMenus[menuType] || [];
+                
+                menu.innerHTML = generateMenuHTML(menuItems);
+                menu.style.display = 'block';
+                
+                // Posicionar o menu
+                const rect = menu.getBoundingClientRect();
+                let x = e.clientX;
+                let y = e.clientY;
+                
+                // Ajustar posição se sair da tela
+                if (x + rect.width > window.innerWidth) {
+                    x = window.innerWidth - rect.width - 10;
+                }
+                if (y + rect.height > window.innerHeight) {
+                    y = window.innerHeight - rect.height - 10;
+                }
+                
+                menu.style.left = x + 'px';
+                menu.style.top = y + 'px';
+                
+                currentContextMenu = { menu, target, menuType };
+                
+                // Adicionar event listeners
+                setupMenuEventListeners(menu, target);
+                
+                // Efeito mágico
+                createMagicEffect(x, y);
+            }
+
+            function generateMenuHTML(items) {
+                return items.map(item => {
+                    if (item.separator) {
+                        return '<div class="context-menu-separator"></div>';
+                    }
+                    
+                    const hasSubmenu = item.submenu && item.submenu.length > 0;
+                    const submenuHTML = hasSubmenu ? 
+                        `<div class="context-menu-submenu">${generateMenuHTML(item.submenu)}</div>` : '';
+                    const arrow = hasSubmenu ? '<span class="context-menu-arrow">▶</span>' : '';
+                    
+                    return `
+                        <div class="context-menu-item" data-action="${item.action || ''}" ${item.disabled ? 'disabled' : ''}>
+                            <span class="context-menu-icon">${item.icon}</span>
+                            <span>${item.text}</span>
+                            ${arrow}
+                            ${submenuHTML}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            function setupMenuEventListeners(menu, target) {
+                menu.querySelectorAll('.context-menu-item[data-action]').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const action = item.dataset.action;
+                        if (action && !item.classList.contains('disabled')) {
+                            executeMenuAction(action, target);
+                            hideContextMenu();
+                        }
+                    });
+                });
+            }
+
+            function executeMenuAction(action, target) {
+                const actions = {
+                    invokeApp: () => {
+                        createMagicEffect(window.innerWidth/2, window.innerHeight/2);
+                    },
+                    consecrateArea: () => {
+                        createMagicEffect(window.innerWidth/2, window.innerHeight/2);
+                    },
+                    changeWallpaper: () => showWallpaperSelector(),
+                    protectionCircle: () => {
+                        createMagicEffect(window.innerWidth/2, window.innerHeight/2);
+                    },
+                    energyBarrier: () => {
+                        createMagicEffect(window.innerWidth/2, window.innerHeight/2);
+                    },
+                    purification: () => {
+                        createMagicEffect(window.innerWidth/2, window.innerHeight/2);
+                    },
+                    openApp: () => {
+                        if (target && target.dataset.app) {
+                            openApp(target.dataset.app);
+                        }
+                    },
+                    invokeWithPower: () => {
+                        if (target && target.dataset.app) {
+                            createMagicEffect(target.offsetLeft + 25, target.offsetTop + 25);
+                            openApp(target.dataset.app);
+                        }
+                    },
+                    consecrateIcon: () => {
+                        if (target) {
+                            target.style.filter = 'drop-shadow(0 0 10px gold)';
+                            createMagicEffect(target.offsetLeft + 25, target.offsetTop + 25);
+                        }
+                    },
+                    showMagicCenter: () => showMagicCenter(),
+                    showVolumeControls: () => toggleVolumePopup(),
+                    mysticProperties: () => {
+                        // Apenas efeito visual, sem notificação de voz
+                    }
+                };
+                
+                if (actions[action]) {
+                    actions[action]();
+                } else {
+                    console.log('Ação não implementada:', action);
+                }
+            }
+
+            function hideContextMenu() {
+                const menu = document.getElementById('context-menu');
+                if (menu) {
+                    menu.style.display = 'none';
+                }
+                currentContextMenu = null;
+            }
+
+            function createMagicEffect(x, y) {
+                const effects = ['✨', '⭐', '🌟', '💫', '🔮'];
+                const effect = effects[Math.floor(Math.random() * effects.length)];
+                
+                const element = document.createElement('div');
+                element.className = 'magic-effect';
+                element.textContent = effect;
+                element.style.left = x + 'px';
+                element.style.top = y + 'px';
+                
+                document.body.appendChild(element);
+                
+                setTimeout(() => {
+                    if (element.parentNode) {
+                        element.parentNode.removeChild(element);
+                    }
+                }, 1000);
+            }
+
+            // Event listeners para menus contextuais
+            document.addEventListener('contextmenu', (e) => {
+                const target = e.target.closest('.desktop-icon');
+                const isTaskbar = e.target.closest('.taskbar');
+                const isDesktop = e.target.closest('.desktop') && !target && !isTaskbar;
+                
+                if (target) {
+                    showContextMenu(e, 'icon', target);
+                } else if (isTaskbar) {
+                    showContextMenu(e, 'taskbar');
+                } else if (isDesktop) {
+                    showContextMenu(e, 'desktop');
+                } else {
+                    e.preventDefault();
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#context-menu')) {
+                    hideContextMenu();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    hideContextMenu();
+                }
+            });
             
             console.log('🌟 Aurora OS • MysticSoft Millennium Edition inicializado com sucesso!');
         });
+
+        // Função para iniciar sequência de boot retro futurista
+        function startBootSequence() {
+            const bootScreen = document.getElementById('boot-screen');
+            const tvStatic = document.getElementById('tv-static');
+            const logo = document.getElementById('mysticsoft-logo');
+            const bootUI = document.getElementById('boot-ui');
+            const bootButton = document.getElementById('boot-button');
+            const progressFill = document.getElementById('progress-fill');
+            
+            // Esconder botão
+            bootButton.style.display = 'none';
+            
+            // Ativar efeito de TV estática
+            tvStatic.classList.add('active');
+            
+            // Som de dial-up simulado (usando Web Audio API)
+            playDialUpSound();
+            
+            // Sequência de inicialização
+            setTimeout(() => {
+                // Reduzir estática
+                tvStatic.style.opacity = '0.3';
+                
+                // Mostrar logo emergindo do estático
+                logo.classList.add('visible');
+            }, 1500);
+            
+            setTimeout(() => {
+                // Remover estática completamente
+                tvStatic.classList.remove('active');
+                
+                // Mostrar interface de boot
+                bootUI.classList.add('visible');
+                
+                // Iniciar barra de progresso
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += Math.random() * 15 + 5;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(progressInterval);
+                        
+                        // Finalizar boot após completar
+                        setTimeout(() => {
+                            bootScreen.style.display = 'none';
+                            document.getElementById('desktop').classList.add('show');
+                            
+                            // Inicializar sistema astrológico
+                            if (auroraOS) {
+                                auroraOS.startAstrologicalNotifications();
+                            }
+                        }, 1000);
+                    }
+                    progressFill.style.width = progress + '%';
+                }, 200);
+            }, 3000);
+        }
+        
+        // Função para simular som de dial-up
+        function playDialUpSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Som de chiado inicial
+                const whiteNoise = audioContext.createBufferSource();
+                const noiseBuffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.5, audioContext.sampleRate);
+                const noiseData = noiseBuffer.getChannelData(0);
+                
+                for (let i = 0; i < noiseData.length; i++) {
+                    noiseData[i] = Math.random() * 2 - 1;
+                }
+                
+                whiteNoise.buffer = noiseBuffer;
+                
+                const noiseGain = audioContext.createGain();
+                noiseGain.gain.setValueAtTime(0.1, audioContext.currentTime);
+                noiseGain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                whiteNoise.connect(noiseGain);
+                noiseGain.connect(audioContext.destination);
+                whiteNoise.start();
+                whiteNoise.stop(audioContext.currentTime + 0.5);
+                
+                // Sons de conexão (tons eletrônicos)
+                setTimeout(() => {
+                    const oscillator1 = audioContext.createOscillator();
+                    const gain1 = audioContext.createGain();
+                    
+                    oscillator1.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator1.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.3);
+                    gain1.gain.setValueAtTime(0.05, audioContext.currentTime);
+                    gain1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    
+                    oscillator1.connect(gain1);
+                    gain1.connect(audioContext.destination);
+                    oscillator1.start();
+                    oscillator1.stop(audioContext.currentTime + 0.3);
+                }, 800);
+                
+                setTimeout(() => {
+                    const oscillator2 = audioContext.createOscillator();
+                    const gain2 = audioContext.createGain();
+                    
+                    oscillator2.frequency.setValueAtTime(1200, audioContext.currentTime);
+                    oscillator2.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.4);
+                    gain2.gain.setValueAtTime(0.05, audioContext.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+                    
+                    oscillator2.connect(gain2);
+                    gain2.connect(audioContext.destination);
+                    oscillator2.start();
+                    oscillator2.stop(audioContext.currentTime + 0.4);
+                }, 1200);
+                
+            } catch (e) {
+                console.log('Audio não disponível para efeitos sonoros');
+            }
+        }
     </script>
 </body>
 </html>

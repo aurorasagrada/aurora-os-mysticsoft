@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MysticSoft • Inicialização</title>
+    <style>
+        /* === FONTE GOTHIC PIXEL === */
+        @font-face {
+            font-family: 'GothicPixel';
+            src: url('./gothic-pixel-font.ttf') format('truetype');
+            font-display: swap;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* === TELA DE INICIALIZAÇÃO MYSTICSOFT PIXEL ART WHIMSIGOTH === */
+        .mysticsoft-boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 30%, #16213e 60%, #4a1a4a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            overflow: hidden;
+        }
+
+        /* Estática de TV */
+        .tv-static {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, transparent 20%, rgba(255,255,255,0.4) 21%, rgba(255,255,255,0.4) 29%, transparent 30%),
+                radial-gradient(circle at 80% 20%, transparent 20%, rgba(240,170,83,0.3) 21%, rgba(240,170,83,0.3) 29%, transparent 30%),
+                radial-gradient(circle at 40% 40%, transparent 20%, rgba(178,209,177,0.3) 21%, rgba(178,209,177,0.3) 29%, transparent 30%),
+                radial-gradient(circle at 60% 80%, transparent 20%, rgba(138,43,226,0.3) 21%, rgba(138,43,226,0.3) 29%, transparent 30%);
+            background-size: 30px 30px, 40px 40px, 25px 25px, 35px 35px;
+            animation: staticNoise 0.08s infinite;
+            opacity: 0;
+            z-index: 10001;
+        }
+
+        @keyframes staticNoise {
+            0% { 
+                opacity: 0;
+                background-position: 0 0, 0 0, 0 0, 0 0;
+            }
+            25% { 
+                opacity: 0.9;
+                background-position: 5px 5px, -3px 8px, 12px -5px, -8px 10px;
+            }
+            50% { 
+                opacity: 0.7;
+                background-position: -5px 10px, 8px -3px, -10px 15px, 12px -8px;
+            }
+            75% { 
+                opacity: 0.8;
+                background-position: 10px -5px, -5px 12px, 8px 8px, -12px 5px;
+            }
+            100% { 
+                opacity: 0;
+                background-position: 0 0, 0 0, 0 0, 0 0;
+            }
+        }
+
+        /* Fundo cósmico */
+        .cosmic-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Estrelas pixeladas */
+        .pixel-stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #f0aa53, transparent),
+                radial-gradient(2px 2px at 40px 70px, #b2d1b1, transparent),
+                radial-gradient(1px 1px at 90px 40px, #f0aa53, transparent),
+                radial-gradient(1px 1px at 130px 80px, #b2d1b1, transparent),
+                radial-gradient(2px 2px at 160px 30px, #f0aa53, transparent),
+                radial-gradient(1px 1px at 200px 60px, #8a2be2, transparent),
+                radial-gradient(2px 2px at 250px 20px, #f0aa53, transparent),
+                radial-gradient(1px 1px at 300px 90px, #b2d1b1, transparent);
+            background-repeat: repeat;
+            background-size: 320px 120px;
+            animation: twinkleStars 6s ease-in-out infinite;
+        }
+
+        @keyframes twinkleStars {
+            0%, 100% { opacity: 0.6; }
+            33% { opacity: 0.9; }
+            66% { opacity: 0.7; }
+        }
+
+        /* Símbolos esotéricos flutuantes */
+        .floating-symbols {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .floating-symbols .symbol {
+            position: absolute;
+            color: #f0aa53;
+            font-size: 18px;
+            opacity: 0.5;
+            animation: floatSymbol 12s ease-in-out infinite;
+            text-shadow: 0 0 15px currentColor;
+            font-family: 'Courier New', monospace;
+        }
+
+        .floating-symbols .symbol:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; color: #f0aa53; }
+        .floating-symbols .symbol:nth-child(2) { top: 25%; left: 85%; animation-delay: 1.5s; color: #b2d1b1; }
+        .floating-symbols .symbol:nth-child(3) { top: 55%; left: 8%; animation-delay: 3s; color: #8a2be2; }
+        .floating-symbols .symbol:nth-child(4) { top: 75%; left: 88%; animation-delay: 4.5s; color: #f0aa53; }
+        .floating-symbols .symbol:nth-child(5) { top: 35%; left: 78%; animation-delay: 6s; color: #b2d1b1; }
+        .floating-symbols .symbol:nth-child(6) { top: 85%; left: 20%; animation-delay: 7.5s; color: #8a2be2; }
+        .floating-symbols .symbol:nth-child(7) { top: 12%; left: 65%; animation-delay: 9s; color: #f0aa53; }
+        .floating-symbols .symbol:nth-child(8) { top: 88%; left: 72%; animation-delay: 10.5s; color: #b2d1b1; }
+
+        @keyframes floatSymbol {
+            0%, 100% { 
+                opacity: 0.2; 
+                transform: translateY(0px) scale(0.8) rotate(0deg);
+            }
+            25% { 
+                opacity: 0.7; 
+                transform: translateY(-15px) scale(1.1) rotate(90deg);
+            }
+            50% { 
+                opacity: 0.9; 
+                transform: translateY(-8px) scale(1.2) rotate(180deg);
+            }
+            75% { 
+                opacity: 0.6; 
+                transform: translateY(-20px) scale(1.0) rotate(270deg);
+            }
+        }
+
+        /* Container do logo */
+        .mysticsoft-logo-container {
+            position: relative;
+            z-index: 100;
+            opacity: 0;
+            transform: scale(0.5) rotate(-10deg);
+            transition: all 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .mysticsoft-logo-container.visible {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        /* Logo MysticSoft */
+        .mysticsoft-logo-img {
+            width: 180px;
+            height: 180px;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            filter: 
+                drop-shadow(0 0 20px #f0aa53) 
+                drop-shadow(0 0 40px #f0aa53)
+                drop-shadow(0 0 60px rgba(240,170,83,0.5));
+            animation: logoGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { 
+                filter: 
+                    drop-shadow(0 0 20px #f0aa53) 
+                    drop-shadow(0 0 40px #f0aa53)
+                    drop-shadow(0 0 60px rgba(240,170,83,0.5));
+                transform: scale(1);
+            }
+            50% { 
+                filter: 
+                    drop-shadow(0 0 30px #f0aa53) 
+                    drop-shadow(0 0 60px #f0aa53) 
+                    drop-shadow(0 0 90px rgba(240,170,83,0.8))
+                    drop-shadow(0 0 120px rgba(178,209,177,0.3));
+                transform: scale(1.08);
+            }
+        }
+
+        /* Borda brilhante do logo */
+        .logo-border-glow {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border: 3px solid #f0aa53;
+            border-radius: 12px;
+            opacity: 0.8;
+            animation: borderPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes borderPulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 15px #f0aa53,
+                    0 0 30px rgba(240,170,83,0.5),
+                    inset 0 0 15px rgba(240,170,83,0.2);
+                border-color: #f0aa53;
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 30px #f0aa53, 
+                    0 0 60px rgba(240,170,83,0.8),
+                    0 0 90px rgba(178,209,177,0.4),
+                    inset 0 0 30px rgba(240,170,83,0.4);
+                border-color: #b2d1b1;
+                transform: scale(1.05);
+            }
+        }
+
+        /* Interface de inicialização */
+        .boot-interface {
+            position: relative;
+            z-index: 101;
+            text-align: center;
+            margin-top: 50px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 2s ease-out 2s;
+        }
+
+        .boot-interface.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Título MysticSoft com fonte gothic-pixel */
+        .mysticsoft-brand {
+            font-family: 'GothicPixel', 'Courier New', monospace;
+            font-size: 56px;
+            color: #f0aa53;
+            text-shadow: 
+                0 0 15px #f0aa53,
+                0 0 30px #f0aa53,
+                0 0 45px rgba(240,170,83,0.7),
+                0 0 60px rgba(178,209,177,0.3);
+            margin-bottom: 25px;
+            letter-spacing: 4px;
+            animation: brandGlow 5s ease-in-out infinite;
+        }
+
+        @keyframes brandGlow {
+            0%, 100% { 
+                text-shadow: 
+                    0 0 15px #f0aa53,
+                    0 0 30px #f0aa53,
+                    0 0 45px rgba(240,170,83,0.7);
+                transform: scale(1);
+            }
+            50% { 
+                text-shadow: 
+                    0 0 25px #f0aa53, 
+                    0 0 50px #f0aa53, 
+                    0 0 75px rgba(240,170,83,0.9),
+                    0 0 100px rgba(178,209,177,0.5),
+                    0 0 125px rgba(138,43,226,0.3);
+                transform: scale(1.03);
+            }
+        }
+
+        /* Mensagem de inicialização */
+        .boot-message {
+            color: #b2d1b1;
+            font-size: 20px;
+            margin-bottom: 35px;
+            font-weight: bold;
+            text-shadow: 
+                0 0 10px #b2d1b1,
+                0 0 20px rgba(178,209,177,0.5);
+            animation: messageFlicker 4s ease-in-out infinite;
+            font-family: 'Courier New', monospace;
+        }
+
+        @keyframes messageFlicker {
+            0%, 100% { opacity: 0.7; }
+            25% { opacity: 1; }
+            50% { opacity: 0.8; }
+            75% { opacity: 0.9; }
+        }
+
+        /* Container da barra de progresso */
+        .progress-container {
+            margin: 40px 0;
+            position: relative;
+        }
+
+        /* Barra de progresso */
+        .progress-bar-bg {
+            width: 500px;
+            height: 24px;
+            background: linear-gradient(135deg, #1a1a2e, #0a0a0a);
+            border: 3px solid #f0aa53;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+            box-shadow: 
+                0 0 20px rgba(240,170,83,0.3),
+                inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, 
+                #f0aa53 0%, 
+                #b2d1b1 25%, 
+                #8a2be2 50%, 
+                #b2d1b1 75%, 
+                #f0aa53 100%);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            border-radius: 9px;
+            box-shadow: 
+                0 0 25px rgba(240,170,83,0.8),
+                inset 0 0 15px rgba(255,255,255,0.2);
+            animation: progressGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes progressGlow {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 25px rgba(240,170,83,0.8),
+                    inset 0 0 15px rgba(255,255,255,0.2);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 40px rgba(240,170,83,1),
+                    0 0 60px rgba(178,209,177,0.6),
+                    inset 0 0 25px rgba(255,255,255,0.4);
+            }
+        }
+
+        /* Faíscas na barra de progresso */
+        .progress-sparkles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 8% 50%, transparent 25%, rgba(255,255,255,0.9) 26%, transparent 27%),
+                radial-gradient(circle at 24% 50%, transparent 25%, rgba(240,170,83,0.8) 26%, transparent 27%),
+                radial-gradient(circle at 40% 50%, transparent 25%, rgba(178,209,177,0.8) 26%, transparent 27%),
+                radial-gradient(circle at 56% 50%, transparent 25%, rgba(138,43,226,0.8) 26%, transparent 27%),
+                radial-gradient(circle at 72% 50%, transparent 25%, rgba(240,170,83,0.8) 26%, transparent 27%),
+                radial-gradient(circle at 88% 50%, transparent 25%, rgba(255,255,255,0.9) 26%, transparent 27%);
+            background-size: 25px 25px;
+            animation: sparkleMove 3s linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes sparkleMove {
+            0% { background-position: -30px 0; }
+            100% { background-position: 530px 0; }
+        }
+
+        /* Texto de porcentagem */
+        .progress-text {
+            color: #f0aa53;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-shadow: 
+                0 0 10px #f0aa53,
+                0 0 20px rgba(240,170,83,0.5);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Créditos */
+        .credits {
+            color: #b2d1b1;
+            font-size: 16px;
+            margin-top: 35px;
+            opacity: 0.9;
+            text-shadow: 
+                0 0 8px #b2d1b1,
+                0 0 16px rgba(178,209,177,0.4);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Botão de início */
+        .start-button-container {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 102;
+        }
+
+        .cosmic-start-button {
+            background: linear-gradient(135deg, #4a1a4a, #1a1a2e, #2a2a4a);
+            border: 3px solid #f0aa53;
+            color: #f0aa53;
+            padding: 18px 36px;
+            font-size: 20px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            text-shadow: 
+                0 0 10px #f0aa53,
+                0 0 20px rgba(240,170,83,0.5);
+            box-shadow: 
+                0 0 25px rgba(240,170,83,0.6),
+                0 0 50px rgba(240,170,83,0.3),
+                inset 0 0 25px rgba(240,170,83,0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            animation: buttonPulse 4s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cosmic-start-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(240,170,83,0.1), transparent);
+            animation: buttonShine 3s linear infinite;
+        }
+
+        @keyframes buttonShine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .cosmic-start-button:hover {
+            background: linear-gradient(135deg, #6a2a6a, #2a2a4e, #4a4a6a);
+            box-shadow: 
+                0 0 35px rgba(240,170,83,0.9),
+                0 0 70px rgba(240,170,83,0.5),
+                0 0 105px rgba(178,209,177,0.3),
+                inset 0 0 35px rgba(240,170,83,0.2);
+            transform: translateX(-50%) scale(1.08);
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 25px rgba(240,170,83,0.6),
+                    0 0 50px rgba(240,170,83,0.3),
+                    inset 0 0 25px rgba(240,170,83,0.1);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 40px rgba(240,170,83,0.9),
+                    0 0 80px rgba(240,170,83,0.5),
+                    0 0 120px rgba(178,209,177,0.3),
+                    inset 0 0 40px rgba(240,170,83,0.2);
+            }
+        }
+
+        /* Estados da tela de boot */
+        .mysticsoft-boot-screen.static-phase .tv-static {
+            opacity: 1;
+        }
+
+        .mysticsoft-boot-screen.logo-phase .mysticsoft-logo-container {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        .mysticsoft-boot-screen.interface-phase .boot-interface {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mysticsoft-boot-screen.hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 1.5s ease-out;
+        }
+
+        /* Efeito de finalização */
+        .final-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(240,170,83,0.3) 0%, transparent 70%);
+            opacity: 0;
+            animation: finalGlow 2s ease-out;
+            z-index: 10002;
+        }
+
+        @keyframes finalGlow {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="mysticsoft-boot-screen" id="mysticsoft-boot-screen">
+        <!-- Estática de TV -->
+        <div class="tv-static" id="tv-static"></div>
+        
+        <!-- Fundo cósmico -->
+        <div class="cosmic-background">
+            <!-- Estrelas pixeladas -->
+            <div class="pixel-stars"></div>
+            
+            <!-- Símbolos esotéricos flutuantes -->
+            <div class="floating-symbols">
+                <span class="symbol">⚡</span>
+                <span class="symbol">☽</span>
+                <span class="symbol">△</span>
+                <span class="symbol">▽</span>
+                <span class="symbol">☉</span>
+                <span class="symbol">ᚱ</span>
+                <span class="symbol">✦</span>
+                <span class="symbol">◊</span>
+            </div>
+        </div>
+        
+        <!-- Logo MysticSoft -->
+        <div class="mysticsoft-logo-container" id="mysticsoft-logo-container">
+            <div class="logo-border-glow"></div>
+            <img src="./Designsemnome(14).png" alt="MysticSoft Logo" class="mysticsoft-logo-img" id="mysticsoft-logo-img">
+        </div>
+        
+        <!-- Interface de inicialização -->
+        <div class="boot-interface" id="boot-interface">
+            <!-- Título MysticSoft -->
+            <div class="mysticsoft-brand">MysticSoft</div>
+            
+            <!-- Texto de inicialização -->
+            <div class="boot-message">Inicializando o Universo MysticSoft...</div>
+            
+            <!-- Barra de progresso -->
+            <div class="progress-container">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                    <div class="progress-sparkles"></div>
+                </div>
+                <div class="progress-text" id="progress-text">0%</div>
+            </div>
+            
+            <!-- Créditos -->
+            <div class="credits">Desenvolvido pela Aurora Sagrada</div>
+        </div>
+        
+        <!-- Botão de início -->
+        <div class="start-button-container" id="start-button-container">
+            <button class="cosmic-start-button" onclick="startMysticSoftBoot()">
+                ✨ Conectar ao Cosmos ✨
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Sistema de áudio cósmico
+        let audioContext;
+        let isBootStarted = false;
+
+        function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.log('Web Audio API não suportada');
+            }
+        }
+
+        function playCosmicSound() {
+            if (!audioContext) return;
+
+            // Som de estática inicial
+            const staticDuration = 1.5;
+            playStaticSound(staticDuration);
+
+            // Sons dial-up cósmicos
+            setTimeout(() => {
+                playDialUpCosmic();
+            }, staticDuration * 1000);
+
+            // Som cristalino final
+            setTimeout(() => {
+                playCrystallineSound();
+            }, 8000);
+        }
+
+        function playStaticSound(duration) {
+            if (!audioContext) return;
+
+            const bufferSize = audioContext.sampleRate * duration;
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            const data = buffer.getChannelData(0);
+
+            // Gerar ruído branco com modulação
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * 0.3 * Math.sin(i / 1000);
+            }
+
+            const source = audioContext.createBufferSource();
+            const gainNode = audioContext.createGain();
+            
+            source.buffer = buffer;
+            source.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.4, audioContext.currentTime + 0.1);
+            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration);
+            
+            source.start();
+        }
+
+        function playDialUpCosmic() {
+            if (!audioContext) return;
+
+            const frequencies = [697, 770, 852, 941, 1209, 1336, 1477, 1633];
+            const cosmicFreqs = [220, 330, 440, 660, 880, 1320];
+
+            frequencies.concat(cosmicFreqs).forEach((freq, index) => {
+                setTimeout(() => {
+                    playTone(freq, 0.3, 0.1);
+                }, index * 200);
+            });
+        }
+
+        function playTone(frequency, duration, volume = 0.1) {
+            if (!audioContext) return;
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 0.01);
+            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        function playCrystallineSound() {
+            if (!audioContext) return;
+
+            // Som cristalino etéreo
+            const frequencies = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            
+            frequencies.forEach((freq, index) => {
+                setTimeout(() => {
+                    playTone(freq, 1.5, 0.15);
+                }, index * 300);
+            });
+        }
+
+        function startMysticSoftBoot() {
+            if (isBootStarted) return;
+            isBootStarted = true;
+
+            initAudio();
+            
+            const bootScreen = document.getElementById('mysticsoft-boot-screen');
+            const startButton = document.getElementById('start-button-container');
+            const logoContainer = document.getElementById('mysticsoft-logo-container');
+            const bootInterface = document.getElementById('boot-interface');
+            const progressFill = document.getElementById('progress-bar-fill');
+            const progressText = document.getElementById('progress-text');
+
+            // Esconder botão
+            startButton.style.display = 'none';
+
+            // Fase 1: Estática (1.5s)
+            bootScreen.classList.add('static-phase');
+            playCosmicSound();
+
+            setTimeout(() => {
+                bootScreen.classList.remove('static-phase');
+                
+                // Fase 2: Logo aparece (2s)
+                bootScreen.classList.add('logo-phase');
+                logoContainer.classList.add('visible');
+
+                setTimeout(() => {
+                    // Fase 3: Interface aparece (2s)
+                    bootScreen.classList.add('interface-phase');
+                    bootInterface.classList.add('visible');
+
+                    // Fase 4: Barra de progresso (4s)
+                    setTimeout(() => {
+                        animateProgress();
+                    }, 1000);
+
+                }, 2000);
+            }, 1500);
+        }
+
+        function animateProgress() {
+            const progressFill = document.getElementById('progress-bar-fill');
+            const progressText = document.getElementById('progress-text');
+            let progress = 0;
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 8 + 2;
+                if (progress > 100) progress = 100;
+
+                progressFill.style.width = progress + '%';
+                progressText.textContent = Math.floor(progress) + '%';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Efeito final
+                    setTimeout(() => {
+                        const finalGlow = document.createElement('div');
+                        finalGlow.className = 'final-glow';
+                        document.body.appendChild(finalGlow);
+
+                        setTimeout(() => {
+                            // Redirecionar para o sistema principal
+                            window.location.href = './index.html';
+                        }, 2000);
+                    }, 1000);
+                }
+            }, 100);
+        }
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            // Auto-start após 2 segundos se não clicar
+            setTimeout(() => {
+                if (!isBootStarted) {
+                    startMysticSoftBoot();
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
+
