@@ -1581,8 +1581,42 @@
             const window = document.createElement('div');
             window.id = windowId;
             window.className = 'window';
-            window.style.width = '800px';
-            window.style.height = '600px';
+            
+            // Redimensionamento proporcional baseado no conteúdo e tela
+            let windowWidth, windowHeight;
+            
+            // Detecta o tipo de conteúdo baseado no título ou URL
+            if (title.includes('Aurora Player')) {
+                // Aurora Player - tamanho otimizado
+                windowWidth = Math.min(920, window.innerWidth * 0.85);
+                windowHeight = Math.min(650, window.innerHeight * 0.8);
+            } else if (title.includes('Arquivos') || title.includes('File')) {
+                // Gerenciador de arquivos - tamanho médio
+                windowWidth = Math.min(800, window.innerWidth * 0.75);
+                windowHeight = Math.min(550, window.innerHeight * 0.7);
+            } else if (url && (url.includes('youtube') || url.includes('video'))) {
+                // Vídeos - formato widescreen
+                windowWidth = Math.min(1000, window.innerWidth * 0.9);
+                windowHeight = Math.min(600, window.innerHeight * 0.75);
+            } else {
+                // Sites padrão - tamanho responsivo
+                windowWidth = Math.min(900, window.innerWidth * 0.8);
+                windowHeight = Math.min(650, window.innerHeight * 0.8);
+            }
+            
+            // Posição centralizada com offset para evitar sobreposição
+            const centerX = (window.innerWidth - windowWidth) / 2;
+            const centerY = (window.innerHeight - windowHeight) / 2;
+            const offsetX = (Math.random() - 0.5) * 120; // ±60px
+            const offsetY = (Math.random() - 0.5) * 100; // ±50px
+            
+            const finalX = Math.max(10, Math.min(centerX + offsetX, window.innerWidth - windowWidth - 10));
+            const finalY = Math.max(10, Math.min(centerY + offsetY, window.innerHeight - windowHeight - 70)); // 70px para taskbar
+            
+            window.style.left = finalX + 'px';
+            window.style.top = finalY + 'px';
+            window.style.width = windowWidth + 'px';
+            window.style.height = windowHeight + 'px';
             
             window.innerHTML = `
                 <div class="window-header" onmousedown="startDrag(event, '${windowId}')">
@@ -1660,11 +1694,25 @@
             const window = document.getElementById(windowId);
             if (window) {
                 window.style.display = 'none';
+                window.classList.remove('focused');
                 
                 // Remove da lista de janelas ativas mas mantém na taskbar
                 const taskbarItem = document.querySelector(`[data-window="${windowId}"]`);
                 if (taskbarItem) {
                     taskbarItem.classList.remove('active');
+                }
+                
+                // Se era a janela ativa, foca outra janela visível
+                if (activeWindow === windowId) {
+                    activeWindow = null;
+                    const visibleWindows = openWindows.filter(id => {
+                        const w = document.getElementById(id);
+                        return w && w.style.display !== 'none';
+                    });
+                    
+                    if (visibleWindows.length > 0) {
+                        focusWindow(visibleWindows[visibleWindows.length - 1]);
+                    }
                 }
             }
         }
@@ -1672,19 +1720,42 @@
         function toggleMaximize(windowId) {
             const window = document.getElementById(windowId);
             if (window) {
-                if (window.style.width === '100vw') {
-                    // Restaurar
-                    window.style.width = '800px';
-                    window.style.height = '600px';
-                    window.style.left = '100px';
-                    window.style.top = '100px';
+                if (window.classList.contains('maximized')) {
+                    // Restaurar tamanho original proporcional
+                    window.classList.remove('maximized');
+                    
+                    // Recalcula tamanho baseado no título
+                    const title = window.querySelector('.window-title span:last-child').textContent;
+                    let windowWidth, windowHeight;
+                    
+                    if (title.includes('Aurora Player')) {
+                        windowWidth = Math.min(920, window.innerWidth * 0.85);
+                        windowHeight = Math.min(650, window.innerHeight * 0.8);
+                    } else if (title.includes('Arquivos') || title.includes('File')) {
+                        windowWidth = Math.min(800, window.innerWidth * 0.75);
+                        windowHeight = Math.min(550, window.innerHeight * 0.7);
+                    } else {
+                        windowWidth = Math.min(900, window.innerWidth * 0.8);
+                        windowHeight = Math.min(650, window.innerHeight * 0.8);
+                    }
+                    
+                    const centerX = (window.innerWidth - windowWidth) / 2;
+                    const centerY = (window.innerHeight - windowHeight) / 2;
+                    
+                    window.style.width = windowWidth + 'px';
+                    window.style.height = windowHeight + 'px';
+                    window.style.left = centerX + 'px';
+                    window.style.top = centerY + 'px';
                 } else {
                     // Maximizar
+                    window.classList.add('maximized');
                     window.style.width = '100vw';
-                    window.style.height = 'calc(100vh - 32px)';
+                    window.style.height = 'calc(100vh - 50px)'; // 50px para taskbar
                     window.style.left = '0';
                     window.style.top = '0';
                 }
+                
+                focusWindow(windowId);
             }
         }
 
@@ -1720,10 +1791,19 @@
             taskbarItem.textContent = `${icon} ${title}`;
             taskbarItem.onclick = () => {
                 const window = document.getElementById(windowId);
-                if (window.style.display === 'none') {
-                    window.style.display = 'block';
+                if (window) {
+                    if (window.style.display === 'none') {
+                        // Restaurar janela minimizada
+                        window.style.display = 'block';
+                        focusWindow(windowId);
+                    } else if (window.classList.contains('focused')) {
+                        // Se já está focada, minimizar
+                        minimizeWindow(windowId);
+                    } else {
+                        // Focar janela
+                        focusWindow(windowId);
+                    }
                 }
-                focusWindow(windowId);
             };
             
             taskbarItems.appendChild(taskbarItem);
