@@ -1836,7 +1836,8 @@
             function pause(){ 
                 audio.pause(); 
                 isPlaying=false; 
-                btnPlay.textContent='▶'; 
+                btnPlay.textContent='▶';
+                $('.led.play').style.opacity=.7;
             }
             
             function stop(){ 
@@ -1872,7 +1873,55 @@
                 }
             }
 
-            // Event listeners
+            // Progress drag/seek functions
+            function posToPct(e, elem){
+                const r = elem.getBoundingClientRect();
+                const x = Math.min(Math.max(0, (e.clientX || (e.touches? e.touches[0].clientX:0)) - r.left), r.width);
+                return (x / r.width) * 100;
+            }
+
+            // Volume control functions
+            function setVolumeByPct(p){ 
+                audio.volume = Math.min(1, Math.max(0, p/100)); 
+                volFill.style.width = `${p}%`; 
+                vol.setAttribute('aria-valuenow', Math.round(p)); 
+            }
+
+            // Progress bar event listeners
+            progress.addEventListener('pointerdown', e=>{
+                draggingProgress = true; 
+                progress.setPointerCapture(e.pointerId);
+                const pct = posToPct(e, progress); 
+                updateProgressUI(pct);
+            });
+            
+            progress.addEventListener('pointermove', e=>{
+                if(!draggingProgress) return; 
+                const pct = posToPct(e, progress); 
+                updateProgressUI(pct);
+            });
+            
+            progress.addEventListener('pointerup', e=>{
+                const pct = posToPct(e, progress);
+                const d = mediaLibrary[current].duration || audio.duration || 0;
+                audio.currentTime = (pct/100) * d; 
+                draggingProgress = false;
+            });
+
+            // Volume control event listeners
+            vol.addEventListener('pointerdown', e=>{
+                draggingVol=true; 
+                vol.setPointerCapture(e.pointerId); 
+                setVolumeByPct(posToPct(e, vol));
+            });
+            
+            vol.addEventListener('pointermove', e=>{
+                if(draggingVol) setVolumeByPct(posToPct(e, vol));
+            });
+            
+            vol.addEventListener('pointerup', ()=> draggingVol=false);
+
+            // Button event listeners
             btnPlay.addEventListener('click', ()=> isPlaying ? pause() : play());
             btnPrev.addEventListener('click', prev);
             btnNext.addEventListener('click', next);
@@ -1881,26 +1930,110 @@
             btnShf.addEventListener('click', ()=>{
                 shuffle = !shuffle;
                 btnShf.classList.toggle('active', shuffle);
-                btnShf.setAttribute('aria-pressed', shuffle);
+                btnShf.setAttribute('aria-pressed', String(shuffle));
             });
             
             btnRpt.addEventListener('click', ()=>{
                 repeat = !repeat;
                 btnRpt.classList.toggle('active', repeat);
-                btnRpt.setAttribute('aria-pressed', repeat);
+                btnRpt.setAttribute('aria-pressed', String(repeat));
             });
 
+            btnEq.addEventListener('click', ()=> {
+                alert('🎛️ Equalizer chegará em breve!\n\nRecursos planejados:\n• Graves, médios e agudos\n• Presets: Aurora, Whimsigoth, Vaporwave\n• Visualizador de frequência');
+            });
+
+            btnFav.addEventListener('click', ()=>{
+                const id = mediaLibrary[current].id; 
+                toggleFav(id); 
+                renderList();
+            });
+
+            // Audio event listeners
             audio.addEventListener('timeupdate', onTime);
             audio.addEventListener('ended', ()=>{
                 if(repeat) { audio.currentTime = 0; play(); }
                 else { next(); }
             });
+            audio.addEventListener('play', ()=>{
+                isPlaying=true; 
+                btnPlay.textContent='⏸'; 
+                $('.led.play').style.opacity=1;
+            });
+            audio.addEventListener('pause', ()=>{
+                isPlaying=false; 
+                btnPlay.textContent='▶'; 
+                $('.led.play').style.opacity=.7;
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e)=>{
+                if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+                switch(e.code){
+                    case 'Space': 
+                        e.preventDefault(); 
+                        isPlaying? pause(): play(); 
+                        break;
+                    case 'ArrowRight': 
+                        next(); 
+                        break;
+                    case 'ArrowLeft': 
+                        prev(); 
+                        break;
+                    case 'ArrowUp': 
+                        setVolumeByPct(Math.min(100, (audio.volume*100)+5)); 
+                        break;
+                    case 'ArrowDown': 
+                        setVolumeByPct(Math.max(0, (audio.volume*100)-5)); 
+                        break;
+                    case 'KeyS': 
+                        if(e.ctrlKey){ 
+                            shuffle=!shuffle; 
+                            btnShf.classList.toggle('active', shuffle);
+                        } 
+                        break;
+                    case 'KeyR': 
+                        if(e.ctrlKey){ 
+                            repeat=!repeat; 
+                            btnRpt.classList.toggle('active', repeat);
+                        } 
+                        break;
+                }
+            });
+
+            // Mini visualizer (fake oscilloscope)
+            const canvas = document.getElementById('viz');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                let t = 0; 
+                
+                function viz(){ 
+                    const w = ctx.canvas.width, h = ctx.canvas.height; 
+                    ctx.clearRect(0,0,w,h); 
+                    ctx.lineWidth=2; 
+                    ctx.strokeStyle='rgba(240,170,83,.9)'; 
+                    ctx.beginPath(); 
+                    
+                    for(let x=0;x<w;x++){ 
+                        const y = h/2 + Math.sin((x/32)+t)* (isPlaying? (h*.28): (h*.12)); 
+                        if(x===0) ctx.moveTo(x,y); 
+                        else ctx.lineTo(x,y);
+                    } 
+                    
+                    ctx.stroke(); 
+                    t+= isPlaying? .08 : .03; 
+                    requestAnimationFrame(viz);
+                } 
+                
+                requestAnimationFrame(viz);
+            }
 
             // Initialize
             load(0);
             renderList();
+            setVolumeByPct(70);
             
-            showNotification('🎵 Aurora Player', 'Player carregado com sucesso!');
+            showNotification('🎵 Aurora Player', 'Player carregado com todas as funcionalidades!');
         }
 
         // ========================================
