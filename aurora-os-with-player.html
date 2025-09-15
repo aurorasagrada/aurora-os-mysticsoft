@@ -394,25 +394,115 @@
             position: relative;
         }
         
-        .window-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
-        .loading-overlay {
+        /* Tela de carregamento */
+        .loading-screen {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 10;
-            font-size: 12px;
+            z-index: 1000;
+        }
+
+        /* Tela de erro */
+        .error-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #2c1810, #4a2c1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+        }
+
+        .error-content {
+            text-align: center;
+            color: white;
+            padding: 30px;
+            max-width: 400px;
+        }
+
+        .error-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .error-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #f0aa53;
+        }
+
+        .error-message {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .error-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+
+        .error-btn.primary {
+            background: linear-gradient(135deg, #f0aa53, #d4941e);
+            color: white;
+        }
+
+        .error-btn.primary:hover {
+            background: linear-gradient(135deg, #d4941e, #b8801a);
+            transform: translateY(-2px);
+        }
+
+        .error-btn.secondary {
+            background: linear-gradient(135deg, #0b1836, #1a2a4a);
+            color: white;
+            border: 1px solid #f0aa53;
+        }
+
+        .error-btn.secondary:hover {
+            background: linear-gradient(135deg, #1a2a4a, #2a3a5a);
+            transform: translateY(-2px);
+        }
+
+        /* Container do iframe com tratamento de erro */
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        .window-iframe {
             color: #666;
         }
         
@@ -2446,7 +2536,7 @@
                     setTimeout(() => {
                         loading.style.display = 'none';
                     }, 500);
-                }, 2000);
+                }, 1500);
             }
         }
 
@@ -2454,10 +2544,151 @@
             const loading = document.getElementById(`loading-${windowId}`);
             if (loading) {
                 loading.innerHTML = `
-                    <div style="color: #ff6b6b; font-size: 24px; margin-bottom: 12px;">⚠️</div>
-                    <div>Erro ao carregar o site</div>
-                    <div style="font-size: 10px; margin-top: 5px; opacity: 0.7;">Verifique sua conexão com a internet</div>
+                    <div style="color: #ff6b6b; font-size: 32px; margin-bottom: 15px;">⚠️</div>
+                    <div style="font-size: 16px; margin-bottom: 10px; color: #f0aa53;">Não foi possível carregar o site</div>
+                    <div style="font-size: 12px; margin-bottom: 20px; opacity: 0.8; line-height: 1.4;">
+                        Este site não permite ser carregado em frames por questões de segurança.<br>
+                        Isso é uma limitação do próprio site, não do Aurora OS.
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="openSiteInNewTab('${windowId}')" 
+                                style="padding: 8px 16px; background: linear-gradient(135deg, #f0aa53, #d4941e); 
+                                       color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                            🔗 Abrir em Nova Aba
+                        </button>
+                        <button onclick="reloadSite('${windowId}')" 
+                                style="padding: 8px 16px; background: linear-gradient(135deg, #0b1836, #1a2a4a); 
+                                       color: white; border: 1px solid #f0aa53; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                            🔄 Tentar Novamente
+                        </button>
+                    </div>
                 `;
+            }
+        }
+
+        // Abre site em nova aba do navegador
+        function openSiteInNewTab(windowId) {
+            const iframe = document.querySelector(`#${windowId} iframe`);
+            if (iframe && iframe.src) {
+                window.open(iframe.src, '_blank', 'noopener,noreferrer');
+                showNotification('🔗 Nova Aba', 'Site aberto em nova aba do navegador');
+            }
+        }
+
+        // Recarrega o site na janela
+        function reloadSite(windowId) {
+            const iframe = document.querySelector(`#${windowId} iframe`);
+            const loading = document.getElementById(`loading-${windowId}`);
+            
+            if (iframe && loading) {
+                // Restaura tela de carregamento
+                loading.style.display = 'flex';
+                loading.style.opacity = '1';
+                loading.innerHTML = `
+                    <div class="loading-spinner"></div>
+                    <div>Recarregando...</div>
+                    <div style="font-size: 10px; margin-top: 5px; opacity: 0.7;">${iframe.src}</div>
+                `;
+                
+                // Recarrega o iframe
+                iframe.src = iframe.src;
+                
+                // Timeout para nova tentativa de erro
+                setTimeout(() => {
+                    if (loading.style.display !== 'none') {
+                        showError(windowId);
+                    }
+                }, 8000);
+            }
+        }
+
+        // Função para verificar se um site funciona em iframe
+        function checkSiteCompatibility(url) {
+            // Lista de sites conhecidos que NÃO funcionam em iframe
+            const blockedSites = [
+                'facebook.com',
+                'instagram.com', 
+                'twitter.com',
+                'x.com',
+                'linkedin.com',
+                'tiktok.com',
+                'whatsapp.com',
+                'telegram.org',
+                'discord.com',
+                'netflix.com',
+                'amazon.com',
+                'mercadolivre.com',
+                'mercadolibre.com',
+                'shopee.com',
+                'aliexpress.com'
+            ];
+            
+            return !blockedSites.some(blocked => url.includes(blocked));
+        }
+
+        // Função melhorada para abrir sites com verificação prévia
+        function openSiteWithCheck(siteId, url, icon, title) {
+            if (!checkSiteCompatibility(url)) {
+                // Site conhecido por não funcionar em iframe - oferece alternativas
+                showSiteCompatibilityDialog(title, url);
+            } else {
+                // Tenta abrir normalmente
+                openSiteWindow(siteId, url, icon, title);
+            }
+        }
+
+        // Dialog para sites incompatíveis
+        function showSiteCompatibilityDialog(siteName, siteUrl) {
+            const dialog = document.createElement('div');
+            dialog.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+            `;
+            
+            dialog.innerHTML = `
+                <div style="background: linear-gradient(135deg, #0b1836, #1a2a4a); 
+                           padding: 30px; border-radius: 10px; text-align: center; 
+                           max-width: 400px; border: 2px solid #f0aa53;">
+                    <div style="font-size: 48px; margin-bottom: 20px;">🌐</div>
+                    <div style="color: #f0aa53; font-size: 18px; font-weight: bold; margin-bottom: 15px;">
+                        ${siteName}
+                    </div>
+                    <div style="color: white; font-size: 14px; line-height: 1.5; margin-bottom: 25px;">
+                        Este site não permite ser carregado dentro do Aurora OS por questões de segurança.<br>
+                        Escolha uma das opções abaixo:
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="window.open('${siteUrl}', '_blank'); document.body.removeChild(this.closest('div').parentElement)" 
+                                style="padding: 12px 20px; background: linear-gradient(135deg, #f0aa53, #d4941e); 
+                                       color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                            🔗 Abrir em Nova Aba
+                        </button>
+                        <button onclick="document.body.removeChild(this.closest('div').parentElement)" 
+                                style="padding: 12px 20px; background: linear-gradient(135deg, #770543, #a0073d); 
+                                       color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                            ❌ Cancelar
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(dialog);
+            
+            // Remove dialog ao clicar fora
+            dialog.addEventListener('click', (e) => {
+                if (e.target === dialog) {
+                    document.body.removeChild(dialog);
+                }
+            });
+        }
             }
         }
 
