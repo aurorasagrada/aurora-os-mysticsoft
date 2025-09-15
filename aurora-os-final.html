@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora OS • MysticSoft</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        
+        :root {
+            /* Tema Aurora Sagrada */
+            --vinho: #3e0a29;
+            --verde-claro: #b2d1b1;
+            --azul-escuro: #0b1836;
+            --dourado: #f0aa53;
+            --pergaminho: #f2eaff;
+            
+            /* Variáveis de tema dinâmicas */
+            --theme-bg: linear-gradient(135deg, var(--azul-escuro) 0%, var(--vinho) 100%);
+            --theme-taskbar: var(--vinho);
+            --theme-start-btn: var(--vinho);
+            --theme-start-text: var(--dourado);
+            --theme-clock: var(--dourado);
+            --theme-window-header: var(--azul-escuro);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+            background: var(--theme-bg);
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        /* Desktop */
+        .desktop {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 32px);
+            background: var(--theme-bg);
+            background-attachment: fixed;
+        }
+        
+        .desktop-icons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, 80px);
+            gap: 20px;
+            padding: 20px;
+            height: 100%;
+            align-content: start;
+        }
+        
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .desktop-icon:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .desktop-icon .icon {
+            font-size: 32px;
+            margin-bottom: 4px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+            animation: iconBreathe 3s ease-in-out infinite;
+        }
+        
+        .desktop-icon.premium .icon::after {
+            content: '⭐';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 16px;
+            color: var(--dourado);
+            text-shadow: 0 0 5px var(--dourado);
+            animation: starGlow 2s ease-in-out infinite;
+        }
+        
+        .desktop-icon .label {
+            color: white;
+            font-size: 10px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            max-width: 70px;
+            word-wrap: break-word;
+        }
+        
+        @keyframes iconBreathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes starGlow {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        /* Taskbar */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: linear-gradient(to bottom, var(--theme-taskbar), #2a0a1f);
+            border-top: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .start-button {
+            background: linear-gradient(to bottom, var(--theme-start-btn), #2a0a1f);
+            border: 1px outset var(--theme-start-btn);
+            color: var(--theme-start-text);
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            transition: all 0.1s;
+        }
+        
+        .start-button:hover {
+            background: linear-gradient(to bottom, #4a1a35, var(--theme-start-btn));
+        }
+        
+        .start-button:active {
+            border: 1px inset var(--theme-start-btn);
+        }
+        
+        .start-logo {
+            font-size: 14px;
+            filter: drop-shadow(0 0 3px var(--dourado));
+        }
+        
+        .taskbar-items {
+            flex: 1;
+            display: flex;
+            gap: 2px;
+            margin-left: 8px;
+        }
+        
+        .taskbar-item {
+            background: rgba(255,255,255,0.1);
+            border: 1px outset rgba(255,255,255,0.2);
+            color: white;
+            padding: 2px 8px;
+            cursor: pointer;
+            font-size: 10px;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .taskbar-item:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .taskbar-item.active {
+            background: rgba(255,255,255,0.3);
+            border: 1px inset rgba(255,255,255,0.2);
+        }
+        
+        .clock {
+            color: var(--theme-clock);
+            font-size: 11px;
+            font-weight: bold;
+            padding: 0 8px;
+            text-shadow: 0 0 3px var(--dourado);
+        }
+        
+        /* Menu Iniciar */
+        .start-menu {
+            position: fixed;
+            bottom: 32px;
+            left: 4px;
+            width: 320px;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            z-index: 2500;
+            display: none;
+            animation: menuSlideUp 0.2s ease-out;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .start-menu.active {
+            display: block;
+        }
+        
+        @keyframes menuSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .start-menu-header {
+            background: var(--theme-window-header);
+            color: white;
+            padding: 12px 16px;
+            font-weight: bold;
+            font-size: 14px;
+            border-bottom: 2px solid #808080;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        }
+        
+        .start-menu-header .logo {
+            font-size: 20px;
+            filter: drop-shadow(0 0 5px var(--dourado));
+        }
+        
+        .start-menu-items {
+            background: #c0c0c0;
+            padding: 8px 0;
+        }
+        
+        .start-menu-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: black;
+            transition: all 0.1s;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+        
+        .start-menu-item:hover {
+            background: linear-gradient(90deg, #316AC5, #4a7bc8);
+            color: white;
+            border-left: 3px solid var(--dourado);
+            transform: translateX(2px);
+        }
+        
+        .start-menu-item .icon {
+            font-size: 24px;
+            min-width: 32px;
+            text-align: center;
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
+        }
+        
+        .start-menu-item .text {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .start-menu-item.premium::after {
+            content: '⭐';
+            position: absolute;
+            right: 12px;
+            font-size: 16px;
+            color: var(--dourado);
+            text-shadow: 0 0 3px var(--dourado);
+            animation: starGlow 2s ease-in-out infinite;
+        }
+        
+        .start-menu-item.premium:hover::after {
+            color: white;
+            text-shadow: 0 0 5px white;
+        }
+        
+        .start-menu-separator {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #808080, transparent);
+            margin: 4px 12px;
+        }
+        
+        .start-menu-footer {
+            background: #d0d0d0;
+            padding: 8px 16px;
+            border-top: 1px solid #808080;
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+        }
+        
+        /* Janelas */
+        .window {
+            position: fixed;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            min-width: 400px;
+            min-height: 300px;
+            z-index: 1500;
+            display: none;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .window.active {
+            display: block;
+        }
+        
+        .window.focused {
+            z-index: 1600;
+        }
+        
+        .window-header {
+            background: var(--theme-window-header);
+            color: white;
+            padding: 2px 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            font-size: 11px;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        }
+        
+        .window-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .window-controls {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .window-control {
+            width: 16px;
+            height: 14px;
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+        }
+        
+        .window-control:hover {
+            background: #d0d0d0;
+        }
+        
+        .window-control:active {
+            border: 1px inset #c0c0c0;
+        }
+        
+        .window-control.close {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .window-content {
+            height: calc(100% - 20px);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .window-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--azul-escuro);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 12px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .window-resize-handle {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            cursor: se-resize;
+            background: linear-gradient(-45deg, transparent 40%, #808080 40%, #808080 60%, transparent 60%);
+        }
+        
+        /* Gerenciador de Arquivos */
+        .file-manager {
+            background: white;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            font-family: 'MS Sans Serif', sans-serif;
+        }
+        
+        .file-toolbar {
+            background: #f0f0f0;
+            border-bottom: 1px solid #ccc;
+            padding: 8px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .file-btn {
+            padding: 4px 8px;
+            border: 1px outset #c0c0c0;
+            background: #c0c0c0;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .file-btn:hover {
+            background: #d0d0d0;
+        }
+        
+        .file-btn:active {
+            border: 1px inset #c0c0c0;
+        }
+        
+        .file-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .file-sidebar {
+            width: 200px;
+            background: #f8f8f8;
+            border-right: 1px solid #ccc;
+            padding: 8px;
+            overflow-y: auto;
+        }
+        
+        .file-folder {
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 2px;
+            margin-bottom: 2px;
+        }
+        
+        .file-folder:hover {
+            background: #e0e0e0;
+        }
+        
+        .file-folder.active {
+            background: #316AC5;
+            color: white;
+        }
+        
+        .file-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .file-path {
+            background: #f0f0f0;
+            padding: 6px 12px;
+            border-bottom: 1px solid #ccc;
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .file-grid {
+            flex: 1;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            overflow-y: auto;
+            background: white;
+        }
+        
+        .file-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .file-item:hover {
+            background: #f0f0f0;
+        }
+        
+        .file-item.selected {
+            background: #316AC5;
+            color: white;
+        }
+        
+        .file-item .icon {
+            font-size: 32px;
+            margin-bottom: 6px;
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
+        }
+        
+        .file-item .name {
+            font-size: 11px;
+            word-break: break-word;
+            max-width: 100px;
+        }
+        
+        .file-item .size {
+            font-size: 9px;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+        
+        .file-upload {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            margin: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .file-upload:hover {
+            border-color: #316AC5;
+            background: #f0f8ff;
+        }
+        
+        .file-upload.dragover {
+            border-color: #316AC5;
+            background: #e6f3ff;
+        }
+        
+        .file-upload input {
+            display: none;
+        }
+        
+        /* Visualizador de Arquivos */
+        .file-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .file-viewer.active {
+            display: flex;
+        }
+        
+        .file-viewer-content {
+            background: white;
+            border: 2px outset #c0c0c0;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            position: relative;
+        }
+        
+        .file-viewer-header {
+            background: var(--theme-window-header);
+            color: white;
+            padding: 4px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .file-viewer-close {
+            cursor: pointer;
+            font-size: 14px;
+            width: 16px;
+            height: 14px;
+            background: #ff6b6b;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px outset #ff6b6b;
+        }
+        
+        .file-viewer-body {
+            padding: 16px;
+            min-width: 400px;
+            min-height: 300px;
+        }
+        
+        .text-editor {
+            width: 100%;
+            height: 400px;
+            border: 1px inset #c0c0c0;
+            padding: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            resize: vertical;
+        }
+        
+        .image-viewer {
+            text-align: center;
+        }
+        
+        .image-viewer img {
+            max-width: 100%;
+            max-height: 500px;
+            border: 1px solid #ccc;
+        }
+        
+        .audio-player {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .audio-player audio {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .video-player {
+            text-align: center;
+        }
+        
+        .video-player video {
+            max-width: 100%;
+            max-height: 500px;
+        }
+        
+        /* Notificações */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--azul-escuro);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 4000;
+            animation: notificationSlide 0.3s ease-out;
+            font-size: 12px;
+            max-width: 300px;
+        }
+        
+        @keyframes notificationSlide {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fit, 60px);
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .desktop-icon .icon {
+                font-size: 28px;
+            }
+            
+            .desktop-icon .label {
+                font-size: 9px;
+            }
+            
+            .taskbar {
+                height: 40px;
+            }
+            
+            .start-menu {
+                width: 280px;
+                bottom: 40px;
+            }
+            
+            .window {
+                min-width: 300px;
+                width: 95% !important;
+                height: 80% !important;
+                left: 2.5% !important;
+                top: 10% !important;
+            }
+            
+            .file-sidebar {
+                width: 150px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fit, 50px);
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .desktop-icon .icon {
+                font-size: 24px;
+            }
+            
+            .desktop-icon .label {
+                font-size: 8px;
+            }
+            
+            .taskbar {
+                height: 45px;
+            }
+            
+            .start-menu {
+                width: 250px;
+                bottom: 45px;
+            }
+            
+            .file-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Desktop -->
+    <div class="desktop">
+        <div class="desktop-icons" id="desktop-icons">
+            <!-- Ícones serão carregados dinamicamente -->
+        </div>
+    </div>
+
+    <!-- Visualizador de Arquivos -->
+    <div class="file-viewer" id="file-viewer">
+        <div class="file-viewer-content">
+            <div class="file-viewer-header">
+                <span id="file-viewer-title">Visualizador de Arquivos</span>
+                <div class="file-viewer-close" onclick="closeFileViewer()">×</div>
+            </div>
+            <div class="file-viewer-body" id="file-viewer-body">
+                <!-- Conteúdo será carregado dinamicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Iniciar -->
+    <div class="start-menu" id="start-menu">
+        <div class="start-menu-header">
+            <span class="logo">🌟</span>
+            <span>Aurora OS • MysticSoft</span>
+        </div>
+        <div class="start-menu-items" id="start-menu-items">
+            <!-- Itens serão carregados dinamicamente -->
+        </div>
+        <div class="start-menu-footer">
+            Clique em qualquer item para abrir
+        </div>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="start-button" onclick="toggleStartMenu()">
+            <div class="start-logo">🌟</div>
+            <span>Iniciar</span>
+        </button>
+        <div class="taskbar-items" id="taskbar-items">
+            <!-- Itens da taskbar serão adicionados dinamicamente -->
+        </div>
+        <div class="clock" id="clock">00:00</div>
+    </div>
+
+    <script>
+        // ========================================
+        // CONFIGURAÇÃO DE SITES E APLICATIVOS
+        // ========================================
+        
+        const sitesConfig = [
+            // 🌐 SITES BÁSICOS
+            {
+                id: 'google',
+                name: 'Google',
+                url: 'https://www.google.com',
+                icon: '🔍',
+                premium: false
+            },
+            {
+                id: 'youtube',
+                name: 'YouTube',
+                url: 'https://www.youtube.com',
+                icon: '📺',
+                premium: false
+            },
+            {
+                id: 'github',
+                name: 'GitHub',
+                url: 'https://github.com',
+                icon: '💻',
+                premium: false
+            },
+            {
+                id: 'spotify',
+                name: 'Spotify',
+                url: 'https://open.spotify.com',
+                icon: '🎵',
+                premium: false
+            },
+            
+            // 🌟 SITES PREMIUM
+            {
+                id: 'mysticsoft-portal',
+                name: 'MysticSoft Portal',
+                url: 'https://www.wix.com',
+                icon: '🌟',
+                premium: true
+            },
+            {
+                id: 'loja-mistica',
+                name: 'Loja Mística',
+                url: 'https://www.wix.com/website-template/view/html/1902',
+                icon: '🛒',
+                premium: true
+            },
+            {
+                id: 'tarot-online',
+                name: 'Tarot Online',
+                url: 'https://www.tarot.com',
+                icon: '🔮',
+                premium: true
+            },
+            {
+                id: 'portal-astrologico',
+                name: 'Portal Astrológico',
+                url: 'https://www.astro.com',
+                icon: '⭐',
+                premium: true
+            },
+            
+            // 📁 APLICATIVOS LOCAIS
+            {
+                id: 'file-manager',
+                name: 'Arquivos & Anotações',
+                url: 'local://file-manager',
+                icon: '📁',
+                premium: false
+            }
+        ];
+
+        // ========================================
+        // SISTEMA DE MENU INICIAR
+        // ========================================
+        
+        function toggleStartMenu() {
+            const startMenu = document.getElementById('start-menu');
+            const isActive = startMenu.classList.contains('active');
+            
+            if (isActive) {
+                startMenu.classList.remove('active');
+            } else {
+                startMenu.classList.add('active');
+                loadStartMenuItems();
+            }
+        }
+        
+        function loadStartMenuItems() {
+            const menuItems = document.getElementById('start-menu-items');
+            menuItems.innerHTML = '';
+            
+            // Separar sites por categoria
+            const basicSites = sitesConfig.filter(site => !site.premium);
+            const premiumSites = sitesConfig.filter(site => site.premium);
+            
+            // Adicionar sites básicos
+            if (basicSites.length > 0) {
+                basicSites.forEach(site => {
+                    const menuItem = document.createElement('div');
+                    menuItem.className = 'start-menu-item';
+                    menuItem.onclick = () => {
+                        openSiteWindow(site.id, site.url, site.icon, site.name);
+                        toggleStartMenu(); // Fecha o menu após clicar
+                    };
+                    
+                    menuItem.innerHTML = `
+                        <div class="icon">${site.icon}</div>
+                        <div class="text">${site.name}</div>
+                    `;
+                    
+                    menuItems.appendChild(menuItem);
+                });
+            }
+            
+            // Separador se houver sites premium
+            if (premiumSites.length > 0 && basicSites.length > 0) {
+                const separator = document.createElement('div');
+                separator.className = 'start-menu-separator';
+                menuItems.appendChild(separator);
+            }
+            
+            // Adicionar sites premium
+            if (premiumSites.length > 0) {
+                premiumSites.forEach(site => {
+                    const menuItem = document.createElement('div');
+                    menuItem.className = 'start-menu-item premium';
+                    menuItem.onclick = () => {
+                        openSiteWindow(site.id, site.url, site.icon, site.name);
+                        toggleStartMenu(); // Fecha o menu após clicar
+                    };
+                    
+                    menuItem.innerHTML = `
+                        <div class="icon">${site.icon}</div>
+                        <div class="text">${site.name}</div>
+                    `;
+                    
+                    menuItems.appendChild(menuItem);
+                });
+            }
+        }
+        
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', function(event) {
+            const startMenu = document.getElementById('start-menu');
+            const startButton = document.querySelector('.start-button');
+            
+            if (!startMenu.contains(event.target) && !startButton.contains(event.target)) {
+                startMenu.classList.remove('active');
+            }
+        });
+
+        // ========================================
+        // SISTEMA DE JANELAS COM IFRAME
+        // ========================================
+        
+        let openWindows = [];
+        let activeWindow = null;
+        let dragData = null;
+        let windowCounter = 0;
+
+        function openSiteWindow(siteId, url, icon, title) {
+            const windowId = `window-${siteId}-${++windowCounter}`;
+            const windowTitle = title || siteId.charAt(0).toUpperCase() + siteId.slice(1);
+            
+            // Se já existe uma janela para este site, apenas foca
+            const existingWindow = openWindows.find(id => id.includes(`window-${siteId}`));
+            if (existingWindow) {
+                focusWindow(existingWindow);
+                return;
+            }
+            
+            // Verifica se é aplicativo local
+            if (url.startsWith('local://')) {
+                createLocalAppWindow(windowId, windowTitle, icon, siteId);
+            } else {
+                // Cria janela normal com iframe
+                const windowElement = createWindow(windowId, windowTitle, icon, url);
+                document.body.appendChild(windowElement);
+            }
+            
+            // Abre a janela
+            const windowElement = document.getElementById(windowId);
+            if (windowElement) {
+                windowElement.classList.add('active');
+                openWindows.push(windowId);
+                focusWindow(windowId);
+                addToTaskbar(windowId, windowTitle, icon);
+                
+                // Posiciona aleatoriamente
+                const randomX = Math.random() * (window.innerWidth - 600) + 50;
+                const randomY = Math.random() * (window.innerHeight - 450) + 50;
+                windowElement.style.left = randomX + 'px';
+                windowElement.style.top = randomY + 'px';
+                
+                showNotification('🪟 Aplicativo', `${windowTitle} carregado!`);
+            }
+        }
+
+        function createLocalAppWindow(windowId, title, icon, appId) {
+            const window = document.createElement('div');
+            window.id = windowId;
+            window.className = 'window';
+            window.style.width = '900px';
+            window.style.height = '700px';
+            
+            let appContent = '';
+            
+            if (appId === 'file-manager') {
+                appContent = createFileManagerContent();
+            }
+            
+            window.innerHTML = `
+                <div class="window-header" onmousedown="startDrag(event, '${windowId}')">
+                    <div class="window-title">
+                        <span>${icon}</span>
+                        <span>${title}</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-control" onclick="minimizeWindow('${windowId}')">_</div>
+                        <div class="window-control" onclick="toggleMaximize('${windowId}')">□</div>
+                        <div class="window-control close" onclick="closeWindow('${windowId}')">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    ${appContent}
+                </div>
+                <div class="window-resize-handle" onmousedown="startResize(event, '${windowId}')"></div>
+            `;
+            
+            document.body.appendChild(window);
+            
+            // Inicializa o aplicativo
+            if (appId === 'file-manager') {
+                initFileManager();
+            }
+            
+            return window;
+        }
+
+        function createFileManagerContent() {
+            return `
+                <div class="file-manager">
+                    <div class="file-toolbar">
+                        <div class="file-btn" onclick="createNewFile('text')">
+                            <span>📝</span>
+                            <span>Novo Texto</span>
+                        </div>
+                        <div class="file-btn" onclick="createNewFile('note')">
+                            <span>📋</span>
+                            <span>Nova Anotação</span>
+                        </div>
+                        <div class="file-btn" onclick="uploadFiles()">
+                            <span>📤</span>
+                            <span>Upload</span>
+                        </div>
+                        <div class="file-btn" onclick="deleteSelectedFile()">
+                            <span>🗑️</span>
+                            <span>Excluir</span>
+                        </div>
+                        <div class="file-btn" onclick="refreshFiles()">
+                            <span>🔄</span>
+                            <span>Atualizar</span>
+                        </div>
+                    </div>
+                    
+                    <div class="file-content">
+                        <div class="file-sidebar">
+                            <div class="file-folder active" onclick="selectFolder('all')">
+                                <span>📁</span>
+                                <span>Todos os Arquivos</span>
+                            </div>
+                            <div class="file-folder" onclick="selectFolder('documents')">
+                                <span>📄</span>
+                                <span>Documentos</span>
+                            </div>
+                            <div class="file-folder" onclick="selectFolder('images')">
+                                <span>🖼️</span>
+                                <span>Imagens</span>
+                            </div>
+                            <div class="file-folder" onclick="selectFolder('audio')">
+                                <span>🎵</span>
+                                <span>Áudios</span>
+                            </div>
+                            <div class="file-folder" onclick="selectFolder('videos')">
+                                <span>🎬</span>
+                                <span>Vídeos</span>
+                            </div>
+                            <div class="file-folder" onclick="selectFolder('notes')">
+                                <span>📋</span>
+                                <span>Anotações</span>
+                            </div>
+                        </div>
+                        
+                        <div class="file-main">
+                            <div class="file-path" id="file-path">
+                                📁 Todos os Arquivos
+                            </div>
+                            
+                            <div class="file-upload" onclick="uploadFiles()" ondrop="handleFileDrop(event)" ondragover="handleDragOver(event)">
+                                <div style="font-size: 24px; margin-bottom: 8px;">📤</div>
+                                <div>Clique aqui ou arraste arquivos para fazer upload</div>
+                                <div style="font-size: 10px; margin-top: 4px; opacity: 0.7;">
+                                    Suporta: Texto, Imagens, Áudios, Vídeos
+                                </div>
+                                <input type="file" id="file-input" multiple accept="*/*" onchange="handleFileSelect(event)">
+                            </div>
+                            
+                            <div class="file-grid" id="file-grid">
+                                <!-- Arquivos serão carregados aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createWindow(windowId, title, icon, url) {
+            const window = document.createElement('div');
+            window.id = windowId;
+            window.className = 'window';
+            window.style.width = '800px';
+            window.style.height = '600px';
+            
+            window.innerHTML = `
+                <div class="window-header" onmousedown="startDrag(event, '${windowId}')">
+                    <div class="window-title">
+                        <span>${icon}</span>
+                        <span>${title}</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-control" onclick="minimizeWindow('${windowId}')">_</div>
+                        <div class="window-control" onclick="toggleMaximize('${windowId}')">□</div>
+                        <div class="window-control close" onclick="closeWindow('${windowId}')">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="loading-overlay" id="loading-${windowId}">
+                        <div class="loading-spinner"></div>
+                        <div>Carregando ${title}...</div>
+                        <div style="font-size: 10px; margin-top: 5px; opacity: 0.7;">${url}</div>
+                    </div>
+                    <iframe class="window-iframe" src="${url}" 
+                            onload="hideLoading('${windowId}')"
+                            onerror="showError('${windowId}')">
+                    </iframe>
+                </div>
+                <div class="window-resize-handle" onmousedown="startResize(event, '${windowId}')"></div>
+            `;
+            
+            return window;
+        }
+
+        function hideLoading(windowId) {
+            const loading = document.getElementById(`loading-${windowId}`);
+            if (loading) {
+                setTimeout(() => {
+                    loading.style.opacity = '0';
+                    loading.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => {
+                        loading.style.display = 'none';
+                    }, 500);
+                }, 2000); // Aumentado para 2 segundos
+            }
+        }
+
+        function showError(windowId) {
+            const loading = document.getElementById(`loading-${windowId}`);
+            if (loading) {
+                loading.innerHTML = `
+                    <div style="color: #ff6b6b; font-size: 24px; margin-bottom: 12px;">⚠️</div>
+                    <div>Erro ao carregar o site</div>
+                    <div style="font-size: 10px; margin-top: 5px; opacity: 0.7;">Verifique sua conexão com a internet</div>
+                `;
+            }
+        }
+
+        function focusWindow(windowId) {
+            // Remove foco de todas as janelas
+            document.querySelectorAll('.window').forEach(w => w.classList.remove('focused'));
+            
+            // Adiciona foco à janela atual
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.classList.add('focused');
+                activeWindow = windowId;
+                
+                // Atualiza taskbar
+                document.querySelectorAll('.taskbar-item').forEach(item => item.classList.remove('active'));
+                const taskbarItem = document.querySelector(`[data-window="${windowId}"]`);
+                if (taskbarItem) {
+                    taskbarItem.classList.add('active');
+                }
+            }
+        }
+
+        function minimizeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.style.display = 'none';
+                
+                // Remove da lista de janelas ativas mas mantém na taskbar
+                const taskbarItem = document.querySelector(`[data-window="${windowId}"]`);
+                if (taskbarItem) {
+                    taskbarItem.classList.remove('active');
+                }
+            }
+        }
+
+        function toggleMaximize(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                if (window.style.width === '100vw') {
+                    // Restaurar
+                    window.style.width = '800px';
+                    window.style.height = '600px';
+                    window.style.left = '100px';
+                    window.style.top = '100px';
+                } else {
+                    // Maximizar
+                    window.style.width = '100vw';
+                    window.style.height = 'calc(100vh - 32px)';
+                    window.style.left = '0';
+                    window.style.top = '0';
+                }
+            }
+        }
+
+        function closeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.remove();
+                
+                // Remove da lista de janelas abertas
+                openWindows = openWindows.filter(id => id !== windowId);
+                
+                // Remove da taskbar
+                const taskbarItem = document.querySelector(`[data-window="${windowId}"]`);
+                if (taskbarItem) {
+                    taskbarItem.remove();
+                }
+                
+                // Se era a janela ativa, foca outra
+                if (activeWindow === windowId) {
+                    activeWindow = null;
+                    if (openWindows.length > 0) {
+                        focusWindow(openWindows[openWindows.length - 1]);
+                    }
+                }
+            }
+        }
+
+        function addToTaskbar(windowId, title, icon) {
+            const taskbarItems = document.getElementById('taskbar-items');
+            const taskbarItem = document.createElement('div');
+            taskbarItem.className = 'taskbar-item';
+            taskbarItem.setAttribute('data-window', windowId);
+            taskbarItem.textContent = `${icon} ${title}`;
+            taskbarItem.onclick = () => {
+                const window = document.getElementById(windowId);
+                if (window.style.display === 'none') {
+                    window.style.display = 'block';
+                }
+                focusWindow(windowId);
+            };
+            
+            taskbarItems.appendChild(taskbarItem);
+        }
+
+        // ========================================
+        // SISTEMA DE GERENCIADOR DE ARQUIVOS
+        // ========================================
+        
+        let userFiles = JSON.parse(localStorage.getItem('aurora-files') || '[]');
+        let selectedFile = null;
+        let currentFolder = 'all';
+        
+        function initFileManager() {
+            loadFiles();
+            
+            // Adicionar alguns arquivos de exemplo se não houver nenhum
+            if (userFiles.length === 0) {
+                userFiles = [
+                    {
+                        id: 'welcome',
+                        name: 'Bem-vindo.txt',
+                        type: 'text',
+                        content: 'Bem-vindo ao Aurora OS!\n\nEste é seu gerenciador de arquivos pessoal.\nVocê pode criar textos, anotações e fazer upload de imagens, áudios e vídeos.\n\nDivirta-se explorando! 🌟',
+                        size: '245 bytes',
+                        created: new Date().toLocaleDateString('pt-BR'),
+                        folder: 'documents'
+                    },
+                    {
+                        id: 'notes-example',
+                        name: 'Minhas Anotações.txt',
+                        type: 'note',
+                        content: '📋 ANOTAÇÕES PESSOAIS\n\n• Lembrar de meditar hoje\n• Estudar astrologia\n• Organizar cristais\n• Fazer leitura de tarot\n\n✨ Pensamentos místicos:\n- A lua está em fase crescente\n- Energia positiva fluindo\n- Gratidão pelo dia',
+                        size: '198 bytes',
+                        created: new Date().toLocaleDateString('pt-BR'),
+                        folder: 'notes'
+                    }
+                ];
+                saveFiles();
+                loadFiles();
+            }
+        }
+        
+        function saveFiles() {
+            localStorage.setItem('aurora-files', JSON.stringify(userFiles));
+        }
+        
+        function loadFiles() {
+            const fileGrid = document.getElementById('file-grid');
+            if (!fileGrid) return;
+            
+            fileGrid.innerHTML = '';
+            
+            const filteredFiles = currentFolder === 'all' 
+                ? userFiles 
+                : userFiles.filter(file => file.folder === currentFolder);
+            
+            filteredFiles.forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.onclick = () => selectFileItem(file.id, fileItem);
+                fileItem.ondblclick = () => openFile(file);
+                
+                const icon = getFileIcon(file.type);
+                
+                fileItem.innerHTML = `
+                    <div class="icon">${icon}</div>
+                    <div class="name">${file.name}</div>
+                    <div class="size">${file.size}</div>
+                `;
+                
+                fileGrid.appendChild(fileItem);
+            });
+        }
+        
+        function getFileIcon(type) {
+            const icons = {
+                'text': '📝',
+                'note': '📋',
+                'image': '🖼️',
+                'audio': '🎵',
+                'video': '🎬',
+                'pdf': '📄',
+                'doc': '📄',
+                'unknown': '📄'
+            };
+            return icons[type] || icons['unknown'];
+        }
+        
+        function selectFolder(folder) {
+            currentFolder = folder;
+            
+            // Atualizar visual das pastas
+            document.querySelectorAll('.file-folder').forEach(f => f.classList.remove('active'));
+            event.target.closest('.file-folder').classList.add('active');
+            
+            // Atualizar caminho
+            const pathNames = {
+                'all': '📁 Todos os Arquivos',
+                'documents': '📄 Documentos',
+                'images': '🖼️ Imagens',
+                'audio': '🎵 Áudios',
+                'videos': '🎬 Vídeos',
+                'notes': '📋 Anotações'
+            };
+            
+            document.getElementById('file-path').textContent = pathNames[folder];
+            
+            loadFiles();
+        }
+        
+        function selectFileItem(fileId, element) {
+            // Remove seleção anterior
+            document.querySelectorAll('.file-item').forEach(item => item.classList.remove('selected'));
+            
+            // Adiciona seleção atual
+            element.classList.add('selected');
+            selectedFile = fileId;
+        }
+        
+        function createNewFile(type) {
+            const fileName = prompt(`Nome do ${type === 'text' ? 'arquivo' : 'anotação'}:`, 
+                                  type === 'text' ? 'Novo Documento.txt' : 'Nova Anotação.txt');
+            
+            if (!fileName) return;
+            
+            const newFile = {
+                id: Date.now().toString(),
+                name: fileName,
+                type: type,
+                content: type === 'text' ? '' : '📋 NOVA ANOTAÇÃO\n\n',
+                size: '0 bytes',
+                created: new Date().toLocaleDateString('pt-BR'),
+                folder: type === 'note' ? 'notes' : 'documents'
+            };
+            
+            userFiles.push(newFile);
+            saveFiles();
+            loadFiles();
+            
+            // Abrir para edição
+            setTimeout(() => openFile(newFile), 100);
+        }
+        
+        function openFile(file) {
+            const viewer = document.getElementById('file-viewer');
+            const title = document.getElementById('file-viewer-title');
+            const body = document.getElementById('file-viewer-body');
+            
+            title.textContent = file.name;
+            
+            if (file.type === 'text' || file.type === 'note') {
+                body.innerHTML = `
+                    <div style="margin-bottom: 12px;">
+                        <strong>📝 Editor de Texto</strong>
+                        <div style="font-size: 10px; color: #666; margin-top: 4px;">
+                            Criado em: ${file.created} • Tamanho: ${file.size}
+                        </div>
+                    </div>
+                    <textarea class="text-editor" id="text-content" placeholder="Digite seu texto aqui...">${file.content}</textarea>
+                    <div style="margin-top: 12px; text-align: right;">
+                        <button class="file-btn" onclick="saveTextFile('${file.id}')">
+                            <span>💾</span>
+                            <span>Salvar</span>
+                        </button>
+                    </div>
+                `;
+            } else if (file.type === 'image') {
+                body.innerHTML = `
+                    <div class="image-viewer">
+                        <div style="margin-bottom: 12px;">
+                            <strong>🖼️ Visualizador de Imagem</strong>
+                            <div style="font-size: 10px; color: #666; margin-top: 4px;">
+                                ${file.name} • ${file.size}
+                            </div>
+                        </div>
+                        <img src="${file.content}" alt="${file.name}">
+                    </div>
+                `;
+            } else if (file.type === 'audio') {
+                body.innerHTML = `
+                    <div class="audio-player">
+                        <div style="margin-bottom: 20px;">
+                            <strong>🎵 Player de Áudio</strong>
+                            <div style="font-size: 10px; color: #666; margin-top: 4px;">
+                                ${file.name} • ${file.size}
+                            </div>
+                        </div>
+                        <audio controls>
+                            <source src="${file.content}" type="audio/mpeg">
+                            Seu navegador não suporta o elemento de áudio.
+                        </audio>
+                    </div>
+                `;
+            } else if (file.type === 'video') {
+                body.innerHTML = `
+                    <div class="video-player">
+                        <div style="margin-bottom: 20px;">
+                            <strong>🎬 Player de Vídeo</strong>
+                            <div style="font-size: 10px; color: #666; margin-top: 4px;">
+                                ${file.name} • ${file.size}
+                            </div>
+                        </div>
+                        <video controls>
+                            <source src="${file.content}" type="video/mp4">
+                            Seu navegador não suporta o elemento de vídeo.
+                        </video>
+                    </div>
+                `;
+            }
+            
+            viewer.classList.add('active');
+        }
+        
+        function closeFileViewer() {
+            document.getElementById('file-viewer').classList.remove('active');
+        }
+        
+        function saveTextFile(fileId) {
+            const content = document.getElementById('text-content').value;
+            const file = userFiles.find(f => f.id === fileId);
+            
+            if (file) {
+                file.content = content;
+                file.size = new Blob([content]).size + ' bytes';
+                saveFiles();
+                loadFiles();
+                showNotification('💾 Salvo', 'Arquivo salvo com sucesso!');
+            }
+        }
+        
+        function uploadFiles() {
+            document.getElementById('file-input').click();
+        }
+        
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            processFiles(files);
+        }
+        
+        function handleFileDrop(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const files = event.dataTransfer.files;
+            processFiles(files);
+            
+            event.target.classList.remove('dragover');
+        }
+        
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.target.classList.add('dragover');
+        }
+        
+        function processFiles(files) {
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const fileType = getFileTypeFromMime(file.type);
+                    const folder = getFolderFromType(fileType);
+                    
+                    const newFile = {
+                        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                        name: file.name,
+                        type: fileType,
+                        content: e.target.result,
+                        size: formatFileSize(file.size),
+                        created: new Date().toLocaleDateString('pt-BR'),
+                        folder: folder
+                    };
+                    
+                    userFiles.push(newFile);
+                    saveFiles();
+                    loadFiles();
+                    
+                    showNotification('📤 Upload', `${file.name} carregado com sucesso!`);
+                };
+                
+                if (file.type.startsWith('image/') || file.type.startsWith('audio/') || file.type.startsWith('video/')) {
+                    reader.readAsDataURL(file);
+                } else {
+                    reader.readAsText(file);
+                }
+            });
+        }
+        
+        function getFileTypeFromMime(mimeType) {
+            if (mimeType.startsWith('image/')) return 'image';
+            if (mimeType.startsWith('audio/')) return 'audio';
+            if (mimeType.startsWith('video/')) return 'video';
+            if (mimeType.includes('text')) return 'text';
+            return 'unknown';
+        }
+        
+        function getFolderFromType(type) {
+            const folderMap = {
+                'image': 'images',
+                'audio': 'audio',
+                'video': 'videos',
+                'text': 'documents',
+                'note': 'notes',
+                'unknown': 'documents'
+            };
+            return folderMap[type] || 'documents';
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 bytes';
+            const k = 1024;
+            const sizes = ['bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+        
+        function deleteSelectedFile() {
+            if (!selectedFile) {
+                alert('Selecione um arquivo para excluir.');
+                return;
+            }
+            
+            const file = userFiles.find(f => f.id === selectedFile);
+            if (file && confirm(`Tem certeza que deseja excluir "${file.name}"?`)) {
+                userFiles = userFiles.filter(f => f.id !== selectedFile);
+                saveFiles();
+                loadFiles();
+                selectedFile = null;
+                showNotification('🗑️ Excluído', 'Arquivo excluído com sucesso!');
+            }
+        }
+        
+        function refreshFiles() {
+            loadFiles();
+            showNotification('🔄 Atualizado', 'Lista de arquivos atualizada!');
+        }
+
+        // ========================================
+        // SISTEMA DE ARRASTAR JANELAS
+        // ========================================
+        
+        function startDrag(event, windowId) {
+            event.preventDefault();
+            const window = document.getElementById(windowId);
+            
+            dragData = {
+                windowId: windowId,
+                startX: event.clientX,
+                startY: event.clientY,
+                startLeft: parseInt(window.style.left) || 0,
+                startTop: parseInt(window.style.top) || 0
+            };
+            
+            focusWindow(windowId);
+            
+            document.addEventListener('mousemove', handleDrag);
+            document.addEventListener('mouseup', stopDrag);
+        }
+        
+        function handleDrag(event) {
+            if (!dragData) return;
+            
+            const window = document.getElementById(dragData.windowId);
+            const deltaX = event.clientX - dragData.startX;
+            const deltaY = event.clientY - dragData.startY;
+            
+            window.style.left = (dragData.startLeft + deltaX) + 'px';
+            window.style.top = (dragData.startTop + deltaY) + 'px';
+        }
+        
+        function stopDrag() {
+            dragData = null;
+            document.removeEventListener('mousemove', handleDrag);
+            document.removeEventListener('mouseup', stopDrag);
+        }
+
+        // ========================================
+        // SISTEMA DE REDIMENSIONAR JANELAS
+        // ========================================
+        
+        function startResize(event, windowId) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const window = document.getElementById(windowId);
+            const rect = window.getBoundingClientRect();
+            
+            dragData = {
+                windowId: windowId,
+                startX: event.clientX,
+                startY: event.clientY,
+                startWidth: rect.width,
+                startHeight: rect.height
+            };
+            
+            document.addEventListener('mousemove', handleResize);
+            document.addEventListener('mouseup', stopResize);
+        }
+        
+        function handleResize(event) {
+            if (!dragData) return;
+            
+            const window = document.getElementById(dragData.windowId);
+            const deltaX = event.clientX - dragData.startX;
+            const deltaY = event.clientY - dragData.startY;
+            
+            const newWidth = Math.max(400, dragData.startWidth + deltaX);
+            const newHeight = Math.max(300, dragData.startHeight + deltaY);
+            
+            window.style.width = newWidth + 'px';
+            window.style.height = newHeight + 'px';
+        }
+        
+        function stopResize() {
+            dragData = null;
+            document.removeEventListener('mousemove', handleResize);
+            document.removeEventListener('mouseup', stopResize);
+        }
+
+        // ========================================
+        // SISTEMA DE NOTIFICAÇÕES
+        // ========================================
+        
+        function showNotification(title, message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 4px;">${title}</div>
+                <div style="font-size: 11px;">${message}</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'notificationSlide 0.3s ease-out reverse';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // ========================================
+        // INICIALIZAÇÃO DO SISTEMA
+        // ========================================
+        
+        function loadDesktopIcons() {
+            const desktopIcons = document.getElementById('desktop-icons');
+            desktopIcons.innerHTML = '';
+            
+            sitesConfig.forEach(site => {
+                const icon = document.createElement('div');
+                icon.className = `desktop-icon ${site.premium ? 'premium' : ''}`;
+                icon.onclick = () => openSiteWindow(site.id, site.url, site.icon, site.name);
+                
+                icon.innerHTML = `
+                    <div class="icon">${site.icon}</div>
+                    <div class="label">${site.name}</div>
+                `;
+                
+                desktopIcons.appendChild(icon);
+            });
+        }
+        
+        function updateClock() {
+            const clock = document.getElementById('clock');
+            const now = new Date();
+            const time = now.toLocaleTimeString('pt-BR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            clock.textContent = time;
+        }
+        
+        // Inicializar sistema
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDesktopIcons();
+            updateClock();
+            setInterval(updateClock, 1000);
+            
+            showNotification('🌟 Aurora OS', 'Sistema carregado com sucesso!');
+        });
+    </script>
+</body>
+</html>
+
