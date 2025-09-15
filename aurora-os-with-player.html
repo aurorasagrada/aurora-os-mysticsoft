@@ -1052,7 +1052,262 @@
             to { transform: translateX(0); opacity: 1; }
         }
         
-        /* Responsividade interna das janelas */
+        /* Painel de Personalização */
+        .customization-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .customization-overlay.active {
+            opacity: 1;
+        }
+
+        .customization-panel {
+            background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--vinho) 100%);
+            border: 2px solid var(--dourado);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .customization-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(240, 170, 83, 0.3);
+        }
+
+        .customization-header h3 {
+            color: var(--dourado);
+            margin: 0;
+            font-size: 24px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-btn {
+            background: var(--vinho);
+            color: white;
+            border: 1px solid var(--dourado);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--dourado);
+            color: var(--azul-escuro);
+            transform: scale(1.1);
+        }
+
+        .customization-content {
+            padding: 20px;
+        }
+
+        .customization-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(240, 170, 83, 0.2);
+        }
+
+        .customization-section h4 {
+            color: var(--dourado);
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .color-categories {
+            display: grid;
+            gap: 20px;
+        }
+
+        .color-category h5 {
+            color: var(--pergaminho);
+            margin: 0 0 10px 0;
+            font-size: 14px;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .color-btn:hover {
+            transform: scale(1.1);
+            border-color: var(--dourado);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .color-btn:active {
+            transform: scale(0.95);
+        }
+
+        .background-options {
+            display: grid;
+            gap: 20px;
+        }
+
+        .bg-option h5 {
+            color: var(--pergaminho);
+            margin: 0 0 10px 0;
+            font-size: 14px;
+        }
+
+        .upload-btn {
+            display: inline-block;
+            background: var(--dourado);
+            color: var(--azul-escuro);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .upload-btn:hover {
+            background: var(--pergaminho);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        #bg-upload {
+            display: none;
+        }
+
+        .gradient-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .gradient-btn {
+            height: 60px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+
+        .gradient-btn:hover {
+            border-color: var(--dourado);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .remove-bg-btn {
+            background: var(--vinho);
+            color: white;
+            border: 1px solid var(--dourado);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .remove-bg-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .customization-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .control-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: 1px solid var(--dourado);
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn.reset {
+            background: var(--vinho);
+            color: white;
+        }
+
+        .control-btn.save {
+            background: var(--dourado);
+            color: var(--azul-escuro);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Botão de personalização na taskbar */
+        .customize-btn {
+            background: rgba(240, 170, 83, 0.2);
+            color: var(--dourado);
+            border: 1px solid var(--dourado);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .customize-btn:hover {
+            background: var(--dourado);
+            color: var(--azul-escuro);
+            transform: scale(1.05);
+        }
+
+        /* Variável CSS para cor da taskbar */
+        :root {
+            --taskbar-bg: var(--azul-escuro);
+        }
+
+        .taskbar {
+            background: var(--taskbar-bg) !important;
+        }
         .window-content {
             overflow: auto;
             height: calc(100% - 32px);
@@ -1279,6 +1534,9 @@
         <div class="taskbar-items" id="taskbar-items">
             <!-- Itens da taskbar serão adicionados dinamicamente -->
         </div>
+        <button class="customize-btn" onclick="openCustomizationPanel()">
+            🎨 Personalizar
+        </button>
         <div class="clock" id="clock">00:00</div>
     </div>
 
@@ -1703,8 +1961,325 @@
         }
 
         // ========================================
-        // RESPONSIVE WINDOW CONTENT
+        // DESKTOP CUSTOMIZATION SYSTEM
         // ========================================
+        
+        // Paleta de cores completa para personalização
+        const colorPalette = [
+            // Cores básicas
+            { name: 'Azul Aurora', value: '#0B1836', category: 'basic' },
+            { name: 'Vinho Místico', value: '#770543', category: 'basic' },
+            { name: 'Verde Claro', value: '#B2D1B1', category: 'basic' },
+            { name: 'Dourado', value: '#F0AA53', category: 'basic' },
+            { name: 'Pergaminho', value: '#F2EAFF', category: 'basic' },
+            
+            // Tons de azul
+            { name: 'Azul Marinho', value: '#001f3f', category: 'blue' },
+            { name: 'Azul Real', value: '#0074D9', category: 'blue' },
+            { name: 'Azul Céu', value: '#7FDBFF', category: 'blue' },
+            { name: 'Azul Escuro', value: '#111827', category: 'blue' },
+            { name: 'Azul Meia-Noite', value: '#1e293b', category: 'blue' },
+            
+            // Tons de roxo/violeta
+            { name: 'Roxo Profundo', value: '#4c1d95', category: 'purple' },
+            { name: 'Violeta Cósmico', value: '#7c3aed', category: 'purple' },
+            { name: 'Lavanda', value: '#a78bfa', category: 'purple' },
+            { name: 'Púrpura Real', value: '#6b21a8', category: 'purple' },
+            { name: 'Ametista', value: '#8b5cf6', category: 'purple' },
+            
+            // Tons de vermelho/rosa
+            { name: 'Vermelho Sangue', value: '#7f1d1d', category: 'red' },
+            { name: 'Rosa Místico', value: '#be185d', category: 'red' },
+            { name: 'Carmesim', value: '#dc2626', category: 'red' },
+            { name: 'Rosa Antigo', value: '#9f1239', category: 'red' },
+            { name: 'Borgonha', value: '#881337', category: 'red' },
+            
+            // Tons de verde
+            { name: 'Verde Floresta', value: '#14532d', category: 'green' },
+            { name: 'Verde Esmeralda', value: '#059669', category: 'green' },
+            { name: 'Verde Jade', value: '#10b981', category: 'green' },
+            { name: 'Verde Musgo', value: '#365314', category: 'green' },
+            { name: 'Verde Menta', value: '#6ee7b7', category: 'green' },
+            
+            // Tons neutros
+            { name: 'Preto Absoluto', value: '#000000', category: 'neutral' },
+            { name: 'Cinza Carvão', value: '#374151', category: 'neutral' },
+            { name: 'Cinza Ardósia', value: '#64748b', category: 'neutral' },
+            { name: 'Marrom Terra', value: '#78350f', category: 'neutral' },
+            { name: 'Bege Antigo', value: '#a3a3a3', category: 'neutral' },
+            
+            // Cores especiais
+            { name: 'Dourado Antigo', value: '#d97706', category: 'special' },
+            { name: 'Prata Lunar', value: '#94a3b8', category: 'special' },
+            { name: 'Bronze Místico', value: '#92400e', category: 'special' },
+            { name: 'Cobre Oxidado', value: '#c2410c', category: 'special' },
+            { name: 'Platina', value: '#e5e7eb', category: 'special' }
+        ];
+
+        // Configurações de personalização
+        let customizationSettings = {
+            taskbarColor: '#0B1836',
+            backgroundColor: 'linear-gradient(135deg, #0B1836 0%, #770543 100%)',
+            backgroundImage: null,
+            iconStyle: 'default',
+            theme: 'aurora'
+        };
+
+        // Carrega configurações salvas
+        function loadCustomizationSettings() {
+            const saved = localStorage.getItem('aurora-customization');
+            if (saved) {
+                customizationSettings = { ...customizationSettings, ...JSON.parse(saved) };
+                applyCustomizationSettings();
+            }
+        }
+
+        // Salva configurações
+        function saveCustomizationSettings() {
+            localStorage.setItem('aurora-customization', JSON.stringify(customizationSettings));
+        }
+
+        // Aplica configurações visuais
+        function applyCustomizationSettings() {
+            const root = document.documentElement;
+            
+            // Aplica cor da taskbar
+            root.style.setProperty('--taskbar-bg', customizationSettings.taskbarColor);
+            
+            // Aplica fundo do desktop
+            const desktop = document.querySelector('.desktop');
+            if (desktop) {
+                if (customizationSettings.backgroundImage) {
+                    desktop.style.background = `url(${customizationSettings.backgroundImage}) center/cover, ${customizationSettings.backgroundColor}`;
+                } else {
+                    desktop.style.background = customizationSettings.backgroundColor;
+                }
+            }
+        }
+
+        // Cria painel de personalização
+        function createCustomizationPanel() {
+            return `
+                <div class="customization-panel">
+                    <div class="customization-header">
+                        <h3>🎨 Personalização do Desktop</h3>
+                        <button onclick="closeCustomizationPanel()" class="close-btn">×</button>
+                    </div>
+                    
+                    <div class="customization-content">
+                        <!-- Seção de Cores da Taskbar -->
+                        <div class="customization-section">
+                            <h4>🎨 Cor da Barra de Tarefas</h4>
+                            <div class="color-categories">
+                                <div class="color-category">
+                                    <h5>Cores Básicas</h5>
+                                    <div class="color-grid">
+                                        ${generateColorButtons('basic')}
+                                    </div>
+                                </div>
+                                
+                                <div class="color-category">
+                                    <h5>Tons de Azul</h5>
+                                    <div class="color-grid">
+                                        ${generateColorButtons('blue')}
+                                    </div>
+                                </div>
+                                
+                                <div class="color-category">
+                                    <h5>Tons de Roxo</h5>
+                                    <div class="color-grid">
+                                        ${generateColorButtons('purple')}
+                                    </div>
+                                </div>
+                                
+                                <div class="color-category">
+                                    <h5>Tons de Vermelho</h5>
+                                    <div class="color-grid">
+                                        ${generateColorButtons('red')}
+                                    </div>
+                                </div>
+                                
+                                <div class="color-category">
+                                    <h5>Tons de Verde</h5>
+                                    <div class="color-grid">
+                                        ${generateColorButtons('green')}
+                                    </div>
+                                </div>
+                                
+                                <div class="color-category">
+                                    <h5>Cores Neutras</h5>
+                                    <div class="color-grid">
+                                        ${generateColorButtons('neutral')}
+                                    </div>
+                                </div>
+                                
+                                <div class="color-category">
+                                    <h5>Cores Especiais</h5>
+                                    <div class="color-grid">
+                                        ${generateColorButtons('special')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Seção de Fundo do Desktop -->
+                        <div class="customization-section">
+                            <h4>🖼️ Fundo do Desktop</h4>
+                            
+                            <div class="background-options">
+                                <div class="bg-option">
+                                    <h5>📤 Upload de Imagem</h5>
+                                    <input type="file" id="bg-upload" accept="image/*" onchange="handleBackgroundUpload(event)">
+                                    <label for="bg-upload" class="upload-btn">
+                                        📁 Escolher Imagem do Dispositivo
+                                    </label>
+                                </div>
+                                
+                                <div class="bg-option">
+                                    <h5>🎨 Gradientes Predefinidos</h5>
+                                    <div class="gradient-grid">
+                                        <div class="gradient-btn" onclick="setBackgroundGradient('linear-gradient(135deg, #0B1836 0%, #770543 100%)')" 
+                                             style="background: linear-gradient(135deg, #0B1836 0%, #770543 100%)">
+                                            Aurora Original
+                                        </div>
+                                        <div class="gradient-btn" onclick="setBackgroundGradient('linear-gradient(135deg, #1e293b 0%, #7c3aed 100%)')" 
+                                             style="background: linear-gradient(135deg, #1e293b 0%, #7c3aed 100%)">
+                                            Noite Cósmica
+                                        </div>
+                                        <div class="gradient-btn" onclick="setBackgroundGradient('linear-gradient(135deg, #7f1d1d 0%, #be185d 100%)')" 
+                                             style="background: linear-gradient(135deg, #7f1d1d 0%, #be185d 100%)">
+                                            Rosa Místico
+                                        </div>
+                                        <div class="gradient-btn" onclick="setBackgroundGradient('linear-gradient(135deg, #14532d 0%, #059669 100%)')" 
+                                             style="background: linear-gradient(135deg, #14532d 0%, #059669 100%)">
+                                            Floresta Encantada
+                                        </div>
+                                        <div class="gradient-btn" onclick="setBackgroundGradient('linear-gradient(135deg, #000000 0%, #374151 100%)')" 
+                                             style="background: linear-gradient(135deg, #000000 0%, #374151 100%)">
+                                            Sombras Profundas
+                                        </div>
+                                        <div class="gradient-btn" onclick="setBackgroundGradient('linear-gradient(135deg, #d97706 0%, #92400e 100%)')" 
+                                             style="background: linear-gradient(135deg, #d97706 0%, #92400e 100%)">
+                                            Ouro Antigo
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-option">
+                                    <button onclick="removeBackgroundImage()" class="remove-bg-btn">
+                                        🗑️ Remover Imagem de Fundo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Seção de Controles -->
+                        <div class="customization-section">
+                            <div class="customization-controls">
+                                <button onclick="resetCustomization()" class="control-btn reset">
+                                    🔄 Restaurar Padrão
+                                </button>
+                                <button onclick="saveCustomizationSettings(); showNotification('💾 Configurações', 'Personalização salva com sucesso!')" class="control-btn save">
+                                    💾 Salvar Configurações
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Gera botões de cores por categoria
+        function generateColorButtons(category) {
+            return colorPalette
+                .filter(color => color.category === category)
+                .map(color => `
+                    <div class="color-btn" 
+                         style="background-color: ${color.value}" 
+                         onclick="setTaskbarColor('${color.value}')"
+                         title="${color.name}">
+                    </div>
+                `).join('');
+        }
+
+        // Define cor da taskbar
+        function setTaskbarColor(color) {
+            customizationSettings.taskbarColor = color;
+            applyCustomizationSettings();
+            showNotification('🎨 Cor Alterada', `Taskbar agora é ${color}`);
+        }
+
+        // Define gradiente de fundo
+        function setBackgroundGradient(gradient) {
+            customizationSettings.backgroundColor = gradient;
+            applyCustomizationSettings();
+            showNotification('🎨 Fundo Alterado', 'Gradiente aplicado com sucesso!');
+        }
+
+        // Manipula upload de imagem de fundo
+        function handleBackgroundUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    customizationSettings.backgroundImage = e.target.result;
+                    applyCustomizationSettings();
+                    showNotification('🖼️ Imagem Carregada', 'Fundo personalizado aplicado!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Remove imagem de fundo
+        function removeBackgroundImage() {
+            customizationSettings.backgroundImage = null;
+            applyCustomizationSettings();
+            showNotification('🗑️ Imagem Removida', 'Voltando ao gradiente padrão');
+        }
+
+        // Reseta personalização
+        function resetCustomization() {
+            customizationSettings = {
+                taskbarColor: '#0B1836',
+                backgroundColor: 'linear-gradient(135deg, #0B1836 0%, #770543 100%)',
+                backgroundImage: null,
+                iconStyle: 'default',
+                theme: 'aurora'
+            };
+            applyCustomizationSettings();
+            showNotification('🔄 Reset Completo', 'Configurações restauradas ao padrão');
+        }
+
+        // Abre painel de personalização
+        function openCustomizationPanel() {
+            const existingPanel = document.getElementById('customization-panel');
+            if (existingPanel) {
+                existingPanel.remove();
+            }
+
+            const panel = document.createElement('div');
+            panel.id = 'customization-panel';
+            panel.className = 'customization-overlay';
+            panel.innerHTML = createCustomizationPanel();
+            
+            document.body.appendChild(panel);
+            
+            // Animação de entrada
+            setTimeout(() => {
+                panel.classList.add('active');
+            }, 10);
+        }
+
+        // Fecha painel de personalização
+        function closeCustomizationPanel() {
+            const panel = document.getElementById('customization-panel');
+            if (panel) {
+                panel.classList.remove('active');
+                setTimeout(() => {
+                    panel.remove();
+                }, 300);
+            }
+        }
         
         // Função para ajustar conteúdo ao redimensionar janela
         function adjustWindowContent(windowId) {
@@ -2804,6 +3379,9 @@
             loadDesktopIcons();
             updateClock();
             setInterval(updateClock, 1000);
+            
+            // Carrega configurações de personalização
+            loadCustomizationSettings();
             
             showNotification('🌟 Aurora OS', 'Sistema carregado com Aurora Player integrado!');
         });
