@@ -1052,7 +1052,122 @@
             to { transform: translateX(0); opacity: 1; }
         }
         
-        /* Responsividade */
+        /* Responsividade interna das janelas */
+        .window-content {
+            overflow: auto;
+            height: calc(100% - 32px);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .window-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Aurora Player responsivo */
+        .aurora-player {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+
+        .aurora-player .player {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            min-width: 600px;
+        }
+
+        .aurora-player .wrap {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .aurora-player section {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .aurora-player aside {
+            flex: 0 0 280px;
+            min-width: 250px;
+        }
+
+        /* Gerenciador de arquivos responsivo */
+        .file-manager {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .file-manager-toolbar {
+            flex-shrink: 0;
+            padding: 8px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .file-manager-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .file-manager-sidebar {
+            flex: 0 0 200px;
+            min-width: 150px;
+            overflow-y: auto;
+            border-right: 1px solid #ccc;
+        }
+
+        .file-manager-main {
+            flex: 1;
+            overflow: auto;
+            padding: 10px;
+        }
+
+        /* Responsividade para janelas pequenas */
+        @media (max-width: 768px) {
+            .aurora-player .wrap {
+                flex-direction: column;
+            }
+            
+            .aurora-player aside {
+                flex: none;
+                width: 100%;
+            }
+            
+            .file-manager-content {
+                flex-direction: column;
+            }
+            
+            .file-manager-sidebar {
+                flex: none;
+                height: 120px;
+                border-right: none;
+                border-bottom: 1px solid #ccc;
+            }
+        }
+
+        /* Ajustes para janelas muito pequenas */
+        .window[style*="width: 400px"], .window[style*="width: 300px"] {
+            .aurora-player .player {
+                min-width: 280px;
+                font-size: 12px;
+            }
+            
+            .file-manager-sidebar {
+                flex: none;
+                width: 100px;
+            }
+        }
         @media (max-width: 768px) {
             .desktop-icons {
                 grid-template-columns: repeat(auto-fit, 60px);
@@ -1373,6 +1488,11 @@
                 windowElement.style.left = randomX + 'px';
                 windowElement.style.top = randomY + 'px';
                 
+                // Configura observador de redimensionamento responsivo
+                setTimeout(() => {
+                    setupWindowResizeObserver(windowId);
+                }, 100);
+                
                 showNotification('🪟 Aplicativo', `${windowTitle} carregado!`);
             }
         }
@@ -1414,6 +1534,11 @@
             `;
             
             document.body.appendChild(window);
+            
+            // Configura observador de redimensionamento responsivo
+            setTimeout(() => {
+                setupWindowResizeObserver(windowId);
+            }, 100);
             
             // Inicializa o aplicativo
             if (appId === 'file-manager') {
@@ -1577,6 +1702,91 @@
             `;
         }
 
+        // ========================================
+        // RESPONSIVE WINDOW CONTENT
+        // ========================================
+        
+        // Função para ajustar conteúdo ao redimensionar janela
+        function adjustWindowContent(windowId) {
+            const window = document.getElementById(windowId);
+            if (!window) return;
+            
+            const width = parseInt(window.style.width);
+            const height = parseInt(window.style.height);
+            
+            // Ajusta Aurora Player
+            const auroraPlayer = window.querySelector('.aurora-player');
+            if (auroraPlayer) {
+                const player = auroraPlayer.querySelector('.player');
+                const wrap = auroraPlayer.querySelector('.wrap');
+                
+                if (width < 700) {
+                    // Modo compacto
+                    wrap.style.flexDirection = 'column';
+                    player.style.minWidth = '280px';
+                    player.style.fontSize = '12px';
+                } else if (width < 900) {
+                    // Modo médio
+                    wrap.style.flexDirection = 'row';
+                    player.style.minWidth = '500px';
+                    player.style.fontSize = '14px';
+                } else {
+                    // Modo completo
+                    wrap.style.flexDirection = 'row';
+                    player.style.minWidth = '600px';
+                    player.style.fontSize = '16px';
+                }
+            }
+            
+            // Ajusta Gerenciador de Arquivos
+            const fileManager = window.querySelector('.file-manager');
+            if (fileManager) {
+                const content = fileManager.querySelector('.file-manager-content');
+                const sidebar = fileManager.querySelector('.file-manager-sidebar');
+                
+                if (width < 600) {
+                    // Modo compacto - sidebar no topo
+                    content.style.flexDirection = 'column';
+                    sidebar.style.flex = 'none';
+                    sidebar.style.height = '120px';
+                    sidebar.style.width = '100%';
+                    sidebar.style.borderRight = 'none';
+                    sidebar.style.borderBottom = '1px solid #ccc';
+                } else {
+                    // Modo normal - sidebar lateral
+                    content.style.flexDirection = 'row';
+                    sidebar.style.flex = '0 0 200px';
+                    sidebar.style.height = 'auto';
+                    sidebar.style.width = 'auto';
+                    sidebar.style.borderRight = '1px solid #ccc';
+                    sidebar.style.borderBottom = 'none';
+                }
+            }
+        }
+
+        // Observador de redimensionamento para janelas
+        function setupWindowResizeObserver(windowId) {
+            const window = document.getElementById(windowId);
+            if (!window) return;
+            
+            // Observa mudanças no estilo da janela
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                        adjustWindowContent(windowId);
+                    }
+                });
+            });
+            
+            observer.observe(window, {
+                attributes: true,
+                attributeFilter: ['style']
+            });
+            
+            // Ajuste inicial
+            adjustWindowContent(windowId);
+        }
+
         function createWindow(windowId, title, icon, url) {
             const window = document.createElement('div');
             window.id = windowId;
@@ -1643,6 +1853,11 @@
                 </div>
                 <div class="window-resize-handle" onmousedown="startResize(event, '${windowId}')"></div>
             `;
+            
+            // Configura observador de redimensionamento responsivo
+            setTimeout(() => {
+                setupWindowResizeObserver(windowId);
+            }, 100);
             
             return window;
         }
