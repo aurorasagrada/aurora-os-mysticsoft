@@ -2010,7 +2010,11 @@
             text-align: center;
         }
         
-        /* Janelas */
+        /* ========================================
+           🎬 SISTEMA DE JANELAS CINEMATOGRÁFICO
+           Animações mágicas de materialização e dissolução
+           ======================================== */
+        
         .window {
             position: fixed;
             background: #c0c0c0;
@@ -2019,8 +2023,13 @@
             min-height: 300px;
             z-index: 1500;
             display: none;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            box-shadow: 
+                2px 2px 10px rgba(0,0,0,0.3),
+                0 0 20px rgba(212, 175, 55, 0.2);
             border-radius: 4px;
+            backdrop-filter: blur(2px);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform-origin: center center;
         }
         
         .window.active {
@@ -2029,6 +2038,210 @@
         
         .window.focused {
             z-index: 1600;
+            border: 2px solid var(--dourado);
+            box-shadow: 
+                2px 2px 15px rgba(0,0,0,0.4),
+                0 0 30px rgba(212, 175, 55, 0.4),
+                inset 0 0 20px rgba(212, 175, 55, 0.1);
+            animation: windowFocusPulse 2s ease-in-out infinite;
+        }
+        
+        /* Animação de materialização */
+        .window.materializing {
+            animation: windowMaterialize 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+        
+        /* Animação de dissolução */
+        .window.dissolving {
+            animation: windowDissolve 0.6s ease-in forwards;
+        }
+        
+        /* Efeito de brilho pulsante para janela focada */
+        @keyframes windowFocusPulse {
+            0%, 100% {
+                box-shadow: 
+                    2px 2px 15px rgba(0,0,0,0.4),
+                    0 0 20px rgba(212, 175, 55, 0.3),
+                    inset 0 0 15px rgba(212, 175, 55, 0.1);
+            }
+            50% {
+                box-shadow: 
+                    2px 2px 20px rgba(0,0,0,0.5),
+                    0 0 40px rgba(212, 175, 55, 0.6),
+                    inset 0 0 25px rgba(212, 175, 55, 0.2);
+            }
+        }
+        
+        /* Animação de materialização mágica */
+        @keyframes windowMaterialize {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) rotate(10deg);
+                filter: blur(10px) brightness(2);
+                box-shadow: 
+                    0 0 50px rgba(212, 175, 55, 0.8),
+                    inset 0 0 30px rgba(255, 255, 255, 0.5);
+            }
+            30% {
+                opacity: 0.7;
+                transform: scale(0.8) rotate(2deg);
+                filter: blur(3px) brightness(1.5);
+                box-shadow: 
+                    2px 2px 20px rgba(0,0,0,0.3),
+                    0 0 30px rgba(212, 175, 55, 0.6);
+            }
+            70% {
+                opacity: 0.9;
+                transform: scale(1.05) rotate(-1deg);
+                filter: blur(1px) brightness(1.2);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+                filter: blur(0px) brightness(1);
+                box-shadow: 
+                    2px 2px 15px rgba(0,0,0,0.4),
+                    0 0 20px rgba(212, 175, 55, 0.3);
+            }
+        }
+        
+        /* Animação de dissolução em partículas douradas */
+        @keyframes windowDissolve {
+            0% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+                filter: blur(0px) brightness(1);
+            }
+            30% {
+                opacity: 0.8;
+                transform: scale(1.02) rotate(1deg);
+                filter: blur(1px) brightness(1.3);
+                box-shadow: 
+                    2px 2px 20px rgba(0,0,0,0.4),
+                    0 0 40px rgba(212, 175, 55, 0.7);
+            }
+            70% {
+                opacity: 0.4;
+                transform: scale(0.9) rotate(-2deg);
+                filter: blur(5px) brightness(1.8);
+                box-shadow: 
+                    0 0 60px rgba(212, 175, 55, 0.9),
+                    inset 0 0 40px rgba(255, 255, 255, 0.3);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.2) rotate(15deg);
+                filter: blur(15px) brightness(3);
+                box-shadow: 
+                    0 0 100px rgba(212, 175, 55, 1),
+                    inset 0 0 50px rgba(255, 255, 255, 0.8);
+            }
+        }
+        
+        /* Transparência inteligente baseada no conteúdo */
+        .window.transparent-mode {
+            background: rgba(192, 192, 192, 0.85);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(212, 175, 55, 0.6);
+        }
+        
+        .window.transparent-mode .window-content {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Efeito de ondulação dourada no hover */
+        .window:hover {
+            box-shadow: 
+                2px 2px 15px rgba(0,0,0,0.4),
+                0 0 25px rgba(212, 175, 55, 0.4);
+            animation: windowHoverRipple 0.6s ease-out;
+        }
+        
+        @keyframes windowHoverRipple {
+            0% {
+                box-shadow: 
+                    2px 2px 15px rgba(0,0,0,0.4),
+                    0 0 20px rgba(212, 175, 55, 0.3);
+            }
+            50% {
+                box-shadow: 
+                    2px 2px 20px rgba(0,0,0,0.5),
+                    0 0 35px rgba(212, 175, 55, 0.6),
+                    0 0 60px rgba(212, 175, 55, 0.2);
+            }
+            100% {
+                box-shadow: 
+                    2px 2px 15px rgba(0,0,0,0.4),
+                    0 0 25px rgba(212, 175, 55, 0.4);
+            }
+        }
+        
+        /* Partículas mágicas para efeitos especiais */
+        .window-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, var(--dourado) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: particleFloat 3s ease-in-out infinite;
+            opacity: 0;
+        }
+        
+        @keyframes particleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100%) scale(0);
+            }
+            20% {
+                opacity: 1;
+                transform: translateY(80%) scale(1);
+            }
+            80% {
+                opacity: 1;
+                transform: translateY(20%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(0%) scale(0);
+            }
+        }
+        
+        /* Minimização mágica - transformação em orbe de luz */
+        .window.minimizing {
+            animation: windowMinimize 0.5s ease-in forwards;
+        }
+        
+        @keyframes windowMinimize {
+            0% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+                border-radius: 4px;
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(0.5) rotate(180deg);
+                border-radius: 50%;
+                background: radial-gradient(circle, var(--dourado) 0%, transparent 70%);
+                box-shadow: 0 0 50px var(--dourado);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.1) rotate(360deg);
+                border-radius: 50%;
+                background: var(--dourado);
+                box-shadow: 0 0 100px var(--dourado);
+            }
         }
         
         .window-header {
@@ -3878,6 +4091,10 @@
             `;
             
             document.body.appendChild(window);
+            
+            // Aplicar animação de materialização cinematográfica
+            animateWindowOpen(window);
+            
             openWindows.push({ id: windowId, title: site.name, icon: site.icon });
             updateTaskbar();
             
@@ -3938,6 +4155,10 @@
             `;
             
             document.body.appendChild(window);
+            
+            // Aplicar animação de materialização cinematográfica
+            animateWindowOpen(window);
+            
             openWindows.push({ id: windowId, title: 'Arquivos & Anotações', icon: '📁' });
             updateTaskbar();
         }
@@ -3952,14 +4173,242 @@
         function closeWindow(windowId) {
             const window = document.getElementById(windowId);
             if (window) {
-                window.remove();
-                openWindows = openWindows.filter(w => w.id !== windowId);
-                updateTaskbar();
+                // Animação de dissolução antes de fechar
+                window.classList.add('dissolving');
+                
+                // Criar partículas douradas durante a dissolução
+                createWindowParticles(window);
+                
+                // Remover janela após animação
+                setTimeout(() => {
+                    if (window.parentNode) {
+                        window.remove();
+                    }
+                    openWindows = openWindows.filter(w => w.id !== windowId);
+                    updateTaskbar();
+                }, 600);
+                
+                // Notificar Gatomante sobre fechamento
+                setTimeout(() => {
+                    gatomanteContextual('navegacao', { acao: 'janela fechada com dissolução mágica' });
+                }, 800);
             }
         }
         
         function minimizeWindow(windowId) {
             const window = document.getElementById(windowId);
+            if (window) {
+                // Animação de minimização mágica (transformação em orbe)
+                window.classList.add('minimizing');
+                
+                // Criar efeito de orbe de luz
+                createMinimizeOrb(window);
+                
+                // Ocultar janela após animação
+                setTimeout(() => {
+                    window.style.display = 'none';
+                    window.classList.remove('minimizing');
+                    
+                    // Atualizar estado da janela
+                    const windowData = openWindows.find(w => w.id === windowId);
+                    if (windowData) {
+                        windowData.minimized = true;
+                    }
+                    updateTaskbar();
+                }, 500);
+                
+                // Notificar Gatomante
+                setTimeout(() => {
+                    gatomanteContextual('navegacao', { acao: 'janela minimizada como orbe de luz' });
+                }, 700);
+            }
+        }
+        
+        // ========================================
+        // 🎬 FUNÇÕES DE ANIMAÇÕES CINEMATOGRÁFICAS
+        // ========================================
+        
+        function createWindowParticles(window) {
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'window-particles';
+            window.appendChild(particlesContainer);
+            
+            // Criar 15 partículas douradas
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Posição aleatória
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                particle.style.animationDuration = (2 + Math.random() * 2) + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+            
+            // Remover partículas após animação
+            setTimeout(() => {
+                if (particlesContainer.parentNode) {
+                    particlesContainer.remove();
+                }
+            }, 3000);
+        }
+        
+        function createMinimizeOrb(window) {
+            const orb = document.createElement('div');
+            orb.style.cssText = `
+                position: fixed;
+                width: 20px;
+                height: 20px;
+                background: radial-gradient(circle, var(--dourado) 0%, transparent 70%);
+                border-radius: 50%;
+                z-index: 9999;
+                pointer-events: none;
+                box-shadow: 0 0 30px var(--dourado);
+                animation: orbFloat 2s ease-out forwards;
+            `;
+            
+            // Posicionar orbe no centro da janela
+            const rect = window.getBoundingClientRect();
+            orb.style.left = (rect.left + rect.width / 2 - 10) + 'px';
+            orb.style.top = (rect.top + rect.height / 2 - 10) + 'px';
+            
+            document.body.appendChild(orb);
+            
+            // Animar orbe para a barra de tarefas
+            setTimeout(() => {
+                const taskbar = document.querySelector('.taskbar');
+                const taskbarRect = taskbar.getBoundingClientRect();
+                
+                orb.style.transition = 'all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                orb.style.left = (taskbarRect.left + taskbarRect.width / 2 - 10) + 'px';
+                orb.style.top = (taskbarRect.top + 10) + 'px';
+                orb.style.transform = 'scale(0.5)';
+                orb.style.opacity = '0';
+            }, 100);
+            
+            // Remover orbe
+            setTimeout(() => {
+                if (orb.parentNode) {
+                    orb.remove();
+                }
+            }, 1200);
+        }
+        
+        function animateWindowOpen(window) {
+            // Aplicar animação de materialização
+            window.classList.add('materializing');
+            
+            // Criar partículas de materialização
+            createMaterializeEffect(window);
+            
+            // Remover classe após animação
+            setTimeout(() => {
+                window.classList.remove('materializing');
+                
+                // Adicionar foco com brilho pulsante
+                focusWindow(window.id);
+            }, 800);
+        }
+        
+        function createMaterializeEffect(window) {
+            // Criar efeito de brilho inicial
+            const glowEffect = document.createElement('div');
+            glowEffect.style.cssText = `
+                position: absolute;
+                top: -10px;
+                left: -10px;
+                right: -10px;
+                bottom: -10px;
+                background: radial-gradient(circle, var(--dourado) 0%, transparent 70%);
+                border-radius: 8px;
+                opacity: 0.8;
+                pointer-events: none;
+                z-index: -1;
+                animation: materializeGlow 0.8s ease-out forwards;
+            `;
+            
+            window.style.position = 'relative';
+            window.appendChild(glowEffect);
+            
+            // Remover efeito após animação
+            setTimeout(() => {
+                if (glowEffect.parentNode) {
+                    glowEffect.remove();
+                }
+            }, 800);
+        }
+        
+        function focusWindow(windowId) {
+            // Remover foco de todas as janelas
+            document.querySelectorAll('.window').forEach(w => {
+                w.classList.remove('focused');
+            });
+            
+            // Adicionar foco à janela atual
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.classList.add('focused');
+                
+                // Trazer para frente
+                window.style.zIndex = 1600;
+                
+                // Atualizar outras janelas
+                document.querySelectorAll('.window').forEach(w => {
+                    if (w.id !== windowId) {
+                        w.style.zIndex = 1500;
+                    }
+                });
+            }
+        }
+        
+        function toggleTransparencyMode(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.classList.toggle('transparent-mode');
+                
+                // Notificar sobre mudança de transparência
+                const isTransparent = window.classList.contains('transparent-mode');
+                gatomanteContextual('navegacao', { 
+                    acao: isTransparent ? 'modo transparente ativado' : 'modo transparente desativado' 
+                });
+            }
+        }
+        
+        // Adicionar CSS para animações dinâmicas
+        const dynamicStyles = document.createElement('style');
+        dynamicStyles.textContent = `
+            @keyframes materializeGlow {
+                0% {
+                    opacity: 0;
+                    transform: scale(0.5);
+                }
+                50% {
+                    opacity: 1;
+                    transform: scale(1.2);
+                }
+                100% {
+                    opacity: 0;
+                    transform: scale(1);
+                }
+            }
+            
+            @keyframes orbFloat {
+                0% {
+                    opacity: 1;
+                    transform: scale(1) rotate(0deg);
+                }
+                50% {
+                    opacity: 0.8;
+                    transform: scale(1.5) rotate(180deg);
+                }
+                100% {
+                    opacity: 0.3;
+                    transform: scale(0.8) rotate(360deg);
+                }
+            }
+        `;
+        document.head.appendChild(dynamicStyles);
             if (window) {
                 window.style.display = 'none';
             }
