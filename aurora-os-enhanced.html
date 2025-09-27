@@ -3943,31 +3943,465 @@
             
             .personalization-dialog {
                 width: 90vw;
+                  /* ========================================
+           📱 RESPONSIVIDADE TOTAL - MODO MOBILE
+           Sistema adaptativo para todos os dispositivos
+           ======================================== */
+        
+        /* Tablets e telas médias (768px - 1024px) */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .start-menu {
+                width: 450px;
+                height: 400px;
+            }
+            
+            .start-menu-mandala {
+                width: 400px;
+                height: 350px;
+            }
+            
+            .gatomante-chat {
+                width: 320px;
+                height: 400px;
+            }
+            
+            .window {
+                min-width: 300px;
+                min-height: 200px;
+            }
+            
+            .taskbar {
+                height: 55px;
+            }
+            
+            .system-indicator {
+                width: 36px;
+                height: 36px;
             }
         }
         
+        /* Smartphones e telas pequenas (até 768px) */
+        @media (max-width: 768px) {
+            /* Desktop adaptativo */
+            .desktop {
+                grid-template-columns: repeat(auto-fit, 60px);
+                gap: 15px;
+                padding: 15px;
+                padding-bottom: 70px; /* Espaço para taskbar mobile */
+            }
+            
+            .desktop-icon {
+                width: 60px;
+                height: 70px;
+            }
+            
+            .desktop-icon .icon {
+                font-size: 24px;
+                margin-bottom: 4px;
+            }
+            
+            .desktop-icon .label {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+            
+            /* Taskbar mobile */
+            .taskbar {
+                height: 60px;
+                padding: 0 10px;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            
+            .taskbar-left {
+                flex: 0 0 auto;
+            }
+            
+            .taskbar-center {
+                flex: 1;
+                justify-content: center;
+                overflow-x: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            
+            .taskbar-center::-webkit-scrollbar {
+                display: none;
+            }
+            
+            .taskbar-right {
+                flex: 0 0 auto;
+                gap: 6px;
+            }
+            
+            .start-button {
+                width: 45px;
+                height: 45px;
+                font-size: 12px;
+                border-radius: 12px;
+            }
+            
+            .system-indicator {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            
+            /* Menu Iniciar mobile */
+            .start-menu {
+                width: 100vw;
+                height: 100vh;
+                max-width: none;
+                max-height: none;
+                left: 0;
+                bottom: 0;
+                border-radius: 0;
+                background: linear-gradient(135deg, 
+                    rgba(75, 0, 130, 0.98) 0%, 
+                    rgba(25, 25, 112, 0.98) 50%, 
+                    rgba(0, 0, 0, 0.98) 100%);
+            }
+            
+            .start-menu-mandala {
+                width: 90vw;
+                height: 60vh;
+                max-width: 350px;
+                max-height: 350px;
+            }
+            
+            .start-menu-center {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .start-menu-center img {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .start-menu-app {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .start-menu-search {
+                width: 90%;
+                max-width: 300px;
+                margin: 20px auto;
+            }
+            
+            /* Janelas mobile */
+            .window {
+                width: 95vw !important;
+                height: 80vh !important;
+                max-width: none;
+                max-height: none;
+                left: 2.5vw !important;
+                top: 10vh !important;
+                border-radius: 15px;
+            }
+            
+            .window-header {
+                height: 50px;
+                padding: 0 15px;
+                touch-action: none;
+            }
+            
+            .window-title {
+                font-size: 14px;
+            }
+            
+            .window-controls {
+                gap: 15px;
+            }
+            
+            .window-control {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+                border-radius: 8px;
+            }
+            
+            .window-content {
+                padding: 15px;
+            }
+            
+            /* Chat do Gatomante mobile */
+            .gatomante-chat {
+                width: 95vw;
+                height: 70vh;
+                left: 2.5vw;
+                bottom: 70px;
+                border-radius: 15px;
+            }
+            
+            .gatomante-chat-header {
+                padding: 12px 15px;
+            }
+            
+            .gatomante-chat-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 18px;
+            }
+            
+            .gatomante-chat-input {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+            
+            .gatomante-voice-btn,
+            .gatomante-send-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            
+            /* Popups mobile */
+            .popup {
+                width: 90vw !important;
+                max-width: 350px;
+                left: 50% !important;
+                transform: translateX(-50%);
+                border-radius: 15px;
+            }
+            
+            .calendar-popup {
+                bottom: 70px;
+                right: auto;
+            }
+            
+            .planetary-popup {
+                bottom: 70px;
+                right: auto;
+            }
+            
+            /* Workspaces mobile */
+            .workspace-switcher {
+                position: fixed;
+                top: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.8);
+                border-radius: 20px;
+                padding: 5px;
+                z-index: 1500;
+            }
+            
+            .workspace-tab {
+                width: 35px;
+                height: 35px;
+                font-size: 12px;
+            }
+            
+            .workspace-indicator {
+                top: 60px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+            
+            /* Snap zones mobile */
+            .snap-zones {
+                display: none; /* Desabilitar snap zones em mobile */
+            }
+            
+            /* Gatomante mobile */
+            .gatomante {
+                width: 50px;
+                height: 50px;
+                bottom: 80px;
+                right: 15px;
+                font-size: 20px;
+            }
+            
+            .gatomante-balloon {
+                width: 200px;
+                right: 60px;
+                bottom: 10px;
+                font-size: 11px;
+                padding: 8px 12px;
+            }
+            
+            /* Áudio ambiente mobile */
+            .ambient-audio-modal {
+                width: 95vw;
+                height: 80vh;
+                max-width: none;
+                max-height: none;
+                left: 2.5vw;
+                top: 10vh;
+                border-radius: 15px;
+            }
+            
+            /* Personalização mobile */
+            .personalization-modal {
+                width: 95vw;
+                height: 85vh;
+                max-width: none;
+                max-height: none;
+                left: 2.5vw;
+                top: 7.5vh;
+                border-radius: 15px;
+            }
+            
+            /* Notificações AFÁST mobile */
+            .afast-notification {
+                width: 90vw;
+                max-width: 300px;
+                right: 5vw;
+                bottom: 80px;
+                border-radius: 12px;
+            }
+            
+            /* Partículas reduzidas em mobile */
+            .mystical-particles {
+                opacity: 0.3;
+            }
+            
+            .desktop-particles {
+                opacity: 0.2;
+            }
+        }
+        
+        /* Smartphones pequenos (até 480px) */
         @media (max-width: 480px) {
-            .desktop-icons {
+            .desktop {
+                grid-template-columns: repeat(auto-fit, 55px);
+                gap: 12px;
+                padding: 12px;
+            }
+            
+            .desktop-icon {
+                width: 55px;
+                height: 65px;
+            }
+            
+            .desktop-icon .icon {
+                font-size: 22px;
+            }
+            
+            .desktop-icon .label {
+                font-size: 9px;
+            }
+            
+            .taskbar {
+                height: 55px;
+                padding: 0 8px;
+            }
+            
+            .start-button {
+                width: 40px;
+                height: 40px;
+                font-size: 10px;
+            }
+            
+            .system-indicator {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+            
+            .start-menu-mandala {
+                width: 85vw;
+                height: 50vh;
+                max-width: 300px;
+                max-height: 300px;
+            }
+            
+            .start-menu-app {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            
+            .gatomante-chat {
+                width: 98vw;
+                left: 1vw;
+                height: 75vh;
+            }
+            
+            .window {
+                width: 98vw !important;
+                left: 1vw !important;
+                height: 85vh !important;
+                top: 7.5vh !important;
+            }
+        }
+        
+        /* Orientação landscape em mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .desktop {
                 grid-template-columns: repeat(auto-fit, 50px);
                 gap: 10px;
                 padding: 10px;
+                padding-bottom: 60px;
+            }
+            
+            .desktop-icon {
+                width: 50px;
+                height: 60px;
             }
             
             .desktop-icon .icon {
                 font-size: 20px;
             }
             
-            .taskbar-right {
-                gap: 4px;
-            }
-            
-            .taskbar-widget {
-                padding: 2px 4px;
+            .desktop-icon .label {
                 font-size: 9px;
             }
             
-            .start-menu {
-                width: 260px;
+            .window {
+                width: 90vw !important;
+                height: 70vh !important;
+                left: 5vw !important;
+                top: 15vh !important;
+            }
+            
+            .gatomante-chat {
+                width: 85vw;
+                height: 60vh;
+                left: 7.5vw;
+            }
+            
+            .start-menu-mandala {
+                width: 60vw;
+                height: 50vh;
+                max-width: 400px;
+                max-height: 250px;
+            }
+        }
+        
+        /* Suporte a touch */
+        @media (hover: none) and (pointer: coarse) {
+            /* Aumentar áreas de toque */
+            .desktop-icon,
+            .window-control,
+            .system-indicator,
+            .start-button,
+            .taskbar-item {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            /* Remover efeitos hover em dispositivos touch */
+            .desktop-icon:hover,
+            .window-control:hover,
+            .system-indicator:hover,
+            .start-button:hover {
+                transform: none;
+                box-shadow: none;
+            }
+            
+            /* Adicionar efeitos de toque */
+            .desktop-icon:active,
+            .window-control:active,
+            .system-indicator:active,
+            .start-button:active {
+                transform: scale(0.95);
+                opacity: 0.8;
             }
         }
     </style>
@@ -6390,6 +6824,228 @@
             console.log('🎵 Sistema de áudio ambiente inicializado');
         }
         
+        // ========================================
+        // ========================================
+        // 📱 SISTEMA DE GESTOS TOUCH E RESPONSIVIDADE
+        // ========================================
+        
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+        let isSwipeGesture = false;
+        
+        function initTouchGestures() {
+            // Detectar se é dispositivo touch
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            if (!isTouchDevice) return;
+            
+            console.log('🤚 Inicializando gestos touch...');
+            
+            // Gestos no desktop para mudança de workspace
+            const desktop = document.getElementById('desktop');
+            if (desktop) {
+                desktop.addEventListener('touchstart', handleTouchStart, { passive: false });
+                desktop.addEventListener('touchmove', handleTouchMove, { passive: false });
+                desktop.addEventListener('touchend', handleTouchEnd, { passive: false });
+            }
+            
+            // Gestos nas janelas para controle
+            document.addEventListener('touchstart', handleWindowTouchStart, { passive: true });
+            document.addEventListener('touchmove', handleWindowTouchMove, { passive: false });
+            document.addEventListener('touchend', handleWindowTouchEnd, { passive: true });
+            
+            // Melhorar experiência de toque em botões
+            enhanceTouchExperience();
+            
+            // Adicionar suporte a orientação
+            window.addEventListener('orientationchange', handleOrientationChange);
+            
+            console.log('✅ Gestos touch inicializados!');
+        }
+        
+        function handleTouchStart(e) {
+            if (e.touches.length === 1) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                isSwipeGesture = true;
+            }
+        }
+        
+        function handleTouchMove(e) {
+            if (!isSwipeGesture || e.touches.length !== 1) return;
+            
+            touchEndX = e.touches[0].clientX;
+            touchEndY = e.touches[0].clientY;
+            
+            // Prevenir scroll durante swipe horizontal
+            const deltaX = Math.abs(touchEndX - touchStartX);
+            const deltaY = Math.abs(touchEndY - touchStartY);
+            
+            if (deltaX > deltaY && deltaX > 50) {
+                e.preventDefault();
+            }
+        }
+        
+        function handleTouchEnd(e) {
+            if (!isSwipeGesture) return;
+            
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            const minSwipeDistance = 100;
+            
+            // Swipe horizontal para mudança de workspace
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+                if (deltaX > 0) {
+                    // Swipe para direita - workspace anterior
+                    const prevWorkspace = currentWorkspace > 1 ? currentWorkspace - 1 : 4;
+                    switchWorkspace(prevWorkspace);
+                    gatomanteContextual('workspaces', { acao: 'swipe_direita', workspace: prevWorkspace });
+                } else {
+                    // Swipe para esquerda - próximo workspace
+                    const nextWorkspace = currentWorkspace < 4 ? currentWorkspace + 1 : 1;
+                    switchWorkspace(nextWorkspace);
+                    gatomanteContextual('workspaces', { acao: 'swipe_esquerda', workspace: nextWorkspace });
+                }
+            }
+            
+            // Swipe vertical para ações especiais
+            if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > minSwipeDistance) {
+                if (deltaY < 0) {
+                    // Swipe para cima - abrir menu Iniciar
+                    toggleStartMenu();
+                    gatomanteContextual('navegacao', { acao: 'swipe_menu' });
+                } else {
+                    // Swipe para baixo - mostrar Gatomante
+                    showGatomante();
+                    gatomanteContextual('boas_vindas', { acao: 'swipe_gatomante' });
+                }
+            }
+            
+            isSwipeGesture = false;
+        }
+        
+        function handleWindowTouchStart(e) {
+            const windowElement = e.target.closest('.window');
+            if (!windowElement) return;
+            
+            // Marcar janela como sendo tocada
+            windowElement.dataset.touching = 'true';
+        }
+        
+        function handleWindowTouchMove(e) {
+            const windowElement = e.target.closest('.window');
+            if (!windowElement || !windowElement.dataset.touching) return;
+            
+            // Prevenir scroll do body quando movendo janela
+            if (e.target.closest('.window-header')) {
+                e.preventDefault();
+            }
+        }
+        
+        function handleWindowTouchEnd(e) {
+            const windowElement = e.target.closest('.window');
+            if (!windowElement) return;
+            
+            delete windowElement.dataset.touching;
+        }
+        
+        function enhanceTouchExperience() {
+            // Adicionar feedback tátil para botões importantes
+            const importantButtons = document.querySelectorAll('.start-button, .window-control, .system-indicator');
+            
+            importantButtons.forEach(button => {
+                button.addEventListener('touchstart', () => {
+                    // Vibração sutil se suportada
+                    if (navigator.vibrate) {
+                        navigator.vibrate(10);
+                    }
+                    
+                    // Feedback visual
+                    button.style.transform = 'scale(0.95)';
+                    button.style.opacity = '0.8';
+                });
+                
+                button.addEventListener('touchend', () => {
+                    // Restaurar estado visual
+                    setTimeout(() => {
+                        button.style.transform = '';
+                        button.style.opacity = '';
+                    }, 100);
+                });
+            });
+        }
+        
+        function handleOrientationChange() {
+            // Aguardar mudança de orientação
+            setTimeout(() => {
+                // Reposicionar elementos se necessário
+                const openWindows = document.querySelectorAll('.window:not([style*="display: none"])');
+                
+                openWindows.forEach(window => {
+                    // Garantir que janelas permaneçam visíveis
+                    const rect = window.getBoundingClientRect();
+                    const viewportWidth = window.innerWidth;
+                    const viewportHeight = window.innerHeight;
+                    
+                    if (rect.right > viewportWidth || rect.bottom > viewportHeight) {
+                        // Reposicionar janela
+                        if (viewportWidth <= 768) {
+                            // Modo mobile - centralizar
+                            window.style.left = '2.5vw';
+                            window.style.top = '10vh';
+                            window.style.width = '95vw';
+                            window.style.height = '80vh';
+                        }
+                    }
+                });
+                
+                // Fechar menus abertos em mudança de orientação
+                const startMenu = document.getElementById('startMenu');
+                if (startMenu && startMenu.classList.contains('visible')) {
+                    toggleStartMenu();
+                }
+                
+                console.log('📱 Orientação ajustada para:', screen.orientation?.angle || 'desconhecido');
+            }, 500);
+        }
+        
+        function isMobileDevice() {
+            return window.innerWidth <= 768 || 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        }
+        
+        function adaptToMobile() {
+            if (!isMobileDevice()) return;
+            
+            // Ajustes específicos para mobile
+            const desktop = document.getElementById('desktop');
+            if (desktop) {
+                desktop.style.userSelect = 'none';
+                desktop.style.webkitUserSelect = 'none';
+            }
+            
+            // Prevenir zoom em inputs
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    const viewport = document.querySelector('meta[name="viewport"]');
+                    if (viewport) {
+                        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+                    }
+                });
+                
+                input.addEventListener('blur', () => {
+                    const viewport = document.querySelector('meta[name="viewport"]');
+                    if (viewport) {
+                        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
+                    }
+                });
+            });
+            
+            console.log('📱 Adaptações mobile aplicadas!');
+        }
+
         // ========================================
         // 🖥️ WORKSPACES VIRTUAIS E SNAP ZONES
         // Sistema de múltiplas áreas de trabalho
@@ -8819,6 +9475,10 @@
             
             // Inicializar workspaces virtuais e snap zones
             initWorkspaces();
+            
+            // 📱 Inicializar gestos touch e responsividade
+            initTouchGestures();
+            adaptToMobile();
             
             // 🤖 Inicializar Gatomante IA Avançada
             initVoiceRecognition();
