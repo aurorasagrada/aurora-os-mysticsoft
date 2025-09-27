@@ -1193,91 +1193,149 @@
             50% { transform: rotate(2deg); }
         }
         
-        /* Sistema AFÁST - Antivírus Astrológico */
-        .afast-notification {
+        /* ========================================
+           🛡️ SISTEMA AFÁST! - ANTIVÍRUS ASTROLÓGICO
+           Notificações estilo MSN no canto inferior direito
+           ======================================== */
+        
+        .afast-msn-notification {
             position: fixed;
-            top: 20px;
+            bottom: 20px;
             right: 20px;
-            background: linear-gradient(135deg, #8b1538 0%, #3e0a29 100%);
-            border: 3px solid #f0aa53;
-            border-radius: 15px;
-            padding: 20px;
-            max-width: 350px;
-            z-index: 2000;
+            width: 300px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
+            border: 2px solid #60a5fa;
+            border-radius: 8px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-            transform: translateX(400px);
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            color: #f2eaff;
-            font-family: 'Alice', serif;
+            z-index: 3000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transform: translateX(350px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow: hidden;
         }
         
-        .afast-notification.active {
+        .afast-msn-notification.show {
             transform: translateX(0);
         }
         
-        .afast-header {
+        .afast-msn-header {
+            background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+            padding: 6px 12px;
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #f0aa53;
-            padding-bottom: 10px;
+            justify-content: space-between;
+            border-bottom: 1px solid #3b82f6;
         }
         
-        .afast-logo {
-            font-size: 32px;
-            margin-right: 15px;
-            animation: afastPulse 2s ease-in-out infinite;
-        }
-        
-        .afast-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #f0aa53;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-        }
-        
-        .afast-subtitle {
+        .afast-msn-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
             font-size: 12px;
-            color: #b2d1b1;
-            font-style: italic;
-        }
-        
-        .afast-content {
-            margin-bottom: 15px;
-        }
-        
-        .afast-event {
-            font-size: 16px;
             font-weight: bold;
-            color: #f0aa53;
+        }
+        
+        .afast-msn-logo {
+            font-size: 16px;
+            animation: afastMsnPulse 2s ease-in-out infinite;
+        }
+        
+        .afast-msn-close {
+            background: #dc2626;
+            color: white;
+            border: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .afast-msn-close:hover {
+            background: #b91c1c;
+            transform: scale(1.1);
+        }
+        
+        .afast-msn-content {
+            padding: 12px;
+            color: white;
+        }
+        
+        .afast-msn-event {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .afast-msn-description {
+            font-size: 11px;
+            color: #e0e7ff;
+            line-height: 1.3;
             margin-bottom: 8px;
         }
         
-        .afast-description {
-            font-size: 14px;
-            line-height: 1.4;
-            margin-bottom: 10px;
-        }
-        
-        .afast-advice {
-            background: rgba(0,0,0,0.3);
-            border-left: 4px solid #f0aa53;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 13px;
+        .afast-msn-time {
+            font-size: 10px;
+            color: #c7d2fe;
+            text-align: right;
             font-style: italic;
         }
         
-        .afast-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
+        .afast-severity-critical {
+            border-left: 4px solid #dc2626;
+            background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 50%, #dc2626 100%);
         }
         
-        .afast-button {
-            background: linear-gradient(135deg, #f0aa53 0%, #d4941e 100%);
-            border: none;
-            border-radius: 8px;
+        .afast-severity-warning {
+            border-left: 4px solid #f59e0b;
+            background: linear-gradient(135deg, #92400e 0%, #b45309 50%, #f59e0b 100%);
+        }
+        
+        .afast-severity-info {
+            border-left: 4px solid #10b981;
+            background: linear-gradient(135deg, #065f46 0%, #047857 50%, #10b981 100%);
+        }
+        
+        @keyframes afastMsnPulse {
+            0%, 100% { 
+                transform: scale(1); 
+                filter: drop-shadow(0 0 3px #60a5fa); 
+            }
+            50% { 
+                transform: scale(1.1); 
+                filter: drop-shadow(0 0 8px #60a5fa); 
+            }
+        }
+        
+        /* Animação de entrada estilo MSN */
+        @keyframes afastMsnSlideIn {
+            0% {
+                transform: translateX(350px);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                transform: translateX(-10px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+        
+        .afast-msn-notification.slide-in {
+            animation: afastMsnSlideIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
             padding: 8px 15px;
             color: #3e0a29;
             font-weight: bold;
@@ -1876,6 +1934,73 @@
             margin: 4px 12px;
         }
         
+        .start-menu-search {
+            padding: 8px 12px;
+            background: #e0e0e0;
+            border-bottom: 1px solid #808080;
+        }
+        
+        .start-menu-search input:focus {
+            border-color: var(--dourado);
+            box-shadow: 0 0 5px rgba(240, 170, 83, 0.3);
+        }
+        
+        .start-menu-quick-actions {
+            display: flex;
+            gap: 4px;
+            padding: 8px;
+            background: #d0d0d0;
+            border-top: 1px solid #808080;
+        }
+        
+        .quick-action-btn {
+            flex: 1;
+            padding: 6px 8px;
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            font-size: 11px;
+            cursor: pointer;
+            border-radius: 2px;
+            color: #000;
+            transition: all 0.1s;
+        }
+        
+        .quick-action-btn:hover {
+            background: #b0b0b0;
+            border: 1px inset #c0c0c0;
+        }
+        
+        .quick-action-btn:active {
+            border: 1px inset #c0c0c0;
+            background: #a0a0a0;
+        }
+        
+        .logout-btn {
+            background: #ff6b6b;
+            color: white;
+            border: 1px outset #ff6b6b;
+        }
+        
+        .logout-btn:hover {
+            background: #ff5252;
+        }
+        
+        .start-menu-item.system-app {
+            background: linear-gradient(90deg, #f0f0f0, #e8e8e8);
+            border-left: 3px solid #4CAF50;
+            font-weight: 600;
+        }
+        
+        .start-menu-item.system-app:hover {
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            color: white;
+            border-left: 3px solid var(--dourado);
+        }
+        
+        .start-menu-item.hidden {
+            display: none;
+        }
+        
         .start-menu-footer {
             background: #d0d0d0;
             padding: 8px 16px;
@@ -2312,12 +2437,36 @@
             </span>
             <span>Aurora OS • MysticSoft</span>
         </div>
+        
+        <!-- Campo de Busca Inteligente -->
+        <div class="start-menu-search">
+            <input type="text" id="startMenuSearch" placeholder="🔍 Buscar aplicações..." 
+                   oninput="filterStartMenu(this.value)" 
+                   onkeydown="handleSearchKeydown(event)"
+                   style="width: 100%; padding: 8px 12px; border: 1px solid #555; background: #333; color: #fff; border-radius: 4px; font-size: 14px; outline: none;">
+        </div>
+        
         <div class="start-menu-items" id="startMenuItems">
             <!-- Itens do menu serão gerados dinamicamente -->
         </div>
+        
         <div class="start-menu-separator"></div>
+        
+        <!-- Ações Rápidas -->
+        <div class="start-menu-quick-actions">
+            <button onclick="openPersonalization()" class="quick-action-btn" title="Personalização">
+                🎨 Personalizar
+            </button>
+            <button onclick="openSystemHelp()" class="quick-action-btn" title="Ajuda">
+                ❓ Ajuda
+            </button>
+            <button onclick="performLogout()" class="quick-action-btn logout-btn" title="Sair">
+                🚪 Sair
+            </button>
+        </div>
+        
         <div class="start-menu-footer">
-            Clique em qualquer item para abrir
+            <span id="startMenuStatus">Clique em qualquer item para abrir</span>
         </div>
     </div>
     
@@ -3434,6 +3583,165 @@
             `;
             
             openMysticalApp('Ajuda do Sistema', helpContent);
+        }
+        
+        // ========================================
+        // 🔍 BUSCA INTELIGENTE NO MENU INICIAR
+        // ========================================
+        
+        let allMenuItems = []; // Cache de todos os itens do menu
+        
+        function filterStartMenu(searchTerm) {
+            const items = document.querySelectorAll('.start-menu-item');
+            const statusElement = document.getElementById('startMenuStatus');
+            let visibleCount = 0;
+            
+            if (!searchTerm.trim()) {
+                // Mostrar todos os itens
+                items.forEach(item => {
+                    item.classList.remove('hidden');
+                    visibleCount++;
+                });
+                statusElement.textContent = 'Clique em qualquer item para abrir';
+                return;
+            }
+            
+            const searchLower = searchTerm.toLowerCase();
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                const isMatch = text.includes(searchLower);
+                
+                if (isMatch) {
+                    item.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+            
+            // Atualizar status
+            if (visibleCount === 0) {
+                statusElement.textContent = 'Nenhuma aplicação encontrada';
+                statusElement.style.color = '#ff6b6b';
+            } else {
+                statusElement.textContent = `${visibleCount} aplicação${visibleCount > 1 ? 'ões' : ''} encontrada${visibleCount > 1 ? 's' : ''}`;
+                statusElement.style.color = '#4CAF50';
+            }
+            
+            // Notificar Gatomante sobre busca
+            if (searchTerm.length >= 3) {
+                setTimeout(() => {
+                    gatomanteContextual('personalizacao', { acao: `busca por "${searchTerm}"` });
+                }, 1500);
+            }
+        }
+        
+        function handleSearchKeydown(event) {
+            if (event.key === 'Enter') {
+                // Abrir primeiro item visível
+                const firstVisible = document.querySelector('.start-menu-item:not(.hidden)');
+                if (firstVisible) {
+                    firstVisible.click();
+                    hideStartMenu();
+                    document.getElementById('startMenuSearch').value = '';
+                }
+            } else if (event.key === 'Escape') {
+                // Limpar busca
+                document.getElementById('startMenuSearch').value = '';
+                filterStartMenu('');
+            }
+        }
+        
+        // ========================================
+        // 🚪 SISTEMA DE LOGOUT
+        // ========================================
+        
+        function performLogout() {
+            if (confirm('Tem certeza que deseja sair do Aurora OS?')) {
+                // Limpar sessão atual
+                localStorage.removeItem('auroraOS_currentSession');
+                localStorage.removeItem('auroraOS_rememberMe');
+                
+                // Salvar dados do usuário antes de sair
+                if (currentUser) {
+                    const users = JSON.parse(localStorage.getItem('auroraOS_users') || '[]');
+                    const userIndex = users.findIndex(u => u.email === currentUser.email);
+                    if (userIndex >= 0) {
+                        users[userIndex] = currentUser;
+                        localStorage.setItem('auroraOS_users', JSON.stringify(users));
+                    }
+                }
+                
+                // Notificar Gatomante sobre logout
+                gatomanteContextual('personalizacao', { acao: 'logout realizado' });
+                
+                // Aguardar um pouco e recarregar página
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+                
+                hideStartMenu();
+            }
+        }
+        
+        // ========================================
+        // 📊 ESTATÍSTICAS DO MENU INICIAR
+        // ========================================
+        
+        function updateStartMenuStats() {
+            const systemApps = document.querySelectorAll('.start-menu-item.system-app').length;
+            const basicApps = document.querySelectorAll('.start-menu-item:not(.premium):not(.system-app)').length;
+            const premiumApps = document.querySelectorAll('.start-menu-item.premium').length;
+            
+            console.log(`📊 Menu Iniciar: ${systemApps} apps do sistema, ${basicApps} apps básicos, ${premiumApps} apps premium`);
+        }
+        
+        // Melhorar função toggleStartMenu
+        function toggleStartMenu() {
+            const menu = document.getElementById('startMenu');
+            const isVisible = menu.style.display === 'block';
+            
+            if (isVisible) {
+                hideStartMenu();
+            } else {
+                showStartMenu();
+            }
+        }
+        
+        function showStartMenu() {
+            const menu = document.getElementById('startMenu');
+            menu.style.display = 'block';
+            
+            // Focar no campo de busca
+            setTimeout(() => {
+                const searchInput = document.getElementById('startMenuSearch');
+                if (searchInput) {
+                    searchInput.focus();
+                }
+            }, 100);
+            
+            // Atualizar estatísticas
+            updateStartMenuStats();
+            
+            // Notificar Gatomante ocasionalmente
+            if (Math.random() < 0.3) {
+                setTimeout(() => {
+                    gatomanteContextual('navegacao');
+                }, 2000);
+            }
+        }
+        
+        function hideStartMenu() {
+            const menu = document.getElementById('startMenu');
+            menu.style.display = 'none';
+            
+            // Limpar busca ao fechar
+            const searchInput = document.getElementById('startMenuSearch');
+            if (searchInput && searchInput.value) {
+                searchInput.value = '';
+                filterStartMenu('');
+            }
         }
         
         function generateColorPalette() {
@@ -5593,41 +5901,166 @@
             }
         };
         
-        // Sistema de notificações AFÁST
+        // ========================================
+        // 🛡️ SISTEMA AFÁST! REFORMULADO
+        // ========================================
+        
         let afastNotifications = [];
         let afastActive = false;
+        let afastVoiceEnabled = true;
+        let afastFirstTimeToday = true;
+        let afastLastNotificationTime = 0;
+        
+        // Configurações de voz feminina brasileira
+        const afastVoiceConfig = {
+            lang: 'pt-BR',
+            voice: null, // Será definida dinamicamente
+            rate: 0.9,
+            pitch: 1.1,
+            volume: 0.8
+        };
         
         function initAfastSystem() {
-            // Verificar eventos astrológicos simulados
+            console.log('🛡️ Inicializando Sistema AFÁST!...');
+            
+            // Configurar voz feminina brasileira
+            setupAfastVoice();
+            
+            // Verificar se é primeira vez do dia
+            checkFirstTimeToday();
+            
+            // Verificar eventos astrológicos
             checkAstrologicalEvents();
             
-            // Verificar eventos a cada hora
-            setInterval(checkAstrologicalEvents, 3600000); // 1 hora
+            // Verificar eventos a cada 30 minutos
+            setInterval(checkAstrologicalEvents, 1800000);
             
             // Carregar notificações salvas
             loadAfastNotifications();
+            
+            // Primeira mensagem do dia
+            if (afastFirstTimeToday) {
+                setTimeout(() => {
+                    showAfastWelcome();
+                }, 3000);
+            }
+        }
+        
+        function setupAfastVoice() {
+            if ('speechSynthesis' in window) {
+                // Aguardar vozes carregarem
+                const loadVoices = () => {
+                    const voices = speechSynthesis.getVoices();
+                    
+                    // Buscar voz feminina em português brasileiro
+                    const brazilianVoices = voices.filter(voice => 
+                        voice.lang.includes('pt-BR') || voice.lang.includes('pt')
+                    );
+                    
+                    // Preferir vozes femininas
+                    const femaleVoice = brazilianVoices.find(voice => 
+                        voice.name.toLowerCase().includes('female') ||
+                        voice.name.toLowerCase().includes('feminina') ||
+                        voice.name.toLowerCase().includes('woman') ||
+                        voice.name.toLowerCase().includes('maria') ||
+                        voice.name.toLowerCase().includes('ana')
+                    );
+                    
+                    afastVoiceConfig.voice = femaleVoice || brazilianVoices[0] || voices[0];
+                    
+                    console.log('🎙️ Voz AFÁST configurada:', afastVoiceConfig.voice?.name || 'Padrão');
+                };
+                
+                if (speechSynthesis.getVoices().length > 0) {
+                    loadVoices();
+                } else {
+                    speechSynthesis.onvoiceschanged = loadVoices;
+                }
+            }
+        }
+        
+        function checkFirstTimeToday() {
+            const today = new Date().toDateString();
+            const lastAfastDay = localStorage.getItem('auroraOS_afastLastDay');
+            
+            if (lastAfastDay !== today) {
+                afastFirstTimeToday = true;
+                localStorage.setItem('auroraOS_afastLastDay', today);
+            } else {
+                afastFirstTimeToday = false;
+            }
+        }
+        
+        function showAfastWelcome() {
+            const welcomeNotification = {
+                id: 'welcome_' + Date.now(),
+                type: 'welcome',
+                title: 'Sistema AFÁST! Ativado',
+                message: 'Boas-vindas ao Afást! O céu está sob vigilância.',
+                severity: 'info',
+                timestamp: new Date(),
+                hasVoice: true
+            };
+            
+            showAfastMsnNotification(welcomeNotification);
+            
+            // Falar mensagem de boas-vindas
+            if (afastVoiceEnabled) {
+                setTimeout(() => {
+                    speakAfastMessage('Boas-vindas ao Afást! O céu está sob vigilância.');
+                }, 1000);
+            }
         }
         
         function checkAstrologicalEvents() {
             const now = new Date();
             const hour = now.getHours();
+            const minute = now.getMinutes();
             const day = now.getDay();
             
-            // Simulação de eventos baseada em horários
-            if (hour === 13 && Math.random() < 0.3) { // 30% chance às 13h
+            // Evitar spam de notificações (mínimo 5 minutos entre alertas)
+            if (Date.now() - afastLastNotificationTime < 300000) return;
+            
+            // Simulação inteligente de eventos astrológicos
+            
+            // Mercúrio Retrógrado (mais comum)
+            if ((hour === 9 || hour === 15 || hour === 21) && minute < 5 && Math.random() < 0.4) {
                 triggerAfastEvent('mercuryRetrograde');
             }
             
-            if (hour === 0 && Math.random() < 0.2) { // 20% chance à meia-noite
+            // Lua Fora de Curso (períodos específicos)
+            if ((hour === 2 || hour === 14 || hour === 23) && Math.random() < 0.3) {
                 triggerAfastEvent('voidMoon');
             }
             
-            if (day === 0 && hour === 12 && Math.random() < 0.1) { // 10% chance domingo ao meio-dia
+            // Hora de Marte (conflitos)
+            if ((hour === 12 || hour === 18) && Math.random() < 0.35) {
+                triggerAfastEvent('marsHour');
+            }
+            
+            // Hora de Vênus (romance)
+            if ((hour === 10 || hour === 16 || hour === 20) && Math.random() < 0.25) {
+                triggerAfastEvent('venusHour');
+            }
+            
+            // Lua Cheia (emoções intensas)
+            if (hour === 0 && day === 5 && Math.random() < 0.6) { // Sexta à meia-noite
+                triggerAfastEvent('fullMoon');
+            }
+            
+            // Lua Nova (renovação)
+            if (hour === 6 && day === 1 && Math.random() < 0.5) { // Segunda de manhã
+                triggerAfastEvent('newMoon');
+            }
+            
+            // Eclipse (raro e crítico)
+            if (hour === 13 && day === 0 && Math.random() < 0.1) { // Domingo à tarde
                 triggerAfastEvent('eclipse');
             }
             
-            if (hour === 18 && Math.random() < 0.25) { // 25% chance às 18h
-                triggerAfastEvent('marsSquare');
+            // Júpiter Retrógrado (expansões bloqueadas)
+            if (hour === 11 && Math.random() < 0.2) {
+                triggerAfastEvent('jupiterRetrograde');
             }
         }
         
@@ -5635,28 +6068,46 @@
             const event = afastEvents[eventType];
             if (!event) return;
             
-            // Verificar se já existe notificação ativa deste tipo
-            const existingNotification = afastNotifications.find(n => n.type === eventType && n.active);
-            if (existingNotification) return;
+            // Verificar se já existe notificação ativa deste tipo recente
+            const recentNotification = afastNotifications.find(n => 
+                n.type === eventType && 
+                (Date.now() - new Date(n.timestamp).getTime()) < 1800000 // 30 minutos
+            );
+            if (recentNotification) return;
+            
+            // Atualizar timestamp da última notificação
+            afastLastNotificationTime = Date.now();
             
             // Criar nova notificação
             const notification = {
                 id: Date.now(),
                 type: eventType,
-                event: event,
+                title: `AFÁST! ${event.name}`,
+                message: event.shortAlert,
+                description: event.description,
+                severity: event.severity,
                 timestamp: new Date(),
-                active: true,
-                acknowledged: false
+                hasVoice: event.severity === 'critical' || event.severity === 'warning'
             };
             
             afastNotifications.push(notification);
             saveAfastNotifications();
             
-            // Mostrar notificação
-            showAfastNotification(notification);
+            // Mostrar notificação estilo MSN
+            showAfastMsnNotification(notification);
             
-            // Reproduzir alerta sonoro e voz
-            playAfastAlert(event);
+            // Reproduzir som e voz se necessário
+            if (notification.hasVoice && afastVoiceEnabled) {
+                setTimeout(() => {
+                    playAfastSyntheticSound();
+                    speakAfastMessage(event.voiceAlert || event.shortAlert);
+                }, 500);
+            } else {
+                playAfastSyntheticSound();
+            }
+            
+            // Adicionar à central de notificações
+            addToNotificationCenter(notification);
             
             // Notificar Gatomante
             setTimeout(() => {
@@ -5664,27 +6115,157 @@
             }, 3000);
         }
         
-        function showAfastNotification(notification) {
-            // Criar notificação estilo MSN no canto inferior direito
-            createMSNStyleNotification(notification.event);
-        }
-        
-        function createMSNStyleNotification(event) {
+        function showAfastMsnNotification(notification) {
             // Remover notificação anterior se existir
             const existingNotif = document.getElementById('afastMSNNotification');
             if (existingNotif) {
                 existingNotif.remove();
             }
             
-            // Criar elemento de notificação
-            const notification = document.createElement('div');
-            notification.id = 'afastMSNNotification';
-            notification.className = 'afast-msn-notification';
-            notification.style.cssText = `
-                position: fixed;
-                bottom: 60px;
-                right: 20px;
-                width: 300px;
+            // Criar elemento de notificação estilo MSN
+            const msnNotif = document.createElement('div');
+            msnNotif.id = 'afastMSNNotification';
+            msnNotif.className = `afast-msn-notification afast-severity-${notification.severity}`;
+            
+            // Definir ícone baseado na severidade
+            const severityIcons = {
+                critical: '🚨',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            
+            msnNotif.innerHTML = `
+                <div class="afast-msn-header">
+                    <div class="afast-msn-title">
+                        <span class="afast-msn-logo">🛡️</span>
+                        AFÁST! Antivírus Astrológico
+                    </div>
+                    <button class="afast-msn-close" onclick="closeAfastMsnNotification()">×</button>
+                </div>
+                <div class="afast-msn-content">
+                    <div class="afast-msn-event">
+                        ${severityIcons[notification.severity]} ${notification.message}
+                    </div>
+                    <div class="afast-msn-description">
+                        ${notification.description}
+                    </div>
+                    <div class="afast-msn-time">
+                        ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                </div>
+            `;
+            
+            // Adicionar ao DOM
+            document.body.appendChild(msnNotif);
+            
+            // Animar entrada
+            setTimeout(() => {
+                msnNotif.classList.add('show', 'slide-in');
+            }, 100);
+            
+            // Auto-fechar baseado na severidade
+            const autoCloseTime = {
+                critical: 10000, // 10 segundos
+                warning: 7000,   // 7 segundos
+                info: 5000       // 5 segundos
+            };
+            
+            setTimeout(() => {
+                closeAfastMsnNotification();
+            }, autoCloseTime[notification.severity]);
+        }
+        
+        function closeAfastMsnNotification() {
+            const notification = document.getElementById('afastMSNNotification');
+            if (notification) {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 400);
+            }
+        }
+        
+        function playAfastSyntheticSound() {
+            try {
+                // Criar som sintético estilo MSN/Windows
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Primeira frequência (800Hz)
+                const oscillator1 = audioContext.createOscillator();
+                const gainNode1 = audioContext.createGain();
+                
+                oscillator1.connect(gainNode1);
+                gainNode1.connect(audioContext.destination);
+                
+                oscillator1.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator1.type = 'sine';
+                
+                gainNode1.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                
+                oscillator1.start(audioContext.currentTime);
+                oscillator1.stop(audioContext.currentTime + 0.2);
+                
+                // Segunda frequência (600Hz) - mais suave
+                setTimeout(() => {
+                    const oscillator2 = audioContext.createOscillator();
+                    const gainNode2 = audioContext.createGain();
+                    
+                    oscillator2.connect(gainNode2);
+                    gainNode2.connect(audioContext.destination);
+                    
+                    oscillator2.frequency.setValueAtTime(600, audioContext.currentTime);
+                    oscillator2.type = 'sine';
+                    
+                    gainNode2.gain.setValueAtTime(0.2, audioContext.currentTime);
+                    gainNode2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    
+                    oscillator2.start(audioContext.currentTime);
+                    oscillator2.stop(audioContext.currentTime + 0.3);
+                }, 100);
+                
+            } catch (error) {
+                console.log('🔊 Erro ao reproduzir som sintético:', error);
+            }
+        }
+        
+        function speakAfastMessage(message) {
+            if (!afastVoiceEnabled || !('speechSynthesis' in window)) return;
+            
+            try {
+                // Cancelar qualquer fala anterior
+                speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(message);
+                
+                // Configurar voz feminina brasileira
+                if (afastVoiceConfig.voice) {
+                    utterance.voice = afastVoiceConfig.voice;
+                }
+                
+                utterance.lang = afastVoiceConfig.lang;
+                utterance.rate = afastVoiceConfig.rate;
+                utterance.pitch = afastVoiceConfig.pitch;
+                utterance.volume = afastVoiceConfig.volume * (currentUser?.settings?.volumes?.system || 0.7);
+                
+                // Eventos de voz
+                utterance.onstart = () => {
+                    console.log('🎙️ AFÁST falando:', message);
+                };
+                
+                utterance.onerror = (event) => {
+                    console.log('🎙️ Erro na síntese de voz:', event.error);
+                };
+                
+                // Falar
+                speechSynthesis.speak(utterance);
+                
+            } catch (error) {
+                console.log('🎙️ Erro na síntese de voz AFÁST:', error);
+            }
+        }
                 background: linear-gradient(135deg, ${event.color}22 0%, ${event.color}44 100%);
                 border: 2px solid ${event.color};
                 border-radius: 8px;
