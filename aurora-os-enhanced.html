@@ -1352,8 +1352,121 @@
             color: #3e0a29;
             padding: 15px;
             font-weight: bold;
-            text-align: center;
             font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .notification-center-close {
+            background: rgba(62, 10, 41, 0.2);
+            border: 1px solid #3e0a29;
+            color: #3e0a29;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .notification-center-close:hover {
+            background: rgba(62, 10, 41, 0.4);
+        }
+        
+        /* Filtros de Notificação */
+        .notification-filters {
+            display: flex;
+            padding: 10px;
+            gap: 5px;
+            background: rgba(0,0,0,0.2);
+            border-bottom: 1px solid #f0aa53;
+        }
+        
+        .filter-btn {
+            flex: 1;
+            background: rgba(240, 170, 83, 0.2);
+            border: 1px solid #f0aa53;
+            color: #f2eaff;
+            padding: 8px 4px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover {
+            background: rgba(240, 170, 83, 0.4);
+        }
+        
+        .filter-btn.active {
+            background: #f0aa53;
+            color: #3e0a29;
+        }
+        
+        /* Estatísticas AFÁST */
+        .afast-stats {
+            display: flex;
+            padding: 15px 10px;
+            background: rgba(0,0,0,0.3);
+            border-bottom: 1px solid #f0aa53;
+        }
+        
+        .stat-item {
+            flex: 1;
+            text-align: center;
+            color: #f2eaff;
+        }
+        
+        .stat-number {
+            display: block;
+            font-size: 18px;
+            font-weight: bold;
+            color: #f0aa53;
+        }
+        
+        .stat-label {
+            font-size: 10px;
+            opacity: 0.8;
+        }
+        
+        /* Estado vazio */
+        .no-notifications {
+            text-align: center;
+            padding: 40px 20px;
+            color: #f2eaff;
+            opacity: 0.7;
+        }
+        
+        /* Ações da Central */
+        .notification-center-actions {
+            display: flex;
+            padding: 10px;
+            gap: 5px;
+            background: rgba(0,0,0,0.2);
+            border-top: 1px solid #f0aa53;
+        }
+        
+        .action-btn {
+            flex: 1;
+            background: rgba(240, 170, 83, 0.2);
+            border: 1px solid #f0aa53;
+            color: #f2eaff;
+            padding: 8px 4px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: rgba(240, 170, 83, 0.4);
+            transform: translateY(-1px);
         }
         
         .notification-center-content {
@@ -1471,6 +1584,96 @@
             margin-bottom: 12px;
             color: var(--azul-escuro);
             font-size: 12px;
+        }
+        
+        /* Sistema de Upload de Foto */
+        .profile-photo-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .profile-photo-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--dourado);
+            margin: 0 auto 10px;
+            background: var(--azul-escuro);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--dourado);
+            overflow: hidden;
+        }
+        
+        .profile-photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .photo-upload-btn {
+            background: var(--verde-claro);
+            color: var(--azul-escuro);
+            border: 2px outset var(--verde-claro);
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 11px;
+            margin: 4px;
+            border-radius: 4px;
+        }
+        
+        .photo-upload-btn:hover {
+            background: #9bc49a;
+        }
+        
+        .photo-upload-btn:active {
+            border: 2px inset var(--verde-claro);
+        }
+        
+        /* Sistema de Wallpapers Personalizados */
+        .wallpaper-upload-section {
+            border: 1px dashed var(--dourado);
+            padding: 20px;
+            text-align: center;
+            margin: 10px 0;
+            background: rgba(240, 170, 83, 0.1);
+            border-radius: 8px;
+        }
+        
+        .wallpaper-preview {
+            width: 100%;
+            height: 60px;
+            border: 2px inset #c0c0c0;
+            margin: 8px 0;
+            background-size: cover;
+            background-position: center;
+            border-radius: 4px;
+        }
+        
+        .custom-color-picker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .color-input {
+            width: 40px;
+            height: 30px;
+            border: 2px outset #c0c0c0;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .color-hex-input {
+            background: white;
+            border: 1px inset #c0c0c0;
+            padding: 4px 8px;
+            font-family: monospace;
+            font-size: 11px;
+            width: 80px;
         }
         
         .color-palette {
@@ -2155,38 +2358,66 @@
         </div>
     </div>
     
-    <!-- Sistema AFÁST - Notificação Astrológica -->
-    <div class="afast-notification" id="afastNotification">
-        <button class="afast-close" onclick="closeAfastNotification()">×</button>
-        <div class="afast-header">
-            <div class="afast-logo">🛡️</div>
-            <div>
-                <div class="afast-title">AFÁST!</div>
-                <div class="afast-subtitle">Antivírus Astrológico</div>
-            </div>
-        </div>
-        <div class="afast-content">
-            <div class="afast-event" id="afastEvent">Mercúrio Retrógrado Detectado!</div>
-            <div class="afast-description" id="afastDescription">
-                O planeta da comunicação está em movimento retrógrado, causando possíveis interferências em sistemas de comunicação e tecnologia.
-            </div>
-            <div class="afast-advice" id="afastAdvice">
-                💡 Recomendação: Faça backup de arquivos importantes e evite assinar contratos importantes neste período.
-            </div>
-        </div>
-        <div class="afast-buttons">
-            <button class="afast-button secondary" onclick="snoozeAfastNotification()">Lembrar Depois</button>
-            <button class="afast-button" onclick="acknowledgeAfastNotification()">Entendi</button>
-        </div>
-    </div>
+    <!-- Sistema AFÁST! reformulado - notificações estilo MSN são criadas dinamicamente -->
     
     <!-- Central de Notificações -->
     <div class="notification-center" id="notificationCenter">
         <div class="notification-center-header">
-            🔔 Central de Notificações
+            🛡️ Central AFÁST
+            <button class="notification-center-close" onclick="toggleNotificationCenter()">×</button>
         </div>
+        
+        <!-- Filtros de Notificação -->
+        <div class="notification-filters">
+            <button class="filter-btn active" onclick="filterNotifications('all')" id="filterAll">
+                📋 Todas
+            </button>
+            <button class="filter-btn" onclick="filterNotifications('critical')" id="filterCritical">
+                🚨 Críticas
+            </button>
+            <button class="filter-btn" onclick="filterNotifications('warning')" id="filterWarning">
+                ⚠️ Avisos
+            </button>
+            <button class="filter-btn" onclick="filterNotifications('info')" id="filterInfo">
+                ℹ️ Informações
+            </button>
+        </div>
+        
+        <!-- Estatísticas AFÁST -->
+        <div class="afast-stats">
+            <div class="stat-item">
+                <span class="stat-number" id="totalAlerts">0</span>
+                <span class="stat-label">Total de Alertas</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="criticalAlerts">0</span>
+                <span class="stat-label">Críticos</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="todayAlerts">0</span>
+                <span class="stat-label">Hoje</span>
+            </div>
+        </div>
+        
         <div class="notification-center-content" id="notificationCenterContent">
-            <!-- Notificações serão adicionadas dinamicamente -->
+            <div class="no-notifications" id="noNotifications">
+                <div style="font-size: 48px; opacity: 0.5;">🛡️</div>
+                <p>Nenhuma notificação AFÁST</p>
+                <p style="font-size: 12px; opacity: 0.7;">O sistema está monitorando eventos astrológicos...</p>
+            </div>
+        </div>
+        
+        <!-- Ações da Central -->
+        <div class="notification-center-actions">
+            <button class="action-btn" onclick="clearAllNotifications()">
+                🗑️ Limpar Todas
+            </button>
+            <button class="action-btn" onclick="exportNotifications()">
+                📤 Exportar
+            </button>
+            <button class="action-btn" onclick="afastSettings()">
+                ⚙️ Configurações
+            </button>
         </div>
     </div>
     
@@ -2233,19 +2464,58 @@
                 <button class="personalization-close" onclick="closePersonalization()">×</button>
             </div>
             <div class="personalization-content">
-                <div class="personalization-section">
-                    <h3>Cores do Tema</h3>
-                    <div class="color-palette" id="colorPalette">
-                        <!-- Cores serão geradas dinamicamente -->
+                <!-- Seção de Foto de Perfil -->
+                <div class="personalization-section profile-photo-section">
+                    <h3>📸 Foto de Perfil</h3>
+                    <div class="profile-photo-preview" id="profilePhotoPreview">
+                        👤
+                    </div>
+                    <div>
+                        <button class="photo-upload-btn" onclick="document.getElementById('profilePhotoInput').click()">
+                            📁 Escolher Arquivo
+                        </button>
+                        <button class="photo-upload-btn" onclick="removeProfilePhoto()">
+                            🗑️ Remover
+                        </button>
+                        <input type="file" id="profilePhotoInput" accept="image/*" style="display: none;" onchange="uploadProfilePhoto(event)">
                     </div>
                 </div>
                 
                 <div class="personalization-section">
-                    <h3>Papel de Parede</h3>
-                    <div class="wallpaper-section">
-                        <div class="wallpaper-upload">
-                            <input type="file" id="wallpaperUpload" accept="image/*" onchange="uploadWallpaper(event)">
+                    <h3>🎨 Cores do Tema</h3>
+                    <div class="color-palette" id="colorPalette">
+                        <!-- Cores serão geradas dinamicamente -->
+                    </div>
+                    
+                    <!-- Seletor de Cor Personalizada -->
+                    <div class="custom-color-picker">
+                        <label>Cor personalizada:</label>
+                        <input type="color" id="customColorInput" class="color-input" onchange="applyCustomColor(this.value)">
+                        <input type="text" id="colorHexInput" class="color-hex-input" placeholder="#FF0000" onchange="applyCustomHex(this.value)">
+                    </div>
+                </div>
+                
+                <div class="personalization-section">
+                    <h3>🖼️ Papel de Parede</h3>
+                    
+                    <!-- Upload de Wallpaper Personalizado -->
+                    <div class="wallpaper-upload-section">
+                        <div>📁 <strong>Upload Personalizado</strong></div>
+                        <div style="font-size: 11px; color: #666; margin: 5px 0;">
+                            Formatos aceitos: JPG, PNG, GIF | Tamanho máximo: 5MB
                         </div>
+                        <button class="photo-upload-btn" onclick="document.getElementById('wallpaperUpload').click()">
+                            🖼️ Escolher Imagem
+                        </button>
+                        <input type="file" id="wallpaperUpload" accept="image/*" style="display: none;" onchange="uploadWallpaper(event)">
+                        
+                        <!-- Preview do wallpaper personalizado -->
+                        <div id="customWallpaperPreview" class="wallpaper-preview" style="display: none;"></div>
+                    </div>
+                    
+                    <!-- Wallpapers Predefinidos -->
+                    <div class="wallpaper-section">
+                        <div style="font-size: 11px; margin-bottom: 8px;"><strong>Gradientes Predefinidos:</strong></div>
                         <div class="wallpaper-presets" id="wallpaperPresets">
                             <!-- Presets serão gerados dinamicamente -->
                         </div>
@@ -2370,6 +2640,123 @@
                 url: 'https://astro.com', 
                 icon: '⭐', 
                 premium: true 
+            },
+            
+            // ==========================================
+            // 🔮 APLICAÇÕES MÍSTICAS NATIVAS
+            // ==========================================
+            { 
+                id: 'combine-cristais', 
+                name: 'Combine os Cristais', 
+                url: 'local://crystals', 
+                icon: '💎', 
+                premium: true 
+            },
+            { 
+                id: 'combine-ervas', 
+                name: 'Combine as Ervas', 
+                url: 'local://herbs', 
+                icon: '🌿', 
+                premium: true 
+            },
+            { 
+                id: 'combine-cartas', 
+                name: 'Combine as Cartas', 
+                url: 'local://cards', 
+                icon: '🃏', 
+                premium: true 
+            },
+            { 
+                id: 'estrelas-fixas', 
+                name: 'Estrelas Fixas', 
+                url: 'local://stars', 
+                icon: '⭐', 
+                premium: true 
+            },
+            { 
+                id: 'arvore-vida', 
+                name: 'Árvore da Vida', 
+                url: 'local://kabbalah', 
+                icon: '🌳', 
+                premium: true 
+            },
+            { 
+                id: 'witch-tarot', 
+                name: 'Witch Tarot', 
+                url: 'local://tarot', 
+                icon: '🔮', 
+                premium: true 
+            },
+            { 
+                id: 'livros-interativos', 
+                name: 'Livros Interativos', 
+                url: 'local://books', 
+                icon: '📚', 
+                premium: true 
+            },
+            { 
+                id: 'roda-do-ano', 
+                name: 'Roda do Ano', 
+                url: 'local://wheel', 
+                icon: '🎡', 
+                premium: true 
+            },
+            
+            // ==========================================
+            // 🎮 JOGOS E ENTRETENIMENTO
+            // ==========================================
+            { 
+                id: 'jogo-cobrinha', 
+                name: 'Jogo da Cobrinha', 
+                url: 'local://snake', 
+                icon: '🐍', 
+                premium: false 
+            },
+            { 
+                id: 'paciencia', 
+                name: 'Paciência', 
+                url: 'local://solitaire', 
+                icon: '🃏', 
+                premium: false 
+            },
+            { 
+                id: 'domino', 
+                name: 'Dominó', 
+                url: 'local://domino', 
+                icon: '⚫', 
+                premium: false 
+            },
+            
+            // ==========================================
+            // 🛠️ APLICAÇÕES LOCAIS
+            // ==========================================
+            { 
+                id: 'editor-texto', 
+                name: 'Editor de Texto', 
+                url: 'local://notepad', 
+                icon: '📝', 
+                premium: false 
+            },
+            { 
+                id: 'calculadora', 
+                name: 'Calculadora', 
+                url: 'local://calculator', 
+                icon: '🔢', 
+                premium: false 
+            },
+            { 
+                id: 'leitor-documentos', 
+                name: 'Leitor de Documentos', 
+                url: 'local://reader', 
+                icon: '📄', 
+                premium: false 
+            },
+            { 
+                id: 'visualizador-videos', 
+                name: 'Visualizador de Vídeos', 
+                url: 'local://player', 
+                icon: '🎬', 
+                premium: false 
             },
             
             // ==========================================
@@ -2505,10 +2892,28 @@
             const container = document.getElementById('desktopIcons');
             container.innerHTML = '';
             
-            sitesConfig.forEach(site => {
+            // Adicionar ícone da lixeira primeiro
+            const trashIcon = document.createElement('div');
+            trashIcon.className = 'desktop-icon trash-icon';
+            trashIcon.id = 'trashIcon';
+            trashIcon.onclick = () => openTrash();
+            trashIcon.innerHTML = `
+                <div class="icon">🗑️</div>
+                <div class="label">Lixeira</div>
+            `;
+            trashIcon.style.position = 'absolute';
+            trashIcon.style.bottom = '20px';
+            trashIcon.style.right = '20px';
+            container.appendChild(trashIcon);
+            
+            // Carregar posições salvas dos ícones
+            const savedPositions = JSON.parse(localStorage.getItem('auroraOS_icon_positions') || '{}');
+            
+            sitesConfig.forEach((site, index) => {
                 const icon = document.createElement('div');
                 icon.className = `desktop-icon ${site.premium ? 'premium' : ''}`;
-                icon.onclick = () => openSite(site);
+                icon.draggable = true;
+                icon.dataset.siteIndex = index;
                 
                 const iconContent = site.icon.endsWith('.png') ? 
                     `<img src="${site.icon}" alt="${site.name}" style="width: 32px; height: 32px; image-rendering: pixelated;">` : 
@@ -2519,13 +2924,208 @@
                     <div class="label">${site.name}</div>
                 `;
                 
+                // Aplicar posição salva se existir
+                if (savedPositions[site.name]) {
+                    icon.style.position = 'absolute';
+                    icon.style.left = savedPositions[site.name].x + 'px';
+                    icon.style.top = savedPositions[site.name].y + 'px';
+                }
+                
+                // Eventos de arrastar
+                icon.addEventListener('dragstart', handleDragStart);
+                icon.addEventListener('dragend', handleDragEnd);
+                icon.addEventListener('click', (e) => {
+                    if (!icon.classList.contains('dragging')) {
+                        openSite(site);
+                    }
+                });
+                
                 container.appendChild(icon);
             });
+            
+            // Configurar área de drop
+            container.addEventListener('dragover', handleDragOver);
+            container.addEventListener('drop', handleDrop);
+        }
+        
+        // ========================================
+        // 🖱️ SISTEMA DE ARRASTAR ÍCONES
+        // ========================================
+        
+        let draggedIcon = null;
+        let dragOffset = { x: 0, y: 0 };
+        
+        function handleDragStart(e) {
+            draggedIcon = e.target.closest('.desktop-icon');
+            draggedIcon.classList.add('dragging');
+            
+            const rect = draggedIcon.getBoundingClientRect();
+            dragOffset.x = e.clientX - rect.left;
+            dragOffset.y = e.clientY - rect.top;
+            
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', draggedIcon.outerHTML);
+        }
+        
+        function handleDragEnd(e) {
+            if (draggedIcon) {
+                draggedIcon.classList.remove('dragging');
+                draggedIcon = null;
+            }
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            
+            if (draggedIcon) {
+                const container = document.getElementById('desktopIcons');
+                const containerRect = container.getBoundingClientRect();
+                
+                const x = e.clientX - containerRect.left - dragOffset.x;
+                const y = e.clientY - containerRect.top - dragOffset.y;
+                
+                // Limitar posição dentro do container
+                const maxX = containerRect.width - draggedIcon.offsetWidth;
+                const maxY = containerRect.height - draggedIcon.offsetHeight;
+                
+                const finalX = Math.max(0, Math.min(x, maxX));
+                const finalY = Math.max(0, Math.min(y, maxY));
+                
+                draggedIcon.style.position = 'absolute';
+                draggedIcon.style.left = finalX + 'px';
+                draggedIcon.style.top = finalY + 'px';
+                
+                // Salvar posição
+                saveIconPosition(draggedIcon, finalX, finalY);
+                
+                draggedIcon.classList.remove('dragging');
+                draggedIcon = null;
+            }
+        }
+        
+        function saveIconPosition(iconElement, x, y) {
+            const siteIndex = iconElement.dataset.siteIndex;
+            if (siteIndex !== undefined) {
+                const siteName = sitesConfig[siteIndex].name;
+                const savedPositions = JSON.parse(localStorage.getItem('auroraOS_icon_positions') || '{}');
+                savedPositions[siteName] = { x, y };
+                localStorage.setItem('auroraOS_icon_positions', JSON.stringify(savedPositions));
+            }
+        }
+        
+        function resetIconPositions() {
+            localStorage.removeItem('auroraOS_icon_positions');
+            generateDesktopIcons();
+            
+            // Notificar Gatomante
+            setTimeout(() => {
+                gatomanteContextual('personalizacao', { acao: 'ícones reorganizados' });
+            }, 1000);
+        }
+        
+        // ========================================
+        // 🗑️ SISTEMA DE LIXEIRA
+        // ========================================
+        
+        function openTrash() {
+            const trashItems = JSON.parse(localStorage.getItem('auroraOS_trash') || '[]');
+            
+            let trashContent = '<h3>🗑️ Lixeira do Aurora OS</h3>';
+            
+            if (trashItems.length === 0) {
+                trashContent += '<p>A lixeira está vazia.</p>';
+            } else {
+                trashContent += '<div style="margin: 15px 0;">';
+                trashItems.forEach((item, index) => {
+                    trashContent += `
+                        <div style="display: flex; align-items: center; padding: 8px; border-bottom: 1px solid #444;">
+                            <span style="margin-right: 10px;">${item.icon}</span>
+                            <span style="flex: 1;">${item.name}</span>
+                            <small style="opacity: 0.7;">${item.deletedAt}</small>
+                            <button onclick="restoreFromTrash(${index})" style="margin-left: 10px; padding: 4px 8px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Restaurar</button>
+                        </div>
+                    `;
+                });
+                trashContent += '</div>';
+                trashContent += '<button onclick="emptyTrash()" style="background: #f44336; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-top: 10px;">Esvaziar Lixeira</button>';
+            }
+            
+            openMysticalApp('Lixeira', trashContent);
+        }
+        
+        function addToTrash(item) {
+            const trashItems = JSON.parse(localStorage.getItem('auroraOS_trash') || '[]');
+            trashItems.push({
+                ...item,
+                deletedAt: new Date().toLocaleString('pt-BR')
+            });
+            localStorage.setItem('auroraOS_trash', JSON.stringify(trashItems));
+        }
+        
+        function restoreFromTrash(index) {
+            const trashItems = JSON.parse(localStorage.getItem('auroraOS_trash') || '[]');
+            const item = trashItems[index];
+            
+            if (item) {
+                // Restaurar item (implementar lógica específica conforme necessário)
+                trashItems.splice(index, 1);
+                localStorage.setItem('auroraOS_trash', JSON.stringify(trashItems));
+                
+                alert(`${item.name} foi restaurado com sucesso!`);
+                openTrash(); // Reabrir lixeira para mostrar mudanças
+            }
+        }
+        
+        function emptyTrash() {
+            if (confirm('Tem certeza que deseja esvaziar a lixeira? Esta ação não pode ser desfeita.')) {
+                localStorage.removeItem('auroraOS_trash');
+                alert('Lixeira esvaziada com sucesso!');
+                openTrash(); // Reabrir lixeira para mostrar mudanças
+            }
         }
         
         function generateStartMenu() {
             const container = document.getElementById('startMenuItems');
             container.innerHTML = '';
+            
+            // ========================================
+            // 📁 APLICAÇÕES DO SISTEMA
+            // ========================================
+            
+            // Aplicações essenciais do sistema
+            const systemApps = [
+                { name: 'Processador de Texto', icon: '📝', action: () => openTextProcessor() },
+                { name: 'Pasta Documentos', icon: '📁', action: () => openDocumentsFolder() },
+                { name: 'Ajuda do Sistema', icon: '❓', action: () => openSystemHelp() },
+                { name: 'Lixeira', icon: '🗑️', action: () => openTrash() }
+            ];
+            
+            systemApps.forEach(app => {
+                const item = document.createElement('div');
+                item.className = 'start-menu-item system-app';
+                item.onclick = app.action;
+                
+                item.innerHTML = `
+                    <div class="icon">${app.icon}</div>
+                    <div class="text">${app.name}</div>
+                `;
+                
+                container.appendChild(item);
+            });
+            
+            // Separador
+            const systemSeparator = document.createElement('div');
+            systemSeparator.className = 'start-menu-separator';
+            container.appendChild(systemSeparator);
+            
+            // ========================================
+            // 🌐 SITES E APLICAÇÕES EXTERNAS
+            // ========================================
             
             // Separar sites básicos e premium
             const basicSites = sitesConfig.filter(site => !site.premium);
@@ -2572,6 +3172,268 @@
                     container.appendChild(item);
                 });
             }
+        }
+        
+        // ========================================
+        // 📝 PROCESSADOR DE TEXTO
+        // ========================================
+        
+        function openTextProcessor() {
+            const savedDocuments = JSON.parse(localStorage.getItem('auroraOS_documents') || '[]');
+            
+            let content = `
+                <div style="display: flex; flex-direction: column; height: 100%; font-family: 'Segoe UI', sans-serif;">
+                    <div style="background: #2a2a2a; padding: 10px; border-bottom: 2px solid #444; display: flex; gap: 10px; align-items: center;">
+                        <button onclick="newDocument()" style="padding: 5px 10px; background: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer;">📄 Novo</button>
+                        <button onclick="saveDocument()" style="padding: 5px 10px; background: #2196F3; color: white; border: none; border-radius: 3px; cursor: pointer;">💾 Salvar</button>
+                        <button onclick="loadDocument()" style="padding: 5px 10px; background: #FF9800; color: white; border: none; border-radius: 3px; cursor: pointer;">📂 Abrir</button>
+                        <input type="text" id="documentTitle" placeholder="Título do documento..." style="padding: 5px; border: 1px solid #555; background: #333; color: white; border-radius: 3px; flex: 1;">
+                    </div>
+                    <div style="flex: 1; padding: 15px; background: #1a1a1a;">
+                        <textarea id="textEditor" placeholder="Digite seu texto aqui..." style="width: 100%; height: 100%; border: none; background: #222; color: #fff; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.5; resize: none; outline: none; padding: 15px;"></textarea>
+                    </div>
+                    <div style="background: #2a2a2a; padding: 8px; border-top: 1px solid #444; font-size: 12px; color: #aaa; display: flex; justify-content: space-between;">
+                        <span id="documentStatus">Pronto</span>
+                        <span id="characterCount">0 caracteres</span>
+                    </div>
+                </div>
+            `;
+            
+            openMysticalApp('Processador de Texto', content);
+            
+            // Configurar eventos após abrir a janela
+            setTimeout(() => {
+                const editor = document.getElementById('textEditor');
+                const charCount = document.getElementById('characterCount');
+                
+                if (editor && charCount) {
+                    editor.addEventListener('input', function() {
+                        charCount.textContent = this.value.length + ' caracteres';
+                        document.getElementById('documentStatus').textContent = 'Modificado';
+                    });
+                }
+            }, 100);
+        }
+        
+        function newDocument() {
+            document.getElementById('textEditor').value = '';
+            document.getElementById('documentTitle').value = '';
+            document.getElementById('documentStatus').textContent = 'Novo documento';
+            document.getElementById('characterCount').textContent = '0 caracteres';
+        }
+        
+        function saveDocument() {
+            const title = document.getElementById('documentTitle').value.trim();
+            const content = document.getElementById('textEditor').value;
+            
+            if (!title) {
+                alert('Por favor, digite um título para o documento.');
+                return;
+            }
+            
+            if (!content.trim()) {
+                alert('O documento está vazio.');
+                return;
+            }
+            
+            const documents = JSON.parse(localStorage.getItem('auroraOS_documents') || '[]');
+            const existingIndex = documents.findIndex(doc => doc.title === title);
+            
+            const document = {
+                title: title,
+                content: content,
+                lastModified: new Date().toLocaleString('pt-BR'),
+                wordCount: content.split(/\s+/).filter(word => word.length > 0).length
+            };
+            
+            if (existingIndex >= 0) {
+                documents[existingIndex] = document;
+                alert('Documento atualizado com sucesso!');
+            } else {
+                documents.push(document);
+                alert('Documento salvo com sucesso!');
+            }
+            
+            localStorage.setItem('auroraOS_documents', JSON.stringify(documents));
+            document.getElementById('documentStatus').textContent = 'Salvo';
+            
+            // Notificar Gatomante
+            setTimeout(() => {
+                gatomanteContextual('personalizacao', { acao: 'documento salvo' });
+            }, 1000);
+        }
+        
+        function loadDocument() {
+            const documents = JSON.parse(localStorage.getItem('auroraOS_documents') || '[]');
+            
+            if (documents.length === 0) {
+                alert('Nenhum documento salvo encontrado.');
+                return;
+            }
+            
+            let docList = 'Documentos salvos:\n\n';
+            documents.forEach((doc, index) => {
+                docList += `${index + 1}. ${doc.title}\n   ${doc.wordCount} palavras - ${doc.lastModified}\n\n`;
+            });
+            
+            const choice = prompt(docList + 'Digite o número do documento para abrir:');
+            const docIndex = parseInt(choice) - 1;
+            
+            if (docIndex >= 0 && docIndex < documents.length) {
+                const doc = documents[docIndex];
+                document.getElementById('documentTitle').value = doc.title;
+                document.getElementById('textEditor').value = doc.content;
+                document.getElementById('documentStatus').textContent = 'Carregado';
+                document.getElementById('characterCount').textContent = doc.content.length + ' caracteres';
+            } else {
+                alert('Número inválido.');
+            }
+        }
+        
+        // ========================================
+        // 📁 PASTA DOCUMENTOS
+        // ========================================
+        
+        function openDocumentsFolder() {
+            const documents = JSON.parse(localStorage.getItem('auroraOS_documents') || '[]');
+            
+            let content = '<h3>📁 Pasta Documentos</h3>';
+            
+            if (documents.length === 0) {
+                content += '<p style="color: #aaa; font-style: italic;">Nenhum documento encontrado. Use o Processador de Texto para criar documentos.</p>';
+            } else {
+                content += '<div style="margin: 15px 0;">';
+                documents.forEach((doc, index) => {
+                    content += `
+                        <div style="display: flex; align-items: center; padding: 12px; border: 1px solid #444; border-radius: 6px; margin-bottom: 8px; background: #222;">
+                            <div style="font-size: 24px; margin-right: 15px;">📄</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: #fff; margin-bottom: 4px;">${doc.title}</div>
+                                <div style="font-size: 12px; color: #aaa;">${doc.wordCount} palavras • ${doc.lastModified}</div>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button onclick="openDocumentInEditor('${doc.title}')" style="padding: 4px 8px; background: #2196F3; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px;">Abrir</button>
+                                <button onclick="deleteDocument('${doc.title}')" style="padding: 4px 8px; background: #f44336; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px;">Excluir</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                content += '</div>';
+            }
+            
+            openMysticalApp('Pasta Documentos', content);
+        }
+        
+        function openDocumentInEditor(title) {
+            // Fechar pasta documentos
+            const windows = document.querySelectorAll('.window');
+            windows.forEach(win => {
+                if (win.querySelector('.window-title').textContent === 'Pasta Documentos') {
+                    win.remove();
+                }
+            });
+            
+            // Abrir processador de texto
+            openTextProcessor();
+            
+            // Carregar documento específico
+            setTimeout(() => {
+                const documents = JSON.parse(localStorage.getItem('auroraOS_documents') || '[]');
+                const doc = documents.find(d => d.title === title);
+                
+                if (doc) {
+                    document.getElementById('documentTitle').value = doc.title;
+                    document.getElementById('textEditor').value = doc.content;
+                    document.getElementById('documentStatus').textContent = 'Carregado';
+                    document.getElementById('characterCount').textContent = doc.content.length + ' caracteres';
+                }
+            }, 200);
+        }
+        
+        function deleteDocument(title) {
+            if (confirm(`Tem certeza que deseja excluir o documento "${title}"?`)) {
+                const documents = JSON.parse(localStorage.getItem('auroraOS_documents') || '[]');
+                const filteredDocs = documents.filter(doc => doc.title !== title);
+                localStorage.setItem('auroraOS_documents', JSON.stringify(filteredDocs));
+                
+                // Adicionar à lixeira
+                const deletedDoc = documents.find(doc => doc.title === title);
+                if (deletedDoc) {
+                    addToTrash({ name: deletedDoc.title, icon: '📄', type: 'document' });
+                }
+                
+                alert('Documento excluído com sucesso!');
+                openDocumentsFolder(); // Reabrir pasta para mostrar mudanças
+            }
+        }
+        
+        // ========================================
+        // ❓ AJUDA DO SISTEMA
+        // ========================================
+        
+        function openSystemHelp() {
+            const helpContent = `
+                <div style="font-family: 'Segoe UI', sans-serif; line-height: 1.6;">
+                    <h2 style="color: #f0aa53; margin-bottom: 20px;">🔮 Ajuda do Aurora OS • MysticSoft</h2>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <h3 style="color: #d4af37; margin-bottom: 10px;">🖥️ Navegação Básica</h3>
+                        <ul style="color: #ccc; margin-left: 20px;">
+                            <li><strong>Ícones do Desktop:</strong> Clique duas vezes para abrir aplicações</li>
+                            <li><strong>Arrastar Ícones:</strong> Clique e arraste para reorganizar</li>
+                            <li><strong>Menu Iniciar:</strong> Clique no botão Iniciar para acessar aplicações</li>
+                            <li><strong>Barra de Tarefas:</strong> Mostra aplicações abertas e widgets</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <h3 style="color: #d4af37; margin-bottom: 10px;">🛡️ Sistema AFÁST!</h3>
+                        <ul style="color: #ccc; margin-left: 20px;">
+                            <li><strong>Antivírus Astrológico:</strong> Monitora eventos cósmicos 24/7</li>
+                            <li><strong>Notificações:</strong> Aparecem no canto inferior direito</li>
+                            <li><strong>Central AFÁST:</strong> Clique no escudo dourado para ver histórico</li>
+                            <li><strong>Voz Feminina:</strong> Alerta "AFÁSTE" para eventos críticos</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <h3 style="color: #d4af37; margin-bottom: 10px;">🐱‍⬛ Gatomante - Seu Assistente Místico</h3>
+                        <ul style="color: #ccc; margin-left: 20px;">
+                            <li><strong>Dicas Contextuais:</strong> Aparece automaticamente com sugestões</li>
+                            <li><strong>Clique no Gato:</strong> Para obter novas dicas</li>
+                            <li><strong>Balão de Fala:</strong> Estilo HQ com botão de fechar</li>
+                            <li><strong>Inteligência:</strong> Aprende seus padrões de uso</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <h3 style="color: #d4af37; margin-bottom: 10px;">🎨 Personalização</h3>
+                        <ul style="color: #ccc; margin-left: 20px;">
+                            <li><strong>Temas de Cores:</strong> 6 temas místicos disponíveis</li>
+                            <li><strong>Wallpapers:</strong> Upload de imagens personalizadas</li>
+                            <li><strong>Foto de Perfil:</strong> Personalize sua conta</li>
+                            <li><strong>Seletor de Cores:</strong> Crie temas únicos</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <h3 style="color: #d4af37; margin-bottom: 10px;">📝 Aplicações Nativas</h3>
+                        <ul style="color: #ccc; margin-left: 20px;">
+                            <li><strong>Processador de Texto:</strong> Crie e salve documentos</li>
+                            <li><strong>Pasta Documentos:</strong> Gerencie seus arquivos</li>
+                            <li><strong>Lixeira:</strong> Recupere itens excluídos</li>
+                            <li><strong>Aplicações Místicas:</strong> Ferramentas esotéricas únicas</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #2a2a2a; padding: 15px; border-radius: 8px; border-left: 4px solid #f0aa53;">
+                        <h4 style="color: #f0aa53; margin-bottom: 10px;">💡 Dica Especial</h4>
+                        <p style="color: #ccc; margin: 0;">O Aurora OS é um sistema operacional místico único. Explore todas as funcionalidades e deixe o Gatomante guiá-lo em sua jornada digital!</p>
+                    </div>
+                </div>
+            `;
+            
+            openMysticalApp('Ajuda do Sistema', helpContent);
         }
         
         function generateColorPalette() {
@@ -2653,6 +3515,9 @@
             if (site.url === 'local://files') {
                 // Abrir aplicativo local de arquivos
                 openLocalFilesApp();
+            } else if (site.url.startsWith('local://')) {
+                // Abrir aplicação mística local
+                openMysticalApp(site);
             } else {
                 // Abrir site em janela
                 openWebsite(site);
@@ -2868,6 +3733,271 @@
                 isDragging = false;
                 currentWindow = null;
             });
+        }
+        
+        // ========================================
+        // 🔮 SISTEMA DE APLICAÇÕES MÍSTICAS LOCAIS
+        // ========================================
+        
+        function openMysticalApp(site) {
+            const windowId = `window-${site.id}`;
+            
+            // Verificar se janela já está aberta
+            if (document.getElementById(windowId)) {
+                focusWindow(windowId);
+                return;
+            }
+            
+            const window = document.createElement('div');
+            window.id = windowId;
+            window.className = 'window active focused';
+            window.style.left = `${100 + openWindows.length * 30}px`;
+            window.style.top = `${50 + openWindows.length * 30}px`;
+            window.style.width = '600px';
+            window.style.height = '500px';
+            
+            let appContent = '';
+            
+            // Gerar conteúdo específico para cada aplicação mística
+            switch(site.url) {
+                case 'local://crystals':
+                    appContent = generateCrystalsApp();
+                    break;
+                case 'local://herbs':
+                    appContent = generateHerbsApp();
+                    break;
+                case 'local://cards':
+                    appContent = generateCardsApp();
+                    break;
+                case 'local://stars':
+                    appContent = generateStarsApp();
+                    break;
+                case 'local://kabbalah':
+                    appContent = generateKabbalahApp();
+                    break;
+                case 'local://tarot':
+                    appContent = generateTarotApp();
+                    break;
+                case 'local://books':
+                    appContent = generateBooksApp();
+                    break;
+                case 'local://wheel':
+                    appContent = generateWheelApp();
+                    break;
+                case 'local://snake':
+                    appContent = generateSnakeGame();
+                    break;
+                case 'local://solitaire':
+                    appContent = generateSolitaireGame();
+                    break;
+                case 'local://domino':
+                    appContent = generateDominoGame();
+                    break;
+                case 'local://notepad':
+                    appContent = generateNotepadApp();
+                    break;
+                case 'local://calculator':
+                    appContent = generateCalculatorApp();
+                    break;
+                case 'local://reader':
+                    appContent = generateReaderApp();
+                    break;
+                case 'local://player':
+                    appContent = generatePlayerApp();
+                    break;
+                default:
+                    appContent = generateDefaultApp(site);
+            }
+            
+            window.innerHTML = `
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>${site.icon}</span>
+                        <span>${site.name}</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-control" onclick="minimizeWindow('${windowId}')">_</div>
+                        <div class="window-control" onclick="maximizeWindow('${windowId}')">□</div>
+                        <div class="window-control close" onclick="closeWindow('${windowId}')">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    ${appContent}
+                </div>
+                <div class="window-resize-handle"></div>
+            `;
+            
+            document.body.appendChild(window);
+            openWindows.push(windowId);
+            
+            // Tornar janela arrastável
+            makeDraggable(window);
+            
+            // Focar na nova janela
+            focusWindow(windowId);
+        }
+        
+        // Geradores de conteúdo para aplicações místicas
+        function generateCrystalsApp() {
+            return `
+                <div style="padding: 20px; text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; height: 100%; overflow-y: auto;">
+                    <h2>💎 Combine os Cristais</h2>
+                    <p>Descubra as propriedades místicas dos cristais e suas combinações poderosas.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+                            <div style="font-size: 24px;">🔮</div>
+                            <h4>Quartzo</h4>
+                            <p style="font-size: 12px;">Amplificação e clareza</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+                            <div style="font-size: 24px;">💜</div>
+                            <h4>Ametista</h4>
+                            <p style="font-size: 12px;">Proteção e intuição</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+                            <div style="font-size: 24px;">💚</div>
+                            <h4>Quartzo Rosa</h4>
+                            <p style="font-size: 12px;">Amor e cura emocional</p>
+                        </div>
+                    </div>
+                    
+                    <button style="background: var(--dourado); color: var(--azul-escuro); border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                        🔍 Explorar Combinações
+                    </button>
+                </div>
+            `;
+        }
+        
+        function generateHerbsApp() {
+            return `
+                <div style="padding: 20px; text-align: center; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; height: 100%; overflow-y: auto;">
+                    <h2>🌿 Combine as Ervas</h2>
+                    <p>Aprenda sobre as propriedades mágicas das ervas e suas correspondências.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+                            <div style="font-size: 24px;">🌹</div>
+                            <h4>Rosa</h4>
+                            <p style="font-size: 12px;">Amor e proteção</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+                            <div style="font-size: 24px;">🌙</div>
+                            <h4>Lavanda</h4>
+                            <p style="font-size: 12px;">Paz e purificação</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+                            <div style="font-size: 24px;">🔥</div>
+                            <h4>Canela</h4>
+                            <p style="font-size: 12px;">Prosperidade e energia</p>
+                        </div>
+                    </div>
+                    
+                    <button style="background: var(--dourado); color: var(--azul-escuro); border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                        🌱 Criar Mistura
+                    </button>
+                </div>
+            `;
+        }
+        
+        function generateTarotApp() {
+            return `
+                <div style="padding: 20px; text-align: center; background: linear-gradient(135deg, #2c3e50 0%, #4a6741 100%); color: white; height: 100%; overflow-y: auto;">
+                    <h2>🔮 Witch Tarot</h2>
+                    <p>Consulte as cartas e desvende os mistérios do futuro.</p>
+                    
+                    <div style="margin: 30px 0;">
+                        <div style="display: inline-block; background: var(--dourado); color: var(--azul-escuro); padding: 40px 20px; border-radius: 10px; margin: 10px;">
+                            <div style="font-size: 48px;">🃏</div>
+                            <p>Carta do Dia</p>
+                        </div>
+                    </div>
+                    
+                    <button style="background: var(--dourado); color: var(--azul-escuro); border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; margin: 5px;">
+                        🔮 Tirar Carta
+                    </button>
+                    <button style="background: var(--vinho); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; margin: 5px;">
+                        ⭐ Leitura Completa
+                    </button>
+                </div>
+            `;
+        }
+        
+        function generateCalculatorApp() {
+            return `
+                <div style="padding: 20px; background: #c0c0c0; height: 100%; font-family: 'MS Sans Serif', sans-serif;">
+                    <div style="background: white; border: 2px inset #c0c0c0; padding: 10px; margin-bottom: 10px; text-align: right; font-size: 18px; font-family: monospace;">
+                        <div id="calc-display">0</div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="clearCalc()">C</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="calcInput('/')">/</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="calcInput('*')">*</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="calcInput('-')">-</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="calcInput('7')">7</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="calcInput('8')">8</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="calcInput('9')">9</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer; grid-row: span 2;" onclick="calcInput('+')">+</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="calcInput('4')">4</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="calcInput('5')">5</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="calcInput('6')">6</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="calcInput('1')">1</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="calcInput('2')">2</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="calcInput('3')">3</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer; grid-row: span 2;" onclick="calcEquals()">=</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer; grid-column: span 2;" onclick="calcInput('0')">0</button>
+                        <button style="background: #c0c0c0; border: 2px outset #c0c0c0; padding: 15px; cursor: pointer;" onclick="calcInput('.')">.</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateDefaultApp(site) {
+            return `
+                <div style="padding: 40px; text-align: center; background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--vinho) 100%); color: white; height: 100%;">
+                    <div style="font-size: 64px; margin-bottom: 20px;">${site.icon}</div>
+                    <h2>${site.name}</h2>
+                    <p>Esta aplicação mística está sendo desenvolvida...</p>
+                    <p style="font-size: 12px; opacity: 0.8;">Em breve, novas funcionalidades serão adicionadas!</p>
+                    
+                    <button style="background: var(--dourado); color: var(--azul-escuro); border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 20px;">
+                        ✨ Em Desenvolvimento
+                    </button>
+                </div>
+            `;
+        }
+        
+        // Funções da calculadora
+        let calcExpression = '';
+        let calcDisplay = '0';
+        
+        function calcInput(value) {
+            if (calcDisplay === '0' && !isNaN(value)) {
+                calcDisplay = value;
+            } else {
+                calcDisplay += value;
+            }
+            calcExpression += value;
+            document.getElementById('calc-display').textContent = calcDisplay;
+        }
+        
+        function clearCalc() {
+            calcExpression = '';
+            calcDisplay = '0';
+            document.getElementById('calc-display').textContent = calcDisplay;
+        }
+        
+        function calcEquals() {
+            try {
+                const result = eval(calcExpression);
+                calcDisplay = result.toString();
+                calcExpression = result.toString();
+                document.getElementById('calc-display').textContent = calcDisplay;
+            } catch (error) {
+                calcDisplay = 'Erro';
+                calcExpression = '';
+                document.getElementById('calc-display').textContent = calcDisplay;
+            }
         }
         
         // Funções do menu de contexto
@@ -3204,6 +4334,192 @@
             // Atualizar seleções visuais
             generateColorPalette();
             generateWallpaperPresets();
+        }
+        
+        // ========================================
+        // 📸 SISTEMA DE UPLOAD DE FOTO E WALLPAPER
+        // ========================================
+        
+        function uploadProfilePhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Validar tipo de arquivo
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor, selecione apenas arquivos de imagem.');
+                return;
+            }
+            
+            // Validar tamanho (máximo 2MB para foto de perfil)
+            if (file.size > 2 * 1024 * 1024) {
+                alert('A imagem deve ter no máximo 2MB.');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageData = e.target.result;
+                
+                // Atualizar preview
+                const preview = document.getElementById('profilePhotoPreview');
+                preview.innerHTML = `<img src="${imageData}" alt="Foto de Perfil">`;
+                
+                // Salvar no localStorage
+                if (currentUser) {
+                    currentUser.profilePhoto = imageData;
+                    userDatabase[currentUser.email] = currentUser;
+                    localStorage.setItem('auroraOS_users', JSON.stringify(userDatabase));
+                    sessionStorage.setItem('auroraOS_current_user', JSON.stringify(currentUser));
+                }
+                
+                // Notificar Gatomante
+                setTimeout(() => {
+                    gatomanteContextual('personalizacao', { acao: 'foto de perfil atualizada' });
+                }, 1500);
+            };
+            
+            reader.readAsDataURL(file);
+        }
+        
+        function removeProfilePhoto() {
+            // Remover preview
+            const preview = document.getElementById('profilePhotoPreview');
+            preview.innerHTML = '👤';
+            
+            // Remover do usuário
+            if (currentUser) {
+                delete currentUser.profilePhoto;
+                userDatabase[currentUser.email] = currentUser;
+                localStorage.setItem('auroraOS_users', JSON.stringify(userDatabase));
+                sessionStorage.setItem('auroraOS_current_user', JSON.stringify(currentUser));
+            }
+            
+            // Limpar input
+            document.getElementById('profilePhotoInput').value = '';
+        }
+        
+        function uploadWallpaper(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Validar tipo de arquivo
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor, selecione apenas arquivos de imagem.');
+                return;
+            }
+            
+            // Validar tamanho (máximo 5MB para wallpaper)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('A imagem deve ter no máximo 5MB.');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageData = e.target.result;
+                
+                // Mostrar preview
+                const preview = document.getElementById('customWallpaperPreview');
+                preview.style.display = 'block';
+                preview.style.backgroundImage = `url(${imageData})`;
+                
+                // Aplicar wallpaper personalizado
+                applyCustomWallpaper(imageData);
+                
+                // Notificar Gatomante
+                setTimeout(() => {
+                    gatomanteContextual('personalizacao', { acao: 'wallpaper personalizado aplicado' });
+                }, 1500);
+            };
+            
+            reader.readAsDataURL(file);
+        }
+        
+        function applyCustomWallpaper(imageData) {
+            // Aplicar wallpaper personalizado
+            document.body.style.backgroundImage = `url(${imageData})`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
+            document.body.style.backgroundRepeat = 'no-repeat';
+            
+            // Salvar configuração
+            const settings = {
+                theme: currentTheme,
+                wallpaper: 'custom',
+                customWallpaper: imageData,
+                volumes: volumes,
+                showPlanetaryWidget: document.getElementById('showPlanetaryWidget').checked,
+                showNotifications: document.getElementById('showNotifications').checked,
+                showVolumeControl: document.getElementById('showVolumeControl').checked
+            };
+            
+            if (currentUser) {
+                currentUser.settings = settings;
+                userDatabase[currentUser.email] = currentUser;
+                localStorage.setItem('auroraOS_users', JSON.stringify(userDatabase));
+            } else {
+                localStorage.setItem('auroraOS_settings', JSON.stringify(settings));
+            }
+        }
+        
+        function applyCustomColor(colorValue) {
+            // Aplicar cor personalizada como tema
+            document.documentElement.style.setProperty('--theme-primary', colorValue);
+            document.documentElement.style.setProperty('--theme-secondary', adjustBrightness(colorValue, -20));
+            document.documentElement.style.setProperty('--theme-accent', adjustBrightness(colorValue, 20));
+            
+            // Atualizar input hex
+            document.getElementById('colorHexInput').value = colorValue;
+            
+            // Salvar como tema personalizado
+            currentTheme = 'custom';
+            savePersonalization();
+        }
+        
+        function applyCustomHex(hexValue) {
+            if (hexValue.match(/^#[0-9A-F]{6}$/i)) {
+                document.getElementById('customColorInput').value = hexValue;
+                applyCustomColor(hexValue);
+            }
+        }
+        
+        function adjustBrightness(hex, percent) {
+            // Função auxiliar para ajustar brilho da cor
+            const num = parseInt(hex.replace("#", ""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) + amt;
+            const G = (num >> 8 & 0x00FF) + amt;
+            const B = (num & 0x0000FF) + amt;
+            return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        }
+        
+        function loadUserProfilePhoto() {
+            if (currentUser && currentUser.profilePhoto) {
+                const preview = document.getElementById('profilePhotoPreview');
+                if (preview) {
+                    preview.innerHTML = `<img src="${currentUser.profilePhoto}" alt="Foto de Perfil">`;
+                }
+            }
+        }
+        
+        function loadCustomWallpaper() {
+            const settings = currentUser ? currentUser.settings : JSON.parse(localStorage.getItem('auroraOS_settings') || '{}');
+            
+            if (settings.wallpaper === 'custom' && settings.customWallpaper) {
+                document.body.style.backgroundImage = `url(${settings.customWallpaper})`;
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundPosition = 'center';
+                document.body.style.backgroundRepeat = 'no-repeat';
+                
+                // Mostrar preview no modal
+                const preview = document.getElementById('customWallpaperPreview');
+                if (preview) {
+                    preview.style.display = 'block';
+                    preview.style.backgroundImage = `url(${settings.customWallpaper})`;
+                }
+            }
         }
         
         // Sistema Gatomante - Assistente Místico
@@ -3746,6 +5062,15 @@
             updatePlanetaryInfo();
             loadPersonalization();
             
+            // Carregar configurações do sistema AFÁST!
+            loadAfastVoiceSettings();
+            loadAfastNotifications();
+            initAfastSystem();
+            
+            // Carregar foto de perfil e wallpaper personalizado
+            loadUserProfilePhoto();
+            loadCustomWallpaper();
+            
             // Atualiza relógio a cada segundo
             setInterval(updateClock, 1000);
             
@@ -4181,42 +5506,90 @@
         }
         
         // ========================================
-        // 🛡️ SISTEMA AFÁST - ANTIVÍRUS ASTROLÓGICO
+        // 🛡️ SISTEMA AFÁST! - ANTIVÍRUS ASTROLÓGICO
         // ========================================
         
-        // Base de dados de eventos astrológicos
+        // Base de dados de eventos astrológicos reformulada
         const afastEvents = {
             mercuryRetrograde: {
                 name: "Mercúrio Retrógrado",
                 icon: "☿",
-                description: "O planeta da comunicação está em movimento retrógrado, causando possíveis interferências em sistemas de comunicação e tecnologia.",
-                advice: "💡 Recomendação: Faça backup de arquivos importantes e evite assinar contratos importantes neste período.",
-                severity: "high",
-                duration: 21 // dias
+                shortAlert: "Afást! Uma ameaça foi detectada: Mercúrio retrógrado.",
+                description: "Comunicação vulnerável. Reforce sua paciência.",
+                voiceAlert: "Uma ameaça foi detectada: Mercúrio retrógrado. Comunicação vulnerável. Reforce sua paciência.",
+                severity: "critical",
+                duration: 21,
+                color: "#ff4444"
+            },
+            jupiterRetrograde: {
+                name: "Júpiter Retrógrado", 
+                icon: "♃",
+                shortAlert: "Afást! Júpiter retrógrado. Expansões em quarentena.",
+                description: "Expansões bloqueadas. Evite promessas grandiosas.",
+                voiceAlert: "Júpiter em retrógrado. Expansões bloqueadas. Evite promessas grandiosas.",
+                severity: "warning",
+                duration: 120,
+                color: "#ff8800"
+            },
+            fullMoon: {
+                name: "Lua Cheia",
+                icon: "🌕",
+                shortAlert: "Lua Cheia detectada. Emoções em modo máximo.",
+                description: "Emoções instáveis podem comprometer o sistema.",
+                voiceAlert: "Uma ameaça foi detectada: Lua Cheia em andamento. Emoções instáveis podem comprometer o sistema.",
+                severity: "warning",
+                duration: 3,
+                color: "#ffaa00"
+            },
+            newMoon: {
+                name: "Lua Nova",
+                icon: "🌑",
+                shortAlert: "Afást! Lua Nova ativada. Hora de reinicializar intenções.",
+                description: "Rituais e intenções prontos para instalação.",
+                voiceAlert: "Varredura concluída. Lua Nova ativa. Rituais e intenções prontos para instalação.",
+                severity: "info",
+                duration: 3,
+                color: "#4488ff"
+            },
+            marsHour: {
+                name: "Hora de Marte",
+                icon: "♂",
+                shortAlert: "Afást! Hora de Marte: discussões em risco de explosão.",
+                description: "Conflitos em potencial. Proteja seus relacionamentos.",
+                voiceAlert: "Afást! Hora de Marte iniciada. Conflitos em potencial. Proteja seus relacionamentos.",
+                severity: "warning",
+                duration: 1,
+                color: "#ff6600"
+            },
+            venusHour: {
+                name: "Hora de Vênus",
+                icon: "♀",
+                shortAlert: "Hora de Vênus detectada. Vulnerabilidade amorosa ativa.",
+                description: "Ameaça de distrações românticas detectada.",
+                voiceAlert: "Hora de Vênus em curso. Ameaça de distrações românticas detectada.",
+                severity: "info",
+                duration: 1,
+                color: "#ff69b4"
             },
             voidMoon: {
                 name: "Lua Fora de Curso",
                 icon: "🌑",
-                description: "A Lua não faz aspectos maiores antes de mudar de signo, criando um período de energia instável.",
-                advice: "⚠️ Evite: Tomar decisões importantes, iniciar projetos novos ou fazer compras significativas.",
-                severity: "medium",
-                duration: 0.5 // horas
+                shortAlert: "Afást! Lua Fora de Curso. Decisões instáveis detectadas.",
+                description: "Nenhum feitiço seguro até a próxima fase.",
+                voiceAlert: "Uma ameaça foi detectada: Lua Fora de Curso. Decisões correm risco de falha crítica.",
+                severity: "critical",
+                duration: 8,
+                color: "#cc0000"
             },
             eclipse: {
-                name: "Eclipse Detectado",
+                name: "Eclipse Solar/Lunar",
                 icon: "🌘",
-                description: "Um eclipse está ativo, trazendo energias intensas de transformação e mudança.",
-                advice: "🔮 Recomendação: Momento ideal para meditação, limpeza energética e liberação do que não serve mais.",
+                shortAlert: "Afást! Eclipse detectado. Transformações em andamento.",
+                description: "Energias intensas de mudança ativas.",
+                voiceAlert: "Atenção. Eclipse detectado. Energias intensas de transformação em andamento. Sistema em alerta máximo.",
                 severity: "critical",
-                duration: 3 // dias
-            },
-            marsSquare: {
-                name: "Marte em Tensão",
-                icon: "♂",
-                description: "Marte está formando aspectos tensos, aumentando a energia agressiva e conflitos.",
-                advice: "🛡️ Cuidado: Evite discussões desnecessárias e pratique exercícios para canalizar a energia.",
-                severity: "medium",
-                duration: 7 // dias
+                duration: 7,
+                color: "#8800cc"
             }
         };
         
@@ -4282,8 +5655,8 @@
             // Mostrar notificação
             showAfastNotification(notification);
             
-            // Reproduzir alerta sonoro
-            playAfastAlert(event.severity);
+            // Reproduzir alerta sonoro e voz
+            playAfastAlert(event);
             
             // Notificar Gatomante
             setTimeout(() => {
@@ -4292,16 +5665,112 @@
         }
         
         function showAfastNotification(notification) {
-            const afastElement = document.getElementById('afastNotification');
-            const event = notification.event;
+            // Criar notificação estilo MSN no canto inferior direito
+            createMSNStyleNotification(notification.event);
+        }
+        
+        function createMSNStyleNotification(event) {
+            // Remover notificação anterior se existir
+            const existingNotif = document.getElementById('afastMSNNotification');
+            if (existingNotif) {
+                existingNotif.remove();
+            }
             
-            // Atualizar conteúdo
-            document.getElementById('afastEvent').textContent = `${event.icon} ${event.name}`;
-            document.getElementById('afastDescription').textContent = event.description;
-            document.getElementById('afastAdvice').textContent = event.advice;
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.id = 'afastMSNNotification';
+            notification.className = 'afast-msn-notification';
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 60px;
+                right: 20px;
+                width: 300px;
+                background: linear-gradient(135deg, ${event.color}22 0%, ${event.color}44 100%);
+                border: 2px solid ${event.color};
+                border-radius: 8px;
+                padding: 15px;
+                color: white;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 13px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                z-index: 2000;
+                transform: translateX(350px);
+                transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                cursor: pointer;
+            `;
             
-            // Mostrar notificação
-            afastElement.classList.add('active');
+            // Ícone de severidade
+            const severityIcons = {
+                'critical': '🚨',
+                'warning': '⚠️',
+                'info': 'ℹ️'
+            };
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <div style="font-size: 20px; margin-right: 10px;">${severityIcons[event.severity]} ${event.icon}</div>
+                    <div style="font-weight: bold; flex: 1;">AFÁST!</div>
+                    <div style="cursor: pointer; font-size: 16px; opacity: 0.7;" onclick="closeAfastMSNNotification()">×</div>
+                </div>
+                <div style="font-weight: bold; margin-bottom: 5px; font-size: 14px;">${event.shortAlert}</div>
+                <div style="opacity: 0.9; font-size: 12px;">${event.description}</div>
+                <div style="margin-top: 8px; font-size: 11px; opacity: 0.7; text-align: right;">
+                    Clique para fechar
+                </div>
+            `;
+            
+            // Adicionar ao DOM
+            document.body.appendChild(notification);
+            
+            // Animar entrada
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto-fechar baseado na severidade
+            const autoCloseTime = event.severity === 'critical' ? 10000 : 
+                                 event.severity === 'warning' ? 7000 : 5000;
+            
+            setTimeout(() => {
+                closeAfastMSNNotification();
+            }, autoCloseTime);
+            
+            // Fechar ao clicar
+            notification.onclick = closeAfastMSNNotification;
+            
+            // Som de notificação (ping/bip)
+            playNotificationSound();
+        }
+        
+        function closeAfastMSNNotification() {
+            const notification = document.getElementById('afastMSNNotification');
+            if (notification) {
+                notification.style.transform = 'translateX(350px)';
+                setTimeout(() => {
+                    notification.remove();
+                }, 400);
+            }
+        }
+        
+        function playNotificationSound() {
+            // Som simples de notificação (bip/ping)
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.3 * (volumes.notifications / 100) * (volumes.master / 100), audioContext.currentTime + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.2);
+        }
             afastActive = true;
             
             // Auto-ocultar após 15 segundos se não for crítico
@@ -4347,23 +5816,120 @@
             }, 3600000); // 1 hora
         }
         
-        function playAfastAlert(severity) {
-            // Síntese de voz "AFÁSTI!"
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance('AFÁSTI!');
-                utterance.lang = 'pt-BR';
-                utterance.rate = 0.8;
-                utterance.pitch = 1.2;
-                utterance.volume = (volumes.notifications / 100) * (volumes.master / 100);
+        // ========================================
+        // 🎙️ SISTEMA DE VOZ AFÁST! - VOZ FEMININA
+        // ========================================
+        
+        let afastVoiceEnabled = true;
+        let afastFirstTimeToday = true;
+        
+        function playAfastAlert(event) {
+            if (!afastVoiceEnabled || !('speechSynthesis' in window)) return;
+            
+            // Primeira vez do dia - mensagem de boas-vindas
+            if (afastFirstTimeToday) {
+                speakAfastMessage("Boas-vindas ao Afást! O céu está sob vigilância.", 'welcome');
+                afastFirstTimeToday = false;
                 
-                // Repetir baseado na severidade
-                const repeats = severity === 'critical' ? 3 : severity === 'high' ? 2 : 1;
-                
-                for (let i = 0; i < repeats; i++) {
-                    setTimeout(() => {
-                        speechSynthesis.speak(utterance);
-                    }, i * 1500);
+                // Aguardar 3 segundos antes do alerta principal
+                setTimeout(() => {
+                    if (event.severity === 'critical' || event.severity === 'warning') {
+                        speakAfastMessage(event.voiceAlert, event.severity);
+                    }
+                }, 3000);
+            } else {
+                // Apenas eventos críticos e avisos têm voz
+                if (event.severity === 'critical' || event.severity === 'warning') {
+                    speakAfastMessage(event.voiceAlert, event.severity);
                 }
+            }
+        }
+        
+        function speakAfastMessage(message, severity) {
+            const utterance = new SpeechSynthesisUtterance(message);
+            
+            // Configurações da voz feminina
+            utterance.lang = 'pt-BR';
+            utterance.rate = 0.7; // Mais devagar para clareza
+            utterance.pitch = 1.1; // Tom feminino
+            utterance.volume = (volumes.notifications / 100) * (volumes.master / 100);
+            
+            // Ajustar tom conforme severidade
+            switch(severity) {
+                case 'critical':
+                    utterance.pitch = 1.3; // Mais agudo para urgência
+                    utterance.rate = 0.6;  // Mais devagar para ênfase
+                    break;
+                case 'warning':
+                    utterance.pitch = 1.1;
+                    utterance.rate = 0.7;
+                    break;
+                case 'info':
+                    utterance.pitch = 1.0;
+                    utterance.rate = 0.8;
+                    break;
+                case 'welcome':
+                    utterance.pitch = 1.2;
+                    utterance.rate = 0.9;
+                    break;
+            }
+            
+            // Tentar usar voz feminina se disponível
+            const voices = speechSynthesis.getVoices();
+            const femaleVoice = voices.find(voice => 
+                voice.lang.includes('pt') && 
+                (voice.name.toLowerCase().includes('female') || 
+                 voice.name.toLowerCase().includes('feminina') ||
+                 voice.name.toLowerCase().includes('woman'))
+            );
+            
+            if (femaleVoice) {
+                utterance.voice = femaleVoice;
+            }
+            
+            speechSynthesis.speak(utterance);
+        }
+        
+        // Easter eggs - frases raras e engraçadas
+        function getRandomEasterEgg() {
+            const easterEggs = [
+                "Afást! Marte está irritado. Melhor não discutir hoje.",
+                "Afást. A Lua encerrou seu curso. O véu está instável.",
+                "Sistema cósmico instável. Recomendo um chá de camomila.",
+                "Afást! Mercúrio está fazendo das suas novamente.",
+                "Energia planetária detectada. Seus cristais estão vibrando?"
+            ];
+            
+            return easterEggs[Math.floor(Math.random() * easterEggs.length)];
+        }
+        
+        // Configurações de voz do usuário
+        function toggleAfastVoice() {
+            afastVoiceEnabled = !afastVoiceEnabled;
+            const status = afastVoiceEnabled ? 'ativada' : 'desativada';
+            
+            if (afastVoiceEnabled) {
+                speakAfastMessage(`Voz do Afást ${status}.`, 'info');
+            }
+            
+            // Salvar preferência
+            localStorage.setItem('auroraOS_afast_voice', afastVoiceEnabled);
+        }
+        
+        function loadAfastVoiceSettings() {
+            const saved = localStorage.getItem('auroraOS_afast_voice');
+            if (saved !== null) {
+                afastVoiceEnabled = JSON.parse(saved);
+            }
+            
+            // Resetar primeira vez a cada dia
+            const lastDate = localStorage.getItem('auroraOS_afast_last_date');
+            const today = new Date().toDateString();
+            if (lastDate !== today) {
+                afastFirstTimeToday = true;
+                localStorage.setItem('auroraOS_afast_last_date', today);
+            } else {
+                afastFirstTimeToday = false;
             }
         }
         
@@ -4396,6 +5962,166 @@
         function toggleNotificationCenter() {
             const center = document.getElementById('notificationCenter');
             center.classList.toggle('active');
+            
+            // Atualizar estatísticas quando abrir
+            if (center.classList.contains('active')) {
+                updateAfastStats();
+                updateNotificationVisibility();
+            }
+        }
+        
+        // ========================================
+        // 🛡️ FUNÇÕES AVANÇADAS DA CENTRAL AFÁST
+        // ========================================
+        
+        let currentFilter = 'all';
+        
+        function filterNotifications(type) {
+            currentFilter = type;
+            
+            // Atualizar botões ativos
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`filter${type.charAt(0).toUpperCase() + type.slice(1)}`).classList.add('active');
+            
+            updateNotificationVisibility();
+        }
+        
+        function updateNotificationVisibility() {
+            const notifications = document.querySelectorAll('.notification-item');
+            const noNotificationsMsg = document.getElementById('noNotifications');
+            let visibleCount = 0;
+            
+            notifications.forEach(notification => {
+                const severity = notification.dataset.severity || 'info';
+                const shouldShow = currentFilter === 'all' || severity === currentFilter;
+                
+                notification.style.display = shouldShow ? 'block' : 'none';
+                if (shouldShow) visibleCount++;
+            });
+            
+            // Mostrar/ocultar mensagem de "sem notificações"
+            noNotificationsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+        
+        function updateAfastStats() {
+            const total = afastNotifications.length;
+            const critical = afastNotifications.filter(n => n.event.severity === 'critical').length;
+            const today = afastNotifications.filter(n => {
+                const notifDate = new Date(n.timestamp);
+                const todayDate = new Date();
+                return notifDate.toDateString() === todayDate.toDateString();
+            }).length;
+            
+            document.getElementById('totalAlerts').textContent = total;
+            document.getElementById('criticalAlerts').textContent = critical;
+            document.getElementById('todayAlerts').textContent = today;
+        }
+        
+        function clearAllNotifications() {
+            if (confirm('Tem certeza que deseja limpar todas as notificações AFÁST?')) {
+                afastNotifications = [];
+                saveAfastNotifications();
+                
+                // Limpar interface
+                const container = document.getElementById('notificationCenterContent');
+                const notifications = container.querySelectorAll('.notification-item');
+                notifications.forEach(n => n.remove());
+                
+                // Atualizar estatísticas
+                updateAfastStats();
+                updateNotificationVisibility();
+                
+                // Notificar Gatomante
+                setTimeout(() => {
+                    gatomanteContextual('personalizacao', { acao: 'notificações limpas' });
+                }, 1000);
+            }
+        }
+        
+        function exportNotifications() {
+            if (afastNotifications.length === 0) {
+                alert('Não há notificações para exportar.');
+                return;
+            }
+            
+            const exportData = {
+                exportedAt: new Date().toISOString(),
+                user: currentUser ? currentUser.name : 'Usuário Anônimo',
+                totalNotifications: afastNotifications.length,
+                notifications: afastNotifications.map(n => ({
+                    timestamp: n.timestamp,
+                    event: n.event.name,
+                    severity: n.event.severity,
+                    description: n.event.description,
+                    advice: n.event.advice,
+                    acknowledged: n.acknowledged
+                }))
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `afast-notifications-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            // Notificar Gatomante
+            setTimeout(() => {
+                gatomanteContextual('personalizacao', { acao: 'notificações exportadas' });
+            }, 1000);
+        }
+        
+        function afastSettings() {
+            alert('🛡️ Configurações AFÁST\n\n' +
+                  '• Monitoramento: Ativo 24/7\n' +
+                  '• Eventos detectados: Mercúrio retrógrado, Eclipses, Lua fora de curso\n' +
+                  '• Alertas sonoros: Habilitados\n' +
+                  '• Síntese de voz: "AFÁSTI!" ativada\n' +
+                  '• Integração Gatomante: Ativa\n\n' +
+                  'O sistema AFÁST está funcionando perfeitamente!\n' +
+                  'Suas energias estão protegidas. ✨');
+        }
+        
+        // Melhorar função addToNotificationCenter para incluir severidade
+        function addToNotificationCenter(notification) {
+            const container = document.getElementById('notificationCenterContent');
+            const notificationElement = document.createElement('div');
+            notificationElement.className = 'notification-item';
+            notificationElement.dataset.severity = notification.event.severity;
+            
+            const timeStr = notification.timestamp.toLocaleTimeString('pt-BR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            const severityIcon = {
+                'critical': '🚨',
+                'warning': '⚠️',
+                'info': 'ℹ️'
+            }[notification.event.severity] || 'ℹ️';
+            
+            notificationElement.innerHTML = `
+                <div class="notification-item-header">
+                    <span>${severityIcon} ${notification.event.icon} ${notification.event.name}</span>
+                    <div class="notification-item-time">${timeStr}</div>
+                </div>
+                <div class="notification-item-content">${notification.event.description}</div>
+                <div style="font-size: 11px; opacity: 0.8; margin-top: 5px;">${notification.event.advice}</div>
+            `;
+            
+            container.insertBefore(notificationElement, container.firstChild);
+            
+            // Ocultar mensagem de "sem notificações"
+            document.getElementById('noNotifications').style.display = 'none';
+            
+            // Limitar a 50 notificações
+            while (container.children.length > 51) { // +1 por causa da mensagem "no notifications"
+                const lastChild = container.lastChild;
+                if (lastChild && lastChild.classList.contains('notification-item')) {
+                    container.removeChild(lastChild);
+                }
+            }
         }
         
         function saveAfastNotifications() {
