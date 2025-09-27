@@ -1832,30 +1832,339 @@
             background: #1a2a4a;
         }
         
-        /* Menu Iniciar */
+        /* ========================================
+           🌟 MENU INICIAR REVOLUCIONÁRIO
+           Layout em mandala com categorias místicas
+           ======================================== */
+        
         .start-menu {
             position: fixed;
-            bottom: 40px;
-            left: 8px;
-            width: 320px;
-            background: #c0c0c0;
-            border: 2px outset #c0c0c0;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 500px;
+            background: radial-gradient(circle at center, 
+                rgba(30, 20, 60, 0.95) 0%, 
+                rgba(15, 10, 40, 0.98) 70%, 
+                rgba(0, 0, 0, 0.99) 100%);
+            border: 3px solid var(--dourado);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 50px rgba(212, 175, 55, 0.6),
+                inset 0 0 30px rgba(212, 175, 55, 0.2),
+                0 0 100px rgba(0, 0, 0, 0.8);
             z-index: 2500;
             display: none;
-            animation: menuSlideUp 0.2s ease-out;
-            max-height: 500px;
-            overflow-y: auto;
-            border-radius: 4px;
+            animation: mandalaOpen 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
         }
         
         .start-menu.active {
             display: block;
         }
         
-        @keyframes menuSlideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes mandalaOpen {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) scale(0.3) rotate(-180deg);
+                filter: blur(20px);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateX(-50%) scale(1.1) rotate(-90deg);
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1) rotate(0deg);
+                filter: blur(0px);
+            }
+        }
+        
+        /* Centro da mandala - Logo e busca */
+        .mandala-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, var(--dourado) 0%, #8b6914 100%);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 0 30px var(--dourado),
+                inset 0 0 20px rgba(0, 0, 0, 0.3);
+            animation: centerPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes centerPulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 20px var(--dourado),
+                    inset 0 0 15px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                box-shadow: 
+                    0 0 40px var(--dourado),
+                    inset 0 0 25px rgba(0, 0, 0, 0.3);
+            }
+        }
+        
+        .mandala-logo {
+            width: 40px;
+            height: 40px;
+            image-rendering: pixelated;
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.8));
+        }
+        
+        .mandala-search {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+        }
+        
+        .mandala-search input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid var(--dourado);
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--dourado);
+            font-size: 12px;
+            text-align: center;
+            outline: none;
+            backdrop-filter: blur(5px);
+        }
+        
+        .mandala-search input::placeholder {
+            color: rgba(212, 175, 55, 0.7);
+        }
+        
+        .mandala-search input:focus {
+            box-shadow: 0 0 20px var(--dourado);
+            background: rgba(0, 0, 0, 0.9);
+        }
+        
+        /* Roda dos Elementos */
+        .elements-wheel {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .element-sector {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 2px solid transparent;
+        }
+        
+        .element-sector:hover {
+            transform: scale(1.2);
+            border: 2px solid var(--dourado);
+            box-shadow: 0 0 30px var(--dourado);
+        }
+        
+        .element-fire {
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, rgba(255, 69, 0, 0.8) 0%, rgba(139, 21, 56, 0.6) 100%);
+        }
+        
+        .element-earth {
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, rgba(101, 67, 33, 0.8) 0%, rgba(62, 39, 35, 0.6) 100%);
+        }
+        
+        .element-air {
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background: radial-gradient(circle, rgba(135, 206, 235, 0.8) 0%, rgba(70, 130, 180, 0.6) 100%);
+        }
+        
+        .element-water {
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            background: radial-gradient(circle, rgba(0, 191, 255, 0.8) 0%, rgba(30, 144, 255, 0.6) 100%);
+        }
+        
+        .element-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.8));
+        }
+        
+        .element-name {
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        /* Aplicações em órbita */
+        .app-orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        .app-item {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            backdrop-filter: blur(3px);
+        }
+        
+        .app-item:hover {
+            transform: scale(1.3);
+            background: rgba(212, 175, 55, 0.2);
+            border: 2px solid var(--dourado);
+            box-shadow: 0 0 20px var(--dourado);
+        }
+        
+        .app-item.hidden {
+            display: none;
+        }
+        
+        .app-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+        
+        .app-name {
+            font-size: 8px;
+            color: white;
+            text-align: center;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+            line-height: 1;
+        }
+        
+        /* Ações rápidas na borda */
+        .quick-actions-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 550px;
+            height: 550px;
+            border-radius: 50%;
+        }
+        
+        .quick-action {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        }
+        
+        .quick-action:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 25px var(--dourado);
+        }
+        
+        .quick-action.personalize {
+            top: 20px;
+            right: 80px;
+        }
+        
+        .quick-action.help {
+            bottom: 20px;
+            right: 80px;
+        }
+        
+        .quick-action.logout {
+            bottom: 20px;
+            left: 80px;
+            background: rgba(220, 38, 38, 0.8);
+        }
+        
+        /* Partículas místicas de fundo */
+        .mandala-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+        
+        .mandala-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--dourado);
+            border-radius: 50%;
+            animation: mandalaParticleFloat 8s ease-in-out infinite;
+            opacity: 0;
+        }
+        
+        @keyframes mandalaParticleFloat {
+            0%, 100% {
+                opacity: 0;
+                transform: translateY(100%) scale(0) rotate(0deg);
+            }
+            20% {
+                opacity: 1;
+                transform: translateY(80%) scale(1) rotate(90deg);
+            }
+            80% {
+                opacity: 1;
+                transform: translateY(20%) scale(1) rotate(270deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(0%) scale(0) rotate(360deg);
+            }
         }
         
         .start-menu-header {
@@ -2643,43 +2952,62 @@
     </div>
     
     <!-- Menu Iniciar -->
+    <!-- 🌟 MENU INICIAR REVOLUCIONÁRIO - MANDALA MÍSTICA -->
     <div class="start-menu" id="startMenu">
-        <div class="start-menu-header">
-            <span class="logo">
-                <img src="mysticsoft-logo.png" alt="MysticSoft" style="width: 20px; height: 20px; image-rendering: pixelated;">
-            </span>
-            <span>Aurora OS • MysticSoft</span>
+        <!-- Partículas místicas de fundo -->
+        <div class="mandala-particles" id="mandalaParticles">
+            <!-- Partículas serão geradas dinamicamente -->
         </div>
         
-        <!-- Campo de Busca Inteligente -->
-        <div class="start-menu-search">
-            <input type="text" id="startMenuSearch" placeholder="🔍 Buscar aplicações..." 
-                   oninput="filterStartMenu(this.value)" 
-                   onkeydown="handleSearchKeydown(event)"
-                   style="width: 100%; padding: 8px 12px; border: 1px solid #555; background: #333; color: #fff; border-radius: 4px; font-size: 14px; outline: none;">
+        <!-- Campo de busca no topo -->
+        <div class="mandala-search">
+            <input type="text" id="mandalaSearch" placeholder="🔮 Buscar nos mistérios..." 
+                   oninput="filterMandalaApps(this.value)" 
+                   onkeydown="handleMandalaSearch(event)">
         </div>
         
-        <div class="start-menu-items" id="startMenuItems">
-            <!-- Itens do menu serão gerados dinamicamente -->
+        <!-- Centro da mandala com logo -->
+        <div class="mandala-center">
+            <img src="mysticsoft-logo.png" alt="MysticSoft" class="mandala-logo">
+            <div style="font-size: 8px; color: rgba(0,0,0,0.8); font-weight: bold; margin-top: 4px;">AURORA OS</div>
         </div>
         
-        <div class="start-menu-separator"></div>
-        
-        <!-- Ações Rápidas -->
-        <div class="start-menu-quick-actions">
-            <button onclick="openPersonalization()" class="quick-action-btn" title="Personalização">
-                🎨 Personalizar
-            </button>
-            <button onclick="openSystemHelp()" class="quick-action-btn" title="Ajuda">
-                ❓ Ajuda
-            </button>
-            <button onclick="performLogout()" class="quick-action-btn logout-btn" title="Sair">
-                🚪 Sair
-            </button>
+        <!-- Roda dos 4 Elementos -->
+        <div class="elements-wheel">
+            <div class="element-sector element-fire" onclick="filterByElement('fire')" title="Aplicações de Fogo - Criatividade e Ação">
+                <div class="element-icon">🔥</div>
+                <div class="element-name">FOGO</div>
+            </div>
+            <div class="element-sector element-earth" onclick="filterByElement('earth')" title="Aplicações de Terra - Estabilidade e Materialização">
+                <div class="element-icon">🌍</div>
+                <div class="element-name">TERRA</div>
+            </div>
+            <div class="element-sector element-air" onclick="filterByElement('air')" title="Aplicações de Ar - Comunicação e Intelecto">
+                <div class="element-icon">💨</div>
+                <div class="element-name">AR</div>
+            </div>
+            <div class="element-sector element-water" onclick="filterByElement('water')" title="Aplicações de Água - Emoção e Intuição">
+                <div class="element-icon">🌊</div>
+                <div class="element-name">ÁGUA</div>
+            </div>
         </div>
         
-        <div class="start-menu-footer">
-            <span id="startMenuStatus">Clique em qualquer item para abrir</span>
+        <!-- Órbita das aplicações -->
+        <div class="app-orbit" id="appOrbit">
+            <!-- Aplicações serão posicionadas dinamicamente em círculo -->
+        </div>
+        
+        <!-- Ações rápidas na borda externa -->
+        <div class="quick-actions-ring">
+            <div class="quick-action personalize" onclick="openPersonalization()" title="Personalização Mística">
+                🎨
+            </div>
+            <div class="quick-action help" onclick="openSystemHelp()" title="Grimório de Ajuda">
+                ❓
+            </div>
+            <div class="quick-action logout" onclick="performLogout()" title="Sair dos Mistérios">
+                🚪
+            </div>
         </div>
     </div>
     
@@ -3451,17 +3779,250 @@
             }
         }
         
-        function generateStartMenu() {
-            const container = document.getElementById('startMenuItems');
+        // ========================================
+        // 🌟 SISTEMA DE MENU MANDALA REVOLUCIONÁRIO
+        // ========================================
+        
+        let currentElementFilter = null;
+        let mandalaApps = [];
+        
+        function generateMandalaMenu() {
+            // Configurar aplicações com elementos místicos
+            mandalaApps = [
+                // FOGO - Criatividade e Ação
+                { name: 'Processador de Texto', icon: '📝', element: 'fire', action: () => openTextProcessor() },
+                { name: 'Combine os Cristais', icon: '💎', element: 'fire', action: () => openMysticalApp({id: 'crystals', name: 'Combine os Cristais', icon: '💎'}) },
+                { name: 'Witch Tarot', icon: '🔮', element: 'fire', action: () => openMysticalApp({id: 'tarot', name: 'Witch Tarot', icon: '🔮'}) },
+                { name: 'Jogo da Cobrinha', icon: '🐍', element: 'fire', action: () => openMysticalApp({id: 'snake', name: 'Jogo da Cobrinha', icon: '🐍'}) },
+                
+                // TERRA - Estabilidade e Materialização
+                { name: 'Pasta Documentos', icon: '📁', element: 'earth', action: () => openDocumentsFolder() },
+                { name: 'Combine as Ervas', icon: '🌿', element: 'earth', action: () => openMysticalApp({id: 'herbs', name: 'Combine as Ervas', icon: '🌿'}) },
+                { name: 'Árvore da Vida', icon: '🌳', element: 'earth', action: () => openMysticalApp({id: 'tree', name: 'Árvore da Vida', icon: '🌳'}) },
+                { name: 'Calculadora', icon: '🔢', element: 'earth', action: () => openMysticalApp({id: 'calc', name: 'Calculadora', icon: '🔢'}) },
+                
+                // AR - Comunicação e Intelecto
+                { name: 'Livros Interativos', icon: '📚', element: 'air', action: () => openMysticalApp({id: 'books', name: 'Livros Interativos', icon: '📚'}) },
+                { name: 'Estrelas Fixas', icon: '⭐', element: 'air', action: () => openMysticalApp({id: 'stars', name: 'Estrelas Fixas', icon: '⭐'}) },
+                { name: 'Paciência', icon: '🃏', element: 'air', action: () => openMysticalApp({id: 'solitaire', name: 'Paciência', icon: '🃏'}) },
+                { name: 'Ajuda do Sistema', icon: '❓', element: 'air', action: () => openSystemHelp() },
+                
+                // ÁGUA - Emoção e Intuição
+                { name: 'Roda do Ano', icon: '🎡', element: 'water', action: () => openMysticalApp({id: 'wheel', name: 'Roda do Ano', icon: '🎡'}) },
+                { name: 'Combine as Cartas', icon: '🃏', element: 'water', action: () => openMysticalApp({id: 'cards', name: 'Combine as Cartas', icon: '🃏'}) },
+                { name: 'Lixeira', icon: '🗑️', element: 'water', action: () => openTrash() },
+                { name: 'Visualizador de Vídeos', icon: '🎬', element: 'water', action: () => openMysticalApp({id: 'video', name: 'Visualizador de Vídeos', icon: '🎬'}) }
+            ];
+            
+            // Adicionar sites externos como aplicações místicas
+            sitesConfig.forEach(site => {
+                if (site.category === 'basic') {
+                    mandalaApps.push({
+                        name: site.name,
+                        icon: site.icon,
+                        element: getElementForSite(site.name),
+                        action: () => openSite(site.id)
+                    });
+                }
+            });
+            
+            renderMandalaApps();
+            createMandalaParticles();
+        }
+        
+        function getElementForSite(siteName) {
+            // Classificar sites por elemento baseado no nome/função
+            const fireKeywords = ['game', 'jogo', 'create', 'art', 'music'];
+            const earthKeywords = ['work', 'business', 'money', 'shop', 'store'];
+            const airKeywords = ['social', 'chat', 'news', 'search', 'learn'];
+            const waterKeywords = ['video', 'stream', 'emotion', 'love', 'spiritual'];
+            
+            const name = siteName.toLowerCase();
+            
+            if (fireKeywords.some(keyword => name.includes(keyword))) return 'fire';
+            if (earthKeywords.some(keyword => name.includes(keyword))) return 'earth';
+            if (airKeywords.some(keyword => name.includes(keyword))) return 'air';
+            return 'water'; // Default para água
+        }
+        
+        function renderMandalaApps() {
+            const orbit = document.getElementById('appOrbit');
+            orbit.innerHTML = '';
+            
+            let appsToShow = mandalaApps;
+            if (currentElementFilter) {
+                appsToShow = mandalaApps.filter(app => app.element === currentElementFilter);
+            }
+            
+            const totalApps = appsToShow.length;
+            const angleStep = (2 * Math.PI) / totalApps;
+            const radius = 200; // Raio da órbita
+            
+            appsToShow.forEach((app, index) => {
+                const angle = index * angleStep - Math.PI / 2; // Começar do topo
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+                
+                const appElement = document.createElement('div');
+                appElement.className = 'app-item';
+                appElement.style.left = `calc(50% + ${x}px - 30px)`;
+                appElement.style.top = `calc(50% + ${y}px - 30px)`;
+                appElement.onclick = app.action;
+                appElement.title = app.name;
+                
+                // Adicionar classe do elemento para efeitos visuais
+                appElement.classList.add(`element-${app.element}`);
+                
+                appElement.innerHTML = `
+                    <div class="app-icon">${app.icon}</div>
+                    <div class="app-name">${app.name.split(' ')[0]}</div>
+                `;
+                
+                // Animação de entrada escalonada
+                appElement.style.animationDelay = `${index * 0.1}s`;
+                appElement.style.animation = 'appOrbitEntry 0.6s ease-out forwards';
+                
+                orbit.appendChild(appElement);
+            });
+        }
+        
+        function createMandalaParticles() {
+            const container = document.getElementById('mandalaParticles');
             container.innerHTML = '';
             
-            // ========================================
-            // 📁 APLICAÇÕES DO SISTEMA
-            // ========================================
+            // Criar 20 partículas místicas
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'mandala-particle';
+                
+                // Posição aleatória
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (6 + Math.random() * 4) + 's';
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        function filterByElement(element) {
+            if (currentElementFilter === element) {
+                // Se já está filtrado por este elemento, remover filtro
+                currentElementFilter = null;
+                document.querySelectorAll('.element-sector').forEach(el => el.classList.remove('active'));
+            } else {
+                // Aplicar novo filtro
+                currentElementFilter = element;
+                document.querySelectorAll('.element-sector').forEach(el => el.classList.remove('active'));
+                document.querySelector(`.element-${element}`).classList.add('active');
+            }
             
-            // Aplicações essenciais do sistema
-            const systemApps = [
-                { name: 'Processador de Texto', icon: '📝', action: () => openTextProcessor() },
+            renderMandalaApps();
+            
+            // Notificar Gatomante sobre filtro
+            const elementNames = {
+                fire: 'Fogo - Criatividade e Ação',
+                earth: 'Terra - Estabilidade e Materialização', 
+                air: 'Ar - Comunicação e Intelecto',
+                water: 'Água - Emoção e Intuição'
+            };
+            
+            setTimeout(() => {
+                if (currentElementFilter) {
+                    gatomanteContextual('navegacao', { 
+                        acao: `filtro por elemento ${elementNames[element]} aplicado` 
+                    });
+                } else {
+                    gatomanteContextual('navegacao', { acao: 'filtro de elemento removido' });
+                }
+            }, 500);
+        }
+        
+        function filterMandalaApps(searchTerm) {
+            const orbit = document.getElementById('appOrbit');
+            const apps = orbit.querySelectorAll('.app-item');
+            
+            if (!searchTerm.trim()) {
+                apps.forEach(app => app.classList.remove('hidden'));
+                return;
+            }
+            
+            const term = searchTerm.toLowerCase();
+            let visibleCount = 0;
+            
+            apps.forEach(app => {
+                const name = app.title.toLowerCase();
+                if (name.includes(term)) {
+                    app.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    app.classList.add('hidden');
+                }
+            });
+            
+            // Notificar sobre resultados da busca
+            if (visibleCount === 0) {
+                gatomanteContextual('navegacao', { acao: 'busca sem resultados nos mistérios' });
+            }
+        }
+        
+        function handleMandalaSearch(event) {
+            if (event.key === 'Enter') {
+                const visibleApps = document.querySelectorAll('.app-item:not(.hidden)');
+                if (visibleApps.length > 0) {
+                    visibleApps[0].click();
+                    hideStartMenu();
+                }
+            } else if (event.key === 'Escape') {
+                event.target.value = '';
+                filterMandalaApps('');
+            }
+        }
+        
+        // Adicionar CSS para animações dinâmicas
+        const mandalaStyles = document.createElement('style');
+        mandalaStyles.textContent = `
+            @keyframes appOrbitEntry {
+                0% {
+                    opacity: 0;
+                    transform: scale(0) rotate(-180deg);
+                }
+                70% {
+                    opacity: 1;
+                    transform: scale(1.2) rotate(-20deg);
+                }
+                100% {
+                    opacity: 1;
+                    transform: scale(1) rotate(0deg);
+                }
+            }
+            
+            .element-sector.active {
+                transform: scale(1.3) !important;
+                border: 3px solid var(--dourado) !important;
+                box-shadow: 0 0 40px var(--dourado) !important;
+            }
+            
+            .app-item.element-fire:hover {
+                box-shadow: 0 0 25px #ff4500 !important;
+            }
+            
+            .app-item.element-earth:hover {
+                box-shadow: 0 0 25px #8b4513 !important;
+            }
+            
+            .app-item.element-air:hover {
+                box-shadow: 0 0 25px #87ceeb !important;
+            }
+            
+            .app-item.element-water:hover {
+                box-shadow: 0 0 25px #00bfff !important;
+            }
+        `;
+        document.head.appendChild(mandalaStyles);
+        
+        function generateStartMenu() {
+            // Função legacy mantida para compatibilidade
+            generateMandalaMenu();
                 { name: 'Pasta Documentos', icon: '📁', action: () => openDocumentsFolder() },
                 { name: 'Ajuda do Sistema', icon: '❓', action: () => openSystemHelp() },
                 { name: 'Lixeira', icon: '🗑️', action: () => openTrash() }
