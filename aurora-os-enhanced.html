@@ -1,0 +1,4674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora OS • MysticSoft</title>
+    <link href="https://fonts.googleapis.com/css2?family=Alice&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        
+        :root {
+            /* Tema Aurora Sagrada */
+            --vinho: #3e0a29;
+            --verde-claro: #b2d1b1;
+            --azul-escuro: #0b1836;
+            --dourado: #f0aa53;
+            --pergaminho: #f2eaff;
+            
+            /* Variáveis de tema dinâmicas */
+            --theme-bg: linear-gradient(135deg, var(--azul-escuro) 0%, var(--vinho) 100%);
+            --theme-taskbar: var(--vinho);
+            --theme-start-btn: var(--vinho);
+            --theme-start-text: var(--dourado);
+            --theme-clock: var(--dourado);
+            --theme-window-header: var(--azul-escuro);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+            background: var(--theme-bg);
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        /* Telas de Boot e Boas-vindas */
+        .boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--azul-escuro) 0%, #000 50%, var(--vinho) 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--pergaminho);
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+        
+        .boot-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .boot-logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+            animation: logoGlow 2s ease-in-out infinite;
+            text-shadow: 0 0 20px var(--dourado);
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 10px var(--dourado));
+                transform: scale(1);
+            }
+            50% { 
+                filter: drop-shadow(0 0 30px var(--dourado));
+                transform: scale(1.05);
+            }
+        }
+        
+        .boot-title {
+            font-family: 'Alice', serif;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--dourado);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            animation: titleFade 3s ease-in-out;
+        }
+        
+        @keyframes titleFade {
+            0% { opacity: 0; transform: translateY(20px); }
+            50% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .boot-subtitle {
+            font-family: 'Alice', serif;
+            font-size: 16px;
+            color: var(--verde-claro);
+            margin-bottom: 40px;
+            font-style: italic;
+            animation: subtitleFade 3s ease-in-out 0.5s both;
+        }
+        
+        @keyframes subtitleFade {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .boot-progress {
+            width: 300px;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid var(--dourado);
+        }
+        
+        .boot-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--dourado), var(--verde-claro));
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--dourado);
+        }
+        
+        .boot-status {
+            font-size: 12px;
+            color: var(--pergaminho);
+            opacity: 0.8;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes statusPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--vinho) 100%);
+            z-index: 9998;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--pergaminho);
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        
+        .welcome-screen.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .welcome-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .welcome-content {
+            text-align: center;
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            border: 2px solid var(--dourado);
+            box-shadow: 0 0 30px rgba(240, 170, 83, 0.3);
+            animation: welcomeFloat 0.8s ease-out;
+        }
+        
+        @keyframes welcomeFloat {
+            0% { 
+                opacity: 0; 
+                transform: translateY(50px) scale(0.9); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+        
+        .welcome-gatomante {
+            font-size: 64px;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            animation: gatomanteWelcome 2s ease-in-out infinite;
+        }
+        
+        @keyframes gatomanteWelcome {
+            0%, 100% { transform: translateY(0px) rotate(-2deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+        
+        .welcome-gatomante::after {
+            content: '👓';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: var(--dourado);
+            animation: glassesSparkle 3s ease-in-out infinite;
+        }
+        
+        @keyframes glassesSparkle {
+            0%, 100% { 
+                filter: drop-shadow(0 0 5px var(--dourado));
+                opacity: 1;
+            }
+            50% { 
+                filter: drop-shadow(0 0 15px var(--dourado));
+                opacity: 0.7;
+            }
+        }
+        
+        .welcome-title {
+            font-family: 'Alice', serif;
+            font-size: 28px;
+            color: var(--dourado);
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        
+        .welcome-message {
+            font-family: 'Alice', serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--pergaminho);
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .welcome-button {
+            background: linear-gradient(135deg, var(--vinho), var(--azul-escuro));
+            color: var(--dourado);
+            border: 2px solid var(--dourado);
+            padding: 12px 30px;
+            font-size: 14px;
+            font-family: 'Alice', serif;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .welcome-button:hover {
+            background: linear-gradient(135deg, var(--azul-escuro), var(--vinho));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(240, 170, 83, 0.4);
+        }
+        
+        .welcome-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .mystical-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            color: var(--dourado);
+            font-size: 12px;
+            opacity: 0.6;
+            animation: particleFloat 8s linear infinite;
+        }
+        
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Sistema de Autenticação */
+        .auth-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--vinho) 100%);
+            z-index: 9997;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--pergaminho);
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        
+        .auth-screen.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .auth-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .auth-container {
+            background: rgba(0,0,0,0.4);
+            border: 2px solid var(--dourado);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 0 30px rgba(240, 170, 83, 0.3);
+            animation: authFloat 0.8s ease-out;
+        }
+        
+        @keyframes authFloat {
+            0% { 
+                opacity: 0; 
+                transform: translateY(50px) scale(0.9); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .auth-logo {
+            font-size: 48px;
+            margin-bottom: 15px;
+            animation: logoGlow 2s ease-in-out infinite;
+        }
+        
+        .auth-title {
+            font-family: 'Alice', serif;
+            font-size: 24px;
+            color: var(--dourado);
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        
+        .auth-subtitle {
+            font-family: 'Alice', serif;
+            font-size: 14px;
+            color: var(--verde-claro);
+            font-style: italic;
+        }
+        
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .auth-field {
+            position: relative;
+        }
+        
+        .auth-label {
+            display: block;
+            font-family: 'Alice', serif;
+            font-size: 12px;
+            color: var(--verde-claro);
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .auth-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid var(--azul-escuro);
+            border-radius: 8px;
+            color: var(--pergaminho);
+            font-family: 'Alice', serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-input:focus {
+            outline: none;
+            border-color: var(--dourado);
+            box-shadow: 0 0 10px rgba(240, 170, 83, 0.3);
+            background: rgba(0,0,0,0.5);
+        }
+        
+        .auth-input::placeholder {
+            color: rgba(242, 234, 255, 0.6);
+            font-style: italic;
+        }
+        
+        .auth-section-title {
+            font-family: 'Alice', serif;
+            font-size: 16px;
+            color: var(--dourado);
+            font-weight: bold;
+            margin: 20px 0 5px 0;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        
+        .auth-section-subtitle {
+            font-family: 'Alice', serif;
+            font-size: 12px;
+            color: var(--verde-claro);
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .auth-checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .auth-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--dourado);
+        }
+        
+        .auth-checkbox-label {
+            font-family: 'Alice', serif;
+            font-size: 12px;
+            color: var(--pergaminho);
+            cursor: pointer;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .auth-button {
+            background: linear-gradient(135deg, var(--vinho), var(--azul-escuro));
+            color: var(--dourado);
+            border: 2px solid var(--dourado);
+            padding: 12px 20px;
+            font-size: 14px;
+            font-family: 'Alice', serif;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .auth-button:hover {
+            background: linear-gradient(135deg, var(--azul-escuro), var(--vinho));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(240, 170, 83, 0.4);
+        }
+        
+        .auth-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .auth-button.secondary {
+            background: transparent;
+            color: var(--verde-claro);
+            border-color: var(--verde-claro);
+        }
+        
+        .auth-button.secondary:hover {
+            background: rgba(178, 209, 177, 0.1);
+            color: var(--pergaminho);
+        }
+        
+        .auth-button.demo {
+            background: linear-gradient(135deg, #8b1538 0%, #3e0a29 100%);
+            border: 2px solid var(--dourado);
+            color: var(--dourado);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-button.demo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(240, 170, 83, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .auth-button.demo:hover::before {
+            left: 100%;
+        }
+        
+        .auth-button.demo:hover {
+            background: linear-gradient(135deg, #a01a42 0%, #4a0c30 100%);
+            box-shadow: 0 0 15px rgba(240, 170, 83, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .auth-divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            color: var(--verde-claro);
+            font-family: 'Alice', serif;
+            font-size: 12px;
+        }
+        
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: var(--verde-claro);
+        }
+        
+        .auth-divider::before {
+            left: 0;
+        }
+        
+        .auth-divider::after {
+            right: 0;
+        }
+        
+        .auth-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .auth-link {
+            color: var(--verde-claro);
+            text-decoration: none;
+            font-family: 'Alice', serif;
+            font-size: 12px;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .auth-link:hover {
+            color: var(--dourado);
+            text-decoration: underline;
+        }
+        
+        .auth-error {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid #ff6b6b;
+            color: #ffcccb;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-family: 'Alice', serif;
+        }
+        
+        .auth-success {
+            background: rgba(178, 209, 177, 0.2);
+            border: 1px solid var(--verde-claro);
+            color: var(--verde-claro);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-family: 'Alice', serif;
+        }
+        
+        .auth-loading {
+            display: none;
+            text-align: center;
+            color: var(--dourado);
+            font-family: 'Alice', serif;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        
+        .auth-loading.active {
+            display: block;
+        }
+        
+        .auth-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(240, 170, 83, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--dourado);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Desktop */
+        .desktop {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 40px);
+            background: var(--theme-bg);
+            background-attachment: fixed;
+        }
+        
+        .desktop-icons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, 80px);
+            gap: 20px;
+            padding: 20px;
+            height: 100%;
+            align-content: start;
+        }
+        
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .desktop-icon:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .desktop-icon .icon {
+            font-size: 32px;
+            margin-bottom: 4px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+            animation: iconBreathe 3s ease-in-out infinite;
+        }
+        
+        .desktop-icon.premium .icon::after {
+            content: '⭐';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 16px;
+            color: var(--dourado);
+            text-shadow: 0 0 5px var(--dourado);
+            animation: starGlow 2s ease-in-out infinite;
+        }
+        
+        .desktop-icon .label {
+            color: white;
+            font-size: 10px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            max-width: 70px;
+            word-wrap: break-word;
+        }
+        
+        @keyframes iconBreathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes starGlow {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        /* Menu de Contexto (Botão Direito) */
+        .context-menu {
+            position: fixed;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            z-index: 3000;
+            display: none;
+            min-width: 200px;
+        }
+        
+        .context-menu-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: black;
+            border-bottom: 1px solid #a0a0a0;
+        }
+        
+        .context-menu-item:hover {
+            background: #316AC5;
+            color: white;
+        }
+        
+        .context-menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .context-menu-separator {
+            height: 1px;
+            background: #808080;
+            margin: 2px 0;
+        }
+        
+        /* Taskbar Aprimorada */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--theme-taskbar), #2a0a1f);
+            border-top: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .start-button {
+            background: linear-gradient(to bottom, var(--theme-start-btn), #2a0a1f);
+            border: 1px outset var(--theme-start-btn);
+            color: var(--theme-start-text);
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            transition: all 0.1s;
+            border-radius: 4px;
+        }
+        
+        .start-button:hover {
+            background: linear-gradient(to bottom, #4a1a35, var(--theme-start-btn));
+        }
+        
+        .start-button:active {
+            border: 1px inset var(--theme-start-btn);
+        }
+        
+        .start-logo {
+            font-size: 16px;
+            filter: drop-shadow(0 0 3px var(--dourado));
+        }
+        
+        .taskbar-items {
+            flex: 1;
+            display: flex;
+            gap: 4px;
+            margin-left: 12px;
+        }
+        
+        .taskbar-item {
+            background: rgba(255,255,255,0.1);
+            border: 1px outset rgba(255,255,255,0.2);
+            color: white;
+            padding: 4px 10px;
+            cursor: pointer;
+            font-size: 10px;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            border-radius: 3px;
+        }
+        
+        .taskbar-item:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .taskbar-item.active {
+            background: rgba(255,255,255,0.3);
+            border: 1px inset rgba(255,255,255,0.2);
+        }
+        
+        /* Área direita da taskbar */
+        .taskbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .taskbar-widget {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px outset rgba(255,255,255,0.2);
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            color: var(--theme-clock);
+            text-shadow: 0 0 3px var(--dourado);
+            transition: all 0.1s;
+        }
+        
+        .taskbar-widget:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .taskbar-widget:active {
+            border: 1px inset rgba(255,255,255,0.2);
+        }
+        
+        .planetary-symbol {
+            font-size: 14px;
+            animation: planetGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes planetGlow {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; text-shadow: 0 0 8px var(--dourado); }
+        }
+        
+        .clock {
+            color: var(--theme-clock);
+            font-size: 11px;
+            font-weight: bold;
+            text-shadow: 0 0 3px var(--dourado);
+        }
+        
+        .notification-icon, .volume-icon {
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 3px;
+            transition: all 0.1s;
+        }
+        
+        .notification-icon:hover, .volume-icon:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* Popups */
+        .popup {
+            position: fixed;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            z-index: 2000;
+            display: none;
+            border-radius: 4px;
+        }
+        
+        .popup.active {
+            display: block;
+        }
+        
+        /* Calendário Popup */
+        .calendar-popup {
+            bottom: 50px;
+            right: 10px;
+            width: 280px;
+            padding: 12px;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        
+        .calendar-nav {
+            background: #d0d0d0;
+            border: 1px outset #d0d0d0;
+            cursor: pointer;
+            padding: 2px 6px;
+            font-size: 10px;
+        }
+        
+        .calendar-nav:hover {
+            background: #e0e0e0;
+        }
+        
+        .calendar-nav:active {
+            border: 1px inset #d0d0d0;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            text-align: center;
+        }
+        
+        .calendar-day-header {
+            font-size: 9px;
+            font-weight: bold;
+            padding: 4px 2px;
+            background: #a0a0a0;
+            color: white;
+        }
+        
+        .calendar-day {
+            padding: 4px 2px;
+            cursor: pointer;
+            font-size: 10px;
+            border-radius: 2px;
+        }
+        
+        .calendar-day:hover {
+            background: #316AC5;
+            color: white;
+        }
+        
+        .calendar-day.today {
+            background: var(--dourado);
+            color: black;
+            font-weight: bold;
+        }
+        
+        .calendar-day.other-month {
+            color: #808080;
+        }
+        
+        /* Volume Popup */
+        .volume-popup {
+            bottom: 50px;
+            right: 10px;
+            width: 200px;
+            padding: 12px;
+        }
+        
+        .volume-control {
+            margin-bottom: 8px;
+        }
+        
+        .volume-label {
+            font-size: 10px;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+        
+        .volume-slider {
+            width: 100%;
+            height: 4px;
+            background: #808080;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .volume-fill {
+            height: 100%;
+            background: var(--dourado);
+            border-radius: 2px;
+            transition: width 0.1s;
+        }
+        
+        .volume-thumb {
+            position: absolute;
+            top: -4px;
+            width: 12px;
+            height: 12px;
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translateX(-50%);
+        }
+        
+        /* Planetary Info Popup */
+        .planetary-popup {
+            bottom: 50px;
+            right: 10px;
+            width: 300px;
+            padding: 12px;
+        }
+        
+        .planetary-info {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        
+        .planetary-current {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--azul-escuro);
+        }
+        
+        .planetary-time {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .planetary-ruler {
+            font-size: 12px;
+            color: var(--vinho);
+            font-weight: bold;
+        }
+        
+        /* Gatomante - Assistente Místico */
+        .gatomante-container {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            z-index: 3000;
+            display: none;
+            animation: gatomanteAppear 0.5s ease-out;
+        }
+        
+        .gatomante-container.active {
+            display: block;
+        }
+        
+        @keyframes gatomanteAppear {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px) scale(0.8); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+        
+        .gatomante-character {
+            position: relative;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .gatomante-sprite {
+            position: relative;
+            display: inline-block;
+            font-size: 48px;
+            animation: gatomanteIdle 3s ease-in-out infinite;
+            cursor: pointer;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes gatomanteIdle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+        }
+        
+        .gatomante-body {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .gatomante-glasses {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: var(--dourado);
+            z-index: 2;
+            animation: glassesGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes glassesGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 3px var(--dourado)); 
+                opacity: 1;
+            }
+            50% { 
+                filter: drop-shadow(0 0 8px var(--dourado)); 
+                opacity: 0.8;
+            }
+        }
+        
+        .gatomante-bubble {
+            background: var(--pergaminho);
+            border: 2px solid var(--azul-escuro);
+            border-radius: 15px;
+            padding: 12px 16px;
+            max-width: 280px;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: bubbleFloat 0.3s ease-out;
+        }
+        
+        @keyframes bubbleFloat {
+            from { 
+                opacity: 0; 
+                transform: translateY(10px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .gatomante-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 30px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--azul-escuro);
+        }
+        
+        .gatomante-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 31px;
+            width: 0;
+            height: 0;
+            border-left: 9px solid transparent;
+            border-right: 9px solid transparent;
+            border-top: 9px solid var(--pergaminho);
+        }
+        
+        .gatomante-text {
+            color: var(--azul-escuro);
+            font-size: 12px;
+            line-height: 1.4;
+            font-family: 'Alice', serif;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+        
+        .gatomante-close {
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            background: var(--vinho);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .gatomante-close:hover {
+            background: #a0073a;
+            transform: scale(1.1);
+        }
+        
+        .gatomante-thinking {
+            animation: gatomanteThinking 1s ease-in-out infinite;
+        }
+        
+        @keyframes gatomanteThinking {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+        
+        /* Sistema AFÁST - Antivírus Astrológico */
+        .afast-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #8b1538 0%, #3e0a29 100%);
+            border: 3px solid #f0aa53;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 350px;
+            z-index: 2000;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            transform: translateX(400px);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            color: #f2eaff;
+            font-family: 'Alice', serif;
+        }
+        
+        .afast-notification.active {
+            transform: translateX(0);
+        }
+        
+        .afast-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #f0aa53;
+            padding-bottom: 10px;
+        }
+        
+        .afast-logo {
+            font-size: 32px;
+            margin-right: 15px;
+            animation: afastPulse 2s ease-in-out infinite;
+        }
+        
+        .afast-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #f0aa53;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        
+        .afast-subtitle {
+            font-size: 12px;
+            color: #b2d1b1;
+            font-style: italic;
+        }
+        
+        .afast-content {
+            margin-bottom: 15px;
+        }
+        
+        .afast-event {
+            font-size: 16px;
+            font-weight: bold;
+            color: #f0aa53;
+            margin-bottom: 8px;
+        }
+        
+        .afast-description {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        
+        .afast-advice {
+            background: rgba(0,0,0,0.3);
+            border-left: 4px solid #f0aa53;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            font-style: italic;
+        }
+        
+        .afast-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .afast-button {
+            background: linear-gradient(135deg, #f0aa53 0%, #d4941e 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            color: #3e0a29;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .afast-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+        
+        .afast-button.secondary {
+            background: linear-gradient(135deg, #666 0%, #444 100%);
+            color: white;
+        }
+        
+        .afast-close {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #f0aa53;
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        .afast-close:hover {
+            color: white;
+            transform: scale(1.2);
+        }
+        
+        @keyframes afastPulse {
+            0%, 100% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 5px #f0aa53);
+            }
+            50% { 
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 15px #f0aa53);
+            }
+        }
+        
+        /* Central de Notificações */
+        .notification-center {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            width: 320px;
+            max-height: 500px;
+            background: linear-gradient(135deg, #0b1836 0%, #3e0a29 100%);
+            border: 2px solid #f0aa53;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            z-index: 1900;
+            transform: translateX(350px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow: hidden;
+        }
+        
+        .notification-center.active {
+            transform: translateX(0);
+        }
+        
+        .notification-center-header {
+            background: linear-gradient(135deg, #f0aa53 0%, #d4941e 100%);
+            color: #3e0a29;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 16px;
+        }
+        
+        .notification-center-content {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .notification-item {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #f0aa53;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            color: #f2eaff;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        
+        .notification-item:hover {
+            background: rgba(240, 170, 83, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .notification-item-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .notification-item-title {
+            font-weight: bold;
+            color: #f0aa53;
+        }
+        
+        .notification-item-time {
+            font-size: 11px;
+            color: #b2d1b1;
+            font-style: italic;
+        }
+        
+        .notification-item-content {
+            line-height: 1.4;
+        }
+        
+        /* Modal de Personalização */
+        .personalization-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 4000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .personalization-modal.active {
+            display: flex;
+        }
+        
+        .personalization-dialog {
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            width: 600px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 4px;
+        }
+        
+        .personalization-header {
+            background: var(--theme-window-header);
+            color: white;
+            padding: 8px 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .personalization-close {
+            background: #ff6b6b;
+            color: white;
+            border: 1px outset #ff6b6b;
+            width: 20px;
+            height: 18px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .personalization-close:hover {
+            background: #ff5252;
+        }
+        
+        .personalization-close:active {
+            border: 1px inset #ff6b6b;
+        }
+        
+        .personalization-content {
+            padding: 16px;
+        }
+        
+        .personalization-section {
+            margin-bottom: 20px;
+            border: 1px inset #c0c0c0;
+            padding: 12px;
+        }
+        
+        .personalization-section h3 {
+            margin-bottom: 12px;
+            color: var(--azul-escuro);
+            font-size: 12px;
+        }
+        
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+        
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border: 2px outset #c0c0c0;
+            cursor: pointer;
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .color-option:hover {
+            border: 2px inset #c0c0c0;
+        }
+        
+        .color-option.selected {
+            border: 2px solid var(--dourado);
+            box-shadow: 0 0 4px var(--dourado);
+        }
+        
+        .wallpaper-section {
+            margin-bottom: 12px;
+        }
+        
+        .wallpaper-upload {
+            margin-bottom: 8px;
+        }
+        
+        .wallpaper-upload input[type="file"] {
+            width: 100%;
+            padding: 4px;
+            border: 1px inset #c0c0c0;
+        }
+        
+        .wallpaper-presets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        
+        .wallpaper-preset {
+            height: 60px;
+            border: 2px outset #c0c0c0;
+            cursor: pointer;
+            border-radius: 4px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .wallpaper-preset:hover {
+            border: 2px inset #c0c0c0;
+        }
+        
+        .wallpaper-preset.selected {
+            border: 2px solid var(--dourado);
+            box-shadow: 0 0 4px var(--dourado);
+        }
+        
+        .personalization-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #808080;
+        }
+        
+        .personalization-button {
+            background: #d0d0d0;
+            border: 1px outset #d0d0d0;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .personalization-button:hover {
+            background: #e0e0e0;
+        }
+        
+        .personalization-button:active {
+            border: 1px inset #d0d0d0;
+        }
+        
+        .personalization-button.primary {
+            background: var(--azul-escuro);
+            color: white;
+        }
+        
+        .personalization-button.primary:hover {
+            background: #1a2a4a;
+        }
+        
+        /* Menu Iniciar */
+        .start-menu {
+            position: fixed;
+            bottom: 40px;
+            left: 8px;
+            width: 320px;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            z-index: 2500;
+            display: none;
+            animation: menuSlideUp 0.2s ease-out;
+            max-height: 500px;
+            overflow-y: auto;
+            border-radius: 4px;
+        }
+        
+        .start-menu.active {
+            display: block;
+        }
+        
+        @keyframes menuSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .start-menu-header {
+            background: var(--theme-window-header);
+            color: white;
+            padding: 12px 16px;
+            font-weight: bold;
+            font-size: 14px;
+            border-bottom: 2px solid #808080;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        }
+        
+        .start-menu-header .logo {
+            font-size: 20px;
+            filter: drop-shadow(0 0 5px var(--dourado));
+        }
+        
+        .start-menu-items {
+            background: #c0c0c0;
+            padding: 8px 0;
+        }
+        
+        .start-menu-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: black;
+            transition: all 0.1s;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+        
+        .start-menu-item:hover {
+            background: linear-gradient(90deg, #316AC5, #4a7bc8);
+            color: white;
+            border-left: 3px solid var(--dourado);
+            transform: translateX(2px);
+        }
+        
+        .start-menu-item .icon {
+            font-size: 24px;
+            min-width: 32px;
+            text-align: center;
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
+        }
+        
+        .start-menu-item .text {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .start-menu-item.premium::after {
+            content: '⭐';
+            position: absolute;
+            right: 12px;
+            font-size: 16px;
+            color: var(--dourado);
+            text-shadow: 0 0 3px var(--dourado);
+            animation: starGlow 2s ease-in-out infinite;
+        }
+        
+        .start-menu-item.premium:hover::after {
+            color: white;
+            text-shadow: 0 0 5px white;
+        }
+        
+        .start-menu-separator {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #808080, transparent);
+            margin: 4px 12px;
+        }
+        
+        .start-menu-footer {
+            background: #d0d0d0;
+            padding: 8px 16px;
+            border-top: 1px solid #808080;
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+        }
+        
+        /* Janelas */
+        .window {
+            position: fixed;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            min-width: 400px;
+            min-height: 300px;
+            z-index: 1500;
+            display: none;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            border-radius: 4px;
+        }
+        
+        .window.active {
+            display: block;
+        }
+        
+        .window.focused {
+            z-index: 1600;
+        }
+        
+        .window-header {
+            background: var(--theme-window-header);
+            color: white;
+            padding: 4px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            font-size: 11px;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        }
+        
+        .window-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .window-controls {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .window-control {
+            width: 18px;
+            height: 16px;
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+        }
+        
+        .window-control:hover {
+            background: #d0d0d0;
+        }
+        
+        .window-control:active {
+            border: 1px inset #c0c0c0;
+        }
+        
+        .window-control.close {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .window-content {
+            height: calc(100% - 24px);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .window-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--azul-escuro);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 12px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .window-resize-handle {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            cursor: se-resize;
+            background: linear-gradient(-45deg, transparent 40%, #808080 40%, #808080 60%, transparent 60%);
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fit, 60px);
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .desktop-icon .icon {
+                font-size: 24px;
+            }
+            
+            .desktop-icon .label {
+                font-size: 9px;
+            }
+            
+            .taskbar {
+                height: 36px;
+            }
+            
+            .desktop {
+                height: calc(100vh - 36px);
+            }
+            
+            .start-menu {
+                width: 280px;
+            }
+            
+            .personalization-dialog {
+                width: 90vw;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fit, 50px);
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .desktop-icon .icon {
+                font-size: 20px;
+            }
+            
+            .taskbar-right {
+                gap: 4px;
+            }
+            
+            .taskbar-widget {
+                padding: 2px 4px;
+                font-size: 9px;
+            }
+            
+            .start-menu {
+                width: 260px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Boot -->
+    <div class="boot-screen" id="bootScreen">
+        <div class="mystical-particles" id="bootParticles"></div>
+        <div class="boot-logo">
+            <img src="mysticsoft-logo.png" alt="MysticSoft Logo" style="width: 120px; height: 120px; image-rendering: pixelated;">
+        </div>
+        <div class="boot-title">Aurora OS</div>
+        <div class="boot-subtitle">• MysticSoft •</div>
+        <div class="boot-progress">
+            <div class="boot-progress-bar" id="bootProgressBar"></div>
+        </div>
+        <div class="boot-status" id="bootStatus">Inicializando sistema místico...</div>
+    </div>
+    
+    <!-- Tela de Boas-vindas -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="mystical-particles" id="welcomeParticles"></div>
+        <div class="welcome-content">
+            <div class="welcome-gatomante">🐱‍⬛</div>
+            <div class="welcome-title">Bem-vindo ao Aurora OS</div>
+            <div class="welcome-message">
+                Saudações, mortal! Sou Gatomante, seu guia pelos mistérios digitais deste sistema operacional místico. 
+                Prepare-se para uma jornada através das dimensões da tecnologia esotérica, onde cada clique revela 
+                segredos ancestrais e cada aplicativo é uma porta para o conhecimento oculto.
+            </div>
+            <button class="welcome-button" onclick="enterSystem()">
+                Adentrar os Mistérios
+            </button>
+        </div>
+    </div>
+    
+    <!-- Tela de Autenticação -->
+    <div class="auth-screen" id="authScreen">
+        <div class="mystical-particles" id="authParticles"></div>
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <img src="mysticsoft-logo.png" alt="MysticSoft Logo" style="width: 60px; height: 60px; image-rendering: pixelated;">
+                </div>
+                <div class="auth-title">Portal Místico</div>
+                <div class="auth-subtitle">Acesse sua conta no Aurora OS</div>
+            </div>
+            
+            <!-- Formulário de Login -->
+            <div id="loginForm" class="auth-form">
+                <div id="authMessage" class="auth-error" style="display: none;"></div>
+                
+                <div class="auth-field">
+                    <label class="auth-label" for="loginEmail">📧 Email ou Usuário</label>
+                    <input type="text" id="loginEmail" class="auth-input" placeholder="Digite seu email ou usuário..." required>
+                </div>
+                
+                <div class="auth-field">
+                    <label class="auth-label" for="loginPassword">🔒 Senha</label>
+                    <input type="password" id="loginPassword" class="auth-input" placeholder="Digite sua senha..." required>
+                </div>
+                
+                <div class="auth-checkbox-container">
+                    <input type="checkbox" id="rememberMe" class="auth-checkbox">
+                    <label for="rememberMe" class="auth-checkbox-label">Lembrar-me neste dispositivo</label>
+                </div>
+                
+                <div class="auth-buttons">
+                    <button class="auth-button" onclick="performLogin()">🌟 Entrar no Sistema</button>
+                    <button class="auth-button secondary" onclick="showForgotPassword()">👁️ Esqueci minha senha</button>
+                </div>
+                
+                <div class="auth-divider">OU</div>
+                
+                <div class="auth-buttons">
+                    <button class="auth-button secondary" onclick="showRegisterForm()">✨ Criar Nova Conta</button>
+                    <button class="auth-button demo" onclick="loginDemo()">🔮 Conta Demo</button>
+                </div>
+                
+                <div class="auth-loading" id="authLoading">
+                    <div class="auth-spinner"></div>
+                    Conectando com as energias cósmicas...
+                </div>
+            </div>
+            
+            <!-- Formulário de Registro -->
+            <div id="registerForm" class="auth-form" style="display: none;">
+                <div id="registerMessage" class="auth-error" style="display: none;"></div>
+                
+                <div class="auth-field">
+                    <label class="auth-label" for="registerName">👤 Nome Completo</label>
+                    <input type="text" id="registerName" class="auth-input" placeholder="Digite seu nome completo..." required>
+                </div>
+                
+                <div class="auth-field">
+                    <label class="auth-label" for="registerEmail">📧 Email</label>
+                    <input type="email" id="registerEmail" class="auth-input" placeholder="Digite seu email..." required>
+                </div>
+                
+                <div class="auth-field">
+                    <label class="auth-label" for="registerPassword">🔒 Senha</label>
+                    <input type="password" id="registerPassword" class="auth-input" placeholder="Crie uma senha segura..." required>
+                </div>
+                
+                <div class="auth-field">
+                    <label class="auth-label" for="confirmPassword">🔒 Confirmar Senha</label>
+                    <input type="password" id="confirmPassword" class="auth-input" placeholder="Confirme sua senha..." required>
+                </div>
+                
+                <!-- Seção de Dados Astrológicos -->
+                <div class="auth-section-title">🔮 Dados Astrológicos (Opcional)</div>
+                <div class="auth-section-subtitle">Para criar seu mapa astral personalizado</div>
+                
+                <div class="auth-field">
+                    <label class="auth-label" for="birthDate">📅 Data de Nascimento</label>
+                    <input type="date" id="birthDate" class="auth-input">
+                </div>
+                
+                <div class="auth-field">
+                    <label class="auth-label" for="birthTime">⏰ Hora de Nascimento</label>
+                    <input type="time" id="birthTime" class="auth-input" placeholder="Ex: 14:30">
+                </div>
+                
+                <div class="auth-field">
+                    <label class="auth-label" for="birthPlace">🌍 Local de Nascimento</label>
+                    <input type="text" id="birthPlace" class="auth-input" placeholder="Ex: São Paulo, SP, Brasil">
+                </div>
+                
+                <div class="auth-checkbox-container">
+                    <input type="checkbox" id="acceptTerms" class="auth-checkbox" required>
+                    <label for="acceptTerms" class="auth-checkbox-label">Aceito os Termos de Uso e Política de Privacidade</label>
+                </div>
+                
+                <div class="auth-checkbox-container">
+                    <input type="checkbox" id="receiveNotifications" class="auth-checkbox">
+                    <label for="receiveNotifications" class="auth-checkbox-label">Desejo receber notificações místicas</label>
+                </div>
+                
+                <div class="auth-buttons">
+                    <button class="auth-button" onclick="performRegister()">🌟 Criar Conta</button>
+                    <button class="auth-button secondary" onclick="showLoginForm()">🔙 Voltar ao Login</button>
+                </div>
+                
+                <div class="auth-loading" id="registerLoading">
+                    <div class="auth-spinner"></div>
+                    Criando sua conta mística...
+                </div>
+            </div>
+            
+            <!-- Formulário de Recuperação de Senha -->
+            <div id="forgotForm" class="auth-form" style="display: none;">
+                <div id="forgotMessage" class="auth-success" style="display: none;"></div>
+                
+                <div class="auth-field">
+                    <label class="auth-label" for="forgotEmail">📧 Email</label>
+                    <input type="email" id="forgotEmail" class="auth-input" placeholder="Digite seu email para recuperação..." required>
+                </div>
+                
+                <div class="auth-buttons">
+                    <button class="auth-button" onclick="performForgotPassword()">📧 Enviar Link de Recuperação</button>
+                    <button class="auth-button secondary" onclick="showLoginForm()">🔙 Voltar ao Login</button>
+                </div>
+                
+                <div class="auth-loading" id="forgotLoading">
+                    <div class="auth-spinner"></div>
+                    Consultando os oráculos...
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="desktop" id="desktop">
+        <div class="desktop-icons" id="desktopIcons">
+            <!-- Ícones serão gerados dinamicamente -->
+        </div>
+    </div>
+    
+    <!-- Elementos de Áudio -->
+    <audio id="dialupSound1" preload="auto">
+        <source src="dialup_chiados_dirty_enhanced.wav" type="audio/wav">
+    </audio>
+    <audio id="dialupSound2" preload="auto">
+        <source src="dialup_chiados_vintage.wav" type="audio/wav">
+    </audio>
+    
+    <!-- Menu de Contexto -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" onclick="openPersonalization()">
+            <span>⚙️</span>
+            <span>Personalizar</span>
+        </div>
+        <div class="context-menu-separator"></div>
+        <div class="context-menu-item" onclick="refreshDesktop()">
+            <span>🔄</span>
+            <span>Atualizar</span>
+        </div>
+        <div class="context-menu-item" onclick="arrangeIcons()">
+            <span>📐</span>
+            <span>Organizar ícones</span>
+        </div>
+    </div>
+    
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="start-button" onclick="toggleStartMenu()">
+            <span class="start-logo">
+                <img src="mysticsoft-logo.png" alt="MysticSoft" style="width: 16px; height: 16px; image-rendering: pixelated;">
+            </span>
+            <span>Iniciar</span>
+        </button>
+        
+        <div class="taskbar-items" id="taskbarItems">
+            <!-- Itens da taskbar serão adicionados dinamicamente -->
+        </div>
+        
+        <div class="taskbar-right">
+            <!-- Widget Planetário -->
+            <div class="taskbar-widget" onclick="togglePlanetaryPopup()" title="Hora Planetária Atual">
+                <span class="planetary-symbol" id="planetarySymbol">☉</span>
+                <span id="planetaryName">Sol</span>
+            </div>
+            
+            <!-- Relógio e Calendário -->
+            <div class="taskbar-widget" onclick="toggleCalendarPopup()" title="Calendário">
+                <span class="clock" id="clock">00:00</span>
+            </div>
+            
+            <!-- Central AFÁST -->
+            <div class="taskbar-widget" onclick="toggleNotificationCenter()" title="Central AFÁST - Notificações Astrológicas">
+                <span style="color: #f0aa53;">🛡️</span>
+            </div>
+            
+            <!-- Volume -->
+            <div class="volume-icon" onclick="toggleVolumePopup()" title="Controle de Volume">
+                🔊
+            </div>
+        </div>
+    </div>
+    
+    <!-- Menu Iniciar -->
+    <div class="start-menu" id="startMenu">
+        <div class="start-menu-header">
+            <span class="logo">
+                <img src="mysticsoft-logo.png" alt="MysticSoft" style="width: 20px; height: 20px; image-rendering: pixelated;">
+            </span>
+            <span>Aurora OS • MysticSoft</span>
+        </div>
+        <div class="start-menu-items" id="startMenuItems">
+            <!-- Itens do menu serão gerados dinamicamente -->
+        </div>
+        <div class="start-menu-separator"></div>
+        <div class="start-menu-footer">
+            Clique em qualquer item para abrir
+        </div>
+    </div>
+    
+    <!-- Popup do Calendário -->
+    <div class="popup calendar-popup" id="calendarPopup">
+        <div class="calendar-header">
+            <button class="calendar-nav" onclick="previousMonth()">◀</button>
+            <span id="calendarTitle">Janeiro 2024</span>
+            <button class="calendar-nav" onclick="nextMonth()">▶</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid">
+            <!-- Calendário será gerado dinamicamente -->
+        </div>
+    </div>
+    
+    <!-- Popup do Volume -->
+    <div class="popup volume-popup" id="volumePopup">
+        <div class="volume-control">
+            <div class="volume-label">Volume Principal</div>
+            <div class="volume-slider" onclick="setVolume(event, 'master')">
+                <div class="volume-fill" id="masterVolumeFill" style="width: 70%"></div>
+                <div class="volume-thumb" id="masterVolumeThumb" style="left: 70%"></div>
+            </div>
+        </div>
+        <div class="volume-control">
+            <div class="volume-label">Notificações</div>
+            <div class="volume-slider" onclick="setVolume(event, 'notifications')">
+                <div class="volume-fill" id="notificationsVolumeFill" style="width: 50%"></div>
+                <div class="volume-thumb" id="notificationsVolumeThumb" style="left: 50%"></div>
+            </div>
+        </div>
+        <div class="volume-control">
+            <div class="volume-label">Sistema</div>
+            <div class="volume-slider" onclick="setVolume(event, 'system')">
+                <div class="volume-fill" id="systemVolumeFill" style="width: 60%"></div>
+                <div class="volume-thumb" id="systemVolumeThumb" style="left: 60%"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sistema AFÁST - Notificação Astrológica -->
+    <div class="afast-notification" id="afastNotification">
+        <button class="afast-close" onclick="closeAfastNotification()">×</button>
+        <div class="afast-header">
+            <div class="afast-logo">🛡️</div>
+            <div>
+                <div class="afast-title">AFÁST!</div>
+                <div class="afast-subtitle">Antivírus Astrológico</div>
+            </div>
+        </div>
+        <div class="afast-content">
+            <div class="afast-event" id="afastEvent">Mercúrio Retrógrado Detectado!</div>
+            <div class="afast-description" id="afastDescription">
+                O planeta da comunicação está em movimento retrógrado, causando possíveis interferências em sistemas de comunicação e tecnologia.
+            </div>
+            <div class="afast-advice" id="afastAdvice">
+                💡 Recomendação: Faça backup de arquivos importantes e evite assinar contratos importantes neste período.
+            </div>
+        </div>
+        <div class="afast-buttons">
+            <button class="afast-button secondary" onclick="snoozeAfastNotification()">Lembrar Depois</button>
+            <button class="afast-button" onclick="acknowledgeAfastNotification()">Entendi</button>
+        </div>
+    </div>
+    
+    <!-- Central de Notificações -->
+    <div class="notification-center" id="notificationCenter">
+        <div class="notification-center-header">
+            🔔 Central de Notificações
+        </div>
+        <div class="notification-center-content" id="notificationCenterContent">
+            <!-- Notificações serão adicionadas dinamicamente -->
+        </div>
+    </div>
+    
+    <!-- Popup Planetário -->
+    <div class="popup planetary-popup" id="planetaryPopup">
+        <div class="planetary-info">
+            <div class="planetary-current">
+                <span id="currentPlanetSymbol">☉</span>
+                <span id="currentPlanetName">Sol</span>
+            </div>
+            <div class="planetary-time" id="planetaryTime">
+                Hora 1 do Dia • 06:00 - 07:00
+            </div>
+            <div class="planetary-ruler">
+                Regente do Dia: <span id="dayRuler">Sol</span>
+            </div>
+        </div>
+        <div style="font-size: 10px; color: #666; text-align: center;">
+            Sistema baseado nas horas planetárias tradicionais
+        </div>
+    </div>
+    
+    <!-- Gatomante - Assistente Místico -->
+    <div class="gatomante-container" id="gatomanteContainer">
+        <div class="gatomante-character" id="gatomanteCharacter">
+            <div class="gatomante-sprite">
+                <div class="gatomante-body">🐱‍⬛</div>
+                <div class="gatomante-glasses">👓</div>
+            </div>
+        </div>
+        <div class="gatomante-bubble" id="gatomanteBubble">
+            <div class="gatomante-text" id="gatomanteText">
+                Miau! Bem-vindo ao Aurora OS, humano... Vejo que você busca conhecimento místico.
+            </div>
+            <div class="gatomante-close" onclick="hideGatomante()">×</div>
+        </div>
+    </div>
+
+    <!-- Modal de Personalização -->
+    <div class="personalization-modal" id="personalizationModal">
+        <div class="personalization-dialog">
+            <div class="personalization-header">
+                <span>Personalização do Aurora OS</span>
+                <button class="personalization-close" onclick="closePersonalization()">×</button>
+            </div>
+            <div class="personalization-content">
+                <div class="personalization-section">
+                    <h3>Cores do Tema</h3>
+                    <div class="color-palette" id="colorPalette">
+                        <!-- Cores serão geradas dinamicamente -->
+                    </div>
+                </div>
+                
+                <div class="personalization-section">
+                    <h3>Papel de Parede</h3>
+                    <div class="wallpaper-section">
+                        <div class="wallpaper-upload">
+                            <input type="file" id="wallpaperUpload" accept="image/*" onchange="uploadWallpaper(event)">
+                        </div>
+                        <div class="wallpaper-presets" id="wallpaperPresets">
+                            <!-- Presets serão gerados dinamicamente -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="personalization-section">
+                    <h3>Configurações da Taskbar</h3>
+                    <label>
+                        <input type="checkbox" id="showPlanetaryWidget" checked onchange="togglePlanetaryWidget()">
+                        Mostrar widget planetário
+                    </label><br>
+                    <label>
+                        <input type="checkbox" id="showNotifications" checked onchange="toggleNotifications()">
+                        Mostrar notificações
+                    </label><br>
+                    <label>
+                        <input type="checkbox" id="showVolumeControl" checked onchange="toggleVolumeControl()">
+                        Mostrar controle de volume
+                    </label>
+                </div>
+                
+                <div class="personalization-buttons">
+                    <button class="personalization-button" onclick="resetPersonalization()">Restaurar Padrão</button>
+                    <button class="personalization-button primary" onclick="savePersonalization()">Aplicar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // 🎯 CONFIGURAÇÃO MANUAL DE SITES E ÍCONES
+        // ========================================
+        // 
+        // INSTRUÇÕES PARA PERSONALIZAÇÃO:
+        // 
+        // 1. ÍCONES:
+        //    - Para emojis: use diretamente (ex: '🔍', '📺', '💻')
+        //    - Para imagens: coloque o arquivo na pasta do projeto e use o nome (ex: 'meu-icone.png')
+        //    - Tamanho recomendado para imagens: 64x64 pixels
+        //
+        // 2. LINKS:
+        //    - URLs normais: 'https://seusite.com'
+        //    - Aplicativo local de arquivos: 'local://files'
+        //
+        // 3. PREMIUM:
+        //    - true: aparece na seção premium (dourada) do menu
+        //    - false: aparece na seção básica do menu
+        //
+        // 4. ID:
+        //    - Use apenas letras minúsculas, números e hífens
+        //    - Deve ser único para cada item
+        //
+        const sitesConfig = [
+            // ==========================================
+            // 📱 APLICATIVOS BÁSICOS (Seção Superior)
+            // ==========================================
+            { 
+                id: 'google', 
+                name: 'Google', 
+                url: 'https://google.com', 
+                icon: '🔍', 
+                premium: false 
+            },
+            { 
+                id: 'youtube', 
+                name: 'YouTube', 
+                url: 'https://youtube.com', 
+                icon: '📺', 
+                premium: false 
+            },
+            { 
+                id: 'github', 
+                name: 'GitHub', 
+                url: 'https://github.com', 
+                icon: '💻', 
+                premium: false 
+            },
+            { 
+                id: 'spotify', 
+                name: 'Spotify', 
+                url: 'https://spotify.com', 
+                icon: '🎵', 
+                premium: false 
+            },
+            { 
+                id: 'arquivos', 
+                name: 'Arquivos & Anotações', 
+                url: 'local://files', 
+                icon: '📁', 
+                premium: false 
+            },
+            
+            // ==========================================
+            // ⭐ APLICATIVOS PREMIUM (Seção Dourada)
+            // ==========================================
+            { 
+                id: 'mysticsoft', 
+                name: 'MysticSoft Portal', 
+                url: 'https://wix.com', 
+                icon: 'mysticsoft-logo.png', 
+                premium: true 
+            },
+            { 
+                id: 'loja-mistica', 
+                name: 'Loja Mística', 
+                url: 'https://wix.com', 
+                icon: '🛒', 
+                premium: true 
+            },
+            { 
+                id: 'tarot-online', 
+                name: 'Tarot Online', 
+                url: 'https://tarot.com', 
+                icon: '🔮', 
+                premium: true 
+            },
+            { 
+                id: 'portal-astrologico', 
+                name: 'Portal Astrológico', 
+                url: 'https://astro.com', 
+                icon: '⭐', 
+                premium: true 
+            },
+            
+            // ==========================================
+            // ➕ ADICIONE SEUS PRÓPRIOS SITES AQUI:
+            // ==========================================
+            // 
+            // EXEMPLO DE NOVO SITE BÁSICO:
+            // { 
+            //     id: 'meu-site', 
+            //     name: 'Meu Site Pessoal', 
+            //     url: 'https://meusite.com', 
+            //     icon: '🌐', 
+            //     premium: false 
+            // },
+            //
+            // EXEMPLO DE NOVO SITE PREMIUM:
+            // { 
+            //     id: 'app-premium', 
+            //     name: 'Meu App Premium', 
+            //     url: 'https://meuapp.com', 
+            //     icon: 'meu-icone.png', 
+            //     premium: true 
+            // },
+        ];
+        
+        // ========================================
+        // 🎨 CONFIGURAÇÃO MANUAL DE TEMAS DE CORES
+        // ========================================
+        // 
+        // INSTRUÇÕES:
+        // - primary: Cor principal (barras, janelas)
+        // - secondary: Cor secundária (fundos, sombras)  
+        // - accent: Cor de destaque (textos, bordas)
+        // - Use códigos hexadecimais (#000000)
+        //
+        const colorThemes = [
+            { name: 'Aurora Original', primary: '#3e0a29', secondary: '#0b1836', accent: '#f0aa53' },
+            { name: 'Noite Cósmica', primary: '#1a1a2e', secondary: '#16213e', accent: '#e94560' },
+            { name: 'Rosa Místico', primary: '#8b1538', secondary: '#2d1b69', accent: '#f39c12' },
+            { name: 'Verde Floresta', primary: '#2d5016', secondary: '#1b4332', accent: '#95d5b2' },
+            { name: 'Azul Oceano', primary: '#023047', secondary: '#219ebc', accent: '#ffb703' },
+            { name: 'Roxo Imperial', primary: '#5a189a', secondary: '#240046', accent: '#ff006e' },
+            { name: 'Dourado Real', primary: '#b7410e', secondary: '#6f1d1b', accent: '#ffd60a' },
+            { name: 'Prata Lunar', primary: '#495057', secondary: '#212529', accent: '#adb5bd' }
+            
+            // ➕ ADICIONE SEUS PRÓPRIOS TEMAS AQUI:
+            // { name: 'Meu Tema', primary: '#cor1', secondary: '#cor2', accent: '#cor3' },
+        ];
+        
+        // ========================================
+        // 🖼️ CONFIGURAÇÃO MANUAL DE WALLPAPERS
+        // ========================================
+        // 
+        // INSTRUÇÕES:
+        // - Use gradientes CSS linear-gradient()
+        // - Formato: 'linear-gradient(ângulo, cor1 %, cor2 %)'
+        // - Ângulo comum: 135deg (diagonal)
+        //
+        const wallpaperPresets = [
+            { name: 'Aurora Original', gradient: 'linear-gradient(135deg, #0b1836 0%, #3e0a29 100%)' },
+            { name: 'Noite Estrelada', gradient: 'linear-gradient(135deg, #000428 0%, #004e92 100%)' },
+            { name: 'Pôr do Sol', gradient: 'linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%)' },
+            { name: 'Floresta Mística', gradient: 'linear-gradient(135deg, #134e5e 0%, #71b280 100%)' },
+            { name: 'Oceano Profundo', gradient: 'linear-gradient(135deg, #667db6 0%, #0082c8 100%)' },
+            { name: 'Rosa Crepúsculo', gradient: 'linear-gradient(135deg, #8360c3 0%, #2ebf91 100%)' }
+            
+            // ➕ ADICIONE SEUS PRÓPRIOS WALLPAPERS AQUI:
+            // { name: 'Meu Wallpaper', gradient: 'linear-gradient(135deg, #cor1 0%, #cor2 100%)' },
+        ];
+        
+        // Símbolos planetários
+        const planetarySymbols = {
+            'Sol': '☉',
+            'Lua': '☽',
+            'Marte': '♂',
+            'Mercúrio': '☿',
+            'Júpiter': '♃',
+            'Vênus': '♀',
+            'Saturno': '♄'
+        };
+        
+        // Ordem caldaica dos planetas
+        const chaldeanOrder = ['Saturno', 'Júpiter', 'Marte', 'Sol', 'Vênus', 'Mercúrio', 'Lua'];
+        const dayRulers = ['Sol', 'Lua', 'Marte', 'Mercúrio', 'Júpiter', 'Vênus', 'Saturno']; // Dom, Seg, Ter, Qua, Qui, Sex, Sáb
+        
+        // Estado do sistema
+        let currentTheme = 0;
+        let currentWallpaper = 0;
+        let openWindows = [];
+        let currentDate = new Date();
+        let currentPlanetaryHour = { planet: 'Sol', hour: 1, period: 'dia' };
+        
+        // Volumes do sistema
+        let volumes = {
+            master: 70,
+            notifications: 50,
+            system: 60
+        };
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar sistema de boot
+            initBootSystem();
+        });
+        
+        function setupEventListeners() {
+            // Menu de contexto (botão direito)
+            document.addEventListener('contextmenu', function(e) {
+                if (e.target.closest('.desktop')) {
+                    e.preventDefault();
+                    showContextMenu(e.clientX, e.clientY);
+                }
+            });
+            
+            // Fechar menus ao clicar fora
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.context-menu')) {
+                    hideContextMenu();
+                }
+                if (!e.target.closest('.start-menu') && !e.target.closest('.start-button')) {
+                    hideStartMenu();
+                }
+                if (!e.target.closest('.popup')) {
+                    hideAllPopups();
+                }
+            });
+            
+            // Drag and drop para janelas
+            setupWindowDragging();
+        }
+        
+        function generateDesktopIcons() {
+            const container = document.getElementById('desktopIcons');
+            container.innerHTML = '';
+            
+            sitesConfig.forEach(site => {
+                const icon = document.createElement('div');
+                icon.className = `desktop-icon ${site.premium ? 'premium' : ''}`;
+                icon.onclick = () => openSite(site);
+                
+                const iconContent = site.icon.endsWith('.png') ? 
+                    `<img src="${site.icon}" alt="${site.name}" style="width: 32px; height: 32px; image-rendering: pixelated;">` : 
+                    site.icon;
+                
+                icon.innerHTML = `
+                    <div class="icon">${iconContent}</div>
+                    <div class="label">${site.name}</div>
+                `;
+                
+                container.appendChild(icon);
+            });
+        }
+        
+        function generateStartMenu() {
+            const container = document.getElementById('startMenuItems');
+            container.innerHTML = '';
+            
+            // Separar sites básicos e premium
+            const basicSites = sitesConfig.filter(site => !site.premium);
+            const premiumSites = sitesConfig.filter(site => site.premium);
+            
+            // Adicionar sites básicos
+            basicSites.forEach(site => {
+                const item = document.createElement('div');
+                item.className = 'start-menu-item';
+                item.onclick = () => openSite(site);
+                
+                const iconContent = site.icon.endsWith('.png') ? 
+                    `<img src="${site.icon}" alt="${site.name}" style="width: 16px; height: 16px; image-rendering: pixelated;">` : 
+                    site.icon;
+                
+                item.innerHTML = `
+                    <div class="icon">${iconContent}</div>
+                    <div class="text">${site.name}</div>
+                `;
+                
+                container.appendChild(item);
+            });
+            
+            if (premiumSites.length > 0) {
+                const separator = document.createElement('div');
+                separator.className = 'start-menu-separator';
+                container.appendChild(separator);
+                
+                // Adicionar sites premium
+                premiumSites.forEach(site => {
+                    const item = document.createElement('div');
+                    item.className = 'start-menu-item premium';
+                    item.onclick = () => openSite(site);
+                    
+                    const iconContent = site.icon.endsWith('.png') ? 
+                        `<img src="${site.icon}" alt="${site.name}" style="width: 16px; height: 16px; image-rendering: pixelated;">` : 
+                        site.icon;
+                    
+                    item.innerHTML = `
+                        <div class="icon">${iconContent}</div>
+                        <div class="text">${site.name}</div>
+                    `;
+                    
+                    container.appendChild(item);
+                });
+            }
+        }
+        
+        function generateColorPalette() {
+            const container = document.getElementById('colorPalette');
+            container.innerHTML = '';
+            
+            colorThemes.forEach((theme, index) => {
+                const colorOption = document.createElement('div');
+                colorOption.className = `color-option ${index === currentTheme ? 'selected' : ''}`;
+                colorOption.style.background = `linear-gradient(45deg, ${theme.primary}, ${theme.secondary})`;
+                colorOption.title = theme.name;
+                colorOption.onclick = () => selectColorTheme(index);
+                
+                container.appendChild(colorOption);
+            });
+        }
+        
+        function generateWallpaperPresets() {
+            const container = document.getElementById('wallpaperPresets');
+            container.innerHTML = '';
+            
+            wallpaperPresets.forEach((preset, index) => {
+                const wallpaperOption = document.createElement('div');
+                wallpaperOption.className = `wallpaper-preset ${index === currentWallpaper ? 'selected' : ''}`;
+                wallpaperOption.style.background = preset.gradient;
+                wallpaperOption.title = preset.name;
+                wallpaperOption.onclick = () => selectWallpaper(index);
+                
+                container.appendChild(wallpaperOption);
+            });
+        }
+        
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            document.getElementById('clock').textContent = timeString;
+        }
+        
+        function updatePlanetaryInfo() {
+            const now = new Date();
+            const dayOfWeek = now.getDay();
+            const hour = now.getHours();
+            
+            // Calcular hora planetária (simplificado)
+            const dayRuler = dayRulers[dayOfWeek];
+            const rulerIndex = chaldeanOrder.indexOf(dayRuler);
+            const planetIndex = (rulerIndex + hour) % 7;
+            const currentPlanet = chaldeanOrder[planetIndex];
+            
+            // Atualizar interface
+            const symbol = planetarySymbols[currentPlanet];
+            document.getElementById('planetarySymbol').textContent = symbol;
+            document.getElementById('planetaryName').textContent = currentPlanet;
+            document.getElementById('currentPlanetSymbol').textContent = symbol;
+            document.getElementById('currentPlanetName').textContent = currentPlanet;
+            document.getElementById('dayRuler').textContent = dayRuler;
+            
+            // Determinar período (dia/noite) - simplificado
+            const period = (hour >= 6 && hour < 18) ? 'dia' : 'noite';
+            const hourInPeriod = period === 'dia' ? hour - 5 : (hour >= 18 ? hour - 17 : hour + 7);
+            
+            document.getElementById('planetaryTime').textContent = 
+                `Hora ${hourInPeriod} do ${period === 'dia' ? 'Dia' : 'Noite'} • ${hour}:00 - ${(hour + 1) % 24}:00`;
+            
+            // Verificar se houve mudança planetária para notificar Gatomante
+            if (currentPlanetaryHour && currentPlanetaryHour.planet !== currentPlanet) {
+                // Notificar Gatomante sobre mudança planetária
+                setTimeout(() => {
+                    gatomanteContextual('planeta_mudou');
+                }, 5000);
+            }
+                    function openSite(siteId) {
+            const site = sitesConfig.find(s => s.id === siteId);
+            if (!site) return;
+            
+            if (site.url === 'local://files') {
+                // Abrir aplicativo local de arquivos
+                openLocalFilesApp();
+            } else {
+                // Abrir site em janela
+                openWebsite(site);
+            }
+            hideStartMenu();
+            
+            // Notificar Gatomante sobre abertura de app
+            setTimeout(() => {
+                gatomanteContextual('app_aberto', { app: site.name });
+                detectarConquistas();
+            }, 2000);
+        }        
+        function openWebsite(site) {
+            const windowId = `window-${site.id}`;
+            
+            // Verificar se janela já está aberta
+            if (document.getElementById(windowId)) {
+                focusWindow(windowId);
+                return;
+            }
+            
+            const window = document.createElement('div');
+            window.id = windowId;
+            window.className = 'window active focused';
+            window.style.left = `${100 + openWindows.length * 30}px`;
+            window.style.top = `${50 + openWindows.length * 30}px`;
+            window.style.width = '800px';
+            window.style.height = '600px';
+            
+            window.innerHTML = `
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>${site.icon}</span>
+                        <span>${site.name}</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-control" onclick="minimizeWindow('${windowId}')">_</div>
+                        <div class="window-control" onclick="maximizeWindow('${windowId}')">□</div>
+                        <div class="window-control close" onclick="closeWindow('${windowId}')">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="loading-overlay" id="loading-${site.id}">
+                        <div class="loading-spinner"></div>
+                        <div>Carregando ${site.name}...</div>
+                    </div>
+                    <iframe class="window-iframe" src="${site.url}" onload="hideLoading('${site.id}')"></iframe>
+                </div>
+                <div class="window-resize-handle"></div>
+            `;
+            
+            document.body.appendChild(window);
+            openWindows.push({ id: windowId, title: site.name, icon: site.icon });
+            updateTaskbar();
+            
+            // Remover loading após 3 segundos (fallback)
+            setTimeout(() => hideLoading(site.id), 3000);
+        }
+        
+        function openLocalFilesApp() {
+            const windowId = 'window-files';
+            
+            if (document.getElementById(windowId)) {
+                focusWindow(windowId);
+                return;
+            }
+            
+            const window = document.createElement('div');
+            window.id = windowId;
+            window.className = 'window active focused';
+            window.style.left = '150px';
+            window.style.top = '100px';
+            window.style.width = '700px';
+            window.style.height = '500px';
+            
+            window.innerHTML = `
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>📁</span>
+                        <span>Arquivos & Anotações</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-control" onclick="minimizeWindow('${windowId}')">_</div>
+                        <div class="window-control" onclick="maximizeWindow('${windowId}')">□</div>
+                        <div class="window-control close" onclick="closeWindow('${windowId}')">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div style="padding: 20px; text-align: center; color: #666;">
+                        <h3>Gerenciador de Arquivos</h3>
+                        <p>Sistema de arquivos em desenvolvimento...</p>
+                        <br>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px;">
+                            <div style="padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+                                <div style="font-size: 32px; margin-bottom: 10px;">📄</div>
+                                <div>Documentos</div>
+                            </div>
+                            <div style="padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+                                <div style="font-size: 32px; margin-bottom: 10px;">🖼️</div>
+                                <div>Imagens</div>
+                            </div>
+                            <div style="padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+                                <div style="font-size: 32px; margin-bottom: 10px;">🎵</div>
+                                <div>Áudios</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="window-resize-handle"></div>
+            `;
+            
+            document.body.appendChild(window);
+            openWindows.push({ id: windowId, title: 'Arquivos & Anotações', icon: '📁' });
+            updateTaskbar();
+        }
+        
+        function hideLoading(siteId) {
+            const loading = document.getElementById(`loading-${siteId}`);
+            if (loading) {
+                loading.style.display = 'none';
+            }
+        }
+        
+        function closeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.remove();
+                openWindows = openWindows.filter(w => w.id !== windowId);
+                updateTaskbar();
+            }
+        }
+        
+        function minimizeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.style.display = 'none';
+            }
+        }
+        
+        function maximizeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                if (window.style.width === '100vw') {
+                    // Restaurar
+                    window.style.width = '800px';
+                    window.style.height = '600px';
+                    window.style.left = '100px';
+                    window.style.top = '50px';
+                } else {
+                    // Maximizar
+                    window.style.width = '100vw';
+                    window.style.height = 'calc(100vh - 40px)';
+                    window.style.left = '0';
+                    window.style.top = '0';
+                }
+            }
+        }
+        
+        function focusWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.style.display = 'block';
+                window.style.zIndex = '1600';
+                
+                // Remover foco de outras janelas
+                document.querySelectorAll('.window').forEach(w => {
+                    if (w.id !== windowId) {
+                        w.style.zIndex = '1500';
+                    }
+                });
+            }
+        }
+        
+        function updateTaskbar() {
+            const container = document.getElementById('taskbarItems');
+            container.innerHTML = '';
+            
+            openWindows.forEach(window => {
+                const item = document.createElement('div');
+                item.className = 'taskbar-item';
+                item.onclick = () => focusWindow(window.id);
+                item.innerHTML = `${window.icon} ${window.title}`;
+                container.appendChild(item);
+            });
+        }
+        
+        function setupWindowDragging() {
+            // Implementação simplificada do drag de janelas
+            let isDragging = false;
+            let currentWindow = null;
+            let offset = { x: 0, y: 0 };
+            
+            document.addEventListener('mousedown', function(e) {
+                const header = e.target.closest('.window-header');
+                if (header && !e.target.closest('.window-control')) {
+                    isDragging = true;
+                    currentWindow = header.closest('.window');
+                    const rect = currentWindow.getBoundingClientRect();
+                    offset.x = e.clientX - rect.left;
+                    offset.y = e.clientY - rect.top;
+                    e.preventDefault();
+                }
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (isDragging && currentWindow) {
+                    currentWindow.style.left = (e.clientX - offset.x) + 'px';
+                    currentWindow.style.top = (e.clientY - offset.y) + 'px';
+                }
+            });
+            
+            document.addEventListener('mouseup', function() {
+                isDragging = false;
+                currentWindow = null;
+            });
+        }
+        
+        // Funções do menu de contexto
+        function showContextMenu(x, y) {
+            const menu = document.getElementById('contextMenu');
+            menu.style.display = 'block';
+            menu.style.left = x + 'px';
+            menu.style.top = y + 'px';
+        }
+        
+        function hideContextMenu() {
+            document.getElementById('contextMenu').style.display = 'none';
+        }
+        
+        function refreshDesktop() {
+            location.reload();
+            hideContextMenu();
+        }
+        
+        function arrangeIcons() {
+            // Reorganizar ícones automaticamente
+            generateDesktopIcons();
+            hideContextMenu();
+        }
+        
+        // Funções do menu iniciar
+        function toggleStartMenu() {
+            const menu = document.getElementById('startMenu');
+            menu.classList.toggle('active');
+        }
+        
+        function hideStartMenu() {
+            document.getElementById('startMenu').classList.remove('active');
+        }
+        
+        // Funções dos popups
+        function toggleCalendarPopup() {
+            const popup = document.getElementById('calendarPopup');
+            hideAllPopups();
+            popup.classList.toggle('active');
+            if (popup.classList.contains('active')) {
+                generateCalendar();
+            }
+        }
+        
+        function toggleVolumePopup() {
+            const popup = document.getElementById('volumePopup');
+            hideAllPopups();
+            popup.classList.toggle('active');
+        }
+        
+        function togglePlanetaryPopup() {
+            const popup = document.getElementById('planetaryPopup');
+            hideAllPopups();
+            popup.classList.toggle('active');
+        }
+        
+        function toggleNotifications() {
+            // Implementar sistema de notificações
+            console.log('Sistema de notificações em desenvolvimento');
+        }
+        
+        function hideAllPopups() {
+            document.querySelectorAll('.popup').forEach(popup => {
+                popup.classList.remove('active');
+            });
+        }
+        
+        // Funções do calendário
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const title = document.getElementById('calendarTitle');
+            
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            title.textContent = currentDate.toLocaleDateString('pt-BR', { 
+                month: 'long', 
+                year: 'numeric' 
+            });
+            
+            grid.innerHTML = '';
+            
+            // Cabeçalhos dos dias da semana
+            const dayHeaders = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            dayHeaders.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'calendar-day-header';
+                header.textContent = day;
+                grid.appendChild(header);
+            });
+            
+            // Primeiro dia do mês e último dia
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const today = new Date();
+            
+            // Dias vazios no início
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day other-month';
+                grid.appendChild(emptyDay);
+            }
+            
+            // Dias do mês
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                
+                // Marcar dia atual
+                if (year === today.getFullYear() && 
+                    month === today.getMonth() && 
+                    day === today.getDate()) {
+                    dayElement.classList.add('today');
+                }
+                
+                grid.appendChild(dayElement);
+            }
+        }
+        
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar();
+        }
+        
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar();
+        }
+        
+        // Funções de volume
+        function setVolume(event, type) {
+            const slider = event.currentTarget;
+            const rect = slider.getBoundingClientRect();
+            const percentage = ((event.clientX - rect.left) / rect.width) * 100;
+            const clampedPercentage = Math.max(0, Math.min(100, percentage));
+            
+            volumes[type] = clampedPercentage;
+            
+            const fill = document.getElementById(`${type}VolumeFill`);
+            const thumb = document.getElementById(`${type}VolumeThumb`);
+            
+            fill.style.width = clampedPercentage + '%';
+            thumb.style.left = clampedPercentage + '%';
+            
+            // Notificar Gatomante sobre mudança de volume (apenas para master)
+            if (type === 'master') {
+                setTimeout(() => {
+                    gatomanteContextual('volume_mudou');
+                }, 500);
+            }
+        }
+        
+        // Funções de personalização
+        function openPersonalization() {
+            document.getElementById('personalizationModal').classList.add('active');
+            hideContextMenu();
+            
+            // Notificar Gatomante sobre personalização
+            setTimeout(() => {
+                gatomanteContextual('personalizacao');
+            }, 2000);
+        }
+        
+        function closePersonalization() {
+            document.getElementById('personalizationModal').classList.remove('active');
+        }
+        
+        function selectColorTheme(index) {
+            currentTheme = index;
+            applyColorTheme();
+            
+            // Atualizar seleção visual
+            document.querySelectorAll('.color-option').forEach((option, i) => {
+                option.classList.toggle('selected', i === index);
+            });
+            
+            // Notificar Gatomante sobre mudança de tema
+            setTimeout(() => {
+                gatomanteContextual('tema_mudou');
+                detectarConquistas();
+            }, 1000);
+        }
+        
+        function selectWallpaper(index) {
+            currentWallpaper = index;
+            applyWallpaper();
+            
+            // Atualizar seleção visual
+            document.querySelectorAll('.wallpaper-preset').forEach((preset, i) => {
+                preset.classList.toggle('selected', i === index);
+            });
+        }
+        
+        function applyColorTheme() {
+            const theme = colorThemes[currentTheme];
+            const root = document.documentElement;
+            
+            root.style.setProperty('--vinho', theme.primary);
+            root.style.setProperty('--azul-escuro', theme.secondary);
+            root.style.setProperty('--dourado', theme.accent);
+            root.style.setProperty('--theme-taskbar', theme.primary);
+            root.style.setProperty('--theme-start-btn', theme.primary);
+            root.style.setProperty('--theme-start-text', theme.accent);
+            root.style.setProperty('--theme-clock', theme.accent);
+            root.style.setProperty('--theme-window-header', theme.secondary);
+        }
+        
+        function applyWallpaper() {
+            const wallpaper = wallpaperPresets[currentWallpaper];
+            const root = document.documentElement;
+            
+            root.style.setProperty('--theme-bg', wallpaper.gradient);
+            document.body.style.background = wallpaper.gradient;
+            document.querySelector('.desktop').style.background = wallpaper.gradient;
+        }
+        
+        function uploadWallpaper(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageUrl = e.target.result;
+                    document.body.style.backgroundImage = `url(${imageUrl})`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                    document.querySelector('.desktop').style.backgroundImage = `url(${imageUrl})`;
+                    document.querySelector('.desktop').style.backgroundSize = 'cover';
+                    document.querySelector('.desktop').style.backgroundPosition = 'center';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function togglePlanetaryWidget() {
+            const widget = document.querySelector('.taskbar-widget');
+            const checkbox = document.getElementById('showPlanetaryWidget');
+            widget.style.display = checkbox.checked ? 'flex' : 'none';
+        }
+        
+        function toggleNotifications() {
+            const icon = document.querySelector('.notification-icon');
+            const checkbox = document.getElementById('showNotifications');
+            icon.style.display = checkbox.checked ? 'block' : 'none';
+        }
+        
+        function toggleVolumeControl() {
+            const icon = document.querySelector('.volume-icon');
+            const checkbox = document.getElementById('showVolumeControl');
+            icon.style.display = checkbox.checked ? 'block' : 'none';
+        }
+        
+        function savePersonalization() {
+            const settings = {
+                theme: currentTheme,
+                wallpaper: currentWallpaper,
+                showPlanetaryWidget: document.getElementById('showPlanetaryWidget').checked,
+                showNotifications: document.getElementById('showNotifications').checked,
+                showVolumeControl: document.getElementById('showVolumeControl').checked,
+                volumes: volumes
+            };
+            
+            // Salvar para usuário logado ou localStorage
+            if (currentUser) {
+                saveUserSettings();
+            } else {
+                localStorage.setItem('auroraOS_settings', JSON.stringify(settings));
+            }
+            
+            closePersonalization();
+            
+            // Mostrar notificação de sucesso
+            console.log('Configurações salvas com sucesso!');
+        }
+        
+        function loadPersonalization() {
+            let settings = null;
+            
+            // Carregar configurações do usuário logado ou localStorage
+            if (currentUser && currentUser.settings) {
+                settings = currentUser.settings;
+            } else {
+                const saved = localStorage.getItem('auroraOS_settings');
+                if (saved) {
+                    settings = JSON.parse(saved);
+                }
+            }
+            
+            if (settings) {
+                currentTheme = settings.theme || 0;
+                currentWallpaper = settings.wallpaper || 0;
+                volumes = settings.volumes || volumes;
+                
+                applyColorTheme();
+                applyWallpaper();
+                
+                // Aplicar configurações de widgets
+                if (settings.showPlanetaryWidget !== undefined) {
+                    document.getElementById('showPlanetaryWidget').checked = settings.showPlanetaryWidget;
+                    togglePlanetaryWidget();
+                }
+                
+                if (settings.showNotifications !== undefined) {
+                    document.getElementById('showNotifications').checked = settings.showNotifications;
+                    toggleNotifications();
+                }
+                
+                if (settings.showVolumeControl !== undefined) {
+                    document.getElementById('showVolumeControl').checked = settings.showVolumeControl;
+                    toggleVolumeControl();
+                }
+            }
+        }
+        
+        function resetPersonalization() {
+            localStorage.removeItem('auroraOS_settings');
+            currentTheme = 0;
+            currentWallpaper = 0;
+            volumes = { master: 70, notifications: 50, system: 60 };
+            
+            applyColorTheme();
+            applyWallpaper();
+            
+            // Resetar checkboxes
+            document.getElementById('showPlanetaryWidget').checked = true;
+            document.getElementById('showNotifications').checked = true;
+            document.getElementById('showVolumeControl').checked = true;
+            
+            togglePlanetaryWidget();
+            toggleNotifications();
+            toggleVolumeControl();
+            
+            // Atualizar seleções visuais
+            generateColorPalette();
+            generateWallpaperPresets();
+        }
+        
+        // Sistema Gatomante - Assistente Místico
+        const gatomante = {
+            nome: "Gatomante",
+            estado: "ativo",
+            humor: "sabio",
+            ultimaAparicao: 0,
+            dicasJaMostradas: [],
+            
+            // Base de conhecimento de dicas expandida
+            dicas: {
+                boasVindas: [
+                    "Miau! Bem-vindo ao Aurora OS, humano... Vejo que você busca conhecimento místico.",
+                    "Ah, mais um mortal adentrando os mistérios digitais. Permita-me guiá-lo...",
+                    "Saudações! Sou Gatomante, seu guia pelos caminhos esotéricos deste sistema.",
+                    "As estrelas se alinharam para sua chegada... que interessante! 🌟"
+                ],
+                boasVindasPersonalizada: [
+                    "Ah, {nome}... as energias cósmicas sussurraram sua chegada!",
+                    "Bem-vindo de volta, {nome}! Senti sua aura se aproximando...",
+                    "Olá, {nome}! Espero que tenha trazido curiosidade para nossa jornada mística!",
+                    "Miau, {nome}! Pronto para desvendar mais segredos digitais?"
+                ],
+                navegacao: [
+                    "Clique com o botão direito no desktop para personalizar... até um filhote saberia isso!",
+                    "Arraste as janelas pela barra de título, não é magia negra, é só tecnologia.",
+                    "O widget planetário mostra a hora atual... muito útil para rituais, não acha?",
+                    "Use o menu Iniciar para acessar seus aplicativos favoritos... elementar!"
+                ],
+                navegacaoPersonalizada: [
+                    "Vejo que você gosta do tema {tema}, {nome}... excelente escolha mística!",
+                    "Seus {numApps} aplicativos favoritos estão bem organizados, {nome}!",
+                    "Notei que você usa muito o {appFavorito}... um verdadeiro conhecedor!",
+                    "Que tal explorar algo novo hoje, {nome}? Há mistérios inexplorados aqui!"
+                ],
+                misticas: [
+                    "A hora planetária mudou para {planeta}... momento propício para {acao}!",
+                    "As estrelas se alinham favoravelmente... que tal explorar algo novo?",
+                    "Sinto energias de {planeta} no ar... perfeito para {atividade}!",
+                    "A lua sussurra segredos... mas primeiro, que tal personalizar seu tema?"
+                ],
+                tecnicas: [
+                    "Seus atalhos estão desorganizados... um verdadeiro caos cósmico!",
+                    "Que tal personalizar seu tema? Até gatos gostam de variedade.",
+                    "O sistema de volume permite controlar cada aspecto... muito útil!",
+                    "Você pode adicionar novos sites ao sistema... magia moderna!"
+                ],
+                tecnicasPersonalizadas: [
+                    "Vejo que você mudou o tema {vezes} vezes, {nome}... um verdadeiro artista místico!",
+                    "Seu volume está em {volume}%... perfeito para rituais noturnos!",
+                    "Você tem {numSites} sites configurados... impressionante coleção digital!",
+                    "Que tal experimentar o tema {sugestaoTema}? Combinaria com sua aura!"
+                ],
+                inatividade: [
+                    "Hmm... parece que você está contemplando o vazio cósmico...",
+                    "Posso ajudá-lo com algo? Ou prefere continuar admirando minha elegância?",
+                    "O tempo passa... como as areias de uma ampulheta mística...",
+                    "Que tal explorar alguma funcionalidade? Estou aqui para guiá-lo!"
+                ],
+                inactividadePersonalizada: [
+                    "{nome}, as energias cósmicas sugerem uma pausa... ou ação?",
+                    "Vejo que você está meditando, {nome}... ou apenas procrastinando?",
+                    "O {planeta} atual favorece {acao}, {nome}... que tal tentar?",
+                    "Sua última atividade foi {ultimaAcao}... pronto para algo novo?"
+                ],
+                conquistas: [
+                    "Parabéns! Você desbloqueou o mistério da personalização!",
+                    "Impressionante! Você dominou {numAcoes} funcionalidades místicas!",
+                    "Excelente! Você se tornou um verdadeiro mago digital!",
+                    "Fantástico! As estrelas celebram sua dedicação!"
+                ],
+                dicas_avancadas: [
+                    "Dica secreta: Pressione Ctrl+Shift+G para invocar poderes ocultos!",
+                    "Mistério revelado: O tema muda com as fases da lua... experimente!",
+                    "Segredo ancestral: Clique 3 vezes no logo para easter eggs!",
+                    "Conhecimento oculto: O widget planetário prevê momentos propícios!"
+                ],
+                afast_alerts: [
+                    "AFÁSTI! O sistema detectou {evento}... mantenha-se protegido!",
+                    "Alerta místico: {evento} foi identificado pelo nosso antivírus astrológico!",
+                    "Cuidado, {nome}! O AFÁST detectou energias de {evento}...",
+                    "Proteção ativada! {evento} não passará despercebido pelo AFÁST!"
+                ],
+                afast_info: [
+                    "O AFÁST é nosso antivírus astrológico... protege contra energias cósmicas adversas!",
+                    "Clique no escudo dourado 🛡️ para ver a central de notificações AFÁST!",
+                    "O sistema AFÁST monitora eventos como Mercúrio retrógrado e eclipses...",
+                    "Quando o AFÁST alerta, é melhor prestar atenção... confie em mim!"
+                ],
+                demo_login: [
+                    "Bem-vindo à conta demo, Luna Mystica! Sou o Gatomante, seu guia místico pessoal.",
+                    "Olá, Luna! Esta conta demo mostra todas as funcionalidades do Aurora OS... explore à vontade!",
+                    "Miau! Vejo que você é de Leão com Lua em Escorpião... uma combinação poderosa!",
+                    "Luna, sua conta demo tem mapa astral completo e histórico AFÁST... perfeito para explorar!"
+                ],
+                demo_features: [
+                    "Esta conta demo tem 47 logins e 15 personalizações... veja como tudo funciona!",
+                    "Seu perfil astrológico está completo: Sol em Leão, Lua em Escorpião, Ascendente em Libra!",
+                    "O sistema AFÁST já detectou 8 eventos astrológicos nesta conta... impressionante!",
+                    "Explore o tema Roxo Imperial e o wallpaper Aurora... combinam com sua energia!"
+                ]
+            },
+            
+            // Sistema de contexto inteligente
+            contexto: {
+                usuarioLogado: false,
+                nomeUsuario: '',
+                tempoSessao: 0,
+                acoesPorSessao: 0,
+                temaAtual: 0,
+                appsFavoritos: [],
+                ultimaAcao: '',
+                planetaAtual: 'Sol',
+                numeroPersonalizacoes: 0,
+                conquistasDesbloqueadas: []
+            },
+            
+            // Mapeamento de planetas para ações
+            planetasAcoes: {
+                'Sol': { acao: 'criatividade', atividade: 'projetos criativos' },
+                'Lua': { acao: 'intuição', atividade: 'meditação' },
+                'Marte': { acao: 'ação', atividade: 'tarefas desafiadoras' },
+                'Mercúrio': { acao: 'comunicação', atividade: 'estudos' },
+                'Júpiter': { acao: 'expansão', atividade: 'aprendizado' },
+                'Vênus': { acao: 'harmonia', atividade: 'arte e beleza' },
+                'Saturno': { acao: 'disciplina', atividade: 'organização' }
+            }
+        };
+        
+        let gatomanteTimer = null;
+        let gatomanteVisible = false;
+        
+        function showGatomante(tipo = 'boasVindas', delay = 0, contextoExtra = {}) {
+            setTimeout(() => {
+                const container = document.getElementById('gatomanteContainer');
+                const textElement = document.getElementById('gatomanteText');
+                
+                // Atualizar contexto do Gatomante
+                updateGatomanteContext();
+                
+                // Escolher dica inteligente baseada no contexto
+                const dicaPersonalizada = getSmartTip(tipo, contextoExtra);
+                
+                textElement.textContent = dicaPersonalizada;
+                container.classList.add('active');
+                gatomanteVisible = true;
+                
+                // Registrar ação
+                gatomante.contexto.acoesPorSessao++;
+                
+                // Auto-hide após 8 segundos
+                clearTimeout(gatomanteTimer);
+                gatomanteTimer = setTimeout(() => {
+                    hideGatomante();
+                }, 8000);
+                
+                // Atualizar última aparição
+                gatomante.ultimaAparicao = Date.now();
+                
+            }, delay);
+        }
+        
+        function updateGatomanteContext() {
+            // Atualizar contexto com informações atuais
+            gatomante.contexto.usuarioLogado = !!currentUser;
+            gatomante.contexto.nomeUsuario = currentUser ? currentUser.name.split(' ')[0] : '';
+            gatomante.contexto.temaAtual = currentTheme;
+            gatomante.contexto.planetaAtual = document.getElementById('planetaryName')?.textContent || 'Sol';
+            gatomante.contexto.tempoSessao = Date.now() - (gatomante.ultimaAparicao || Date.now());
+            
+            // Contar personalizações do usuário
+            if (currentUser && currentUser.settings) {
+                gatomante.contexto.numeroPersonalizacoes = 
+                    (currentUser.settings.theme !== 0 ? 1 : 0) +
+                    (currentUser.settings.wallpaper !== 0 ? 1 : 0) +
+                    (currentUser.settings.volumes.master !== 70 ? 1 : 0);
+            }
+        }
+        
+        function getSmartTip(tipo, contextoExtra = {}) {
+            const ctx = gatomante.contexto;
+            let dicasDisponiveis = [];
+            let dicaEscolhida = '';
+            
+            // Escolher categoria de dicas baseada no contexto
+            if (ctx.usuarioLogado && gatomante.dicas[tipo + 'Personalizada']) {
+                dicasDisponiveis = gatomante.dicas[tipo + 'Personalizada'];
+            } else if (ctx.usuarioLogado && tipo === 'inatividade' && gatomante.dicas['inactividadePersonalizada']) {
+                dicasDisponiveis = gatomante.dicas['inactividadePersonalizada'];
+            } else {
+                dicasDisponiveis = gatomante.dicas[tipo] || gatomante.dicas.boasVindas;
+            }
+            
+            // Escolher dica aleatória
+            dicaEscolhida = dicasDisponiveis[Math.floor(Math.random() * dicasDisponiveis.length)];
+            
+            // Personalizar dica com contexto
+            dicaEscolhida = personalizarDica(dicaEscolhida, contextoExtra);
+            
+            return dicaEscolhida;
+        }
+        
+        function personalizarDica(dica, contextoExtra = {}) {
+            const ctx = gatomante.contexto;
+            const temas = ['Aurora Sagrada', 'Windows ME', 'Cyberpunk', 'Vintage'];
+            
+            // Substituições de contexto
+            const substituicoes = {
+                '{nome}': ctx.nomeUsuario,
+                '{tema}': temas[ctx.temaAtual] || 'Aurora Sagrada',
+                '{planeta}': ctx.planetaAtual,
+                '{acao}': gatomante.planetasAcoes[ctx.planetaAtual]?.acao || 'reflexão',
+                '{atividade}': gatomante.planetasAcoes[ctx.planetaAtual]?.atividade || 'contemplação',
+                '{numApps}': sitesConfig.length,
+                '{appFavorito}': sitesConfig[0]?.name || 'aplicativo',
+                '{vezes}': ctx.numeroPersonalizacoes,
+                '{volume}': Math.round(volumes.master),
+                '{numSites}': sitesConfig.length,
+                '{sugestaoTema}': temas[(ctx.temaAtual + 1) % temas.length],
+                '{ultimaAcao}': ctx.ultimaAcao || 'exploração',
+                '{numAcoes}': ctx.acoesPorSessao,
+                ...contextoExtra
+            };
+            
+            // Aplicar substituições
+            let dicaPersonalizada = dica;
+            for (const [placeholder, valor] of Object.entries(substituicoes)) {
+                dicaPersonalizada = dicaPersonalizada.replace(new RegExp(placeholder, 'g'), valor);
+            }
+            
+            return dicaPersonalizada;
+        }
+        
+        function hideGatomante() {
+            const container = document.getElementById('gatomanteContainer');
+            container.classList.remove('active');
+            gatomanteVisible = false;
+            clearTimeout(gatomanteTimer);
+        }
+        
+        function gatomanteContextual(acao, contextoExtra = {}) {
+            // Evitar spam de dicas
+            if (gatomanteVisible || Date.now() - gatomante.ultimaAparicao < 10000) {
+                return;
+            }
+            
+            // Registrar ação no contexto
+            gatomante.contexto.ultimaAcao = acao;
+            
+            let tipoDica = 'navegacao';
+            let delay = 1000;
+            
+            switch(acao) {
+                case 'personalizacao':
+                    tipoDica = 'tecnicas';
+                    delay = 2000;
+                    break;
+                case 'planeta_mudou':
+                    tipoDica = 'misticas';
+                    delay = 1500;
+                    break;
+                case 'inatividade':
+                    tipoDica = 'inatividade';
+                    delay = 500;
+                    break;
+                case 'primeiro_acesso':
+                    tipoDica = currentUser ? 'boasVindasPersonalizada' : 'boasVindas';
+                    delay = 3000;
+                    break;
+                case 'login_sucesso':
+                    tipoDica = 'boasVindasPersonalizada';
+                    delay = 2000;
+                    break;
+                case 'afast_alert':
+                    tipoDica = 'afast_alerts';
+                    delay = 1000;
+                    break;
+                case 'afast_info':
+                    tipoDica = 'afast_info';
+                    delay = 1500;
+                    break;
+                case 'tema_mudou':
+                    tipoDica = 'tecnicasPersonalizadas';
+                    contextoExtra.acao = 'mudança de tema';
+                    delay = 1500;
+                    break;
+                case 'volume_mudou':
+                    tipoDica = 'tecnicasPersonalizadas';
+                    contextoExtra.acao = 'ajuste de volume';
+                    delay = 1000;
+                    break;
+                case 'app_aberto':
+                    tipoDica = 'navegacaoPersonalizada';
+                    contextoExtra.app = contextoExtra.app || 'aplicativo';
+                    delay = 1500;
+                    break;
+                case 'conquista':
+                    tipoDica = 'conquistas';
+                    delay = 1000;
+                    break;
+                case 'dica_avancada':
+                    tipoDica = 'dicas_avancadas';
+                    delay = 2000;
+                    break;
+                case 'demo_login':
+                    tipoDica = 'demo_login';
+                    delay = 1000;
+                    break;
+                case 'demo_features':
+                    tipoDica = 'demo_features';
+                    delay = 1500;
+                    break;
+                default:
+                    tipoDica = 'navegacao';
+            }
+            
+            showGatomante(tipoDica, delay, contextoExtra);
+        }
+        
+        function detectarConquistas() {
+            const ctx = gatomante.contexto;
+            const conquistasAntigas = ctx.conquistasDesbloqueadas.length;
+            
+            // Conquista: Primeiro login
+            if (currentUser && !ctx.conquistasDesbloqueadas.includes('primeiro_login')) {
+                ctx.conquistasDesbloqueadas.push('primeiro_login');
+                setTimeout(() => {
+                    gatomanteContextual('conquista', { conquista: 'Primeiro Login Místico!' });
+                }, 5000);
+            }
+            
+            // Conquista: Personalização
+            if (ctx.numeroPersonalizacoes >= 3 && !ctx.conquistasDesbloqueadas.includes('personalizador')) {
+                ctx.conquistasDesbloqueadas.push('personalizador');
+                gatomanteContextual('conquista', { conquista: 'Mestre da Personalização!' });
+            }
+            
+            // Conquista: Explorador
+            if (ctx.acoesPorSessao >= 10 && !ctx.conquistasDesbloqueadas.includes('explorador')) {
+                ctx.conquistasDesbloqueadas.push('explorador');
+                gatomanteContextual('conquista', { conquista: 'Explorador Cósmico!' });
+            }
+            
+            // Conquista: Tempo de sessão
+            if (ctx.tempoSessao > 300000 && !ctx.conquistasDesbloqueadas.includes('dedicado')) { // 5 minutos
+                ctx.conquistasDesbloqueadas.push('dedicado');
+                gatomanteContextual('conquista', { conquista: 'Usuário Dedicado!' });
+            }
+        }
+        
+        function gatomanteThinking() {
+            const sprite = document.getElementById('gatomanteCharacter');
+            sprite.classList.add('gatomante-thinking');
+            
+            setTimeout(() => {
+                sprite.classList.remove('gatomante-thinking');
+            }, 2000);
+        }
+        
+        // Detectar inatividade do usuário
+        let inactivityTimer = null;
+        let lastActivity = Date.now();
+        
+        function resetInactivityTimer() {
+            lastActivity = Date.now();
+            clearTimeout(inactivityTimer);
+            
+            inactivityTimer = setTimeout(() => {
+                if (!gatomanteVisible) {
+                    gatomanteContextual('inatividade');
+                }
+            }, 30000); // 30 segundos de inatividade
+        }
+        
+        // Eventos para detectar atividade
+        document.addEventListener('mousemove', resetInactivityTimer);
+        document.addEventListener('click', resetInactivityTimer);
+        document.addEventListener('keypress', resetInactivityTimer);
+        
+        // Clique no Gatomante para nova dica
+        document.getElementById('gatomanteCharacter').addEventListener('click', () => {
+            if (gatomanteVisible) {
+                gatomanteThinking();
+                setTimeout(() => {
+                    showGatomante('navegacao');
+                }, 1000);
+            }
+        });
+        
+        // Inicializar Gatomante
+        function initGatomante() {
+            // Verificar se é primeira visita
+            const primeiraVisita = !localStorage.getItem('auroraOS_gatomante_visited');
+            
+            if (primeiraVisita) {
+                localStorage.setItem('auroraOS_gatomante_visited', 'true');
+                showGatomante('boasVindas', 2000);
+            } else {
+                // Usuário retornando
+                const saudacoes = [
+                    "Ah, você retornou... as energias cósmicas o trouxeram de volta!",
+                    "Bem-vindo de volta, mortal... senti sua presença se aproximando.",
+                    "Olá novamente! Espero que tenha trazido oferendas... ou pelo menos curiosidade!"
+                ];
+                const saudacao = saudacoes[Math.floor(Math.random() * saudacoes.length)];
+                
+                setTimeout(() => {
+                    const textElement = document.getElementById('gatomanteText');
+                    textElement.textContent = saudacao;
+                    showGatomante('boasVindas', 1500);
+                }, 1000);
+            }
+            
+            // Iniciar timer de inatividade
+            resetInactivityTimer();
+        }
+        
+        // Sistema de Boot e Boas-vindas
+        let bootProgress = 0;
+        let bootSteps = [
+            "Inicializando sistema místico...",
+            "Carregando energias cósmicas...",
+            "Conectando com as esferas celestiais...",
+            "Preparando o Gatomante...",
+            "Alinhando chakras digitais...",
+            "Invocando interfaces ancestrais...",
+            "Ativando portais dimensionais...",
+            "Sistema pronto para uso!"
+        ];
+        
+        function createMysticalParticles(containerId) {
+            const container = document.getElementById(containerId);
+            const particles = ['✨', '🌟', '⭐', '💫', '🔮', '🌙', '☽', '☾'];
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                
+                container.appendChild(particle);
+                
+                // Remover partícula após animação
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 8000);
+            }, 500);
+        }
+        
+        function updateBootProgress() {
+            const progressBar = document.getElementById('bootProgressBar');
+            const statusText = document.getElementById('bootStatus');
+            
+            if (bootProgress < bootSteps.length) {
+                const percentage = ((bootProgress + 1) / bootSteps.length) * 100;
+                progressBar.style.width = percentage + '%';
+                statusText.textContent = bootSteps[bootProgress];
+                bootProgress++;
+                
+                if (bootProgress < bootSteps.length) {
+                    setTimeout(updateBootProgress, 800);
+                } else {
+                    setTimeout(showWelcomeScreen, 1000);
+                }
+            }
+        }
+        
+        function showWelcomeScreen() {
+            const bootScreen = document.getElementById('bootScreen');
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            
+            bootScreen.classList.add('hidden');
+            
+            setTimeout(() => {
+                bootScreen.style.display = 'none';
+                welcomeScreen.classList.add('active');
+                createMysticalParticles('welcomeParticles');
+            }, 1000);
+        }
+        
+        function enterSystem() {
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            
+            // Tocar sons de dial-up em sequência
+            playDialupSounds();
+            
+            welcomeScreen.classList.add('hidden');
+            
+            setTimeout(() => {
+                welcomeScreen.style.display = 'none';
+                
+                // Verificar se usuário já está logado
+                if (checkAutoLogin()) {
+                    // Ir direto para o sistema
+                    initMainSystem();
+                } else {
+                    // Mostrar tela de autenticação
+                    showAuthScreen();
+                }
+            }, 1000);
+        }
+        
+        function playDialupSounds() {
+            const sound1 = document.getElementById('dialupSound1');
+            const sound2 = document.getElementById('dialupSound2');
+            
+            // Configurar volume baseado nas configurações do sistema
+            const masterVolume = volumes.master / 100;
+            const systemVolume = volumes.system / 100;
+            const finalVolume = masterVolume * systemVolume;
+            
+            sound1.volume = finalVolume;
+            sound2.volume = finalVolume;
+            
+            // Tocar primeiro som
+            sound1.play().catch(e => {
+                console.log('Erro ao reproduzir primeiro som de dial-up:', e);
+            });
+            
+            // Quando o primeiro som terminar, tocar o segundo
+            sound1.addEventListener('ended', function() {
+                sound2.play().catch(e => {
+                    console.log('Erro ao reproduzir segundo som de dial-up:', e);
+                });
+            }, { once: true });
+        }
+        
+        function initMainSystem() {
+            // Funções já existentes de inicialização
+            generateDesktopIcons();
+            generateStartMenu();
+            generateColorPalette();
+            generateWallpaperPresets();
+            updateClock();
+            updatePlanetaryInfo();
+            loadPersonalization();
+            
+            // Atualiza relógio a cada segundo
+            setInterval(updateClock, 1000);
+            
+            // Atualiza informações planetárias a cada minuto
+            setInterval(updatePlanetaryInfo, 60000);
+            
+            // Event listeners
+            setupEventListeners();
+            
+            // Inicializar Gatomante após entrar no sistema
+            setTimeout(() => {
+                initGatomante();
+                // Detectar conquistas periodicamente
+                setInterval(detectarConquistas, 30000); // A cada 30 segundos
+                
+                // Inicializar sistema AFÁST
+                initAfastSystem();
+            }, 2000);
+        }
+        
+        // Sistema de Autenticação
+        let currentUser = null;
+        let userDatabase = JSON.parse(localStorage.getItem('auroraOS_users') || '{}');
+        
+        // Criar conta demo se não existir
+        function initDemoAccount() {
+            const demoEmail = 'demo@auroraos.com';
+            
+            if (!userDatabase[demoEmail]) {
+                const demoUser = {
+                    id: 'demo_user_001',
+                    name: 'Luna Mystica',
+                    email: demoEmail,
+                    password: 'demo123',
+                    createdAt: '2024-01-15T14:30:00.000Z',
+                    receiveNotifications: true,
+                    birthData: {
+                        date: '1990-07-23',
+                        time: '14:30',
+                        place: 'São Paulo, SP, Brasil',
+                        hasAstrologicalData: true
+                    },
+                    astrologicalProfile: {
+                        calculatedAt: '2024-01-15T14:30:00.000Z',
+                        birthData: {
+                            date: '1990-07-23',
+                            time: '14:30',
+                            place: 'São Paulo, SP, Brasil'
+                        },
+                        sunSign: { name: 'Leão', symbol: '♌', element: 'Fogo', quality: 'Fixo' },
+                        moonSign: { name: 'Escorpião', symbol: '♏', element: 'Água' },
+                        ascendant: { name: 'Libra', symbol: '♎' },
+                        elements: { Fogo: 1, Terra: 0, Ar: 1, Água: 1 },
+                        qualities: { Cardinal: 0, Fixo: 1, Mutável: 0 },
+                        personalityTraits: ['Criativo', 'Generoso', 'Dramático', 'Intenso', 'Transformador'],
+                        recommendations: [
+                            'Pratique exercícios físicos regulares para canalizar sua energia',
+                            'Desenvolva projetos criativos que despertem sua paixão',
+                            'Medite para equilibrar sua impulsividade natural',
+                            'Honre suas emoções e pratique autocompaixão',
+                            'Desenvolva sua intuição através da meditação'
+                        ]
+                    },
+                    settings: {
+                        theme: 2, // Tema Roxo Imperial
+                        wallpaper: 1, // Gradiente Aurora
+                        volumes: { master: 75, notifications: 60, system: 65 },
+                        showPlanetaryWidget: true,
+                        showNotifications: true,
+                        showVolumeControl: true
+                    },
+                    stats: {
+                        loginCount: 47,
+                        totalSessionTime: 12540, // em minutos
+                        personalizationChanges: 15,
+                        appsOpened: 89,
+                        afastAlertsReceived: 8
+                    }
+                };
+                
+                userDatabase[demoEmail] = demoUser;
+                localStorage.setItem('auroraOS_users', JSON.stringify(userDatabase));
+            }
+        }
+        
+        function showAuthScreen() {
+            const authScreen = document.getElementById('authScreen');
+            authScreen.classList.add('active');
+            createMysticalParticles('authParticles');
+        }
+        
+        function hideAuthScreen() {
+            const authScreen = document.getElementById('authScreen');
+            authScreen.classList.add('hidden');
+            
+            setTimeout(() => {
+                authScreen.style.display = 'none';
+                authScreen.classList.remove('hidden');
+            }, 1000);
+        }
+        
+        function showLoginForm() {
+            document.getElementById('loginForm').style.display = 'flex';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('forgotForm').style.display = 'none';
+            clearMessages();
+        }
+        
+        function showRegisterForm() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'flex';
+            document.getElementById('forgotForm').style.display = 'none';
+            clearMessages();
+        }
+        
+        function showForgotPassword() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('forgotForm').style.display = 'flex';
+            clearMessages();
+        }
+        
+        function clearMessages() {
+            document.getElementById('authMessage').style.display = 'none';
+            document.getElementById('registerMessage').style.display = 'none';
+            document.getElementById('forgotMessage').style.display = 'none';
+        }
+        
+        function showMessage(elementId, message, isError = true) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = isError ? 'auth-error' : 'auth-success';
+            element.style.display = 'block';
+        }
+        
+        function showLoading(loadingId, show = true) {
+            const element = document.getElementById(loadingId);
+            element.classList.toggle('active', show);
+        }
+        
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+        
+        function loginDemo() {
+            // Inicializar conta demo
+            initDemoAccount();
+            
+            clearMessages();
+            showLoading('authLoading', true);
+            
+            // Simular delay de autenticação
+            setTimeout(() => {
+                const demoUser = userDatabase['demo@auroraos.com'];
+                
+                if (demoUser) {
+                    // Login bem-sucedido
+                    currentUser = demoUser;
+                    sessionStorage.setItem('auroraOS_current_user', JSON.stringify(demoUser));
+                    
+                    showLoading('authLoading', false);
+                    showMessage('authMessage', `Bem-vindo à conta demo, ${demoUser.name}! Explore todas as funcionalidades místicas.`, false);
+                    
+                    // Entrar no sistema após 2 segundos
+                    setTimeout(() => {
+                        hideAuthScreen();
+                        setTimeout(() => {
+                            initMainSystem();
+                            
+                            // Mostrar dica especial do Gatomante para conta demo
+                            setTimeout(() => {
+                                gatomanteContextual('demo_login', { userName: demoUser.name });
+                            }, 3000);
+                        }, 1000);
+                    }, 2000);
+                } else {
+                    showLoading('authLoading', false);
+                    showMessage('authMessage', 'Erro ao carregar conta demo. Tente novamente.');
+                }
+            }, 1500);
+        }
+        
+        function performLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            clearMessages();
+            
+            if (!email || !password) {
+                showMessage('authMessage', 'Por favor, preencha todos os campos.');
+                return;
+            }
+            
+            showLoading('authLoading', true);
+            
+            // Simular delay de autenticação
+            setTimeout(() => {
+                // Verificar credenciais
+                const user = userDatabase[email.toLowerCase()];
+                
+                if (!user || user.password !== password) {
+                    showLoading('authLoading', false);
+                    showMessage('authMessage', 'Email/usuário ou senha incorretos.');
+                    return;
+                }
+                
+                // Login bem-sucedido
+                currentUser = user;
+                
+                // Salvar sessão
+                if (rememberMe) {
+                    localStorage.setItem('auroraOS_current_user', JSON.stringify(user));
+                } else {
+                    sessionStorage.setItem('auroraOS_current_user', JSON.stringify(user));
+                }
+                
+                showLoading('authLoading', false);
+                showMessage('authMessage', `Bem-vindo de volta, ${user.name}!`, false);
+                
+                // Carregar configurações do usuário
+                loadUserSettings();
+                
+                // Entrar no sistema após 1.5 segundos
+                setTimeout(() => {
+                    hideAuthScreen();
+                    setTimeout(() => {
+                        initMainSystem();
+                        // Notificar Gatomante sobre login bem-sucedido
+                        setTimeout(() => {
+                            gatomanteContextual('login_sucesso');
+                            detectarConquistas();
+                        }, 3000);
+                    }, 1000);
+                }, 1500);
+                
+            }, 1500);
+        }
+        
+        function performRegister() {
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim().toLowerCase();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const acceptTerms = document.getElementById('acceptTerms').checked;
+            const receiveNotifications = document.getElementById('receiveNotifications').checked;
+            
+            // Dados astrológicos opcionais
+            const birthDate = document.getElementById('birthDate').value;
+            const birthTime = document.getElementById('birthTime').value;
+            const birthPlace = document.getElementById('birthPlace').value.trim();
+            
+            clearMessages();
+            
+            // Validações
+            if (!name || !email || !password || !confirmPassword) {
+                showMessage('registerMessage', 'Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showMessage('registerMessage', 'Por favor, digite um email válido.');
+                return;
+            }
+            
+            if (!validatePassword(password)) {
+                showMessage('registerMessage', 'A senha deve ter pelo menos 6 caracteres.');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showMessage('registerMessage', 'As senhas não coincidem.');
+                return;
+            }
+            
+            if (!acceptTerms) {
+                showMessage('registerMessage', 'Você deve aceitar os Termos de Uso.');
+                return;
+            }
+            
+            if (userDatabase[email]) {
+                showMessage('registerMessage', 'Este email já está cadastrado.');
+                return;
+            }
+            
+            showLoading('registerLoading', true);
+            
+            // Simular delay de registro
+            setTimeout(() => {
+                // Criar novo usuário
+                const newUser = {
+                    id: Date.now().toString(),
+                    name: name,
+                    email: email,
+                    password: password,
+                    createdAt: new Date().toISOString(),
+                    receiveNotifications: receiveNotifications,
+                    birthData: {
+                        date: birthDate,
+                        time: birthTime,
+                        place: birthPlace,
+                        hasAstrologicalData: !!(birthDate && birthTime && birthPlace)
+                    },
+                    astrologicalProfile: null, // Será calculado se dados estiverem disponíveis
+                    settings: {
+                        theme: 0,
+                        wallpaper: 0,
+                        volumes: { master: 70, notifications: 50, system: 60 },
+                        showPlanetaryWidget: true,
+                        showNotifications: true,
+                        showVolumeControl: true
+                    }
+                };
+                
+                // Calcular mapa astral se dados estiverem disponíveis
+                if (newUser.birthData.hasAstrologicalData) {
+                    newUser.astrologicalProfile = calculateAstrologicalProfile(birthDate, birthTime, birthPlace);
+                }
+                
+                // Salvar no banco de dados
+                userDatabase[email] = newUser;
+                localStorage.setItem('auroraOS_users', JSON.stringify(userDatabase));
+                
+                showLoading('registerLoading', false);
+                showMessage('registerMessage', `Conta criada com sucesso! Bem-vindo, ${name}!`, false);
+                
+                // Auto-login
+                currentUser = newUser;
+                sessionStorage.setItem('auroraOS_current_user', JSON.stringify(newUser));
+                
+                // Entrar no sistema após 2 segundos
+                setTimeout(() => {
+                    hideAuthScreen();
+                    setTimeout(() => {
+                        initMainSystem();
+                    }, 1000);
+                }, 2000);
+                
+            }, 2000);
+        }
+        
+        function performForgotPassword() {
+            const email = document.getElementById('forgotEmail').value.trim().toLowerCase();
+            
+            clearMessages();
+            
+            if (!email) {
+                showMessage('forgotMessage', 'Por favor, digite seu email.', true);
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showMessage('forgotMessage', 'Por favor, digite um email válido.', true);
+                return;
+            }
+            
+            showLoading('forgotLoading', true);
+            
+            // Simular envio de email
+            setTimeout(() => {
+                showLoading('forgotLoading', false);
+                
+                if (userDatabase[email]) {
+                    showMessage('forgotMessage', 'Link de recuperação enviado para seu email!', false);
+                } else {
+                    showMessage('forgotMessage', 'Email não encontrado em nossa base de dados.', true);
+                }
+            }, 2000);
+        }
+        
+        function loadUserSettings() {
+            if (!currentUser || !currentUser.settings) return;
+            
+            const settings = currentUser.settings;
+            
+            // Aplicar configurações salvas
+            currentTheme = settings.theme || 0;
+            currentWallpaper = settings.wallpaper || 0;
+            volumes = settings.volumes || { master: 70, notifications: 50, system: 60 };
+            
+            applyColorTheme();
+            applyWallpaper();
+        }
+        
+        function saveUserSettings() {
+            if (!currentUser) return;
+            
+            // Atualizar configurações do usuário
+            currentUser.settings = {
+                theme: currentTheme,
+                wallpaper: currentWallpaper,
+                volumes: volumes,
+                showPlanetaryWidget: document.getElementById('showPlanetaryWidget')?.checked || true,
+                showNotifications: document.getElementById('showNotifications')?.checked || true,
+                showVolumeControl: document.getElementById('showVolumeControl')?.checked || true
+            };
+            
+            // Salvar no banco de dados
+            userDatabase[currentUser.email] = currentUser;
+            localStorage.setItem('auroraOS_users', JSON.stringify(userDatabase));
+            
+            // Atualizar sessão
+            const storage = localStorage.getItem('auroraOS_current_user') ? localStorage : sessionStorage;
+            storage.setItem('auroraOS_current_user', JSON.stringify(currentUser));
+        }
+        
+        function checkAutoLogin() {
+            // Verificar se há usuário logado
+            const savedUser = localStorage.getItem('auroraOS_current_user') || 
+                             sessionStorage.getItem('auroraOS_current_user');
+            
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                loadUserSettings();
+                return true;
+            }
+            
+            return false;
+        }
+        
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('auroraOS_current_user');
+            sessionStorage.removeItem('auroraOS_current_user');
+            
+            // Recarregar página para reiniciar sistema
+            location.reload();
+        }
+        
+        // ========================================
+        // 🛡️ SISTEMA AFÁST - ANTIVÍRUS ASTROLÓGICO
+        // ========================================
+        
+        // Base de dados de eventos astrológicos
+        const afastEvents = {
+            mercuryRetrograde: {
+                name: "Mercúrio Retrógrado",
+                icon: "☿",
+                description: "O planeta da comunicação está em movimento retrógrado, causando possíveis interferências em sistemas de comunicação e tecnologia.",
+                advice: "💡 Recomendação: Faça backup de arquivos importantes e evite assinar contratos importantes neste período.",
+                severity: "high",
+                duration: 21 // dias
+            },
+            voidMoon: {
+                name: "Lua Fora de Curso",
+                icon: "🌑",
+                description: "A Lua não faz aspectos maiores antes de mudar de signo, criando um período de energia instável.",
+                advice: "⚠️ Evite: Tomar decisões importantes, iniciar projetos novos ou fazer compras significativas.",
+                severity: "medium",
+                duration: 0.5 // horas
+            },
+            eclipse: {
+                name: "Eclipse Detectado",
+                icon: "🌘",
+                description: "Um eclipse está ativo, trazendo energias intensas de transformação e mudança.",
+                advice: "🔮 Recomendação: Momento ideal para meditação, limpeza energética e liberação do que não serve mais.",
+                severity: "critical",
+                duration: 3 // dias
+            },
+            marsSquare: {
+                name: "Marte em Tensão",
+                icon: "♂",
+                description: "Marte está formando aspectos tensos, aumentando a energia agressiva e conflitos.",
+                advice: "🛡️ Cuidado: Evite discussões desnecessárias e pratique exercícios para canalizar a energia.",
+                severity: "medium",
+                duration: 7 // dias
+            }
+        };
+        
+        // Sistema de notificações AFÁST
+        let afastNotifications = [];
+        let afastActive = false;
+        
+        function initAfastSystem() {
+            // Verificar eventos astrológicos simulados
+            checkAstrologicalEvents();
+            
+            // Verificar eventos a cada hora
+            setInterval(checkAstrologicalEvents, 3600000); // 1 hora
+            
+            // Carregar notificações salvas
+            loadAfastNotifications();
+        }
+        
+        function checkAstrologicalEvents() {
+            const now = new Date();
+            const hour = now.getHours();
+            const day = now.getDay();
+            
+            // Simulação de eventos baseada em horários
+            if (hour === 13 && Math.random() < 0.3) { // 30% chance às 13h
+                triggerAfastEvent('mercuryRetrograde');
+            }
+            
+            if (hour === 0 && Math.random() < 0.2) { // 20% chance à meia-noite
+                triggerAfastEvent('voidMoon');
+            }
+            
+            if (day === 0 && hour === 12 && Math.random() < 0.1) { // 10% chance domingo ao meio-dia
+                triggerAfastEvent('eclipse');
+            }
+            
+            if (hour === 18 && Math.random() < 0.25) { // 25% chance às 18h
+                triggerAfastEvent('marsSquare');
+            }
+        }
+        
+        function triggerAfastEvent(eventType) {
+            const event = afastEvents[eventType];
+            if (!event) return;
+            
+            // Verificar se já existe notificação ativa deste tipo
+            const existingNotification = afastNotifications.find(n => n.type === eventType && n.active);
+            if (existingNotification) return;
+            
+            // Criar nova notificação
+            const notification = {
+                id: Date.now(),
+                type: eventType,
+                event: event,
+                timestamp: new Date(),
+                active: true,
+                acknowledged: false
+            };
+            
+            afastNotifications.push(notification);
+            saveAfastNotifications();
+            
+            // Mostrar notificação
+            showAfastNotification(notification);
+            
+            // Reproduzir alerta sonoro
+            playAfastAlert(event.severity);
+            
+            // Notificar Gatomante
+            setTimeout(() => {
+                gatomanteContextual('afast_alert', { event: event.name });
+            }, 3000);
+        }
+        
+        function showAfastNotification(notification) {
+            const afastElement = document.getElementById('afastNotification');
+            const event = notification.event;
+            
+            // Atualizar conteúdo
+            document.getElementById('afastEvent').textContent = `${event.icon} ${event.name}`;
+            document.getElementById('afastDescription').textContent = event.description;
+            document.getElementById('afastAdvice').textContent = event.advice;
+            
+            // Mostrar notificação
+            afastElement.classList.add('active');
+            afastActive = true;
+            
+            // Auto-ocultar após 15 segundos se não for crítico
+            if (event.severity !== 'critical') {
+                setTimeout(() => {
+                    if (afastActive) {
+                        closeAfastNotification();
+                    }
+                }, 15000);
+            }
+        }
+        
+        function closeAfastNotification() {
+            const afastElement = document.getElementById('afastNotification');
+            afastElement.classList.remove('active');
+            afastActive = false;
+        }
+        
+        function acknowledgeAfastNotification() {
+            // Marcar como reconhecida
+            const activeNotification = afastNotifications.find(n => n.active && !n.acknowledged);
+            if (activeNotification) {
+                activeNotification.acknowledged = true;
+                activeNotification.active = false;
+                saveAfastNotifications();
+            }
+            
+            closeAfastNotification();
+            
+            // Adicionar à central de notificações
+            addToNotificationCenter(activeNotification);
+        }
+        
+        function snoozeAfastNotification() {
+            closeAfastNotification();
+            
+            // Reagendar para 1 hora
+            setTimeout(() => {
+                const activeNotification = afastNotifications.find(n => n.active && !n.acknowledged);
+                if (activeNotification) {
+                    showAfastNotification(activeNotification);
+                }
+            }, 3600000); // 1 hora
+        }
+        
+        function playAfastAlert(severity) {
+            // Síntese de voz "AFÁSTI!"
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance('AFÁSTI!');
+                utterance.lang = 'pt-BR';
+                utterance.rate = 0.8;
+                utterance.pitch = 1.2;
+                utterance.volume = (volumes.notifications / 100) * (volumes.master / 100);
+                
+                // Repetir baseado na severidade
+                const repeats = severity === 'critical' ? 3 : severity === 'high' ? 2 : 1;
+                
+                for (let i = 0; i < repeats; i++) {
+                    setTimeout(() => {
+                        speechSynthesis.speak(utterance);
+                    }, i * 1500);
+                }
+            }
+        }
+        
+        function addToNotificationCenter(notification) {
+            const container = document.getElementById('notificationCenterContent');
+            const notificationElement = document.createElement('div');
+            notificationElement.className = 'notification-item';
+            
+            const timeStr = notification.timestamp.toLocaleTimeString('pt-BR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            notificationElement.innerHTML = `
+                <div class="notification-item-header">
+                    <div class="notification-item-title">${notification.event.icon} ${notification.event.name}</div>
+                    <div class="notification-item-time">${timeStr}</div>
+                </div>
+                <div class="notification-item-content">${notification.event.description}</div>
+            `;
+            
+            container.insertBefore(notificationElement, container.firstChild);
+            
+            // Limitar a 20 notificações
+            while (container.children.length > 20) {
+                container.removeChild(container.lastChild);
+            }
+        }
+        
+        function toggleNotificationCenter() {
+            const center = document.getElementById('notificationCenter');
+            center.classList.toggle('active');
+        }
+        
+        function saveAfastNotifications() {
+            localStorage.setItem('auroraOS_afast_notifications', JSON.stringify(afastNotifications));
+        }
+        
+        function loadAfastNotifications() {
+            const saved = localStorage.getItem('auroraOS_afast_notifications');
+            if (saved) {
+                afastNotifications = JSON.parse(saved);
+                
+                // Recriar notificações na central
+                afastNotifications.forEach(notification => {
+                    if (notification.acknowledged) {
+                        addToNotificationCenter(notification);
+                    }
+                });
+            }
+        }
+        
+        // ========================================
+        // 🔮 SISTEMA DE MAPA ASTRAL
+        // ========================================
+        
+        function calculateAstrologicalProfile(birthDate, birthTime, birthPlace) {
+            // Função básica de cálculo astrológico
+            // Em uma implementação real, isso se conectaria com APIs de astrologia
+            // ou bibliotecas especializadas como Swiss Ephemeris
+            
+            const profile = {
+                calculatedAt: new Date().toISOString(),
+                birthData: {
+                    date: birthDate,
+                    time: birthTime,
+                    place: birthPlace
+                },
+                sunSign: calculateSunSign(birthDate),
+                moonSign: calculateMoonSign(birthDate, birthTime),
+                ascendant: calculateAscendant(birthDate, birthTime, birthPlace),
+                elements: {},
+                qualities: {},
+                houses: {},
+                aspects: [],
+                personalityTraits: [],
+                recommendations: []
+            };
+            
+            // Calcular elementos e qualidades
+            profile.elements = calculateElements(profile);
+            profile.qualities = calculateQualities(profile);
+            
+            // Gerar traços de personalidade baseados no mapa
+            profile.personalityTraits = generatePersonalityTraits(profile);
+            
+            // Gerar recomendações personalizadas
+            profile.recommendations = generateAstrologicalRecommendations(profile);
+            
+            return profile;
+        }
+        
+        function calculateSunSign(birthDate) {
+            const date = new Date(birthDate);
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            
+            // Cálculo simplificado dos signos solares
+            const signs = [
+                { name: 'Capricórnio', symbol: '♑', element: 'Terra', quality: 'Cardinal', start: [12, 22], end: [1, 19] },
+                { name: 'Aquário', symbol: '♒', element: 'Ar', quality: 'Fixo', start: [1, 20], end: [2, 18] },
+                { name: 'Peixes', symbol: '♓', element: 'Água', quality: 'Mutável', start: [2, 19], end: [3, 20] },
+                { name: 'Áries', symbol: '♈', element: 'Fogo', quality: 'Cardinal', start: [3, 21], end: [4, 19] },
+                { name: 'Touro', symbol: '♉', element: 'Terra', quality: 'Fixo', start: [4, 20], end: [5, 20] },
+                { name: 'Gêmeos', symbol: '♊', element: 'Ar', quality: 'Mutável', start: [5, 21], end: [6, 20] },
+                { name: 'Câncer', symbol: '♋', element: 'Água', quality: 'Cardinal', start: [6, 21], end: [7, 22] },
+                { name: 'Leão', symbol: '♌', element: 'Fogo', quality: 'Fixo', start: [7, 23], end: [8, 22] },
+                { name: 'Virgem', symbol: '♍', element: 'Terra', quality: 'Mutável', start: [8, 23], end: [9, 22] },
+                { name: 'Libra', symbol: '♎', element: 'Ar', quality: 'Cardinal', start: [9, 23], end: [10, 22] },
+                { name: 'Escorpião', symbol: '♏', element: 'Água', quality: 'Fixo', start: [10, 23], end: [11, 21] },
+                { name: 'Sagitário', symbol: '♐', element: 'Fogo', quality: 'Mutável', start: [11, 22], end: [12, 21] }
+            ];
+            
+            for (const sign of signs) {
+                const [startMonth, startDay] = sign.start;
+                const [endMonth, endDay] = sign.end;
+                
+                if ((month === startMonth && day >= startDay) || (month === endMonth && day <= endDay)) {
+                    return sign;
+                }
+            }
+            
+            return signs[0]; // Fallback para Capricórnio
+        }
+        
+        function calculateMoonSign(birthDate, birthTime) {
+            // Cálculo simplificado do signo lunar
+            // Em uma implementação real, seria necessário usar efemérides precisas
+            const date = new Date(birthDate + 'T' + birthTime);
+            const dayOfYear = Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 86400000);
+            const moonCycle = (dayOfYear + Math.floor(date.getHours() / 2.5)) % 12;
+            
+            const moonSigns = [
+                { name: 'Áries', symbol: '♈', element: 'Fogo' },
+                { name: 'Touro', symbol: '♉', element: 'Terra' },
+                { name: 'Gêmeos', symbol: '♊', element: 'Ar' },
+                { name: 'Câncer', symbol: '♋', element: 'Água' },
+                { name: 'Leão', symbol: '♌', element: 'Fogo' },
+                { name: 'Virgem', symbol: '♍', element: 'Terra' },
+                { name: 'Libra', symbol: '♎', element: 'Ar' },
+                { name: 'Escorpião', symbol: '♏', element: 'Água' },
+                { name: 'Sagitário', symbol: '♐', element: 'Fogo' },
+                { name: 'Capricórnio', symbol: '♑', element: 'Terra' },
+                { name: 'Aquário', symbol: '♒', element: 'Ar' },
+                { name: 'Peixes', symbol: '♓', element: 'Água' }
+            ];
+            
+            return moonSigns[moonCycle];
+        }
+        
+        function calculateAscendant(birthDate, birthTime, birthPlace) {
+            // Cálculo simplificado do ascendente
+            // Em uma implementação real, seria necessário considerar latitude, longitude e fuso horário
+            const time = new Date(birthDate + 'T' + birthTime);
+            const hour = time.getHours();
+            const ascendantIndex = Math.floor(hour / 2) % 12;
+            
+            const ascendants = [
+                { name: 'Áries', symbol: '♈' },
+                { name: 'Touro', symbol: '♉' },
+                { name: 'Gêmeos', symbol: '♊' },
+                { name: 'Câncer', symbol: '♋' },
+                { name: 'Leão', symbol: '♌' },
+                { name: 'Virgem', symbol: '♍' },
+                { name: 'Libra', symbol: '♎' },
+                { name: 'Escorpião', symbol: '♏' },
+                { name: 'Sagitário', symbol: '♐' },
+                { name: 'Capricórnio', symbol: '♑' },
+                { name: 'Aquário', symbol: '♒' },
+                { name: 'Peixes', symbol: '♓' }
+            ];
+            
+            return ascendants[ascendantIndex];
+        }
+        
+        function calculateElements(profile) {
+            const elements = { Fogo: 0, Terra: 0, Ar: 0, Água: 0 };
+            
+            elements[profile.sunSign.element]++;
+            elements[profile.moonSign.element]++;
+            
+            return elements;
+        }
+        
+        function calculateQualities(profile) {
+            const qualities = { Cardinal: 0, Fixo: 0, Mutável: 0 };
+            
+            qualities[profile.sunSign.quality]++;
+            
+            return qualities;
+        }
+        
+        function generatePersonalityTraits(profile) {
+            const traits = [];
+            
+            // Traços baseados no signo solar
+            const sunTraits = {
+                'Áries': ['Corajoso', 'Impulsivo', 'Líder natural'],
+                'Touro': ['Determinado', 'Prático', 'Sensual'],
+                'Gêmeos': ['Comunicativo', 'Versátil', 'Curioso'],
+                'Câncer': ['Emotivo', 'Protetor', 'Intuitivo'],
+                'Leão': ['Criativo', 'Generoso', 'Dramático'],
+                'Virgem': ['Analítico', 'Perfeccionista', 'Prestativo'],
+                'Libra': ['Diplomático', 'Harmonioso', 'Estético'],
+                'Escorpião': ['Intenso', 'Transformador', 'Misterioso'],
+                'Sagitário': ['Aventureiro', 'Filosófico', 'Otimista'],
+                'Capricórnio': ['Ambicioso', 'Disciplinado', 'Responsável'],
+                'Aquário': ['Inovador', 'Independente', 'Humanitário'],
+                'Peixes': ['Compassivo', 'Artístico', 'Espiritual']
+            };
+            
+            traits.push(...(sunTraits[profile.sunSign.name] || []));
+            
+            return traits;
+        }
+        
+        function generateAstrologicalRecommendations(profile) {
+            const recommendations = [];
+            
+            // Recomendações baseadas no elemento dominante
+            const dominantElement = Object.keys(profile.elements).reduce((a, b) => 
+                profile.elements[a] > profile.elements[b] ? a : b
+            );
+            
+            const elementRecommendations = {
+                'Fogo': [
+                    'Pratique exercícios físicos regulares para canalizar sua energia',
+                    'Desenvolva projetos criativos que despertem sua paixão',
+                    'Medite para equilibrar sua impulsividade natural'
+                ],
+                'Terra': [
+                    'Conecte-se com a natureza regularmente',
+                    'Estabeleça rotinas sólidas e objetivos práticos',
+                    'Cultive plantas ou jardins para nutrir sua essência'
+                ],
+                'Ar': [
+                    'Mantenha-se mentalmente estimulado com leituras e estudos',
+                    'Pratique comunicação consciente e escuta ativa',
+                    'Explore diferentes perspectivas e culturas'
+                ],
+                'Água': [
+                    'Honre suas emoções e pratique autocompaixão',
+                    'Desenvolva sua intuição através da meditação',
+                    'Crie espaços sagrados para reflexão e cura'
+                ]
+            };
+            
+            recommendations.push(...(elementRecommendations[dominantElement] || []));
+            
+            return recommendations;
+        }
+        
+        function getAstrologicalInsights(user) {
+            if (!user || !user.astrologicalProfile) {
+                return {
+                    hasProfile: false,
+                    message: "Complete seu perfil astrológico para receber insights personalizados!"
+                };
+            }
+            
+            const profile = user.astrologicalProfile;
+            return {
+                hasProfile: true,
+                sunSign: profile.sunSign,
+                moonSign: profile.moonSign,
+                ascendant: profile.ascendant,
+                dominantElement: Object.keys(profile.elements).reduce((a, b) => 
+                    profile.elements[a] > profile.elements[b] ? a : b
+                ),
+                personalityTraits: profile.personalityTraits,
+                recommendations: profile.recommendations
+            };
+        }
+        
+        // Inicialização do sistema de boot
+        function initBootSystem() {
+            // Verificar se deve pular boot (para desenvolvimento)
+            const skipBoot = localStorage.getItem('auroraOS_skip_boot') === 'true';
+            
+            if (skipBoot) {
+                // Verificar auto-login
+                if (checkAutoLogin()) {
+                    // Pular direto para o sistema principal
+                    document.getElementById('bootScreen').style.display = 'none';
+                    document.getElementById('welcomeScreen').style.display = 'none';
+                    document.getElementById('authScreen').style.display = 'none';
+                    initMainSystem();
+                } else {
+                    // Mostrar tela de autenticação
+                    document.getElementById('bootScreen').style.display = 'none';
+                    document.getElementById('welcomeScreen').style.display = 'none';
+                    showAuthScreen();
+                }
+            } else {
+                // Iniciar sequência de boot
+                createMysticalParticles('bootParticles');
+                setTimeout(updateBootProgress, 1000);
+            }
+        }
+        
+        // Inicializar conta demo quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            initDemoAccount();
+        });
+    </script>
+</body>
+</html>
+
