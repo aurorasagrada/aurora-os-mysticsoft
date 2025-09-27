@@ -1660,6 +1660,185 @@
             transform: translateY(-2px);
         }
         
+        /* ========================================
+           🖥️ WORKSPACES VIRTUAIS E SNAP ZONES
+           Sistema de múltiplas áreas de trabalho
+           ======================================== */
+        
+        .workspace-switcher {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            background: linear-gradient(135deg, 
+                rgba(75, 0, 130, 0.9) 0%, 
+                rgba(25, 25, 112, 0.9) 50%, 
+                rgba(0, 0, 0, 0.9) 100%);
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 2px solid var(--dourado);
+            box-shadow: 
+                0 0 20px rgba(240, 170, 83, 0.3),
+                inset 0 0 10px rgba(240, 170, 83, 0.1);
+            backdrop-filter: blur(10px);
+            z-index: 1500;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .workspace-switcher.visible {
+            opacity: 1;
+        }
+        
+        .workspace-tab {
+            width: 40px;
+            height: 30px;
+            background: linear-gradient(135deg, 
+                rgba(138, 43, 226, 0.6) 0%, 
+                rgba(75, 0, 130, 0.6) 100%);
+            border: 2px solid rgba(240, 170, 83, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .workspace-tab:hover {
+            border-color: var(--dourado);
+            box-shadow: 0 0 15px rgba(240, 170, 83, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .workspace-tab.active {
+            background: linear-gradient(135deg, 
+                var(--dourado) 0%, 
+                rgba(255, 215, 0, 0.8) 100%);
+            color: black;
+            border-color: var(--dourado);
+            box-shadow: 
+                0 0 20px rgba(240, 170, 83, 0.8),
+                inset 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        .workspace-tab .window-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: rgba(220, 20, 60, 0.9);
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid white;
+        }
+        
+        .snap-zones {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .snap-zones.active {
+            opacity: 1;
+        }
+        
+        .snap-zone {
+            position: absolute;
+            border: 3px dashed var(--dourado);
+            background: rgba(240, 170, 83, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+        
+        .snap-zone.highlight {
+            background: rgba(240, 170, 83, 0.3);
+            border-color: rgba(255, 215, 0, 1);
+            box-shadow: 
+                0 0 20px rgba(240, 170, 83, 0.6),
+                inset 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+        
+        .snap-zone-left {
+            left: 10px;
+            top: 10px;
+            width: calc(50% - 15px);
+            height: calc(100% - 70px);
+        }
+        
+        .snap-zone-right {
+            right: 10px;
+            top: 10px;
+            width: calc(50% - 15px);
+            height: calc(100% - 70px);
+        }
+        
+        .snap-zone-top {
+            left: 10px;
+            top: 10px;
+            width: calc(100% - 20px);
+            height: calc(50% - 35px);
+        }
+        
+        .snap-zone-bottom {
+            left: 10px;
+            bottom: 60px;
+            width: calc(100% - 20px);
+            height: calc(50% - 35px);
+        }
+        
+        .snap-zone-center {
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 60%;
+        }
+        
+        .workspace-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, 
+                rgba(75, 0, 130, 0.9) 0%, 
+                rgba(25, 25, 112, 0.9) 100%);
+            color: var(--dourado);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 2px solid var(--dourado);
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--dourado);
+            box-shadow: 0 0 15px rgba(240, 170, 83, 0.3);
+            backdrop-filter: blur(5px);
+            z-index: 1500;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .workspace-indicator.visible {
+            opacity: 1;
+        }
+        
         /* Popups */
         .popup {
             position: fixed;
@@ -3804,6 +3983,50 @@
             <span>📐</span>
             <span>Organizar ícones</span>
         </div>
+        <div class="context-menu-separator"></div>
+        <div class="context-menu-item" onclick="toggleWorkspaceSwitcher()">
+            <span>🖥️</span>
+            <span>Workspaces</span>
+        </div>
+    </div>
+    
+    <!-- ========================================
+         🖥️ WORKSPACES VIRTUAIS E SNAP ZONES
+         Sistema de múltiplas áreas de trabalho
+         ======================================== -->
+    
+    <!-- Seletor de Workspaces -->
+    <div class="workspace-switcher" id="workspaceSwitcher">
+        <div class="workspace-tab active" data-workspace="1" onclick="switchWorkspace(1)">
+            1
+            <div class="window-count" id="workspace1Count">0</div>
+        </div>
+        <div class="workspace-tab" data-workspace="2" onclick="switchWorkspace(2)">
+            2
+            <div class="window-count" id="workspace2Count">0</div>
+        </div>
+        <div class="workspace-tab" data-workspace="3" onclick="switchWorkspace(3)">
+            3
+            <div class="window-count" id="workspace3Count">0</div>
+        </div>
+        <div class="workspace-tab" data-workspace="4" onclick="switchWorkspace(4)">
+            4
+            <div class="window-count" id="workspace4Count">0</div>
+        </div>
+    </div>
+    
+    <!-- Indicador de Workspace Atual -->
+    <div class="workspace-indicator" id="workspaceIndicator">
+        Workspace 1
+    </div>
+    
+    <!-- Zonas de Snap -->
+    <div class="snap-zones" id="snapZones">
+        <div class="snap-zone snap-zone-left" data-snap="left"></div>
+        <div class="snap-zone snap-zone-right" data-snap="right"></div>
+        <div class="snap-zone snap-zone-top" data-snap="top"></div>
+        <div class="snap-zone snap-zone-bottom" data-snap="bottom"></div>
+        <div class="snap-zone snap-zone-center" data-snap="center"></div>
     </div>
     
     <!-- Taskbar -->
@@ -5851,6 +6074,312 @@
             
             console.log('🎵 Sistema de áudio ambiente inicializado');
         }
+        
+        // ========================================
+        // 🖥️ WORKSPACES VIRTUAIS E SNAP ZONES
+        // Sistema de múltiplas áreas de trabalho
+        // ========================================
+        
+        let currentWorkspace = 1;
+        let workspaceWindows = {
+            1: [],
+            2: [],
+            3: [],
+            4: []
+        };
+        let isDraggingWindow = false;
+        let draggedWindow = null;
+        
+        function toggleWorkspaceSwitcher() {
+            const switcher = document.getElementById('workspaceSwitcher');
+            const indicator = document.getElementById('workspaceIndicator');
+            
+            if (switcher.classList.contains('visible')) {
+                switcher.classList.remove('visible');
+                indicator.classList.remove('visible');
+                
+                // Ocultar após 3 segundos se não houver interação
+                setTimeout(() => {
+                    if (!switcher.matches(':hover')) {
+                        switcher.classList.remove('visible');
+                        indicator.classList.remove('visible');
+                    }
+                }, 3000);
+            } else {
+                switcher.classList.add('visible');
+                indicator.classList.add('visible');
+                updateWorkspaceCounts();
+                
+                // Notificar Gatomante
+                setTimeout(() => {
+                    gatomanteContextual('workspaces', { acao: 'aberto', workspace: currentWorkspace });
+                }, 1000);
+            }
+        }
+        
+        function switchWorkspace(workspaceId) {
+            if (workspaceId === currentWorkspace) return;
+            
+            // Ocultar janelas do workspace atual
+            workspaceWindows[currentWorkspace].forEach(windowId => {
+                const windowElement = document.getElementById(windowId);
+                if (windowElement) {
+                    windowElement.style.display = 'none';
+                }
+            });
+            
+            // Mostrar janelas do novo workspace
+            workspaceWindows[workspaceId].forEach(windowId => {
+                const windowElement = document.getElementById(windowId);
+                if (windowElement) {
+                    windowElement.style.display = 'block';
+                }
+            });
+            
+            // Atualizar workspace atual
+            const oldWorkspace = currentWorkspace;
+            currentWorkspace = workspaceId;
+            
+            // Atualizar interface
+            document.querySelectorAll('.workspace-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-workspace="${workspaceId}"]`).classList.add('active');
+            
+            // Atualizar indicador
+            const indicator = document.getElementById('workspaceIndicator');
+            indicator.textContent = `Workspace ${workspaceId}`;
+            
+            // Efeito visual de transição
+            const desktop = document.getElementById('desktop');
+            desktop.style.opacity = '0.7';
+            setTimeout(() => {
+                desktop.style.opacity = '1';
+            }, 200);
+            
+            // Notificar Gatomante
+            setTimeout(() => {
+                gatomanteContextual('workspaces', { 
+                    acao: 'mudou', 
+                    de: oldWorkspace, 
+                    para: workspaceId,
+                    janelas: workspaceWindows[workspaceId].length
+                });
+            }, 1500);
+            
+            console.log(`🖥️ Mudou para Workspace ${workspaceId}`);
+        }
+        
+        function addWindowToWorkspace(windowId, workspaceId = currentWorkspace) {
+            if (!workspaceWindows[workspaceId].includes(windowId)) {
+                workspaceWindows[workspaceId].push(windowId);
+                updateWorkspaceCounts();
+                
+                // Se não é o workspace atual, ocultar janela
+                if (workspaceId !== currentWorkspace) {
+                    const windowElement = document.getElementById(windowId);
+                    if (windowElement) {
+                        windowElement.style.display = 'none';
+                    }
+                }
+            }
+        }
+        
+        function removeWindowFromWorkspace(windowId) {
+            Object.keys(workspaceWindows).forEach(workspaceId => {
+                const index = workspaceWindows[workspaceId].indexOf(windowId);
+                if (index > -1) {
+                    workspaceWindows[workspaceId].splice(index, 1);
+                }
+            });
+            updateWorkspaceCounts();
+        }
+        
+        function updateWorkspaceCounts() {
+            Object.keys(workspaceWindows).forEach(workspaceId => {
+                const countElement = document.getElementById(`workspace${workspaceId}Count`);
+                const count = workspaceWindows[workspaceId].length;
+                if (countElement) {
+                    countElement.textContent = count;
+                    countElement.style.display = count > 0 ? 'flex' : 'none';
+                }
+            });
+        }
+        
+        function initSnapZones() {
+            const snapZones = document.getElementById('snapZones');
+            let currentHighlight = null;
+            
+            // Mostrar snap zones quando arrastar janela
+            document.addEventListener('mousedown', (e) => {
+                if (e.target.closest('.window-header')) {
+                    isDraggingWindow = true;
+                    draggedWindow = e.target.closest('.window');
+                    
+                    setTimeout(() => {
+                        if (isDraggingWindow) {
+                            snapZones.classList.add('active');
+                        }
+                    }, 200);
+                }
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (isDraggingWindow && snapZones.classList.contains('active')) {
+                    // Detectar zona de snap
+                    const zones = document.querySelectorAll('.snap-zone');
+                    let foundZone = null;
+                    
+                    zones.forEach(zone => {
+                        const rect = zone.getBoundingClientRect();
+                        if (e.clientX >= rect.left && e.clientX <= rect.right &&
+                            e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                            foundZone = zone;
+                        }
+                    });
+                    
+                    // Atualizar highlight
+                    if (currentHighlight) {
+                        currentHighlight.classList.remove('highlight');
+                    }
+                    
+                    if (foundZone) {
+                        foundZone.classList.add('highlight');
+                        currentHighlight = foundZone;
+                    } else {
+                        currentHighlight = null;
+                    }
+                }
+            });
+            
+            document.addEventListener('mouseup', (e) => {
+                if (isDraggingWindow) {
+                    // Aplicar snap se houver zona destacada
+                    if (currentHighlight && draggedWindow) {
+                        const snapType = currentHighlight.getAttribute('data-snap');
+                        applyWindowSnap(draggedWindow, snapType);
+                        
+                        // Notificar Gatomante
+                        setTimeout(() => {
+                            gatomanteContextual('workspaces', { 
+                                acao: 'snap', 
+                                tipo: snapType,
+                                workspace: currentWorkspace
+                            });
+                        }, 1000);
+                    }
+                    
+                    // Limpar estado
+                    snapZones.classList.remove('active');
+                    if (currentHighlight) {
+                        currentHighlight.classList.remove('highlight');
+                        currentHighlight = null;
+                    }
+                    isDraggingWindow = false;
+                    draggedWindow = null;
+                }
+            });
+        }
+        
+        function applyWindowSnap(windowElement, snapType) {
+            if (!windowElement) return;
+            
+            const desktop = document.getElementById('desktop');
+            const desktopRect = desktop.getBoundingClientRect();
+            
+            switch (snapType) {
+                case 'left':
+                    windowElement.style.left = '10px';
+                    windowElement.style.top = '10px';
+                    windowElement.style.width = `${Math.floor(desktopRect.width / 2) - 15}px`;
+                    windowElement.style.height = `${desktopRect.height - 70}px`;
+                    break;
+                    
+                case 'right':
+                    windowElement.style.left = `${Math.floor(desktopRect.width / 2) + 5}px`;
+                    windowElement.style.top = '10px';
+                    windowElement.style.width = `${Math.floor(desktopRect.width / 2) - 15}px`;
+                    windowElement.style.height = `${desktopRect.height - 70}px`;
+                    break;
+                    
+                case 'top':
+                    windowElement.style.left = '10px';
+                    windowElement.style.top = '10px';
+                    windowElement.style.width = `${desktopRect.width - 20}px`;
+                    windowElement.style.height = `${Math.floor(desktopRect.height / 2) - 35}px`;
+                    break;
+                    
+                case 'bottom':
+                    windowElement.style.left = '10px';
+                    windowElement.style.top = `${Math.floor(desktopRect.height / 2) + 5}px`;
+                    windowElement.style.width = `${desktopRect.width - 20}px`;
+                    windowElement.style.height = `${Math.floor(desktopRect.height / 2) - 35}px`;
+                    break;
+                    
+                case 'center':
+                    windowElement.style.left = '20%';
+                    windowElement.style.top = '20%';
+                    windowElement.style.width = '60%';
+                    windowElement.style.height = '60%';
+                    break;
+            }
+            
+            console.log(`📐 Janela ajustada para: ${snapType}`);
+        }
+        
+        function initWorkspaces() {
+            // Configurar eventos de teclado para workspaces
+            document.addEventListener('keydown', (e) => {
+                // Ctrl + 1-4 para mudar workspace
+                if (e.ctrlKey && e.key >= '1' && e.key <= '4') {
+                    e.preventDefault();
+                    const workspaceId = parseInt(e.key);
+                    switchWorkspace(workspaceId);
+                }
+                
+                // Ctrl + Shift + 1-4 para mover janela para workspace
+                if (e.ctrlKey && e.shiftKey && e.key >= '1' && e.key <= '4') {
+                    e.preventDefault();
+                    const workspaceId = parseInt(e.key);
+                    const focusedWindow = document.querySelector('.window.focused');
+                    if (focusedWindow) {
+                        moveWindowToWorkspace(focusedWindow.id, workspaceId);
+                    }
+                }
+            });
+            
+            // Inicializar snap zones
+            initSnapZones();
+            
+            console.log('🖥️ Sistema de workspaces inicializado');
+        }
+        
+        function moveWindowToWorkspace(windowId, targetWorkspace) {
+            // Remover da workspace atual
+            removeWindowFromWorkspace(windowId);
+            
+            // Adicionar à nova workspace
+            addWindowToWorkspace(windowId, targetWorkspace);
+            
+            // Se não é a workspace atual, ocultar janela
+            if (targetWorkspace !== currentWorkspace) {
+                const windowElement = document.getElementById(windowId);
+                if (windowElement) {
+                    windowElement.style.display = 'none';
+                }
+            }
+            
+            // Notificar Gatomante
+            setTimeout(() => {
+                gatomanteContextual('workspaces', { 
+                    acao: 'moveu_janela', 
+                    para: targetWorkspace,
+                    de: currentWorkspace
+                });
+            }, 1000);
+            
+            console.log(`🖥️ Janela ${windowId} movida para Workspace ${targetWorkspace}`);
+        }
                     function openSite(siteId) {
             const site = sitesConfig.find(s => s.id === siteId);
             if (!site) return;
@@ -5913,6 +6442,9 @@
             `;
             
             document.body.appendChild(window);
+            
+            // Adicionar janela ao workspace atual
+            addWindowToWorkspace(windowId);
             
             // Aplicar animação de materialização cinematográfica
             animateWindowOpen(window);
@@ -5978,6 +6510,9 @@
             
             document.body.appendChild(window);
             
+            // Adicionar janela ao workspace atual
+            addWindowToWorkspace(windowId);
+            
             // Aplicar animação de materialização cinematográfica
             animateWindowOpen(window);
             
@@ -6006,6 +6541,8 @@
                     if (window.parentNode) {
                         window.remove();
                     }
+                    // Remover janela do workspace
+                    removeWindowFromWorkspace(windowId);
                     openWindows = openWindows.filter(w => w.id !== windowId);
                     updateTaskbar();
                 }, 600);
@@ -7202,6 +7739,16 @@
                     "O oceano sereno traz paz interior... como ronronar, mas para humanos!",
                     "Chuva relaxante limpa as energias... perfeita para rituais de purificação."
                 ],
+                workspaces: [
+                    "Workspaces virtuais! 🖥️ Organize suas janelas como um verdadeiro mago digital...",
+                    "Ctrl + 1-4 muda de workspace... atalhos que até gatos conseguem decorar!",
+                    "Arraste janelas para as zonas douradas... snap automático é pura magia!",
+                    "Workspace {workspace} tem {janelas} janelas... uma organização felina!",
+                    "Snap para a esquerda, direita, cima, baixo ou centro... escolha sua posição mística!",
+                    "Ctrl + Shift + 1-4 move janelas entre workspaces... produtividade ninja!",
+                    "4 workspaces virtuais... como os 4 elementos da natureza!",
+                    "Zonas de snap aparecem quando você arrasta... guias douradas para organização perfeita!"
+                ],
                 demo_login: [
                     "Bem-vindo à conta demo, Luna Mystica! Sou o Gatomante, seu guia místico pessoal.",
                     "Olá, Luna! Esta conta demo mostra todas as funcionalidades do Aurora OS... explore à vontade!",
@@ -7396,6 +7943,10 @@
                     break;
                 case 'audio_ambiente':
                     tipoDica = 'audio_ambiente';
+                    delay = 1000;
+                    break;
+                case 'workspaces':
+                    tipoDica = 'workspaces';
                     delay = 1000;
                     break;
                 case 'tema_mudou':
@@ -7662,6 +8213,9 @@
             
             // 🎵 Inicializar sistema de áudio ambiente
             initAmbientAudio();
+            
+            // Inicializar workspaces virtuais e snap zones
+            initWorkspaces();
             
             // Inicializar Gatomante após entrar no sistemaÁST!
             loadAfastVoiceSettings();
