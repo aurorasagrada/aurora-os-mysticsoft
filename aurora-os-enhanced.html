@@ -738,30 +738,380 @@
         }
         
         /* Taskbar Aprimorada */
+        /* ========================================
+           🚀 BARRA DE TAREFAS MODERNIZADA
+           Indicadores, thumbnails e agrupamento inteligente
+           ======================================== */
+        
         .taskbar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 40px;
-            background: linear-gradient(to bottom, var(--theme-taskbar), #2a0a1f);
-            border-top: 1px solid rgba(255,255,255,0.2);
+            height: 50px;
+            background: linear-gradient(to bottom, 
+                rgba(30, 20, 60, 0.95) 0%, 
+                rgba(15, 10, 40, 0.98) 70%, 
+                rgba(0, 0, 0, 0.99) 100%);
+            border-top: 2px solid var(--dourado);
             display: flex;
             align-items: center;
-            padding: 0 8px;
+            padding: 0 12px;
             z-index: 1000;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+            box-shadow: 
+                0 -5px 20px rgba(0, 0, 0, 0.8),
+                0 -2px 10px rgba(212, 175, 55, 0.3),
+                inset 0 1px 0 rgba(212, 175, 55, 0.2);
+            backdrop-filter: blur(15px);
         }
         
+        .taskbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--dourado) 20%, 
+                var(--dourado) 80%, 
+                transparent 100%);
+            animation: taskbarGlow 4s ease-in-out infinite;
+        }
+        
+        @keyframes taskbarGlow {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scaleX(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+        
+        /* Botão Iniciar Modernizado */
         .start-button {
-            background: linear-gradient(to bottom, var(--theme-start-btn), #2a0a1f);
-            border: 1px outset var(--theme-start-btn);
-            color: var(--theme-start-text);
-            padding: 6px 12px;
+            background: radial-gradient(circle at center, 
+                rgba(212, 175, 55, 0.9) 0%, 
+                rgba(139, 105, 20, 0.8) 70%, 
+                rgba(0, 0, 0, 0.9) 100%);
+            border: 2px solid var(--dourado);
+            border-radius: 25px;
+            color: white;
+            padding: 8px 16px;
             cursor: pointer;
-            font-size: 11px;
             font-weight: bold;
+            font-size: 12px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            box-shadow: 
+                0 0 15px rgba(212, 175, 55, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
             display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .start-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent 30%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 70%);
+            transform: rotate(-45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+        
+        .start-button:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 25px rgba(212, 175, 55, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        
+        .start-button:hover::before {
+            opacity: 1;
+            left: 100%;
+        }
+        
+        .start-button:active {
+            transform: scale(0.98);
+            box-shadow: 
+                0 0 10px rgba(212, 175, 55, 0.6),
+                inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .start-button.active {
+            background: radial-gradient(circle at center, 
+                rgba(255, 215, 0, 0.9) 0%, 
+                rgba(212, 175, 55, 0.8) 70%, 
+                rgba(139, 105, 20, 0.9) 100%);
+            box-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.8),
+                inset 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Área de aplicações da taskbar */
+        .taskbar-apps {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin: 0 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .taskbar-apps::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Itens de aplicação na taskbar */
+        .taskbar-item {
+            position: relative;
+            min-width: 60px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            overflow: hidden;
+        }
+        
+        .taskbar-item::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--dourado);
+            transition: width 0.3s ease;
+        }
+        
+        .taskbar-item:hover {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: var(--dourado);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .taskbar-item:hover::before {
+            width: 80%;
+        }
+        
+        .taskbar-item.active {
+            background: rgba(212, 175, 55, 0.3);
+            border: 2px solid var(--dourado);
+            box-shadow: 
+                0 0 15px rgba(212, 175, 55, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .taskbar-item.active::before {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--dourado) 50%, 
+                transparent 100%);
+        }
+        
+        .taskbar-item.minimized {
+            opacity: 0.6;
+            background: rgba(100, 100, 100, 0.2);
+        }
+        
+        .taskbar-item.minimized:hover {
+            opacity: 1;
+        }
+        
+        /* Ícones dos itens */
+        .taskbar-item-icon {
+            font-size: 18px;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+        }
+        
+        /* Indicador de notificações */
+        .taskbar-item .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 16px;
+            height: 16px;
+            background: #ff4444;
+            border: 2px solid white;
+            border-radius: 50%;
+            font-size: 10px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes badgePulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 0 15px rgba(255, 68, 68, 0.8);
+            }
+        }
+        
+        /* Thumbnail preview */
+        .taskbar-thumbnail {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--dourado);
+            border-radius: 8px;
+            padding: 8px;
+            display: none;
+            z-index: 3000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+        }
+        
+        .taskbar-thumbnail.show {
+            display: block;
+            animation: thumbnailShow 0.3s ease-out;
+        }
+        
+        @keyframes thumbnailShow {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+        }
+        
+        .thumbnail-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .thumbnail-icon {
+            font-size: 16px;
+        }
+        
+        .thumbnail-title {
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .thumbnail-preview {
+            width: 100%;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 11px;
+            text-align: center;
+        }
+        
+        /* Área direita da taskbar */
+        .taskbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Indicador de sistema */
+        .system-indicator {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .system-indicator:hover {
+            background: rgba(212, 175, 55, 0.4);
+            border-color: var(--dourado);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        }
+        
+        .system-indicator.active {
+            background: rgba(212, 175, 55, 0.6);
+            border: 2px solid var(--dourado);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.7);
+        }
+        
+        .system-indicator .icon {
+            font-size: 14px;
+            color: var(--dourado);
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+        }
+        
+        /* Agrupamento de aplicações */
+        .taskbar-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .taskbar-group .group-indicator {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background: var(--dourado);
+            border-radius: 50%;
+            font-size: 8px;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
             align-items: center;
             gap: 6px;
             text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
@@ -2915,38 +3265,42 @@
     </div>
     
     <!-- Taskbar -->
+    <!-- 🚀 BARRA DE TAREFAS MODERNIZADA -->
     <div class="taskbar">
+        <!-- Botão Iniciar Revolucionário -->
         <button class="start-button" onclick="toggleStartMenu()">
             <span class="start-logo">
-                <img src="mysticsoft-logo.png" alt="MysticSoft" style="width: 16px; height: 16px; image-rendering: pixelated;">
+                <img src="mysticsoft-logo.png" alt="MysticSoft" style="width: 18px; height: 18px; image-rendering: pixelated;">
             </span>
             <span>Iniciar</span>
         </button>
         
-        <div class="taskbar-items" id="taskbarItems">
-            <!-- Itens da taskbar serão adicionados dinamicamente -->
+        <!-- Área de Aplicações com Agrupamento Inteligente -->
+        <div class="taskbar-apps" id="taskbarApps">
+            <!-- Aplicações abertas serão mostradas aqui -->
         </div>
         
+        <!-- Área Direita com Indicadores de Sistema -->
         <div class="taskbar-right">
-            <!-- Widget Planetário -->
-            <div class="taskbar-widget" onclick="togglePlanetaryPopup()" title="Hora Planetária Atual">
-                <span class="planetary-symbol" id="planetarySymbol">☉</span>
-                <span id="planetaryName">Sol</span>
+            <!-- Indicador Planetário -->
+            <div class="system-indicator" onclick="togglePlanetaryPopup()" title="Hora Planetária Atual" id="planetaryIndicator">
+                <span class="icon" id="planetarySymbol">☉</span>
             </div>
             
-            <!-- Relógio e Calendário -->
-            <div class="taskbar-widget" onclick="toggleCalendarPopup()" title="Calendário">
-                <span class="clock" id="clock">00:00</span>
+            <!-- Relógio Digital -->
+            <div class="system-indicator" onclick="toggleCalendarPopup()" title="Calendário e Hora">
+                <span class="icon clock" id="clock">00:00</span>
             </div>
             
-            <!-- Central AFÁST -->
-            <div class="taskbar-widget" onclick="toggleNotificationCenter()" title="Central AFÁST - Notificações Astrológicas">
-                <span style="color: #f0aa53;">🛡️</span>
+            <!-- Central AFÁST com Badge -->
+            <div class="system-indicator" onclick="toggleNotificationCenter()" title="Central AFÁST - Proteção Astrológica" id="afastIndicator">
+                <span class="icon">🛡️</span>
+                <div class="notification-badge" id="afastBadge" style="display: none;">0</div>
             </div>
             
-            <!-- Volume -->
-            <div class="volume-icon" onclick="toggleVolumePopup()" title="Controle de Volume">
-                🔊
+            <!-- Controle de Volume -->
+            <div class="system-indicator" onclick="toggleVolumePopup()" title="Controle de Volume" id="volumeIndicator">
+                <span class="icon" id="volumeIcon">🔊</span>
             </div>
         </div>
     </div>
