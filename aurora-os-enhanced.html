@@ -1839,6 +1839,294 @@
             opacity: 1;
         }
         
+        /* ========================================
+           🤖 GATOMANTE IA AVANÇADA - CHAT E VOZ
+           Sistema de chat integrado e comandos de voz
+           ======================================== */
+        
+        .gatomante-chat {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background: linear-gradient(135deg, 
+                rgba(75, 0, 130, 0.95) 0%, 
+                rgba(25, 25, 112, 0.95) 50%, 
+                rgba(0, 0, 0, 0.95) 100%);
+            border: 3px solid var(--dourado);
+            border-radius: 20px;
+            box-shadow: 
+                0 0 30px rgba(240, 170, 83, 0.4),
+                inset 0 0 20px rgba(240, 170, 83, 0.1);
+            backdrop-filter: blur(15px);
+            z-index: 2500;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .gatomante-chat.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        
+        .gatomante-chat-header {
+            padding: 15px 20px;
+            border-bottom: 2px solid rgba(240, 170, 83, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, 
+                rgba(138, 43, 226, 0.3) 0%, 
+                rgba(75, 0, 130, 0.3) 100%);
+            border-radius: 17px 17px 0 0;
+        }
+        
+        .gatomante-chat-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border: 2px solid var(--dourado);
+            animation: gatomanteBreath 3s ease-in-out infinite;
+        }
+        
+        .gatomante-chat-info {
+            flex: 1;
+        }
+        
+        .gatomante-chat-name {
+            color: var(--dourado);
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 0 0 5px var(--dourado);
+        }
+        
+        .gatomante-chat-status {
+            color: #90EE90;
+            font-size: 11px;
+            opacity: 0.8;
+        }
+        
+        .gatomante-chat-close {
+            background: rgba(220, 20, 60, 0.8);
+            border: none;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .gatomante-chat-close:hover {
+            background: rgba(220, 20, 60, 1);
+            transform: scale(1.1);
+        }
+        
+        .gatomante-chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .gatomante-message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 13px;
+            line-height: 1.4;
+            animation: messageSlideIn 0.4s ease-out;
+        }
+        
+        .gatomante-message.bot {
+            align-self: flex-start;
+            background: linear-gradient(135deg, 
+                rgba(138, 43, 226, 0.8) 0%, 
+                rgba(75, 0, 130, 0.8) 100%);
+            color: white;
+            border: 1px solid rgba(240, 170, 83, 0.3);
+        }
+        
+        .gatomante-message.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, 
+                var(--dourado) 0%, 
+                rgba(255, 215, 0, 0.8) 100%);
+            color: black;
+            font-weight: 500;
+        }
+        
+        .gatomante-chat-input-area {
+            padding: 15px;
+            border-top: 2px solid rgba(240, 170, 83, 0.3);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .gatomante-chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(240, 170, 83, 0.3);
+            border-radius: 20px;
+            padding: 8px 15px;
+            color: white;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .gatomante-chat-input:focus {
+            border-color: var(--dourado);
+            box-shadow: 0 0 10px rgba(240, 170, 83, 0.3);
+        }
+        
+        .gatomante-chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .gatomante-voice-btn {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, 
+                rgba(220, 20, 60, 0.8) 0%, 
+                rgba(139, 0, 0, 0.8) 100%);
+            border: 2px solid rgba(240, 170, 83, 0.5);
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .gatomante-voice-btn:hover {
+            border-color: var(--dourado);
+            box-shadow: 0 0 15px rgba(240, 170, 83, 0.5);
+            transform: scale(1.1);
+        }
+        
+        .gatomante-voice-btn.listening {
+            background: linear-gradient(135deg, 
+                rgba(255, 0, 0, 0.9) 0%, 
+                rgba(220, 20, 60, 0.9) 100%);
+            animation: voicePulse 1s ease-in-out infinite;
+        }
+        
+        .gatomante-send-btn {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, 
+                var(--dourado) 0%, 
+                rgba(255, 215, 0, 0.8) 100%);
+            border: 2px solid var(--dourado);
+            border-radius: 50%;
+            color: black;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .gatomante-send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(240, 170, 83, 0.8);
+        }
+        
+        .gatomante-typing {
+            align-self: flex-start;
+            background: rgba(138, 43, 226, 0.6);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 13px;
+            border: 1px solid rgba(240, 170, 83, 0.3);
+        }
+        
+        .typing-dots {
+            display: inline-flex;
+            gap: 3px;
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--dourado);
+            border-radius: 50%;
+            animation: typingDot 1.4s ease-in-out infinite;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes voicePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        
+        /* Botão de Chat na Taskbar */
+        .gatomante-chat-toggle {
+            position: relative;
+        }
+        
+        .gatomante-chat-toggle::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: rgba(0, 255, 0, 0.8);
+            border-radius: 50%;
+            animation: onlineIndicator 2s ease-in-out infinite;
+        }
+        
+        @keyframes onlineIndicator {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
         /* Popups */
         .popup {
             position: fixed;
@@ -4029,6 +4317,28 @@
         <div class="snap-zone snap-zone-center" data-snap="center"></div>
     </div>
     
+    <!-- 🤖 GATOMANTE IA AVANÇADA - CHAT INTEGRADO -->
+    <div class="gatomante-chat" id="gatomanteChat">
+        <div class="gatomante-chat-header">
+            <div class="gatomante-chat-avatar">🐱‍⬛</div>
+            <div class="gatomante-chat-info">
+                <div class="gatomante-chat-name">Gatomante IA</div>
+                <div class="gatomante-chat-status">Online • Assistente Místico</div>
+            </div>
+            <button class="gatomante-chat-close" onclick="toggleGatomanteChat()">×</button>
+        </div>
+        
+        <div class="gatomante-chat-messages" id="gatomanteMessages">
+            <!-- Mensagens aparecerão aqui dinamicamente -->
+        </div>
+        
+        <div class="gatomante-chat-input-area">
+            <button class="gatomante-voice-btn" id="gatomanteVoiceBtn" onclick="toggleVoiceRecognition()" title="Comando de Voz">🎤</button>
+            <input type="text" class="gatomante-chat-input" id="gatomanteInput" placeholder="Digite sua pergunta ou comando..." onkeypress="handleChatKeyPress(event)">
+            <button class="gatomante-send-btn" onclick="sendChatMessage()" title="Enviar Mensagem">➤</button>
+        </div>
+    </div>
+    
     <!-- Taskbar -->
     <!-- 🚀 BARRA DE TAREFAS MODERNIZADA -->
     <div class="taskbar">
@@ -4047,6 +4357,11 @@
         
         <!-- Área Direita com Indicadores de Sistema -->
         <div class="taskbar-right">
+            <!-- Chat do Gatomante IA -->
+            <div class="system-indicator gatomante-chat-toggle" onclick="toggleGatomanteChat()" title="Chat com Gatomante IA">
+                <span class="icon">🐱‍⬛</span>
+            </div>
+            
             <!-- Indicador Planetário -->
             <div class="system-indicator" onclick="togglePlanetaryPopup()" title="Hora Planetária Atual" id="planetaryIndicator">
                 <span class="icon" id="planetarySymbol">☉</span>
@@ -6354,6 +6669,280 @@
             console.log('🖥️ Sistema de workspaces inicializado');
         }
         
+        // ========================================
+        // 🤖 GATOMANTE IA AVANÇADA - CHAT E VOZ
+        // Sistema de chat integrado e comandos de voz
+        // ========================================
+        
+        let gatomanteVoiceRecognition = null;
+        let isVoiceListening = false;
+        let chatHistory = [];
+        
+        // Base de conhecimento expandida do Gatomante IA
+        const gatomanteKnowledge = {
+            greetings: [
+                "Olá! Sou o Gatomante, seu assistente místico pessoal. Como posso ajudar?",
+                "Miau! 🐱‍⬛ Bem-vindo ao chat! Estou aqui para guiá-lo pelos mistérios do Aurora OS.",
+                "Saudações, mortal! Que os ventos cósmicos o trouxeram até mim hoje?",
+                "Ah, você descobriu meu chat secreto! Prepare-se para sabedoria felina e mística."
+            ],
+            commands: {
+                'abrir': (app) => `Abrindo ${app}... Como um verdadeiro mago digital!`,
+                'fechar': (app) => `Fechando ${app}... Puf! Desapareceu como mágica!`,
+                'ajuda': () => "Posso ajudar com: navegação, personalização, AFÁST, workspaces, áudio ambiente e muito mais!",
+                'hora': () => `São ${new Date().toLocaleTimeString('pt-BR')} - Hora perfeita para magia digital!`,
+                'planeta': () => {
+                    const info = getPlanetaryInfo();
+                    return `Estamos na hora de ${info.planet} ${info.symbol} - ${info.description}`;
+                },
+                'workspace': (num) => {
+                    if (num >= 1 && num <= 4) {
+                        switchWorkspace(parseInt(num));
+                        return `Mudando para workspace ${num}... Organização felina em ação!`;
+                    }
+                    return "Use 'workspace 1', 'workspace 2', etc. para mudar de workspace.";
+                },
+                'tema': (cor) => {
+                    if (cor) {
+                        return `Mudando tema para ${cor}... Que tal experimentar a personalização visual?`;
+                    }
+                    return "Abra a personalização para escolher temas místicos incríveis!";
+                },
+                'volume': (nivel) => {
+                    if (nivel) {
+                        return `Ajustando volume para ${nivel}%... Som perfeito para suas atividades!`;
+                    }
+                    return "Use 'volume 50' para ajustar o volume, ou clique no ícone de som na taskbar.";
+                },
+                'afást': () => "O AFÁST monitora eventos astrológicos! Clique no escudo dourado 🛡️ para ver alertas.",
+                'áudio': () => "Experimente o áudio ambiente! Clique em 🎵 para sons místicos e frequências de cura.",
+                'snap': () => "Arraste janelas para as bordas para usar snap zones! Organização automática é mágica!"
+            },
+            responses: {
+                unknown: [
+                    "Hmm, não entendi completamente... Pode reformular? Sou inteligente, mas ainda sou um gato! 🐱",
+                    "Essa pergunta está além dos meus conhecimentos místicos atuais... Tente algo mais específico!",
+                    "Miau? 🤔 Não captei essa vibração... Que tal perguntar sobre o Aurora OS?",
+                    "Interessante... Mas prefiro falar sobre funcionalidades do sistema. O que gostaria de saber?"
+                ],
+                compliments: [
+                    "Obrigado! Você também é incrível! 😸",
+                    "Aww, que fofo! Gatos adoram elogios! 🐱‍⬛✨",
+                    "Você tem bom gosto... Afinal, está usando o Aurora OS! 😎",
+                    "Miau! Isso me deixa ronronando de felicidade! 😻"
+                ],
+                jokes: [
+                    "Por que gatos são bons programadores? Porque sabem lidar com bugs! 🐛😸",
+                    "Qual a diferença entre um gato e um computador? O gato tem 9 vidas, o computador só tem backup! 💾",
+                    "Por que o Gatomante usa óculos? Para ver melhor os códigos místicos! 🤓✨",
+                    "Como um gato navega na internet? Com o mouse! 🖱️😹"
+                ]
+            }
+        };
+        
+        function toggleGatomanteChat() {
+            const chat = document.getElementById('gatomanteChat');
+            const isVisible = chat.classList.contains('visible');
+            
+            if (isVisible) {
+                chat.classList.remove('visible');
+            } else {
+                chat.classList.add('visible');
+                
+                // Mensagem de boas-vindas se for a primeira vez
+                if (chatHistory.length === 0) {
+                    setTimeout(() => {
+                        addChatMessage('bot', getRandomResponse(gatomanteKnowledge.greetings));
+                    }, 500);
+                }
+                
+                // Focar no input
+                setTimeout(() => {
+                    document.getElementById('gatomanteInput').focus();
+                }, 600);
+            }
+            
+            console.log('🤖 Chat do Gatomante:', isVisible ? 'fechado' : 'aberto');
+        }
+        
+        function addChatMessage(sender, message) {
+            const messagesContainer = document.getElementById('gatomanteMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `gatomante-message ${sender}`;
+            messageDiv.textContent = message;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Adicionar ao histórico
+            chatHistory.push({ sender, message, timestamp: new Date() });
+            
+            // Limitar histórico a 50 mensagens
+            if (chatHistory.length > 50) {
+                chatHistory = chatHistory.slice(-50);
+            }
+        }
+        
+        function showTypingIndicator() {
+            const messagesContainer = document.getElementById('gatomanteMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'gatomante-typing';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                Gatomante está digitando
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        function processUserMessage(message) {
+            const lowerMessage = message.toLowerCase().trim();
+            
+            // Comandos específicos
+            for (const [command, handler] of Object.entries(gatomanteKnowledge.commands)) {
+                if (lowerMessage.includes(command)) {
+                    if (typeof handler === 'function') {
+                        // Extrair parâmetro se houver
+                        const parts = lowerMessage.split(' ');
+                        const paramIndex = parts.indexOf(command) + 1;
+                        const param = paramIndex < parts.length ? parts[paramIndex] : null;
+                        return handler(param);
+                    } else {
+                        return handler;
+                    }
+                }
+            }
+            
+            // Respostas baseadas em palavras-chave
+            if (lowerMessage.includes('obrigad') || lowerMessage.includes('valeu') || lowerMessage.includes('legal')) {
+                return getRandomResponse(gatomanteKnowledge.responses.compliments);
+            }
+            
+            if (lowerMessage.includes('piada') || lowerMessage.includes('engraçado') || lowerMessage.includes('humor')) {
+                return getRandomResponse(gatomanteKnowledge.responses.jokes);
+            }
+            
+            if (lowerMessage.includes('oi') || lowerMessage.includes('olá') || lowerMessage.includes('hey')) {
+                return getRandomResponse(gatomanteKnowledge.greetings);
+            }
+            
+            // Resposta padrão para mensagens não reconhecidas
+            return getRandomResponse(gatomanteKnowledge.responses.unknown);
+        }
+        
+        function getRandomResponse(responses) {
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        function sendChatMessage() {
+            const input = document.getElementById('gatomanteInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Adicionar mensagem do usuário
+            addChatMessage('user', message);
+            input.value = '';
+            
+            // Mostrar indicador de digitação
+            showTypingIndicator();
+            
+            // Simular tempo de resposta
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = processUserMessage(message);
+                addChatMessage('bot', response);
+                
+                // Notificar sobre uso do chat
+                setTimeout(() => {
+                    gatomanteContextual('chat_usado', { mensagem: message });
+                }, 1000);
+            }, 1000 + Math.random() * 1500); // 1-2.5s de delay
+        }
+        
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+        
+        // Sistema de Reconhecimento de Voz
+        function initVoiceRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                gatomanteVoiceRecognition = new SpeechRecognition();
+                
+                gatomanteVoiceRecognition.continuous = false;
+                gatomanteVoiceRecognition.interimResults = false;
+                gatomanteVoiceRecognition.lang = 'pt-BR';
+                
+                gatomanteVoiceRecognition.onstart = () => {
+                    isVoiceListening = true;
+                    const voiceBtn = document.getElementById('gatomanteVoiceBtn');
+                    voiceBtn.classList.add('listening');
+                    voiceBtn.title = 'Ouvindo... Fale agora!';
+                    console.log('🎤 Reconhecimento de voz iniciado');
+                };
+                
+                gatomanteVoiceRecognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    const input = document.getElementById('gatomanteInput');
+                    input.value = transcript;
+                    
+                    // Enviar automaticamente
+                    setTimeout(() => {
+                        sendChatMessage();
+                    }, 500);
+                    
+                    console.log('🎤 Comando de voz reconhecido:', transcript);
+                };
+                
+                gatomanteVoiceRecognition.onend = () => {
+                    isVoiceListening = false;
+                    const voiceBtn = document.getElementById('gatomanteVoiceBtn');
+                    voiceBtn.classList.remove('listening');
+                    voiceBtn.title = 'Comando de Voz';
+                };
+                
+                gatomanteVoiceRecognition.onerror = (event) => {
+                    console.error('❌ Erro no reconhecimento de voz:', event.error);
+                    isVoiceListening = false;
+                    const voiceBtn = document.getElementById('gatomanteVoiceBtn');
+                    voiceBtn.classList.remove('listening');
+                };
+                
+                console.log('🎤 Sistema de reconhecimento de voz inicializado');
+            } else {
+                console.warn('⚠️ Reconhecimento de voz não suportado neste navegador');
+            }
+        }
+        
+        function toggleVoiceRecognition() {
+            if (!gatomanteVoiceRecognition) {
+                addChatMessage('bot', 'Desculpe, reconhecimento de voz não está disponível neste navegador. 😿');
+                return;
+            }
+            
+            if (isVoiceListening) {
+                gatomanteVoiceRecognition.stop();
+            } else {
+                gatomanteVoiceRecognition.start();
+            }
+        }
+        
         function moveWindowToWorkspace(windowId, targetWorkspace) {
             // Remover da workspace atual
             removeWindowFromWorkspace(windowId);
@@ -7749,6 +8338,16 @@
                     "4 workspaces virtuais... como os 4 elementos da natureza!",
                     "Zonas de snap aparecem quando você arrasta... guias douradas para organização perfeita!"
                 ],
+                chat_ia: [
+                    "Descobriu meu chat! 🤖 Agora podemos conversar de verdade... que evolução felina!",
+                    "Use comandos de voz clicando no microfone 🎤... tecnologia mística em ação!",
+                    "Posso executar comandos como 'abrir calculadora' ou 'workspace 2'... sou seu assistente digital!",
+                    "Pergunte sobre qualquer funcionalidade do Aurora OS... tenho conhecimento infinito!",
+                    "Digite 'piada' se quiser humor felino... ou 'ajuda' para comandos disponíveis!",
+                    "Reconhecimento de voz em português brasileiro... finalmente alguém que me entende!",
+                    "Chat inteligente + comandos de voz = Gatomante IA completo! 🐱‍⬛✨",
+                    "Experimente falar 'hora planeta' ou 'mudar tema'... magia vocal pura!"
+                ],
                 demo_login: [
                     "Bem-vindo à conta demo, Luna Mystica! Sou o Gatomante, seu guia místico pessoal.",
                     "Olá, Luna! Esta conta demo mostra todas as funcionalidades do Aurora OS... explore à vontade!",
@@ -7948,6 +8547,10 @@
                 case 'workspaces':
                     tipoDica = 'workspaces';
                     delay = 1000;
+                    break;
+                case 'chat_usado':
+                    tipoDica = 'chat_ia';
+                    delay = 2000;
                     break;
                 case 'tema_mudou':
                     tipoDica = 'tecnicasPersonalizadas';
@@ -8216,6 +8819,9 @@
             
             // Inicializar workspaces virtuais e snap zones
             initWorkspaces();
+            
+            // 🤖 Inicializar Gatomante IA Avançada
+            initVoiceRecognition();
             
             // Inicializar Gatomante após entrar no sistemaÁST!
             loadAfastVoiceSettings();
