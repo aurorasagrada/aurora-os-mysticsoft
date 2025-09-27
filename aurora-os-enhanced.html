@@ -630,13 +630,263 @@
             to { transform: rotate(360deg); }
         }
         
-        /* Desktop */
+        /* ========================================
+           🌟 DESKTOP MÁGICO COM WALLPAPERS DINÂMICOS
+           Muda conforme hora planetária + partículas místicas
+           ======================================== */
+        
         .desktop {
             position: relative;
             width: 100%;
-            height: calc(100vh - 40px);
+            height: calc(100vh - 50px);
             background: var(--theme-bg);
             background-attachment: fixed;
+            overflow: hidden;
+            transition: background 2s ease-in-out;
+        }
+        
+        /* Camada de partículas místicas */
+        .desktop-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .mystic-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, var(--dourado) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatMystic 8s linear infinite;
+            opacity: 0.7;
+        }
+        
+        .mystic-particle.star {
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, #fff 0%, var(--dourado) 50%, transparent 100%);
+            animation: floatStar 12s linear infinite;
+        }
+        
+        .mystic-particle.rune {
+            width: 8px;
+            height: 8px;
+            background: none;
+            color: var(--dourado);
+            font-size: 8px;
+            animation: floatRune 15s linear infinite;
+        }
+        
+        @keyframes floatMystic {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(50px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes floatStar {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(50vh) translateX(25px) scale(1);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(50px) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes floatRune {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(30px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Wallpapers dinâmicos por hora planetária */
+        .desktop.sol {
+            background: radial-gradient(ellipse at center, 
+                rgba(255, 215, 0, 0.3) 0%, 
+                rgba(255, 140, 0, 0.2) 30%, 
+                rgba(139, 69, 19, 0.4) 70%, 
+                rgba(0, 0, 0, 0.8) 100%);
+        }
+        
+        .desktop.lua {
+            background: radial-gradient(ellipse at center, 
+                rgba(192, 192, 192, 0.3) 0%, 
+                rgba(119, 136, 153, 0.2) 30%, 
+                rgba(25, 25, 112, 0.4) 70%, 
+                rgba(0, 0, 0, 0.9) 100%);
+        }
+        
+        .desktop.marte {
+            background: radial-gradient(ellipse at center, 
+                rgba(255, 69, 0, 0.3) 0%, 
+                rgba(178, 34, 34, 0.2) 30%, 
+                rgba(139, 0, 0, 0.4) 70%, 
+                rgba(0, 0, 0, 0.8) 100%);
+        }
+        
+        .desktop.mercurio {
+            background: radial-gradient(ellipse at center, 
+                rgba(255, 255, 0, 0.3) 0%, 
+                rgba(255, 215, 0, 0.2) 30%, 
+                rgba(184, 134, 11, 0.4) 70%, 
+                rgba(0, 0, 0, 0.8) 100%);
+        }
+        
+        .desktop.jupiter {
+            background: radial-gradient(ellipse at center, 
+                rgba(255, 165, 0, 0.3) 0%, 
+                rgba(255, 140, 0, 0.2) 30%, 
+                rgba(205, 133, 63, 0.4) 70%, 
+                rgba(0, 0, 0, 0.8) 100%);
+        }
+        
+        .desktop.venus {
+            background: radial-gradient(ellipse at center, 
+                rgba(255, 182, 193, 0.3) 0%, 
+                rgba(255, 105, 180, 0.2) 30%, 
+                rgba(199, 21, 133, 0.4) 70%, 
+                rgba(0, 0, 0, 0.8) 100%);
+        }
+        
+        .desktop.saturno {
+            background: radial-gradient(ellipse at center, 
+                rgba(128, 128, 128, 0.3) 0%, 
+                rgba(105, 105, 105, 0.2) 30%, 
+                rgba(47, 79, 79, 0.4) 70%, 
+                rgba(0, 0, 0, 0.9) 100%);
+        }
+        
+        /* Efeito de aurora boreal sutil */
+        .desktop::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                rgba(0, 255, 127, 0.05) 25%, 
+                transparent 50%, 
+                rgba(138, 43, 226, 0.05) 75%, 
+                transparent 100%);
+            animation: auroraShift 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes auroraShift {
+            0%, 100% {
+                opacity: 0.3;
+                transform: translateX(-50px) rotate(0deg);
+            }
+            25% {
+                opacity: 0.6;
+                transform: translateX(0px) rotate(1deg);
+            }
+            50% {
+                opacity: 0.4;
+                transform: translateX(30px) rotate(-1deg);
+            }
+            75% {
+                opacity: 0.7;
+                transform: translateX(-20px) rotate(0.5deg);
+            }
+        }
+        
+        /* Constelações de fundo */
+        .desktop-constellation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .constellation-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+        
+        .constellation-star.bright {
+            width: 3px;
+            height: 3px;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+        }
+        
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+        }
+        
+        /* Linhas de conexão das constelações */
+        .constellation-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 100%);
+            transform-origin: left center;
+            animation: lineGlow 4s ease-in-out infinite;
+        }
+        
+        @keyframes lineGlow {
+            0%, 100% {
+                opacity: 0.2;
+            }
+            50% {
+                opacity: 0.6;
+            }
         }
         
         .desktop-icons {
@@ -3233,7 +3483,19 @@
         </div>
     </div>
     
+    <!-- 🌟 DESKTOP MÁGICO COM WALLPAPERS DINÂMICOS -->
     <div class="desktop" id="desktop">
+        <!-- Partículas místicas flutuantes -->
+        <div class="desktop-particles" id="desktopParticles">
+            <!-- Partículas serão geradas dinamicamente -->
+        </div>
+        
+        <!-- Constelações de fundo -->
+        <div class="desktop-constellation" id="desktopConstellation">
+            <!-- Estrelas e linhas serão geradas dinamicamente -->
+        </div>
+        
+        <!-- Ícones do desktop -->
         <div class="desktop-icons" id="desktopIcons">
             <!-- Ícones serão gerados dinamicamente -->
         </div>
@@ -4911,6 +5173,15 @@
             document.getElementById('clock').textContent = timeString;
         }
         
+        // ========================================
+        // 🌟 SISTEMA DE WALLPAPERS DINÂMICOS
+        // Muda conforme hora planetária + partículas
+        // ========================================
+        
+        let currentPlanet = 'sol';
+        let particlesInterval;
+        let constellationInterval;
+        
         function updatePlanetaryInfo() {
             const now = new Date();
             const dayOfWeek = now.getDay();
@@ -4920,14 +5191,14 @@
             const dayRuler = dayRulers[dayOfWeek];
             const rulerIndex = chaldeanOrder.indexOf(dayRuler);
             const planetIndex = (rulerIndex + hour) % 7;
-            const currentPlanet = chaldeanOrder[planetIndex];
+            const planetName = chaldeanOrder[planetIndex];
             
             // Atualizar interface
-            const symbol = planetarySymbols[currentPlanet];
+            const symbol = planetarySymbols[planetName];
             document.getElementById('planetarySymbol').textContent = symbol;
-            document.getElementById('planetaryName').textContent = currentPlanet;
+            document.getElementById('planetaryName').textContent = planetName;
             document.getElementById('currentPlanetSymbol').textContent = symbol;
-            document.getElementById('currentPlanetName').textContent = currentPlanet;
+            document.getElementById('currentPlanetName').textContent = planetName;
             document.getElementById('dayRuler').textContent = dayRuler;
             
             // Determinar período (dia/noite) - simplificado
@@ -4937,13 +5208,149 @@
             document.getElementById('planetaryTime').textContent = 
                 `Hora ${hourInPeriod} do ${period === 'dia' ? 'Dia' : 'Noite'} • ${hour}:00 - ${(hour + 1) % 24}:00`;
             
-            // Verificar se houve mudança planetária para notificar Gatomante
-            if (currentPlanetaryHour && currentPlanetaryHour.planet !== currentPlanet) {
+            // 🌟 WALLPAPER DINÂMICO - Mudar conforme planeta
+            if (currentPlanet !== planetName) {
+                currentPlanet = planetName;
+                updateDynamicWallpaper(planetName);
+                
                 // Notificar Gatomante sobre mudança planetária
                 setTimeout(() => {
-                    gatomanteContextual('planeta_mudou');
-                }, 5000);
+                    gatomanteContextual('planeta_mudou', { planeta: planetName });
+                }, 2000);
             }
+        }
+        
+        function updateDynamicWallpaper(planet) {
+            const desktop = document.getElementById('desktop');
+            
+            // Remover classes planetárias anteriores
+            desktop.classList.remove('sol', 'lua', 'marte', 'mercurio', 'jupiter', 'venus', 'saturno');
+            
+            // Adicionar nova classe planetária
+            const planetClass = planet.toLowerCase().replace('ú', 'u'); // mercúrio -> mercurio
+            desktop.classList.add(planetClass);
+            
+            // Ajustar partículas conforme planeta
+            updateParticlesByPlanet(planet);
+            
+            console.log(`🌟 Wallpaper dinâmico atualizado para: ${planet}`);
+        }
+        
+        function updateParticlesByPlanet(planet) {
+            // Limpar partículas existentes
+            clearInterval(particlesInterval);
+            
+            // Configurar partículas baseadas no planeta
+            const particleConfigs = {
+                'Sol': { count: 15, types: ['star', 'mystic'], colors: ['#FFD700', '#FFA500'] },
+                'Lua': { count: 10, types: ['mystic', 'rune'], colors: ['#C0C0C0', '#E6E6FA'] },
+                'Marte': { count: 12, types: ['star', 'mystic'], colors: ['#FF4500', '#DC143C'] },
+                'Mercúrio': { count: 20, types: ['rune', 'mystic'], colors: ['#FFFF00', '#FFD700'] },
+                'Júpiter': { count: 8, types: ['star', 'rune'], colors: ['#FFA500', '#DAA520'] },
+                'Vênus': { count: 14, types: ['star', 'mystic'], colors: ['#FFB6C1', '#FF69B4'] },
+                'Saturno': { count: 6, types: ['rune'], colors: ['#808080', '#696969'] }
+            };
+            
+            const config = particleConfigs[planet] || particleConfigs['Sol'];
+            
+            // Criar novas partículas
+            createMysticParticles(config);
+            
+            // Iniciar geração contínua
+            particlesInterval = setInterval(() => {
+                createMysticParticles(config);
+            }, 3000);
+        }
+        
+        function createMysticParticles(config) {
+            const container = document.getElementById('desktopParticles');
+            
+            for (let i = 0; i < config.count; i++) {
+                const particle = document.createElement('div');
+                particle.className = `mystic-particle ${config.types[Math.floor(Math.random() * config.types.length)]}`;
+                
+                // Posição aleatória
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+                
+                // Cor baseada no planeta
+                const color = config.colors[Math.floor(Math.random() * config.colors.length)];
+                if (particle.classList.contains('rune')) {
+                    particle.textContent = ['☽', '☉', '♂', '☿', '♃', '♀', '♄'][Math.floor(Math.random() * 7)];
+                    particle.style.color = color;
+                } else {
+                    particle.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
+                }
+                
+                container.appendChild(particle);
+                
+                // Remover após animação
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 12000);
+            }
+        }
+        
+        function createDesktopConstellation() {
+            const container = document.getElementById('desktopConstellation');
+            container.innerHTML = '';
+            
+            // Criar constelação simples (Ursa Maior)
+            const stars = [
+                { x: 20, y: 15, bright: true },
+                { x: 25, y: 18, bright: false },
+                { x: 30, y: 20, bright: true },
+                { x: 35, y: 18, bright: false },
+                { x: 40, y: 22, bright: true },
+                { x: 38, y: 28, bright: false },
+                { x: 32, y: 30, bright: true }
+            ];
+            
+            // Criar estrelas
+            stars.forEach((star, index) => {
+                const starElement = document.createElement('div');
+                starElement.className = `constellation-star ${star.bright ? 'bright' : ''}`;
+                starElement.style.left = star.x + '%';
+                starElement.style.top = star.y + '%';
+                starElement.style.animationDelay = (index * 0.5) + 's';
+                container.appendChild(starElement);
+            });
+            
+            // Criar linhas conectoras
+            for (let i = 0; i < stars.length - 1; i++) {
+                const line = document.createElement('div');
+                line.className = 'constellation-line';
+                
+                const star1 = stars[i];
+                const star2 = stars[i + 1];
+                
+                const dx = star2.x - star1.x;
+                const dy = star2.y - star1.y;
+                const length = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                
+                line.style.left = star1.x + '%';
+                line.style.top = star1.y + '%';
+                line.style.width = length + '%';
+                line.style.transform = `rotate(${angle}deg)`;
+                line.style.animationDelay = (i * 0.3) + 's';
+                
+                container.appendChild(line);
+            }
+        }
+        
+        function initDynamicWallpaper() {
+            // Criar constelação inicial
+            createDesktopConstellation();
+            
+            // Iniciar partículas baseadas no planeta atual
+            updateParticlesByPlanet(currentPlanet);
+            
+            console.log('🌟 Sistema de wallpapers dinâmicos inicializado');
+        }
                     function openSite(siteId) {
             const site = sitesConfig.find(s => s.id === siteId);
             if (!site) return;
@@ -6733,6 +7140,9 @@
             updateClock();
             updatePlanetaryInfo();
             loadPersonalization();
+            
+            // 🌟 Inicializar wallpapers dinâmicos e partículas
+            initDynamicWallpaper();
             
             // Carregar configurações do sistema AFÁST!
             loadAfastVoiceSettings();
