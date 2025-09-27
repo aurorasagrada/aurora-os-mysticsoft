@@ -1471,6 +1471,195 @@
             background: rgba(255,255,255,0.2);
         }
         
+        /* ========================================
+           🎵 SISTEMA DE ÁUDIO AMBIENTE
+           Controles para sons místicos e frequências
+           ======================================== */
+        
+        .ambient-audio-control {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            max-height: 600px;
+            background: linear-gradient(135deg, 
+                rgba(75, 0, 130, 0.95) 0%, 
+                rgba(25, 25, 112, 0.95) 50%, 
+                rgba(0, 0, 0, 0.95) 100%);
+            border: 3px solid var(--dourado);
+            border-radius: 15px;
+            box-shadow: 
+                0 0 30px rgba(240, 170, 83, 0.5),
+                inset 0 0 20px rgba(240, 170, 83, 0.1);
+            z-index: 3000;
+            backdrop-filter: blur(10px);
+            overflow-y: auto;
+        }
+        
+        .ambient-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 2px solid var(--dourado);
+            background: rgba(240, 170, 83, 0.1);
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .ambient-header span {
+            color: var(--dourado);
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--dourado);
+        }
+        
+        .ambient-header button {
+            background: rgba(220, 20, 60, 0.8);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .ambient-header button:hover {
+            background: rgba(220, 20, 60, 1);
+            transform: scale(1.1);
+        }
+        
+        .ambient-categories {
+            padding: 20px;
+        }
+        
+        .ambient-category {
+            margin-bottom: 25px;
+        }
+        
+        .ambient-category h4 {
+            color: var(--dourado);
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 8px var(--dourado);
+            border-bottom: 1px solid rgba(240, 170, 83, 0.3);
+            padding-bottom: 5px;
+        }
+        
+        .ambient-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+        }
+        
+        .ambient-btn {
+            background: linear-gradient(135deg, 
+                rgba(138, 43, 226, 0.6) 0%, 
+                rgba(75, 0, 130, 0.6) 100%);
+            color: white;
+            border: 2px solid rgba(240, 170, 83, 0.3);
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ambient-btn:hover {
+            border-color: var(--dourado);
+            box-shadow: 0 0 15px rgba(240, 170, 83, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .ambient-btn.active {
+            background: linear-gradient(135deg, 
+                var(--dourado) 0%, 
+                rgba(255, 215, 0, 0.8) 100%);
+            color: black;
+            border-color: var(--dourado);
+            box-shadow: 
+                0 0 20px rgba(240, 170, 83, 0.8),
+                inset 0 0 10px rgba(255, 255, 255, 0.2);
+            animation: activeGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes activeGlow {
+            0%, 100% {
+                box-shadow: 
+                    0 0 20px rgba(240, 170, 83, 0.8),
+                    inset 0 0 10px rgba(255, 255, 255, 0.2);
+            }
+            50% {
+                box-shadow: 
+                    0 0 30px rgba(240, 170, 83, 1),
+                    inset 0 0 15px rgba(255, 255, 255, 0.4);
+            }
+        }
+        
+        .ambient-controls {
+            padding: 20px;
+            border-top: 2px solid var(--dourado);
+            background: rgba(240, 170, 83, 0.1);
+            border-radius: 0 0 12px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .ambient-controls label {
+            color: var(--dourado);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .ambient-controls input[type="range"] {
+            width: 150px;
+            height: 6px;
+            background: rgba(240, 170, 83, 0.3);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .ambient-controls input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--dourado);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(240, 170, 83, 0.8);
+        }
+        
+        .ambient-controls button {
+            background: linear-gradient(135deg, 
+                rgba(220, 20, 60, 0.8) 0%, 
+                rgba(139, 0, 0, 0.8) 100%);
+            color: white;
+            border: 2px solid rgba(220, 20, 60, 0.5);
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .ambient-controls button:hover {
+            border-color: rgba(220, 20, 60, 1);
+            box-shadow: 0 0 15px rgba(220, 20, 60, 0.5);
+            transform: translateY(-2px);
+        }
+        
         /* Popups */
         .popup {
             position: fixed;
@@ -3501,13 +3690,104 @@
         </div>
     </div>
     
-    <!-- Elementos de Áudio -->
+    <!-- ========================================
+         🎵 SISTEMA DE ÁUDIO PERSONALIZADO
+         Sons ambientais, cristais, mantras, frequências
+         ======================================== -->
+    
+    <!-- Áudios do Sistema -->
     <audio id="dialupSound1" preload="auto">
         <source src="dialup_chiados_dirty_enhanced.wav" type="audio/wav">
     </audio>
     <audio id="dialupSound2" preload="auto">
         <source src="dialup_chiados_vintage.wav" type="audio/wav">
     </audio>
+    
+    <!-- Áudios Ambientais Místicos -->
+    <audio id="ambientForest" preload="none" loop>
+        <!-- Floresta mística com pássaros e vento -->
+    </audio>
+    <audio id="ambientOcean" preload="none" loop>
+        <!-- Ondas do oceano com gaivotas -->
+    </audio>
+    <audio id="ambientRain" preload="none" loop>
+        <!-- Chuva suave com trovões distantes -->
+    </audio>
+    <audio id="ambientCave" preload="none" loop>
+        <!-- Caverna com gotejamento e ecos -->
+    </audio>
+    
+    <!-- Frequências de Cura -->
+    <audio id="freq396Hz" preload="none" loop>
+        <!-- 396 Hz - Liberação de medos -->
+    </audio>
+    <audio id="freq528Hz" preload="none" loop>
+        <!-- 528 Hz - Frequência do amor -->
+    </audio>
+    <audio id="freq741Hz" preload="none" loop>
+        <!-- 741 Hz - Despertar da intuição -->
+    </audio>
+    
+    <!-- Sons de Cristais -->
+    <audio id="crystalBowl" preload="none">
+        <!-- Tigela de cristal -->
+    </audio>
+    <audio id="crystalChimes" preload="none">
+        <!-- Sinos de cristal -->
+    </audio>
+    
+    <!-- Mantras e Cantos -->
+    <audio id="mantraOm" preload="none" loop>
+        <!-- Om Mani Padme Hum -->
+    </audio>
+    <audio id="mantraGayatri" preload="none" loop>
+        <!-- Gayatri Mantra -->
+    </audio>
+    
+    <!-- Controle de Áudio Ambiente -->
+    <div class="ambient-audio-control" id="ambientControl" style="display: none;">
+        <div class="ambient-header">
+            <span>🎵 Áudio Ambiente</span>
+            <button onclick="toggleAmbientControl()">×</button>
+        </div>
+        <div class="ambient-categories">
+            <div class="ambient-category">
+                <h4>🌿 Natureza</h4>
+                <div class="ambient-options">
+                    <button class="ambient-btn" data-audio="ambientForest">Floresta</button>
+                    <button class="ambient-btn" data-audio="ambientOcean">Oceano</button>
+                    <button class="ambient-btn" data-audio="ambientRain">Chuva</button>
+                    <button class="ambient-btn" data-audio="ambientCave">Caverna</button>
+                </div>
+            </div>
+            <div class="ambient-category">
+                <h4>🔮 Frequências</h4>
+                <div class="ambient-options">
+                    <button class="ambient-btn" data-audio="freq396Hz">396 Hz</button>
+                    <button class="ambient-btn" data-audio="freq528Hz">528 Hz</button>
+                    <button class="ambient-btn" data-audio="freq741Hz">741 Hz</button>
+                </div>
+            </div>
+            <div class="ambient-category">
+                <h4>💎 Cristais</h4>
+                <div class="ambient-options">
+                    <button class="ambient-btn" data-audio="crystalBowl">Tigela</button>
+                    <button class="ambient-btn" data-audio="crystalChimes">Sinos</button>
+                </div>
+            </div>
+            <div class="ambient-category">
+                <h4>🕉️ Mantras</h4>
+                <div class="ambient-options">
+                    <button class="ambient-btn" data-audio="mantraOm">Om</button>
+                    <button class="ambient-btn" data-audio="mantraGayatri">Gayatri</button>
+                </div>
+            </div>
+        </div>
+        <div class="ambient-controls">
+            <label>Volume: <input type="range" id="ambientVolume" min="0" max="100" value="30"></label>
+            <button onclick="stopAllAmbient()">Parar Tudo</button>
+        </div>
+    </div>
     
     <!-- Menu de Contexto -->
     <div class="context-menu" id="contextMenu">
@@ -3563,6 +3843,11 @@
             <!-- Controle de Volume -->
             <div class="system-indicator" onclick="toggleVolumePopup()" title="Controle de Volume" id="volumeIndicator">
                 <span class="icon" id="volumeIcon">🔊</span>
+            </div>
+            
+            <!-- Áudio Ambiente -->
+            <div class="system-indicator" onclick="toggleAmbientControl()" title="Áudio Ambiente Místico" id="ambientIndicator">
+                <span class="icon">🎵</span>
             </div>
         </div>
     </div>
@@ -5351,6 +5636,221 @@
             
             console.log('🌟 Sistema de wallpapers dinâmicos inicializado');
         }
+        
+        // ========================================
+        // 🎵 SISTEMA DE ÁUDIO AMBIENTE MÍSTICO
+        // Sons de cristais, mantras, frequências de cura
+        // ========================================
+        
+        let currentAmbientAudio = null;
+        let ambientVolume = 0.3;
+        
+        function toggleAmbientControl() {
+            const control = document.getElementById('ambientControl');
+            if (control.style.display === 'none' || !control.style.display) {
+                control.style.display = 'block';
+                
+                // Notificar Gatomante
+                setTimeout(() => {
+                    gatomanteContextual('audio_ambiente', { acao: 'aberto' });
+                }, 1000);
+            } else {
+                control.style.display = 'none';
+            }
+        }
+        
+        function playAmbientAudio(audioId) {
+            // Parar áudio atual se existir
+            if (currentAmbientAudio) {
+                currentAmbientAudio.pause();
+                currentAmbientAudio.currentTime = 0;
+            }
+            
+            // Remover classe active de todos os botões
+            document.querySelectorAll('.ambient-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Buscar elemento de áudio
+            const audioElement = document.getElementById(audioId);
+            
+            if (audioElement) {
+                // Se o áudio tem src, tocar
+                if (audioElement.src || audioElement.children.length > 0) {
+                    audioElement.volume = ambientVolume;
+                    audioElement.play().catch(e => {
+                        console.log('Erro ao tocar áudio:', e);
+                        // Fallback: gerar som sintético
+                        generateSyntheticAmbient(audioId);
+                    });
+                    currentAmbientAudio = audioElement;
+                } else {
+                    // Gerar som sintético
+                    generateSyntheticAmbient(audioId);
+                }
+                
+                // Marcar botão como ativo
+                const button = document.querySelector(`[data-audio="${audioId}"]`);
+                if (button) {
+                    button.classList.add('active');
+                }
+                
+                // Notificar Gatomante
+                setTimeout(() => {
+                    gatomanteContextual('audio_ambiente', { 
+                        acao: 'tocando', 
+                        tipo: getAudioTypeName(audioId) 
+                    });
+                }, 1500);
+                
+                console.log(`🎵 Áudio ambiente iniciado: ${audioId}`);
+            }
+        }
+        
+        function generateSyntheticAmbient(audioId) {
+            // Gerar sons sintéticos baseados no tipo
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            const configs = {
+                'ambientForest': {
+                    frequencies: [200, 400, 800],
+                    type: 'sine',
+                    duration: 30,
+                    description: 'Floresta mística'
+                },
+                'ambientOcean': {
+                    frequencies: [100, 300, 600],
+                    type: 'sine',
+                    duration: 25,
+                    description: 'Ondas do oceano'
+                },
+                'ambientRain': {
+                    frequencies: [1000, 2000, 4000],
+                    type: 'sawtooth',
+                    duration: 20,
+                    description: 'Chuva suave'
+                },
+                'freq396Hz': {
+                    frequencies: [396],
+                    type: 'sine',
+                    duration: 60,
+                    description: 'Frequência 396Hz - Liberação'
+                },
+                'freq528Hz': {
+                    frequencies: [528],
+                    type: 'sine',
+                    duration: 60,
+                    description: 'Frequência 528Hz - Amor'
+                },
+                'freq741Hz': {
+                    frequencies: [741],
+                    type: 'sine',
+                    duration: 60,
+                    description: 'Frequência 741Hz - Intuição'
+                },
+                'crystalBowl': {
+                    frequencies: [432, 864],
+                    type: 'sine',
+                    duration: 15,
+                    description: 'Tigela de cristal'
+                },
+                'mantraOm': {
+                    frequencies: [136.1, 272.2],
+                    type: 'triangle',
+                    duration: 45,
+                    description: 'Mantra Om'
+                }
+            };
+            
+            const config = configs[audioId] || configs['ambientForest'];
+            
+            // Criar osciladores para cada frequência
+            config.frequencies.forEach((freq, index) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.type = config.type;
+                oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+                
+                // Volume baixo e variável
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                gainNode.gain.linearRampToValueAtTime(ambientVolume * 0.1, audioContext.currentTime + 2);
+                gainNode.gain.linearRampToValueAtTime(ambientVolume * 0.05, audioContext.currentTime + config.duration - 2);
+                gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + config.duration);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.start(audioContext.currentTime + index * 0.5);
+                oscillator.stop(audioContext.currentTime + config.duration);
+            });
+            
+            console.log(`🎵 Som sintético gerado: ${config.description}`);
+        }
+        
+        function getAudioTypeName(audioId) {
+            const names = {
+                'ambientForest': 'Floresta Mística',
+                'ambientOcean': 'Oceano Sereno',
+                'ambientRain': 'Chuva Relaxante',
+                'ambientCave': 'Caverna Profunda',
+                'freq396Hz': 'Frequência de Liberação',
+                'freq528Hz': 'Frequência do Amor',
+                'freq741Hz': 'Frequência da Intuição',
+                'crystalBowl': 'Tigela de Cristal',
+                'crystalChimes': 'Sinos de Cristal',
+                'mantraOm': 'Mantra Om',
+                'mantraGayatri': 'Mantra Gayatri'
+            };
+            return names[audioId] || 'Som Ambiente';
+        }
+        
+        function updateAmbientVolume() {
+            const volumeSlider = document.getElementById('ambientVolume');
+            ambientVolume = volumeSlider.value / 100;
+            
+            if (currentAmbientAudio) {
+                currentAmbientAudio.volume = ambientVolume;
+            }
+            
+            console.log(`🎵 Volume ambiente ajustado: ${Math.round(ambientVolume * 100)}%`);
+        }
+        
+        function stopAllAmbient() {
+            if (currentAmbientAudio) {
+                currentAmbientAudio.pause();
+                currentAmbientAudio.currentTime = 0;
+                currentAmbientAudio = null;
+            }
+            
+            // Remover classe active de todos os botões
+            document.querySelectorAll('.ambient-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Notificar Gatomante
+            setTimeout(() => {
+                gatomanteContextual('audio_ambiente', { acao: 'parado' });
+            }, 1000);
+            
+            console.log('🎵 Todos os áudios ambiente foram parados');
+        }
+        
+        function initAmbientAudio() {
+            // Configurar eventos dos botões
+            document.querySelectorAll('.ambient-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const audioId = btn.getAttribute('data-audio');
+                    playAmbientAudio(audioId);
+                });
+            });
+            
+            // Configurar slider de volume
+            const volumeSlider = document.getElementById('ambientVolume');
+            volumeSlider.addEventListener('input', updateAmbientVolume);
+            
+            console.log('🎵 Sistema de áudio ambiente inicializado');
+        }
                     function openSite(siteId) {
             const site = sitesConfig.find(s => s.id === siteId);
             if (!site) return;
@@ -6645,7 +7145,10 @@
                     "Seus atalhos estão desorganizados... um verdadeiro caos cósmico!",
                     "Que tal personalizar seu tema? Até gatos gostam de variedade.",
                     "O sistema de volume permite controlar cada aspecto... muito útil!",
-                    "Você pode adicionar novos sites ao sistema... magia moderna!"
+                    "Você pode adicionar novos sites ao sistema... magia moderna!",
+                    "Experimente o áudio ambiente 🎵... sons místicos para elevar sua vibração!",
+                    "As frequências de cura podem harmonizar seus chakras digitais...",
+                    "Sons de cristal ajudam na concentração... até gatos aprovam!"
                 ],
                 tecnicasPersonalizadas: [
                     "Vejo que você mudou o tema {vezes} vezes, {nome}... um verdadeiro artista místico!",
@@ -6688,6 +7191,16 @@
                     "Clique no escudo dourado 🛡️ para ver a central de notificações AFÁST!",
                     "O sistema AFÁST monitora eventos como Mercúrio retrógrado e eclipses...",
                     "Quando o AFÁST alerta, é melhor prestar atenção... confie em mim!"
+                ],
+                audio_ambiente: [
+                    "Ah, você descobriu o áudio ambiente! 🎵 Sons místicos para elevar sua vibração...",
+                    "Experimente as frequências de cura... 528Hz é a frequência do amor!",
+                    "Sons de cristal são perfeitos para meditação... até gatos ficam zen!",
+                    "A floresta mística acalma a mente... ideal para trabalhos espirituais.",
+                    "Mantras Om ressoam com o universo... uma vibração ancestral poderosa!",
+                    "Frequência 396Hz libera medos... muito útil para limpezas energéticas.",
+                    "O oceano sereno traz paz interior... como ronronar, mas para humanos!",
+                    "Chuva relaxante limpa as energias... perfeita para rituais de purificação."
                 ],
                 demo_login: [
                     "Bem-vindo à conta demo, Luna Mystica! Sou o Gatomante, seu guia místico pessoal.",
@@ -6880,6 +7393,10 @@
                 case 'afast_info':
                     tipoDica = 'afast_info';
                     delay = 1500;
+                    break;
+                case 'audio_ambiente':
+                    tipoDica = 'audio_ambiente';
+                    delay = 1000;
                     break;
                 case 'tema_mudou':
                     tipoDica = 'tecnicasPersonalizadas';
@@ -7140,11 +7657,13 @@
             updateClock();
             updatePlanetaryInfo();
             loadPersonalization();
-            
-            // 🌟 Inicializar wallpapers dinâmicos e partículas
+                 // 🌟 Inicializar wallpapers dinâmicos e partículas
             initDynamicWallpaper();
             
-            // Carregar configurações do sistema AFÁST!
+            // 🎵 Inicializar sistema de áudio ambiente
+            initAmbientAudio();
+            
+            // Inicializar Gatomante após entrar no sistemaÁST!
             loadAfastVoiceSettings();
             loadAfastNotifications();
             initAfastSystem();
