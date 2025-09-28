@@ -2361,59 +2361,217 @@
             }
         }
         
+        /* ========================================
+           💬 BALÃO DE FALA DO GATOMANTE - COMIC STYLE
+           Design autêntico de quadrinhos com melhorias
+           ======================================== */
+        
         .gatomante-bubble {
-            background: var(--pergaminho);
-            border: 2px solid var(--azul-escuro);
-            border-radius: 15px;
-            padding: 12px 16px;
-            max-width: 280px;
+            background: linear-gradient(135deg, 
+                rgba(242, 234, 255, 0.98) 0%, 
+                rgba(255, 255, 255, 0.95) 50%, 
+                rgba(240, 170, 83, 0.1) 100%);
+            border: 3px solid var(--azul-escuro);
+            border-radius: 20px;
+            padding: 18px 22px;
+            max-width: 320px;
+            min-width: 200px;
             position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            animation: bubbleFloat 0.3s ease-out;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.3),
+                0 0 15px rgba(240, 170, 83, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            animation: bubbleAppear 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(10px);
+            
+            /* Efeito comic-style com bordas duplas */
+            outline: 2px solid rgba(240, 170, 83, 0.6);
+            outline-offset: 2px;
         }
         
-        @keyframes bubbleFloat {
-            from { 
+        @keyframes bubbleAppear {
+            0% { 
                 opacity: 0; 
-                transform: translateY(10px); 
+                transform: scale(0.3) translateY(30px) rotate(-5deg);
+                filter: blur(5px);
             }
-            to { 
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1) translateY(-5px) rotate(1deg);
+                filter: blur(1px);
+            }
+            100% { 
                 opacity: 1; 
-                transform: translateY(0); 
+                transform: scale(1) translateY(0) rotate(0deg);
+                filter: blur(0);
             }
         }
         
+        /* Cauda do balão estilo comic */
         .gatomante-bubble::before {
             content: '';
             position: absolute;
-            bottom: -10px;
-            right: 30px;
+            bottom: -15px;
+            right: 35px;
             width: 0;
             height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 10px solid var(--azul-escuro);
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid var(--azul-escuro);
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
         }
         
         .gatomante-bubble::after {
             content: '';
             position: absolute;
-            bottom: -8px;
-            right: 31px;
+            bottom: -12px;
+            right: 37px;
             width: 0;
             height: 0;
-            border-left: 9px solid transparent;
-            border-right: 9px solid transparent;
-            border-top: 9px solid var(--pergaminho);
+            border-left: 13px solid transparent;
+            border-right: 13px solid transparent;
+            border-top: 13px solid rgba(242, 234, 255, 0.98);
+        }
+        
+        /* Cauda secundária para efeito 3D */
+        .gatomante-bubble::before {
+            box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .gatomante-text {
             color: var(--azul-escuro);
-            font-size: 12px;
-            line-height: 1.4;
+            font-size: 14px;
+            line-height: 1.5;
             font-family: 'Alice', serif;
-            font-style: italic;
-            margin-bottom: 8px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+            
+            /* Efeito de texto comic */
+            letter-spacing: 0.3px;
+            word-spacing: 1px;
+        }
+        
+        /* Efeitos especiais para diferentes tipos de mensagem */
+        .gatomante-bubble.excited {
+            animation: bubbleExcited 0.6s ease-out;
+            border-color: var(--dourado);
+            outline-color: var(--dourado);
+        }
+        
+        @keyframes bubbleExcited {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.05) rotate(1deg); }
+            75% { transform: scale(1.02) rotate(-1deg); }
+        }
+        
+        .gatomante-bubble.thinking {
+            animation: bubbleThinking 2s ease-in-out infinite;
+        }
+        
+        @keyframes bubbleThinking {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Botão de fechar aprimorado */
+        .gatomante-close {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, 
+                var(--dourado) 0%, 
+                rgba(240, 170, 83, 0.8) 100%);
+            color: var(--vinho);
+            border: 2px solid var(--azul-escuro);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            z-index: 10;
+        }
+        
+        .gatomante-close:hover {
+            transform: scale(1.2) rotate(90deg);
+            background: linear-gradient(135deg, 
+                rgba(220, 38, 38, 0.9) 0%, 
+                rgba(185, 28, 28, 0.9) 100%);
+            color: white;
+            box-shadow: 
+                0 6px 20px rgba(220, 38, 38, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        
+        .gatomante-close:active {
+            transform: scale(1.1) rotate(90deg);
+        }
+        
+        /* Efeitos de hover no balão */
+        .gatomante-bubble:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 35px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(240, 170, 83, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Responsividade do balão */
+        @media (max-width: 768px) {
+            .gatomante-bubble {
+                max-width: 280px;
+                padding: 15px 18px;
+                border-radius: 16px;
+            }
+            
+            .gatomante-text {
+                font-size: 13px;
+                line-height: 1.4;
+            }
+            
+            .gatomante-close {
+                width: 22px;
+                height: 22px;
+                font-size: 12px;
+                top: -6px;
+                right: -6px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gatomante-bubble {
+                max-width: 250px;
+                padding: 12px 16px;
+                border-radius: 14px;
+            }
+            
+            .gatomante-text {
+                font-size: 12px;
+            }
+            
+            .gatomante-bubble::before {
+                right: 25px;
+                border-left-width: 12px;
+                border-right-width: 12px;
+                border-top-width: 12px;
+                bottom: -12px;
+            }
+            
+            .gatomante-bubble::after {
+                right: 27px;
+                border-left-width: 10px;
+                border-right-width: 10px;
+                border-top-width: 10px;
+                bottom: -10px;
+            }
         }
         
         .gatomante-close {
@@ -2591,6 +2749,922 @@
         
         .afast-msn-notification.slide-in {
             animation: afastMsnSlideIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        /* ========================================
+           🛡️ NOTIFICAÇÕES AFÁST! ESTILO MSN
+           Notificações no canto inferior direito
+           ======================================== */
+        
+        .afast-msn-notification {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            width: 320px;
+            min-height: 120px;
+            background: linear-gradient(135deg, 
+                rgba(11, 24, 54, 0.95) 0%, 
+                rgba(62, 10, 41, 0.95) 50%, 
+                rgba(0, 0, 0, 0.95) 100%);
+            border: 2px solid var(--dourado);
+            border-radius: 12px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.6),
+                0 0 20px rgba(240, 170, 83, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            z-index: 2500;
+            transform: translateX(350px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        
+        .afast-msn-notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .afast-msn-notification::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--dourado) 0%, 
+                rgba(240, 170, 83, 0.8) 50%, 
+                var(--dourado) 100%);
+            animation: afastMsnPulse 2s ease-in-out infinite;
+        }
+        
+        .afast-msn-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px 8px 16px;
+            border-bottom: 1px solid rgba(240, 170, 83, 0.3);
+            background: rgba(240, 170, 83, 0.1);
+        }
+        
+        .afast-msn-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--dourado);
+            font-weight: bold;
+            font-size: 13px;
+            text-shadow: 0 0 8px rgba(240, 170, 83, 0.8);
+        }
+        
+        .afast-msn-logo {
+            font-size: 16px;
+            animation: afastMsnPulse 1.5s ease-in-out infinite;
+        }
+        
+        .afast-msn-close {
+            background: rgba(220, 20, 60, 0.8);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .afast-msn-close:hover {
+            background: rgba(220, 20, 60, 1);
+            transform: scale(1.1);
+        }
+        
+        .afast-msn-content {
+            padding: 16px;
+        }
+        
+        .afast-msn-event {
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+            line-height: 1.3;
+        }
+        
+        .afast-msn-description {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 12px;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+        
+        .afast-msn-time {
+            color: var(--dourado);
+            font-size: 11px;
+            text-align: right;
+            opacity: 0.8;
+            font-weight: bold;
+        }
+        
+        /* Variações por severidade */
+        .afast-severity-critical {
+            border-color: #dc2626;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.6),
+                0 0 20px rgba(220, 38, 38, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .afast-severity-critical::before {
+            background: linear-gradient(90deg, 
+                #dc2626 0%, 
+                rgba(220, 38, 38, 0.8) 50%, 
+                #dc2626 100%);
+        }
+        
+        .afast-severity-critical .afast-msn-title {
+            color: #fca5a5;
+        }
+        
+        .afast-severity-critical .afast-msn-time {
+            color: #fca5a5;
+        }
+        
+        .afast-severity-warning {
+            border-color: #f59e0b;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.6),
+                0 0 20px rgba(245, 158, 11, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .afast-severity-warning::before {
+            background: linear-gradient(90deg, 
+                #f59e0b 0%, 
+                rgba(245, 158, 11, 0.8) 50%, 
+                #f59e0b 100%);
+        }
+        
+        .afast-severity-warning .afast-msn-title {
+            color: #fbbf24;
+        }
+        
+        .afast-severity-warning .afast-msn-time {
+            color: #fbbf24;
+        }
+        
+        .afast-severity-info {
+            border-color: #10b981;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.6),
+                0 0 20px rgba(16, 185, 129, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .afast-severity-info::before {
+            background: linear-gradient(90deg, 
+                #10b981 0%, 
+                rgba(16, 185, 129, 0.8) 50%, 
+                #10b981 100%);
+        }
+        
+        .afast-severity-info .afast-msn-title {
+            color: #6ee7b7;
+        }
+        
+        .afast-severity-info .afast-msn-time {
+            color: #6ee7b7;
+        }
+        
+        /* Animações específicas */
+        @keyframes afastMsnSlideIn {
+            0% {
+                transform: translateX(350px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes afastMsnPulse {
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.7;
+                transform: scale(1.05);
+            }
+        }
+        
+        /* Responsividade para notificações MSN */
+        @media (max-width: 768px) {
+            .afast-msn-notification {
+                width: 280px;
+                right: 10px;
+                bottom: 70px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .afast-msn-notification {
+                width: calc(100vw - 20px);
+                right: 10px;
+                left: 10px;
+                bottom: 70px;
+            }
+        }
+        
+        /* ========================================
+           🎨 SELETOR DE CORES DA BARRA DE TAREFAS
+           Popup para personalizar cores da taskbar
+           ======================================== */
+        
+        .taskbar-color-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 450px;
+            max-height: 600px;
+            background: linear-gradient(135deg, 
+                rgba(11, 24, 54, 0.95) 0%, 
+                rgba(62, 10, 41, 0.95) 50%, 
+                rgba(0, 0, 0, 0.95) 100%);
+            border: 2px solid var(--dourado);
+            border-radius: 15px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                0 0 30px rgba(240, 170, 83, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            z-index: 2000;
+            display: none;
+            overflow: hidden;
+        }
+        
+        .taskbar-color-popup.active {
+            display: block;
+            animation: popupFadeIn 0.3s ease-out;
+        }
+        
+        .taskbar-color-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 2px solid var(--dourado);
+            background: rgba(240, 170, 83, 0.1);
+            color: var(--dourado);
+            font-weight: bold;
+            font-size: 16px;
+            text-shadow: 0 0 10px rgba(240, 170, 83, 0.8);
+        }
+        
+        .taskbar-color-content {
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .color-section {
+            margin-bottom: 25px;
+        }
+        
+        .color-section h4 {
+            color: var(--dourado);
+            font-size: 14px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 8px rgba(240, 170, 83, 0.6);
+            border-bottom: 1px solid rgba(240, 170, 83, 0.3);
+            padding-bottom: 8px;
+        }
+        
+        .taskbar-color-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .taskbar-color-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .taskbar-color-option:hover {
+            border-color: var(--dourado);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(240, 170, 83, 0.6);
+        }
+        
+        .taskbar-color-option.selected {
+            border-color: var(--dourado);
+            box-shadow: 
+                0 0 20px rgba(240, 170, 83, 0.8),
+                inset 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        .taskbar-color-option::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+        }
+        
+        .taskbar-color-option.selected::after {
+            opacity: 1;
+        }
+        
+        .custom-color-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .custom-color-controls input[type="color"] {
+            width: 60px;
+            height: 40px;
+            border: 2px solid var(--dourado);
+            border-radius: 8px;
+            background: transparent;
+            cursor: pointer;
+        }
+        
+        .apply-custom-color {
+            background: linear-gradient(135deg, var(--dourado) 0%, rgba(240, 170, 83, 0.8) 100%);
+            color: var(--vinho);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .apply-custom-color:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(240, 170, 83, 0.4);
+        }
+        
+        .taskbar-preview {
+            background: var(--theme-taskbar);
+            border-radius: 8px;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+            border: 1px solid rgba(240, 170, 83, 0.3);
+        }
+        
+        .preview-start-btn {
+            background: rgba(240, 170, 83, 0.2);
+            color: var(--dourado);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .preview-items {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .preview-item {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+        
+        .preview-clock {
+            color: var(--dourado);
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        /* ========================================
+           ⭐ SEÇÕES DE RECENTES E FAVORITOS
+           Aplicações recentes e favoritas no menu
+           ======================================== */
+        
+        .recent-apps-section,
+        .favorites-section {
+            position: absolute;
+            width: 200px;
+            background: rgba(11, 24, 54, 0.9);
+            border: 2px solid var(--dourado);
+            border-radius: 12px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+        }
+        
+        .recent-apps-section {
+            top: 80px;
+            left: 50px;
+        }
+        
+        .favorites-section {
+            top: 80px;
+            right: 50px;
+        }
+        
+        .recent-apps-title,
+        .favorites-title {
+            color: var(--dourado);
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-align: center;
+            text-shadow: 0 0 8px rgba(240, 170, 83, 0.8);
+            border-bottom: 1px solid rgba(240, 170, 83, 0.3);
+            padding-bottom: 8px;
+        }
+        
+        .recent-apps-list,
+        .favorites-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .recent-app-item,
+        .favorite-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: rgba(240, 170, 83, 0.1);
+            border: 1px solid rgba(240, 170, 83, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .recent-app-item:hover,
+        .favorite-item:hover {
+            background: rgba(240, 170, 83, 0.2);
+            border-color: var(--dourado);
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(240, 170, 83, 0.3);
+        }
+        
+        .recent-app-icon,
+        .favorite-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .favorite-star {
+            color: var(--dourado);
+            font-size: 12px;
+            margin-left: auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .favorite-star:hover {
+            transform: scale(1.2);
+            text-shadow: 0 0 8px var(--dourado);
+        }
+        
+        /* Responsividade para novas seções */
+        @media (max-width: 768px) {
+            .recent-apps-section,
+            .favorites-section {
+                width: 150px;
+                padding: 10px;
+            }
+            
+            .recent-apps-section {
+                left: 20px;
+            }
+            
+            .favorites-section {
+                right: 20px;
+            }
+            
+            .taskbar-color-popup {
+                width: 90vw;
+                max-width: 400px;
+            }
+        }
+        
+        /* ========================================
+           ✨ EFEITOS VISUAIS AVANÇADOS
+           Sombras dinâmicas, partículas e animações
+           ======================================== */
+        
+        /* Sombras dinâmicas para ícones do desktop */
+        .desktop-icon {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+        
+        .desktop-icon:hover {
+            transform: translateY(-5px) scale(1.05);
+            filter: drop-shadow(0 8px 25px rgba(240, 170, 83, 0.4));
+        }
+        
+        .desktop-icon.system-icon {
+            background: linear-gradient(135deg, 
+                rgba(240, 170, 83, 0.1) 0%, 
+                rgba(62, 10, 41, 0.1) 50%, 
+                rgba(11, 24, 54, 0.1) 100%);
+            border: 2px solid rgba(240, 170, 83, 0.3);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .desktop-icon.system-icon:hover {
+            border-color: var(--dourado);
+            box-shadow: 
+                0 0 20px rgba(240, 170, 83, 0.6),
+                inset 0 0 20px rgba(240, 170, 83, 0.1);
+        }
+        
+        /* Animações cinematográficas para janelas */
+        .window {
+            animation: windowMaterialize 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+        }
+        
+        @keyframes windowMaterialize {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+                filter: blur(10px);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.02) translateY(-5px);
+                filter: blur(2px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
+        }
+        
+        .window.closing {
+            animation: windowDissolve 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes windowDissolve {
+            0% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.05) translateY(-10px);
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.9) translateY(30px);
+                filter: blur(15px);
+            }
+        }
+        
+        /* Efeitos de partículas douradas */
+        .mystical-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, var(--dourado) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: particleFloat 6s infinite linear;
+            opacity: 0;
+        }
+        
+        @keyframes particleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+        
+        /* Bordas com brilho pulsante */
+        .window-header {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .window-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(240, 170, 83, 0.3) 50%, 
+                transparent 100%);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* Transparência inteligente */
+        .window.focused {
+            backdrop-filter: blur(20px);
+            background: rgba(11, 24, 54, 0.95);
+        }
+        
+        .window:not(.focused) {
+            backdrop-filter: blur(5px);
+            background: rgba(11, 24, 54, 0.8);
+            opacity: 0.9;
+        }
+        
+        /* Efeitos hover com ondulação dourada */
+        .desktop-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(240, 170, 83, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+        
+        .desktop-icon:hover::before {
+            width: 120px;
+            height: 120px;
+        }
+        
+        /* ========================================
+           🖼️ GALERIA DE IMAGENS
+           Visualizador de imagens integrado
+           ======================================== */
+        
+        .gallery-window {
+            background: linear-gradient(135deg, 
+                rgba(11, 24, 54, 0.95) 0%, 
+                rgba(62, 10, 41, 0.95) 100%);
+        }
+        
+        .gallery-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(240, 170, 83, 0.1);
+            border-bottom: 2px solid var(--dourado);
+        }
+        
+        .gallery-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .gallery-btn {
+            background: linear-gradient(135deg, var(--dourado) 0%, rgba(240, 170, 83, 0.8) 100%);
+            color: var(--vinho);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(240, 170, 83, 0.4);
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(240, 170, 83, 0.3);
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+            border-color: var(--dourado);
+            box-shadow: 0 8px 25px rgba(240, 170, 83, 0.4);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .gallery-item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 10px;
+            font-size: 12px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-item-overlay {
+            transform: translateY(0);
+        }
+        
+        /* ========================================
+           🌌 GERENCIADOR DE WALLPAPERS AVANÇADO
+           Upload e gerenciamento de papéis de parede
+           ======================================== */
+        
+        .wallpaper-manager {
+            background: linear-gradient(135deg, 
+                rgba(11, 24, 54, 0.95) 0%, 
+                rgba(62, 10, 41, 0.95) 100%);
+        }
+        
+        .wallpaper-upload-zone {
+            border: 3px dashed rgba(240, 170, 83, 0.5);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .wallpaper-upload-zone:hover,
+        .wallpaper-upload-zone.dragover {
+            border-color: var(--dourado);
+            background: rgba(240, 170, 83, 0.1);
+            transform: scale(1.02);
+        }
+        
+        .wallpaper-upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.7;
+        }
+        
+        .wallpaper-upload-text {
+            color: var(--dourado);
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .wallpaper-upload-hint {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+        }
+        
+        .wallpaper-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .wallpaper-preview {
+            position: relative;
+            aspect-ratio: 16/9;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(240, 170, 83, 0.3);
+        }
+        
+        .wallpaper-preview:hover {
+            transform: scale(1.05);
+            border-color: var(--dourado);
+            box-shadow: 0 8px 25px rgba(240, 170, 83, 0.4);
+        }
+        
+        .wallpaper-preview.active {
+            border-color: var(--dourado);
+            box-shadow: 0 0 20px rgba(240, 170, 83, 0.6);
+        }
+        
+        .wallpaper-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .wallpaper-preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .wallpaper-preview:hover .wallpaper-preview-overlay {
+            opacity: 1;
+        }
+        
+        .wallpaper-preview-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .wallpaper-action-btn {
+            background: rgba(240, 170, 83, 0.9);
+            color: var(--vinho);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .wallpaper-action-btn:hover {
+            background: var(--dourado);
+            transform: scale(1.1);
         }
             padding: 8px 15px;
             color: #3e0a29;
@@ -4870,15 +5944,40 @@
             <!-- Aplicações serão posicionadas dinamicamente em círculo -->
         </div>
         
+        <!-- Seção de Aplicações Recentes -->
+        <div class="recent-apps-section">
+            <div class="recent-apps-title">⭐ Recentes</div>
+            <div class="recent-apps-list" id="recentAppsList">
+                <!-- Aplicações recentes serão inseridas aqui -->
+            </div>
+        </div>
+        
+        <!-- Seção de Favoritos -->
+        <div class="favorites-section">
+            <div class="favorites-title">💫 Favoritos</div>
+            <div class="favorites-list" id="favoritesList">
+                <!-- Favoritos serão inseridos aqui -->
+            </div>
+        </div>
+        
         <!-- Ações rápidas na borda externa -->
         <div class="quick-actions-ring">
-            <div class="quick-action personalize" onclick="openPersonalization()" title="Personalização Mística">
+            <div class="quick-action documents" onclick="openDocuments()" title="📁 Pasta Documentos">
+                📁
+            </div>
+            <div class="quick-action text-processor" onclick="openTextProcessor()" title="📝 Processador de Texto">
+                📝
+            </div>
+            <div class="quick-action taskbar-colors" onclick="openTaskbarColorSelector()" title="🎨 Cores da Barra de Tarefas">
                 🎨
             </div>
-            <div class="quick-action help" onclick="openSystemHelp()" title="Grimório de Ajuda">
+            <div class="quick-action personalize" onclick="openPersonalization()" title="⚙️ Personalização Mística">
+                ⚙️
+            </div>
+            <div class="quick-action help" onclick="openSystemHelp()" title="❓ Grimório de Ajuda">
                 ❓
             </div>
-            <div class="quick-action logout" onclick="performLogout()" title="Sair dos Mistérios">
+            <div class="quick-action logout" onclick="performLogout()" title="🚪 Sair dos Mistérios">
                 🚪
             </div>
         </div>
@@ -4921,6 +6020,49 @@
         </div>
     </div>
     
+    <!-- Seletor de Cores da Barra de Tarefas -->
+    <div class="popup taskbar-color-popup" id="taskbarColorPopup">
+        <div class="taskbar-color-header">
+            <span>🎨 Cores da Barra de Tarefas</span>
+            <button class="popup-close" onclick="closeTaskbarColorSelector()">×</button>
+        </div>
+        <div class="taskbar-color-content">
+            <div class="color-section">
+                <h4>Cores Predefinidas</h4>
+                <div class="taskbar-color-grid">
+                    <div class="taskbar-color-option" data-color="#3e0a29" style="background: #3e0a29;" title="Vinho Místico (Padrão)"></div>
+                    <div class="taskbar-color-option" data-color="#0b1836" style="background: #0b1836;" title="Azul Profundo"></div>
+                    <div class="taskbar-color-option" data-color="#1a1a2e" style="background: #1a1a2e;" title="Roxo Noturno"></div>
+                    <div class="taskbar-color-option" data-color="#2d1b69" style="background: #2d1b69;" title="Violeta Místico"></div>
+                    <div class="taskbar-color-option" data-color="#4a0e4e" style="background: #4a0e4e;" title="Magenta Sombrio"></div>
+                    <div class="taskbar-color-option" data-color="#1e3a8a" style="background: #1e3a8a;" title="Azul Real"></div>
+                    <div class="taskbar-color-option" data-color="#7c2d12" style="background: #7c2d12;" title="Marrom Terroso"></div>
+                    <div class="taskbar-color-option" data-color="#374151" style="background: #374151;" title="Cinza Cósmico"></div>
+                    <div class="taskbar-color-option" data-color="#1f2937" style="background: #1f2937;" title="Preto Estelar"></div>
+                    <div class="taskbar-color-option" data-color="#581c87" style="background: #581c87;" title="Púrpura Imperial"></div>
+                </div>
+            </div>
+            <div class="color-section">
+                <h4>Cor Personalizada</h4>
+                <div class="custom-color-controls">
+                    <input type="color" id="customTaskbarColor" value="#3e0a29" onchange="previewTaskbarColor(this.value)">
+                    <button class="apply-custom-color" onclick="applyCustomTaskbarColor()">Aplicar Cor</button>
+                </div>
+            </div>
+            <div class="color-section">
+                <h4>Pré-visualização</h4>
+                <div class="taskbar-preview" id="taskbarPreview">
+                    <div class="preview-start-btn">🌟 Iniciar</div>
+                    <div class="preview-items">
+                        <div class="preview-item">📱 App</div>
+                        <div class="preview-item">🌐 Web</div>
+                    </div>
+                    <div class="preview-clock">12:34</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Sistema AFÁST! reformulado - notificações estilo MSN são criadas dinamicamente -->
     
     <!-- Central de Notificações -->
@@ -5455,9 +6597,39 @@
             const container = document.getElementById('desktopIcons');
             container.innerHTML = '';
             
-            // Adicionar ícone da lixeira primeiro
+            // Adicionar ícones do sistema primeiro
+            
+            // Ícone da Galeria
+            const galleryIcon = document.createElement('div');
+            galleryIcon.className = 'desktop-icon system-icon gallery-icon';
+            galleryIcon.id = 'galleryIcon';
+            galleryIcon.onclick = () => openGallery();
+            galleryIcon.innerHTML = `
+                <div class="icon">🖼️</div>
+                <div class="label">Galeria</div>
+            `;
+            galleryIcon.style.position = 'absolute';
+            galleryIcon.style.bottom = '20px';
+            galleryIcon.style.left = '20px';
+            container.appendChild(galleryIcon);
+            
+            // Ícone do Gerenciador de Wallpapers
+            const wallpaperIcon = document.createElement('div');
+            wallpaperIcon.className = 'desktop-icon system-icon wallpaper-icon';
+            wallpaperIcon.id = 'wallpaperIcon';
+            wallpaperIcon.onclick = () => openWallpaperManager();
+            wallpaperIcon.innerHTML = `
+                <div class="icon">🌌</div>
+                <div class="label">Wallpapers</div>
+            `;
+            wallpaperIcon.style.position = 'absolute';
+            wallpaperIcon.style.bottom = '20px';
+            wallpaperIcon.style.left = '120px';
+            container.appendChild(wallpaperIcon);
+            
+            // Ícone da lixeira
             const trashIcon = document.createElement('div');
-            trashIcon.className = 'desktop-icon trash-icon';
+            trashIcon.className = 'desktop-icon system-icon trash-icon';
             trashIcon.id = 'trashIcon';
             trashIcon.onclick = () => openTrash();
             trashIcon.innerHTML = `
@@ -7629,6 +8801,9 @@
             const site = sitesConfig.find(s => s.id === siteId);
             if (!site) return;
             
+            // Adicionar aos recentes
+            addToRecentApps(site);
+            
             if (site.url === 'local://files') {
                 // Abrir aplicativo local de arquivos
                 openLocalFilesApp();
@@ -8394,6 +9569,696 @@
             document.getElementById('startMenu').classList.remove('active');
         }
         
+        // ========================================
+        // 🎨 SELETOR DE CORES DA BARRA DE TAREFAS
+        // ========================================
+        
+        function openTaskbarColorSelector() {
+            const popup = document.getElementById('taskbarColorPopup');
+            hideAllPopups();
+            popup.classList.add('active');
+            
+            // Marcar cor atual como selecionada
+            const currentColor = getComputedStyle(document.documentElement).getPropertyValue('--theme-taskbar').trim();
+            const colorOptions = document.querySelectorAll('.taskbar-color-option');
+            colorOptions.forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.color === currentColor) {
+                    option.classList.add('selected');
+                }
+            });
+            
+            // Configurar event listeners para as cores
+            colorOptions.forEach(option => {
+                option.onclick = () => selectTaskbarColor(option.dataset.color, option);
+            });
+            
+            // Atualizar preview
+            updateTaskbarPreview(currentColor);
+        }
+        
+        function closeTaskbarColorSelector() {
+            document.getElementById('taskbarColorPopup').classList.remove('active');
+        }
+        
+        function selectTaskbarColor(color, element) {
+            // Remover seleção anterior
+            document.querySelectorAll('.taskbar-color-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Selecionar nova cor
+            element.classList.add('selected');
+            
+            // Aplicar cor
+            applyTaskbarColor(color);
+            
+            // Atualizar preview
+            updateTaskbarPreview(color);
+        }
+        
+        function previewTaskbarColor(color) {
+            updateTaskbarPreview(color);
+        }
+        
+        function applyCustomTaskbarColor() {
+            const color = document.getElementById('customTaskbarColor').value;
+            applyTaskbarColor(color);
+            updateTaskbarPreview(color);
+            
+            // Marcar como selecionada (remover outras seleções)
+            document.querySelectorAll('.taskbar-color-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+        }
+        
+        function applyTaskbarColor(color) {
+            // Atualizar variável CSS
+            document.documentElement.style.setProperty('--theme-taskbar', color);
+            document.documentElement.style.setProperty('--theme-start-btn', color);
+            
+            // Salvar preferência do usuário
+            if (currentUser) {
+                if (!currentUser.settings) currentUser.settings = {};
+                if (!currentUser.settings.theme) currentUser.settings.theme = {};
+                currentUser.settings.theme.taskbarColor = color;
+                saveUserSettings();
+            }
+            
+            console.log('🎨 Cor da barra de tarefas alterada para:', color);
+        }
+        
+        function updateTaskbarPreview(color) {
+            const preview = document.getElementById('taskbarPreview');
+            if (preview) {
+                preview.style.background = color;
+            }
+        }
+        
+        // ========================================
+        // ⭐ SISTEMA DE APLICAÇÕES RECENTES E FAVORITOS
+        // ========================================
+        
+        let recentApps = [];
+        let favoriteApps = [];
+        
+        function addToRecentApps(app) {
+            // Remover se já existe
+            recentApps = recentApps.filter(recent => recent.id !== app.id);
+            
+            // Adicionar no início
+            recentApps.unshift({
+                id: app.id,
+                name: app.name,
+                icon: app.icon,
+                url: app.url,
+                timestamp: Date.now()
+            });
+            
+            // Manter apenas os 8 mais recentes
+            recentApps = recentApps.slice(0, 8);
+            
+            // Salvar no localStorage
+            localStorage.setItem('auroraOS_recentApps', JSON.stringify(recentApps));
+            
+            // Atualizar interface
+            updateRecentAppsList();
+        }
+        
+        function updateRecentAppsList() {
+            const container = document.getElementById('recentAppsList');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (recentApps.length === 0) {
+                container.innerHTML = '<div style="color: rgba(255,255,255,0.5); font-size: 11px; text-align: center;">Nenhum app recente</div>';
+                return;
+            }
+            
+            recentApps.forEach(app => {
+                const item = document.createElement('div');
+                item.className = 'recent-app-item';
+                item.innerHTML = `
+                    <span class="recent-app-icon">${app.icon}</span>
+                    <span class="recent-app-name">${app.name}</span>
+                    <span class="favorite-star ${favoriteApps.some(fav => fav.id === app.id) ? 'active' : ''}" 
+                          onclick="toggleFavorite('${app.id}', event)">⭐</span>
+                `;
+                
+                item.onclick = (e) => {
+                    if (!e.target.classList.contains('favorite-star')) {
+                        openSite(app);
+                        hideStartMenu();
+                    }
+                };
+                
+                container.appendChild(item);
+            });
+        }
+        
+        function toggleFavorite(appId, event) {
+            event.stopPropagation();
+            
+            const app = recentApps.find(app => app.id === appId) || 
+                       sites.find(site => site.id === appId);
+            
+            if (!app) return;
+            
+            const isFavorite = favoriteApps.some(fav => fav.id === appId);
+            
+            if (isFavorite) {
+                // Remover dos favoritos
+                favoriteApps = favoriteApps.filter(fav => fav.id !== appId);
+            } else {
+                // Adicionar aos favoritos
+                favoriteApps.push({
+                    id: app.id,
+                    name: app.name,
+                    icon: app.icon,
+                    url: app.url
+                });
+            }
+            
+            // Salvar no localStorage
+            localStorage.setItem('auroraOS_favoriteApps', JSON.stringify(favoriteApps));
+            
+            // Atualizar interfaces
+            updateRecentAppsList();
+            updateFavoritesList();
+        }
+        
+        function updateFavoritesList() {
+            const container = document.getElementById('favoritesList');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (favoriteApps.length === 0) {
+                container.innerHTML = '<div style="color: rgba(255,255,255,0.5); font-size: 11px; text-align: center;">Nenhum favorito</div>';
+                return;
+            }
+            
+            favoriteApps.forEach(app => {
+                const item = document.createElement('div');
+                item.className = 'favorite-item';
+                item.innerHTML = `
+                    <span class="favorite-icon">${app.icon}</span>
+                    <span class="favorite-name">${app.name}</span>
+                    <span class="favorite-star active" onclick="toggleFavorite('${app.id}', event)">⭐</span>
+                `;
+                
+                item.onclick = (e) => {
+                    if (!e.target.classList.contains('favorite-star')) {
+                        openSite(app);
+                        hideStartMenu();
+                    }
+                };
+                
+                container.appendChild(item);
+            });
+        }
+        
+        function loadRecentAndFavorites() {
+            // Carregar aplicações recentes
+            const savedRecent = localStorage.getItem('auroraOS_recentApps');
+            if (savedRecent) {
+                recentApps = JSON.parse(savedRecent);
+                updateRecentAppsList();
+            }
+            
+            // Carregar favoritos
+            const savedFavorites = localStorage.getItem('auroraOS_favoriteApps');
+            if (savedFavorites) {
+                favoriteApps = JSON.parse(savedFavorites);
+                updateFavoritesList();
+            }
+        }
+        
+        // ========================================
+        // 📁 PASTA DOCUMENTOS E PROCESSADOR DE TEXTO
+        // ========================================
+        
+        function openDocuments() {
+            hideStartMenu();
+            
+            // Verificar se janela já está aberta
+            if (document.getElementById('window-documents')) {
+                focusWindow('window-documents');
+                return;
+            }
+            
+            const window = createWindow('documents', '📁 Documentos', 'documents');
+            window.innerHTML = `
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>📁</span>
+                        <span>Documentos</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-control" onclick="minimizeWindow('window-documents')">_</div>
+                        <div class="window-control" onclick="maximizeWindow('window-documents')">□</div>
+                        <div class="window-control close" onclick="closeWindow('window-documents')">×</div>
+                    </div>
+                </div>
+                <div class="window-content" style="padding: 20px;">
+                    <div class="documents-toolbar">
+                        <button onclick="createNewDocument()" class="doc-btn">📄 Novo Documento</button>
+                        <button onclick="openTextProcessor()" class="doc-btn">📝 Processador de Texto</button>
+                        <button onclick="refreshDocuments()" class="doc-btn">🔄 Atualizar</button>
+                    </div>
+                    <div class="documents-list" id="documentsList">
+                        <!-- Lista de documentos será carregada aqui -->
+                    </div>
+                </div>
+            `;
+            
+            // Carregar documentos salvos
+            loadDocumentsList();
+        }
+        
+        function openTextProcessor() {
+            hideStartMenu();
+            
+            // Verificar se janela já está aberta
+            if (document.getElementById('window-textprocessor')) {
+                focusWindow('window-textprocessor');
+                return;
+            }
+            
+            const window = createWindow('textprocessor', '📝 Processador de Texto', 'textprocessor');
+            window.innerHTML = `
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>📝</span>
+                        <span>Processador de Texto</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-control" onclick="minimizeWindow('window-textprocessor')">_</div>
+                        <div class="window-control" onclick="maximizeWindow('window-textprocessor')">□</div>
+                        <div class="window-control close" onclick="closeWindow('window-textprocessor')">×</div>
+                    </div>
+                </div>
+                <div class="window-content" style="padding: 0;">
+                    <div class="text-processor-toolbar">
+                        <button onclick="newDocument()" title="Novo">📄</button>
+                        <button onclick="saveDocument()" title="Salvar">💾</button>
+                        <button onclick="openDocument()" title="Abrir">📂</button>
+                        <span class="toolbar-separator">|</span>
+                        <button onclick="formatBold()" title="Negrito"><b>B</b></button>
+                        <button onclick="formatItalic()" title="Itálico"><i>I</i></button>
+                        <button onclick="formatUnderline()" title="Sublinhado"><u>U</u></button>
+                        <span class="toolbar-separator">|</span>
+                        <select onchange="changeFontSize(this.value)">
+                            <option value="12">12px</option>
+                            <option value="14" selected>14px</option>
+                            <option value="16">16px</option>
+                            <option value="18">18px</option>
+                            <option value="20">20px</option>
+                        </select>
+                    </div>
+                    <div class="text-editor-container">
+                        <textarea id="textEditor" class="text-editor" placeholder="Digite seu texto aqui..."></textarea>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // ========================================
+        // 🖼️ GALERIA DE IMAGENS
+        // ========================================
+        
+        let galleryImages = [];
+        
+        function openGallery() {
+            // Verificar se janela já está aberta
+            if (document.getElementById('window-gallery')) {
+                focusWindow('window-gallery');
+                return;
+            }
+            
+            const window = createWindow('gallery', '🖼️ Galeria', 'gallery');
+            window.className += ' gallery-window';
+            window.innerHTML = `
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>🖼️</span>
+                        <span>Galeria de Imagens</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-control" onclick="minimizeWindow('window-gallery')">_</div>
+                        <div class="window-control" onclick="maximizeWindow('window-gallery')">□</div>
+                        <div class="window-control close" onclick="closeWindow('window-gallery')">×</div>
+                    </div>
+                </div>
+                <div class="window-content" style="padding: 0;">
+                    <div class="gallery-toolbar">
+                        <div class="gallery-info">
+                            <span id="galleryCount">0 imagens</span>
+                        </div>
+                        <div class="gallery-controls">
+                            <button class="gallery-btn" onclick="uploadToGallery()">📤 Upload</button>
+                            <button class="gallery-btn" onclick="refreshGallery()">🔄 Atualizar</button>
+                            <button class="gallery-btn" onclick="clearGallery()">🗑️ Limpar</button>
+                        </div>
+                    </div>
+                    <div class="gallery-grid" id="galleryGrid">
+                        <!-- Imagens serão carregadas aqui -->
+                    </div>
+                </div>
+            `;
+            
+            // Carregar imagens da galeria
+            loadGalleryImages();
+        }
+        
+        function loadGalleryImages() {
+            const savedImages = localStorage.getItem('auroraOS_gallery');
+            if (savedImages) {
+                galleryImages = JSON.parse(savedImages);
+            }
+            
+            // Adicionar wallpapers padrão à galeria
+            const defaultWallpapers = [
+                { name: 'Nebulosa Mística', url: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB2aWV3Qm94PSIwIDAgMTkyMCAxMDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxyYWRpYWxHcmFkaWVudCBpZD0iYSIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNTAlIj48c3RvcCBzdG9wLWNvbG9yPSIjM2UwYTI5Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGIxODM2Ii8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNhKSIvPjwvc3ZnPg==', type: 'default' },
+                { name: 'Cosmos Dourado', url: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB2aWV3Qm94PSIwIDAgMTkyMCAxMDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iYiIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agc3RvcC1jb2xvcj0iI2YwYWE1MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzNlMGEyOSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjYikiLz48L3N2Zz4=', type: 'default' }
+            ];
+            
+            // Adicionar wallpapers padrão se não existirem
+            defaultWallpapers.forEach(wallpaper => {
+                if (!galleryImages.some(img => img.name === wallpaper.name)) {
+                    galleryImages.push(wallpaper);
+                }
+            });
+            
+            updateGalleryDisplay();
+        }
+        
+        function updateGalleryDisplay() {
+            const grid = document.getElementById('galleryGrid');
+            const count = document.getElementById('galleryCount');
+            
+            if (!grid || !count) return;
+            
+            count.textContent = `${galleryImages.length} imagens`;
+            grid.innerHTML = '';
+            
+            if (galleryImages.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: rgba(255,255,255,0.5);">
+                        <div style="font-size: 48px; margin-bottom: 15px;">🖼️</div>
+                        <div>Nenhuma imagem na galeria</div>
+                        <div style="font-size: 12px; margin-top: 10px;">Clique em "Upload" para adicionar imagens</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            galleryImages.forEach((image, index) => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.innerHTML = `
+                    <img src="${image.url}" alt="${image.name}" loading="lazy">
+                    <div class="gallery-item-overlay">
+                        <div>${image.name}</div>
+                        <div style="font-size: 10px; opacity: 0.7;">${image.type || 'Personalizada'}</div>
+                    </div>
+                `;
+                
+                item.onclick = () => viewImageFullscreen(image, index);
+                grid.appendChild(item);
+            });
+        }
+        
+        function uploadToGallery() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.multiple = true;
+            
+            input.onchange = (e) => {
+                const files = Array.from(e.target.files);
+                files.forEach(file => {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            const newImage = {
+                                name: file.name,
+                                url: event.target.result,
+                                type: 'upload',
+                                size: file.size,
+                                uploadDate: new Date().toISOString()
+                            };
+                            
+                            galleryImages.push(newImage);
+                            localStorage.setItem('auroraOS_gallery', JSON.stringify(galleryImages));
+                            updateGalleryDisplay();
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            };
+            
+            input.click();
+        }
+        
+        function refreshGallery() {
+            loadGalleryImages();
+        }
+        
+        function clearGallery() {
+            if (confirm('Tem certeza que deseja limpar toda a galeria? Esta ação não pode ser desfeita.')) {
+                galleryImages = [];
+                localStorage.removeItem('auroraOS_gallery');
+                updateGalleryDisplay();
+            }
+        }
+        
+        function viewImageFullscreen(image, index) {
+            // Implementar visualizador fullscreen
+            console.log('Visualizando imagem:', image.name);
+        }
+        
+        // ========================================
+        // 🌌 GERENCIADOR DE WALLPAPERS AVANÇADO
+        // ========================================
+        
+        let customWallpapers = [];
+        
+        function openWallpaperManager() {
+            // Verificar se janela já está aberta
+            if (document.getElementById('window-wallpaper-manager')) {
+                focusWindow('window-wallpaper-manager');
+                return;
+            }
+            
+            const window = createWindow('wallpaper-manager', '🌌 Wallpapers', 'wallpaper-manager');
+            window.className += ' wallpaper-manager';
+            window.innerHTML = `
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>🌌</span>
+                        <span>Gerenciador de Wallpapers</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-control" onclick="minimizeWindow('window-wallpaper-manager')">_</div>
+                        <div class="window-control" onclick="maximizeWindow('window-wallpaper-manager')">□</div>
+                        <div class="window-control close" onclick="closeWindow('window-wallpaper-manager')">×</div>
+                    </div>
+                </div>
+                <div class="window-content" style="padding: 0;">
+                    <div class="wallpaper-upload-zone" onclick="uploadWallpaper()" ondrop="handleWallpaperDrop(event)" ondragover="handleWallpaperDragOver(event)">
+                        <div class="wallpaper-upload-icon">🌌</div>
+                        <div class="wallpaper-upload-text">Adicionar Novo Wallpaper</div>
+                        <div class="wallpaper-upload-hint">Clique aqui ou arraste uma imagem (JPG, PNG, GIF)</div>
+                    </div>
+                    <div class="wallpaper-preview-grid" id="wallpaperPreviewGrid">
+                        <!-- Wallpapers serão carregados aqui -->
+                    </div>
+                </div>
+            `;
+            
+            // Carregar wallpapers
+            loadWallpaperPreviews();
+        }
+        
+        function loadWallpaperPreviews() {
+            const savedWallpapers = localStorage.getItem('auroraOS_customWallpapers');
+            if (savedWallpapers) {
+                customWallpapers = JSON.parse(savedWallpapers);
+            }
+            
+            // Wallpapers padrão
+            const defaultWallpapers = [
+                { name: 'Nebulosa Mística', url: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB2aWV3Qm94PSIwIDAgMTkyMCAxMDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxyYWRpYWxHcmFkaWVudCBpZD0iYSIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNTAlIj48c3RvcCBzdG9wLWNvbG9yPSIjM2UwYTI5Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGIxODM2Ii8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNhKSIvPjwvc3ZnPg==', type: 'default', active: true },
+                { name: 'Cosmos Dourado', url: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB2aWV3Qm94PSIwIDAgMTkyMCAxMDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iYiIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agc3RvcC1jb2xvcj0iI2YwYWE1MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzNlMGEyOSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjYikiLz48L3N2Zz4=', type: 'default' },
+                { name: 'Violeta Profundo', url: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB2aWV3Qm94PSIwIDAgMTkyMCAxMDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iYyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agc3RvcC1jb2xvcj0iIzJkMWI2OSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzBiMTgzNiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjYykiLz48L3N2Zz4=', type: 'default' }
+            ];
+            
+            updateWallpaperPreviewGrid([...defaultWallpapers, ...customWallpapers]);
+        }
+        
+        function updateWallpaperPreviewGrid(wallpapers) {
+            const grid = document.getElementById('wallpaperPreviewGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            wallpapers.forEach((wallpaper, index) => {
+                const preview = document.createElement('div');
+                preview.className = `wallpaper-preview ${wallpaper.active ? 'active' : ''}`;
+                preview.innerHTML = `
+                    <img src="${wallpaper.url}" alt="${wallpaper.name}" loading="lazy">
+                    <div class="wallpaper-preview-overlay">
+                        <div class="wallpaper-preview-actions">
+                            <button class="wallpaper-action-btn" onclick="applyWallpaper('${wallpaper.url}', '${wallpaper.name}')">✓ Aplicar</button>
+                            ${wallpaper.type !== 'default' ? `<button class="wallpaper-action-btn" onclick="deleteWallpaper(${index})">🗑️ Excluir</button>` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(preview);
+            });
+        }
+        
+        function uploadWallpaper() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const newWallpaper = {
+                            name: file.name,
+                            url: event.target.result,
+                            type: 'custom',
+                            uploadDate: new Date().toISOString()
+                        };
+                        
+                        customWallpapers.push(newWallpaper);
+                        localStorage.setItem('auroraOS_customWallpapers', JSON.stringify(customWallpapers));
+                        loadWallpaperPreviews();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            
+            input.click();
+        }
+        
+        function handleWallpaperDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+        
+        function handleWallpaperDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            
+            const files = Array.from(e.dataTransfer.files);
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const newWallpaper = {
+                            name: file.name,
+                            url: event.target.result,
+                            type: 'custom',
+                            uploadDate: new Date().toISOString()
+                        };
+                        
+                        customWallpapers.push(newWallpaper);
+                        localStorage.setItem('auroraOS_customWallpapers', JSON.stringify(customWallpapers));
+                        loadWallpaperPreviews();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        function applyWallpaper(url, name) {
+            document.body.style.backgroundImage = `url(${url})`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
+            document.body.style.backgroundRepeat = 'no-repeat';
+            
+            // Salvar wallpaper atual
+            if (currentUser) {
+                if (!currentUser.settings) currentUser.settings = {};
+                currentUser.settings.customWallpaper = url;
+                currentUser.settings.wallpaperName = name;
+                saveUserSettings();
+            }
+            
+            // Atualizar previews
+            document.querySelectorAll('.wallpaper-preview').forEach(preview => {
+                preview.classList.remove('active');
+            });
+            
+            // Marcar como ativo
+            const activePreview = Array.from(document.querySelectorAll('.wallpaper-preview img')).find(img => img.src === url);
+            if (activePreview) {
+                activePreview.closest('.wallpaper-preview').classList.add('active');
+            }
+            
+            console.log('🌌 Wallpaper aplicado:', name);
+        }
+        
+        function deleteWallpaper(index) {
+            if (confirm('Tem certeza que deseja excluir este wallpaper?')) {
+                customWallpapers.splice(index, 1);
+                localStorage.setItem('auroraOS_customWallpapers', JSON.stringify(customWallpapers));
+                loadWallpaperPreviews();
+            }
+        }
+        
+        // ========================================
+        // ✨ SISTEMA DE PARTÍCULAS DINÂMICAS
+        // ========================================
+        
+        function initDynamicParticles() {
+            const desktop = document.getElementById('desktop');
+            if (!desktop) return;
+            
+            // Criar container de partículas se não existir
+            let particlesContainer = document.getElementById('desktopParticles');
+            if (!particlesContainer) {
+                particlesContainer = document.createElement('div');
+                particlesContainer.id = 'desktopParticles';
+                particlesContainer.className = 'mystical-particles';
+                desktop.appendChild(particlesContainer);
+            }
+            
+            // Gerar partículas periodicamente
+            setInterval(() => {
+                if (Math.random() < 0.3) { // 30% de chance
+                    createParticle(particlesContainer);
+                }
+            }, 2000);
+        }
+        
+        function createParticle(container) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // Posição aleatória
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            particle.style.animationDuration = (4 + Math.random() * 4) + 's';
+            
+            container.appendChild(particle);
+            
+            // Remover partícula após animação
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            }, 8000);
+        }
+        
         // Funções dos popups
         function toggleCalendarPopup() {
             const popup = document.getElementById('calendarPopup');
@@ -9051,6 +10916,7 @@
             setTimeout(() => {
                 const container = document.getElementById('gatomanteContainer');
                 const textElement = document.getElementById('gatomanteText');
+                const bubble = document.getElementById('gatomanteBubble');
                 
                 // Atualizar contexto do Gatomante
                 updateGatomanteContext();
@@ -9059,22 +10925,79 @@
                 const dicaPersonalizada = getSmartTip(tipo, contextoExtra);
                 
                 textElement.textContent = dicaPersonalizada;
+                
+                // Aplicar estilo comic baseado no tipo
+                bubble.className = 'gatomante-bubble';
+                if (tipo === 'conquista' || tipo === 'app_aberto') {
+                    bubble.classList.add('excited');
+                } else if (tipo === 'inatividade' || tipo === 'dica_avancada') {
+                    bubble.classList.add('thinking');
+                }
+                
                 container.classList.add('active');
                 gatomanteVisible = true;
+                
+                // Efeito sonoro sutil para aparição
+                if (currentUser?.settings?.volumes?.system > 0) {
+                    playGatomanteSound(tipo);
+                }
                 
                 // Registrar ação
                 gatomante.contexto.acoesPorSessao++;
                 
-                // Auto-hide após 8 segundos
+                // Auto-hide inteligente baseado no tipo
+                const hideDelay = tipo === 'conquista' ? 12000 : 
+                                tipo === 'dica_avancada' ? 15000 : 8000;
+                
                 clearTimeout(gatomanteTimer);
                 gatomanteTimer = setTimeout(() => {
                     hideGatomante();
-                }, 8000);
+                }, hideDelay);
                 
                 // Atualizar última aparição
                 gatomante.ultimaAparicao = Date.now();
                 
             }, delay);
+        }
+        
+        function playGatomanteSound(tipo = 'normal') {
+            try {
+                // Som sutil de "miau" sintético baseado no tipo
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Frequências diferentes baseadas no tipo
+                if (tipo === 'conquista' || tipo === 'app_aberto') {
+                    // Som mais agudo e animado
+                    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1);
+                    oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.2);
+                } else if (tipo === 'inatividade' || tipo === 'dica_avancada') {
+                    // Som mais grave e pensativo
+                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.15);
+                    oscillator.frequency.exponentialRampToValueAtTime(500, audioContext.currentTime + 0.3);
+                } else {
+                    // Som padrão
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+                    oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.2);
+                }
+                
+                const volume = 0.08 * (currentUser?.settings?.volumes?.system || 0.5);
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.35);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.35);
+            } catch (error) {
+                console.log('🔊 Erro ao reproduzir som do Gatomante:', error);
+            }
         }
         
         function updateGatomanteContext() {
@@ -9487,6 +11410,12 @@
             loadAfastVoiceSettings();
             loadAfastNotifications();
             initAfastSystem();
+            
+            // Carregar aplicações recentes e favoritos
+            loadRecentAndFavorites();
+            
+            // Inicializar partículas dinâmicas
+            initDynamicParticles();
             
             // Carregar foto de perfil e wallpaper personalizado
             loadUserProfilePhoto();
@@ -10015,11 +11944,10 @@
         };
         
         // ========================================
-        // 🛡️ SISTEMA AFÁST! REFORMULADO
+        // 🛡️ SISTEMA AFÁST! - ESTILO MSN CONFORME ESPECIFICAÇÕES
         // ========================================
         
         let afastNotifications = [];
-        let afastActive = false;
         let afastVoiceEnabled = true;
         let afastFirstTimeToday = true;
         let afastLastNotificationTime = 0;
@@ -10027,14 +11955,117 @@
         // Configurações de voz feminina brasileira
         const afastVoiceConfig = {
             lang: 'pt-BR',
-            voice: null, // Será definida dinamicamente
-            rate: 0.9,
-            pitch: 1.1,
-            volume: 0.8
+            voice: null,
+            rate: 0.8,
+            pitch: 1.0,
+            volume: 0.7
+        };
+        
+        // Base de eventos conforme especificações originais
+        const afastEvents = {
+            mercuryRetrograde: {
+                name: "Mercúrio Retrógrado",
+                message: "Uma ameaça foi detectada: Mercúrio retrógrado",
+                shortAlert: "Mercúrio retrógrado detectado",
+                description: "Comunicação vulnerável. Reforce sua paciência.",
+                advice: "Evite assinar contratos e revisar comunicações importantes.",
+                voiceAlert: "AFÁSTE! Mercúrio retrógrado detectado. Comunicações em risco.",
+                severity: "critical",
+                hasVoice: true,
+                color: "#dc2626"
+            },
+            jupiterRetrograde: {
+                name: "Júpiter Retrógrado",
+                message: "Júpiter retrógrado. Expansões em quarentena.",
+                shortAlert: "Júpiter retrógrado ativo",
+                description: "Evite promessas grandiosas e investimentos arriscados.",
+                advice: "Momento de reflexão sobre crescimento pessoal.",
+                voiceAlert: "AFÁSTE! Júpiter retrógrado. Expansões bloqueadas.",
+                severity: "warning",
+                hasVoice: true,
+                color: "#f59e0b"
+            },
+            fullMoon: {
+                name: "Lua Cheia",
+                message: "Lua Cheia detectada. Emoções em modo máximo.",
+                shortAlert: "Lua Cheia ativa",
+                description: "Emoções instáveis podem comprometer o sistema.",
+                advice: "Pratique meditação e evite decisões impulsivas.",
+                voiceAlert: "AFÁSTE! Lua Cheia. Emoções intensificadas.",
+                severity: "warning",
+                hasVoice: true,
+                color: "#8b5cf6"
+            },
+            newMoon: {
+                name: "Lua Nova",
+                message: "Lua Nova ativada. Hora de reinicializar intenções.",
+                shortAlert: "Lua Nova detectada",
+                description: "Rituais e intenções prontos para instalação.",
+                advice: "Momento ideal para novos começos e definir metas.",
+                voiceAlert: "Lua Nova detectada. Energias de renovação ativas.",
+                severity: "info",
+                hasVoice: false,
+                color: "#10b981"
+            },
+            marsHour: {
+                name: "Hora de Marte",
+                message: "AFÁSTE! Hora de Marte: discussões em risco de explosão.",
+                shortAlert: "Hora de Marte ativa",
+                description: "Proteja seus relacionamentos de conflitos desnecessários.",
+                advice: "Evite confrontos e pratique paciência.",
+                voiceAlert: "AFÁSTE! Hora de Marte. Conflitos em potencial.",
+                severity: "warning",
+                hasVoice: true,
+                color: "#dc2626"
+            },
+            venusHour: {
+                name: "Hora de Vênus",
+                message: "Hora de Vênus detectada. Vulnerabilidade amorosa ativa.",
+                shortAlert: "Hora de Vênus ativa",
+                description: "Energias românticas intensas podem afetar julgamento.",
+                advice: "Momento favorável para amor e criatividade.",
+                voiceAlert: "Hora de Vênus ativa. Energias românticas intensificadas.",
+                severity: "info",
+                hasVoice: false,
+                color: "#ec4899"
+            },
+            voidMoon: {
+                name: "Lua Fora de Curso",
+                message: "Uma ameaça foi detectada: Lua Fora de Curso.",
+                shortAlert: "Lua Fora de Curso",
+                description: "Decisões correm risco de falha crítica.",
+                advice: "Evite decisões importantes até a Lua entrar em novo signo.",
+                voiceAlert: "AFÁSTE! Lua Fora de Curso detectada. Decisões em risco.",
+                severity: "critical",
+                hasVoice: true,
+                color: "#7c2d12"
+            },
+            eclipse: {
+                name: "Eclipse",
+                message: "Sistema em espera. Transformações em andamento.",
+                shortAlert: "Eclipse detectado",
+                description: "Eclipse detectado. Mudanças profundas se aproximam.",
+                advice: "Período de transformação intensa. Mantenha-se flexível.",
+                voiceAlert: "AFÁSTE! Eclipse detectado. Transformações em curso.",
+                severity: "critical",
+                hasVoice: true,
+                color: "#1f2937"
+            },
+            saturnAspect: {
+                name: "Aspecto de Saturno",
+                message: "AFÁSTE! Saturno em aspecto tenso detectado.",
+                shortAlert: "Saturno em aspecto tenso",
+                description: "Limitações e responsabilidades intensificadas.",
+                advice: "Foque em disciplina e estruturação de projetos.",
+                voiceAlert: "AFÁSTE! Saturno em aspecto tenso. Responsabilidades aumentadas.",
+                severity: "warning",
+                hasVoice: true,
+                color: "#374151"
+            }
         };
         
         function initAfastSystem() {
-            console.log('🛡️ Inicializando Sistema AFÁST!...');
+            console.log('🛡️ Inicializando Sistema AFÁST! - Estilo MSN');
             
             // Configurar voz feminina brasileira
             setupAfastVoice();
@@ -10042,21 +12073,30 @@
             // Verificar se é primeira vez do dia
             checkFirstTimeToday();
             
-            // Verificar eventos astrológicos
-            checkAstrologicalEvents();
-            
-            // Verificar eventos a cada 30 minutos
-            setInterval(checkAstrologicalEvents, 1800000);
-            
-            // Carregar notificações salvas
-            loadAfastNotifications();
-            
             // Primeira mensagem do dia
             if (afastFirstTimeToday) {
                 setTimeout(() => {
-                    showAfastWelcome();
+                    const welcomeNotification = {
+                        id: 'welcome_' + Date.now(),
+                        type: 'welcome',
+                        title: 'Sistema AFÁST! Ativado',
+                        message: "Boas-vindas ao AFÁST! O céu está sob vigilância.",
+                        description: "Sistema de proteção astrológica ativado com sucesso.",
+                        severity: "info",
+                        timestamp: new Date(),
+                        hasVoice: true,
+                        voiceAlert: "AFÁSTE! Sistema de proteção astrológica ativado."
+                    };
+                    showAfastMsnNotification(welcomeNotification);
+                    afastFirstTimeToday = false;
                 }, 3000);
             }
+            
+            // Verificar eventos astrológicos a cada 5 minutos
+            setInterval(checkAstrologicalEvents, 300000);
+            
+            // Primeira verificação após 10 segundos
+            setTimeout(checkAstrologicalEvents, 10000);
         }
         
         function setupAfastVoice() {
@@ -10064,31 +12104,79 @@
                 // Aguardar vozes carregarem
                 const loadVoices = () => {
                     const voices = speechSynthesis.getVoices();
+                    console.log('🎙️ Vozes disponíveis:', voices.map(v => `${v.name} (${v.lang})`));
                     
-                    // Buscar voz feminina em português brasileiro
+                    // Buscar voz feminina em português brasileiro - ordem de prioridade
                     const brazilianVoices = voices.filter(voice => 
-                        voice.lang.includes('pt-BR') || voice.lang.includes('pt')
+                        voice.lang.includes('pt-BR') || 
+                        voice.lang.includes('pt_BR') ||
+                        voice.lang.includes('pt')
                     );
                     
-                    // Preferir vozes femininas
-                    const femaleVoice = brazilianVoices.find(voice => 
-                        voice.name.toLowerCase().includes('female') ||
-                        voice.name.toLowerCase().includes('feminina') ||
-                        voice.name.toLowerCase().includes('woman') ||
-                        voice.name.toLowerCase().includes('maria') ||
-                        voice.name.toLowerCase().includes('ana')
+                    // Lista de nomes que indicam vozes femininas (mais abrangente)
+                    const femaleIndicators = [
+                        'female', 'feminina', 'woman', 'mulher',
+                        'maria', 'ana', 'lucia', 'carla', 'paula', 'julia',
+                        'fernanda', 'patricia', 'monica', 'sandra', 'rita',
+                        'google português do brasil', 'microsoft helena',
+                        'microsoft maria', 'luciana', 'vitoria', 'beatriz'
+                    ];
+                    
+                    // Buscar voz feminina brasileira
+                    let selectedVoice = null;
+                    
+                    // Primeira tentativa: voz explicitamente feminina brasileira
+                    selectedVoice = brazilianVoices.find(voice => 
+                        femaleIndicators.some(indicator => 
+                            voice.name.toLowerCase().includes(indicator)
+                        )
                     );
                     
-                    afastVoiceConfig.voice = femaleVoice || brazilianVoices[0] || voices[0];
+                    // Segunda tentativa: qualquer voz brasileira
+                    if (!selectedVoice && brazilianVoices.length > 0) {
+                        selectedVoice = brazilianVoices[0];
+                    }
                     
-                    console.log('🎙️ Voz AFÁST configurada:', afastVoiceConfig.voice?.name || 'Padrão');
+                    // Terceira tentativa: voz feminina em qualquer idioma
+                    if (!selectedVoice) {
+                        selectedVoice = voices.find(voice => 
+                            femaleIndicators.some(indicator => 
+                                voice.name.toLowerCase().includes(indicator)
+                            )
+                        );
+                    }
+                    
+                    // Última tentativa: primeira voz disponível
+                    if (!selectedVoice && voices.length > 0) {
+                        selectedVoice = voices[0];
+                    }
+                    
+                    afastVoiceConfig.voice = selectedVoice;
+                    
+                    console.log('🎙️ Voz AFÁST selecionada:', {
+                        name: afastVoiceConfig.voice?.name || 'Nenhuma',
+                        lang: afastVoiceConfig.voice?.lang || 'N/A',
+                        gender: afastVoiceConfig.voice?.name?.toLowerCase().includes('female') || 
+                               afastVoiceConfig.voice?.name?.toLowerCase().includes('maria') ? 'Feminina' : 'Indefinido'
+                    });
                 };
                 
+                // Tentar carregar vozes imediatamente
                 if (speechSynthesis.getVoices().length > 0) {
                     loadVoices();
                 } else {
+                    // Aguardar evento de carregamento das vozes
                     speechSynthesis.onvoiceschanged = loadVoices;
+                    
+                    // Timeout de segurança para tentar novamente após 2 segundos
+                    setTimeout(() => {
+                        if (!afastVoiceConfig.voice) {
+                            loadVoices();
+                        }
+                    }, 2000);
                 }
+            } else {
+                console.log('🎙️ Síntese de voz não suportada neste navegador');
             }
         }
         
@@ -10196,11 +12284,16 @@
                 id: Date.now(),
                 type: eventType,
                 title: `AFÁST! ${event.name}`,
-                message: event.shortAlert,
+                message: event.message,
+                shortAlert: event.shortAlert,
                 description: event.description,
+                advice: event.advice,
+                voiceAlert: event.voiceAlert,
                 severity: event.severity,
                 timestamp: new Date(),
-                hasVoice: event.severity === 'critical' || event.severity === 'warning'
+                hasVoice: event.hasVoice,
+                color: event.color,
+                event: event
             };
             
             afastNotifications.push(notification);
@@ -10213,7 +12306,7 @@
             if (notification.hasVoice && afastVoiceEnabled) {
                 setTimeout(() => {
                     playAfastSyntheticSound();
-                    speakAfastMessage(event.voiceAlert || event.shortAlert);
+                    speakAfastMessage(notification.voiceAlert || notification.shortAlert);
                 }, 500);
             } else {
                 playAfastSyntheticSound();
@@ -10302,45 +12395,88 @@
         
         function playAfastSyntheticSound() {
             try {
-                // Criar som sintético estilo MSN/Windows
+                // Criar som sintético estilo MSN/Windows mais autêntico
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const masterVolume = (currentUser?.settings?.volumes?.notifications || 0.7) * 0.4;
                 
-                // Primeira frequência (800Hz)
-                const oscillator1 = audioContext.createOscillator();
-                const gainNode1 = audioContext.createGain();
+                // Som de notificação MSN clássico - sequência de 3 tons
+                const frequencies = [800, 600, 400];
+                const durations = [0.15, 0.15, 0.2];
                 
-                oscillator1.connect(gainNode1);
-                gainNode1.connect(audioContext.destination);
+                frequencies.forEach((freq, index) => {
+                    setTimeout(() => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        const filterNode = audioContext.createBiquadFilter();
+                        
+                        // Configurar filtro para som mais suave
+                        filterNode.type = 'lowpass';
+                        filterNode.frequency.setValueAtTime(1200, audioContext.currentTime);
+                        filterNode.Q.setValueAtTime(1, audioContext.currentTime);
+                        
+                        // Conectar nós
+                        oscillator.connect(filterNode);
+                        filterNode.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        // Configurar oscilador
+                        oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+                        oscillator.type = 'sine';
+                        
+                        // Envelope de volume (attack-decay)
+                        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                        gainNode.gain.linearRampToValueAtTime(masterVolume, audioContext.currentTime + 0.02);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + durations[index]);
+                        
+                        // Tocar
+                        oscillator.start(audioContext.currentTime);
+                        oscillator.stop(audioContext.currentTime + durations[index]);
+                        
+                    }, index * 120); // Pequeno delay entre os tons
+                });
                 
-                oscillator1.frequency.setValueAtTime(800, audioContext.currentTime);
-                oscillator1.type = 'sine';
-                
-                gainNode1.gain.setValueAtTime(0.3, audioContext.currentTime);
-                gainNode1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
-                
-                oscillator1.start(audioContext.currentTime);
-                oscillator1.stop(audioContext.currentTime + 0.2);
-                
-                // Segunda frequência (600Hz) - mais suave
+                // Som adicional de "ping" para eventos críticos
                 setTimeout(() => {
-                    const oscillator2 = audioContext.createOscillator();
-                    const gainNode2 = audioContext.createGain();
+                    const pingOsc = audioContext.createOscillator();
+                    const pingGain = audioContext.createGain();
                     
-                    oscillator2.connect(gainNode2);
-                    gainNode2.connect(audioContext.destination);
+                    pingOsc.connect(pingGain);
+                    pingGain.connect(audioContext.destination);
                     
-                    oscillator2.frequency.setValueAtTime(600, audioContext.currentTime);
-                    oscillator2.type = 'sine';
+                    pingOsc.frequency.setValueAtTime(1200, audioContext.currentTime);
+                    pingOsc.type = 'triangle';
                     
-                    gainNode2.gain.setValueAtTime(0.2, audioContext.currentTime);
-                    gainNode2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    pingGain.gain.setValueAtTime(0, audioContext.currentTime);
+                    pingGain.gain.linearRampToValueAtTime(masterVolume * 0.6, audioContext.currentTime + 0.01);
+                    pingGain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
                     
-                    oscillator2.start(audioContext.currentTime);
-                    oscillator2.stop(audioContext.currentTime + 0.3);
-                }, 100);
+                    pingOsc.start(audioContext.currentTime);
+                    pingOsc.stop(audioContext.currentTime + 0.1);
+                }, 500);
                 
             } catch (error) {
-                console.log('🔊 Erro ao reproduzir som sintético:', error);
+                console.log('🔊 Erro ao reproduzir som sintético AFÁST:', error);
+                
+                // Fallback: usar beep simples do sistema
+                try {
+                    const context = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = context.createOscillator();
+                    const gainNode = context.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(context.destination);
+                    
+                    oscillator.frequency.value = 800;
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.3, context.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.3);
+                    
+                    oscillator.start(context.currentTime);
+                    oscillator.stop(context.currentTime + 0.3);
+                } catch (fallbackError) {
+                    console.log('🔊 Fallback de som também falhou:', fallbackError);
+                }
             }
         }
         
@@ -10351,32 +12487,63 @@
                 // Cancelar qualquer fala anterior
                 speechSynthesis.cancel();
                 
-                const utterance = new SpeechSynthesisUtterance(message);
-                
-                // Configurar voz feminina brasileira
-                if (afastVoiceConfig.voice) {
-                    utterance.voice = afastVoiceConfig.voice;
-                }
-                
-                utterance.lang = afastVoiceConfig.lang;
-                utterance.rate = afastVoiceConfig.rate;
-                utterance.pitch = afastVoiceConfig.pitch;
-                utterance.volume = afastVoiceConfig.volume * (currentUser?.settings?.volumes?.system || 0.7);
-                
-                // Eventos de voz
-                utterance.onstart = () => {
-                    console.log('🎙️ AFÁST falando:', message);
-                };
-                
-                utterance.onerror = (event) => {
-                    console.log('🎙️ Erro na síntese de voz:', event.error);
-                };
-                
-                // Falar
-                speechSynthesis.speak(utterance);
+                // Aguardar um pouco para garantir que o cancelamento foi processado
+                setTimeout(() => {
+                    const utterance = new SpeechSynthesisUtterance(message);
+                    
+                    // Configurar voz feminina brasileira
+                    if (afastVoiceConfig.voice) {
+                        utterance.voice = afastVoiceConfig.voice;
+                    }
+                    
+                    // Configurações de voz otimizadas para português brasileiro
+                    utterance.lang = afastVoiceConfig.lang;
+                    utterance.rate = afastVoiceConfig.rate; // Velocidade mais lenta para clareza
+                    utterance.pitch = afastVoiceConfig.pitch; // Tom feminino
+                    utterance.volume = afastVoiceConfig.volume * (currentUser?.settings?.volumes?.notifications || 0.7);
+                    
+                    // Eventos de voz
+                    utterance.onstart = () => {
+                        console.log('🎙️ AFÁST falando:', message);
+                        console.log('🎙️ Usando voz:', afastVoiceConfig.voice?.name || 'Padrão');
+                    };
+                    
+                    utterance.onend = () => {
+                        console.log('🎙️ AFÁST terminou de falar');
+                    };
+                    
+                    utterance.onerror = (event) => {
+                        console.log('🎙️ Erro na síntese de voz AFÁST:', event.error);
+                        
+                        // Tentar novamente com configurações mais simples
+                        setTimeout(() => {
+                            const fallbackUtterance = new SpeechSynthesisUtterance(message);
+                            fallbackUtterance.lang = 'pt-BR';
+                            fallbackUtterance.rate = 0.8;
+                            fallbackUtterance.pitch = 1.0;
+                            fallbackUtterance.volume = 0.7;
+                            speechSynthesis.speak(fallbackUtterance);
+                        }, 500);
+                    };
+                    
+                    // Falar com pequeno delay para garantir que a voz está pronta
+                    setTimeout(() => {
+                        speechSynthesis.speak(utterance);
+                    }, 100);
+                    
+                }, 100);
                 
             } catch (error) {
                 console.log('🎙️ Erro na síntese de voz AFÁST:', error);
+                
+                // Fallback simples
+                try {
+                    const simpleUtterance = new SpeechSynthesisUtterance(message);
+                    simpleUtterance.lang = 'pt-BR';
+                    speechSynthesis.speak(simpleUtterance);
+                } catch (fallbackError) {
+                    console.log('🎙️ Fallback de voz também falhou:', fallbackError);
+                }
             }
         }
                 background: linear-gradient(135deg, ${event.color}22 0%, ${event.color}44 100%);
