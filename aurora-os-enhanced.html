@@ -8254,52 +8254,45 @@
         //
         const sitesConfig = [
             // ==========================================
-            // 📱 APLICATIVOS BÁSICOS (Seção Superior)
+            // 🌐 SITES BÁSICOS (Conforme Especificações)
             // ==========================================
             { 
-                id: 'google', 
-                name: 'Google', 
-                url: 'https://google.com', 
-                icon: '🔍', 
+                id: 'webaura', 
+                name: 'WebAura', 
+                url: 'https://webaura.com.br', 
+                icon: '🌟', 
                 premium: false 
             },
             { 
-                id: 'youtube', 
-                name: 'YouTube', 
-                url: 'https://youtube.com', 
+                id: 'occult', 
+                name: 'Occult', 
+                url: 'https://occult.social', 
+                icon: '🔮', 
+                premium: false 
+            },
+            { 
+                id: 'osantuario', 
+                name: 'O Santuário', 
+                url: 'https://osantuario.com.br', 
+                icon: '🏛️', 
+                premium: false 
+            },
+            { 
+                id: 'auroraflix', 
+                name: 'AuroraFlix', 
+                url: 'https://auroraflix.com', 
                 icon: '📺', 
-                premium: false 
-            },
-            { 
-                id: 'github', 
-                name: 'GitHub', 
-                url: 'https://github.com', 
-                icon: '💻', 
-                premium: false 
-            },
-            { 
-                id: 'spotify', 
-                name: 'Spotify', 
-                url: 'https://spotify.com', 
-                icon: '🎵', 
-                premium: false 
-            },
-            { 
-                id: 'arquivos', 
-                name: 'Arquivos & Anotações', 
-                url: 'local://files', 
-                icon: '📁', 
                 premium: false 
             },
             
             // ==========================================
-            // ⭐ APLICATIVOS PREMIUM (Seção Dourada)
+            // ⭐ SITES PREMIUM (Seção Dourada)
             // ==========================================
             { 
-                id: 'mysticsoft', 
-                name: 'MysticSoft Portal', 
-                url: 'https://wix.com', 
-                icon: 'mysticsoft-logo.png', 
+                id: 'astromagick', 
+                name: 'Astromágick', 
+                url: 'https://astromagick.com', 
+                icon: '✨', 
                 premium: true 
             },
             { 
@@ -8575,6 +8568,20 @@
             container.innerHTML = '';
             
             // Adicionar ícones do sistema primeiro
+            
+            // Ícone MysticSoft (Logo da empresa)
+            const mysticsoftIcon = document.createElement('div');
+            mysticsoftIcon.className = 'desktop-icon system-icon mysticsoft-icon';
+            mysticsoftIcon.id = 'mysticsoftIcon';
+            mysticsoftIcon.onclick = () => openMysticsoftInfo();
+            mysticsoftIcon.innerHTML = `
+                <div class="icon"><img src="mysticsoft-logo.png" alt="MysticSoft" style="width: 32px; height: 32px; image-rendering: pixelated;"></div>
+                <div class="label">MysticSoft</div>
+            `;
+            mysticsoftIcon.style.position = 'absolute';
+            mysticsoftIcon.style.top = '20px';
+            mysticsoftIcon.style.left = '20px';
+            container.appendChild(mysticsoftIcon);
             
             // Ícone da Galeria
             const galleryIcon = document.createElement('div');
@@ -14048,6 +14055,103 @@
         }
         
         // ========================================
+        // 🏢 MYSTICSOFT INFO
+        // ========================================
+        
+        function openMysticsoftInfo() {
+            // Verificar se janela já está aberta
+            if (document.getElementById('window-mysticsoft')) {
+                focusWindow('window-mysticsoft');
+                return;
+            }
+            
+            const window = createWindow('mysticsoft', '🌟 MysticSoft', 'mysticsoft');
+            window.className += ' mysticsoft-window';
+            window.innerHTML = `
+                <div class="window-header">
+                    <img src="mysticsoft-logo.png" alt="MysticSoft" style="width: 24px; height: 24px; margin-right: 8px;">
+                    <span>Sobre a MysticSoft</span>
+                </div>
+                <div class="window-content" style="padding: 20px; text-align: center;">
+                    <img src="mysticsoft-logo.png" alt="MysticSoft" style="width: 64px; height: 64px; margin-bottom: 16px;">
+                    <h2 style="color: var(--dourado); margin-bottom: 16px;">MysticSoft Corporation</h2>
+                    <p style="margin-bottom: 12px;">Desenvolvedora do Aurora OS</p>
+                    <p style="margin-bottom: 12px;">Sistema Operacional Místico Avançado</p>
+                    <p style="margin-bottom: 16px; font-size: 12px; color: #888;">Versão 1.0.0 • © 2024 Aurora Sagrada</p>
+                    <div style="border-top: 1px solid #333; padding-top: 16px; margin-top: 16px;">
+                        <p style="font-size: 11px; color: #666;">
+                            "Conectando tecnologia e misticismo para uma experiência única"
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            // Tocar som de inicialização
+            playDialupSound();
+        }
+        
+        // ========================================
+        // 🔊 SISTEMA DE SONS NOSTÁLGICOS
+        // ========================================
+        
+        function playDialupSound() {
+            try {
+                // Escolher aleatoriamente entre os dois sons disponíveis
+                const sounds = [
+                    'dialup_chiados_dirty_enhanced.wav',
+                    'dialup_chiados_vintage.wav'
+                ];
+                const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
+                
+                const audio = new Audio(randomSound);
+                audio.volume = 0.3; // Volume baixo para não incomodar
+                audio.play().catch(e => {
+                    console.log('🔊 Som dial-up não pôde ser reproduzido:', e.message);
+                });
+                
+                console.log('🔊 Reproduzindo som nostálgico:', randomSound);
+            } catch (error) {
+                console.log('🔊 Erro ao reproduzir som dial-up:', error.message);
+            }
+        }
+        
+        function playSystemSound(type = 'click') {
+            try {
+                // Sons sintéticos para diferentes ações
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Diferentes frequências para diferentes tipos
+                switch(type) {
+                    case 'click':
+                        oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                        break;
+                    case 'open':
+                        oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                        break;
+                    case 'close':
+                        oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+                        break;
+                    case 'error':
+                        oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+                        break;
+                }
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } catch (error) {
+                console.log('🔊 Erro ao reproduzir som do sistema:', error.message);
+            }
+        }
+        
+        // ========================================
         // 🖼️ GALERIA DE IMAGENS
         // ========================================
         
@@ -18263,32 +18367,65 @@
                     utterance.pitch = 1.1;
                     utterance.rate = 0.7;
                     break;
-                case 'info':
-                    utterance.pitch = 1.0;
-                    utterance.rate = 0.8;
-                    break;
-                case 'welcome':
-                    utterance.pitch = 1.2;
-                    utterance.rate = 0.9;
-                    break;
+              function speakAfastMessage(message, type = 'warning') {
+            if (!afastVoiceEnabled) return;
+            
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.rate = 0.8;
+            utterance.pitch = 1.3; // Pitch mais alto para voz feminina
+            utterance.volume = 0.9;
+            
+            // Aguardar vozes carregarem
+            if (speechSynthesis.getVoices().length === 0) {
+                speechSynthesis.addEventListener('voiceschanged', () => {
+                    setFemaleVoice(utterance);
+                    speechSynthesis.speak(utterance);
+                }, { once: true });
+            } else {
+                setFemaleVoice(utterance);
+                speechSynthesis.speak(utterance);
+            }
+        }
+        
+        function setFemaleVoice(utterance) {
+            const voices = speechSynthesis.getVoices();
+            
+            // Prioridade 1: Vozes femininas brasileiras específicas
+            let femaleVoice = voices.find(voice => 
+                voice.lang.includes('pt-BR') && 
+                (voice.name.toLowerCase().includes('luciana') ||
+                 voice.name.toLowerCase().includes('maria') ||
+                 voice.name.toLowerCase().includes('fernanda') ||
+                 voice.name.toLowerCase().includes('google português'))
+            );
+            
+            // Prioridade 2: Qualquer voz portuguesa feminina
+            if (!femaleVoice) {
+                femaleVoice = voices.find(voice => 
+                    voice.lang.includes('pt') && 
+                    (voice.name.toLowerCase().includes('female') || 
+                     voice.name.toLowerCase().includes('feminina') ||
+                     voice.name.toLowerCase().includes('woman') ||
+                     voice.name.toLowerCase().includes('f '))
+                );
             }
             
-            // Tentar usar voz feminina se disponível
-            const voices = speechSynthesis.getVoices();
-            const femaleVoice = voices.find(voice => 
-                voice.lang.includes('pt') && 
-                (voice.name.toLowerCase().includes('female') || 
-                 voice.name.toLowerCase().includes('feminina') ||
-                 voice.name.toLowerCase().includes('woman'))
-            );
+            // Prioridade 3: Primeira voz portuguesa disponível com pitch alto
+            if (!femaleVoice) {
+                femaleVoice = voices.find(voice => voice.lang.includes('pt'));
+                if (femaleVoice) {
+                    utterance.pitch = 1.5; // Pitch ainda mais alto para simular voz feminina
+                }
+            }
             
             if (femaleVoice) {
                 utterance.voice = femaleVoice;
+                console.log('🎤 Voz selecionada:', femaleVoice.name, femaleVoice.lang);
+            } else {
+                console.log('⚠️ Nenhuma voz portuguesa encontrada, usando padrão com pitch alto');
+                utterance.pitch = 1.5;
             }
-            
-            speechSynthesis.speak(utterance);
-        }
-        
+        }     
         // Easter eggs - frases raras e engraçadas
         function getRandomEasterEgg() {
             const easterEggs = [
