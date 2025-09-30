@@ -17847,12 +17847,7 @@
             
             showAfastMsnNotification(welcomeNotification);
             
-            // Falar mensagem de boas-vindas
-            if (afastVoiceEnabled) {
-                setTimeout(() => {
-                    speakAfastMessage('Boas-vindas ao Afást! O céu está sob vigilância.');
-                }, 1000);
-            }
+            // Sistema AFÁST iniciado silenciosamente
         }
         
         function checkAstrologicalEvents() {
@@ -18329,45 +18324,17 @@
         function playAfastAlert(event) {
             if (!afastVoiceEnabled || !('speechSynthesis' in window)) return;
             
-            // Primeira vez do dia - mensagem de boas-vindas
-            if (afastFirstTimeToday) {
-                speakAfastMessage("Boas-vindas ao Afást! O céu está sob vigilância.", 'welcome');
-                afastFirstTimeToday = false;
-                
-                // Aguardar 3 segundos antes do alerta principal
-                setTimeout(() => {
-                    if (event.severity === 'critical' || event.severity === 'warning') {
-                        speakAfastMessage(event.voiceAlert, event.severity);
-                    }
-                }, 3000);
-            } else {
-                // Apenas eventos críticos e avisos têm voz
-                if (event.severity === 'critical' || event.severity === 'warning') {
+            // Apenas eventos astrológicos específicos têm voz
+            if (event.severity === 'critical' || event.severity === 'warning') {
+                // Só falar para eventos realmente importantes (Lua, Mercúrio retrógrado, etc.)
+                if (event.title.includes('Lua') || event.title.includes('Mercúrio') || 
+                    event.title.includes('Eclipse') || event.title.includes('Marte')) {
                     speakAfastMessage(event.voiceAlert, event.severity);
                 }
             }
         }
         
-        function speakAfastMessage(message, severity) {
-            const utterance = new SpeechSynthesisUtterance(message);
-            
-            // Configurações da voz feminina
-            utterance.lang = 'pt-BR';
-            utterance.rate = 0.7; // Mais devagar para clareza
-            utterance.pitch = 1.1; // Tom feminino
-            utterance.volume = (volumes.notifications / 100) * (volumes.master / 100);
-            
-            // Ajustar tom conforme severidade
-            switch(severity) {
-                case 'critical':
-                    utterance.pitch = 1.3; // Mais agudo para urgência
-                    utterance.rate = 0.6;  // Mais devagar para ênfase
-                    break;
-                case 'warning':
-                    utterance.pitch = 1.1;
-                    utterance.rate = 0.7;
-                    break;
-              function speakAfastMessage(message, type = 'warning') {
+        function speakAfastMessage(message, type = 'warning') {
             if (!afastVoiceEnabled) return;
             
             const utterance = new SpeechSynthesisUtterance(message);
@@ -18444,12 +18411,11 @@
             afastVoiceEnabled = !afastVoiceEnabled;
             const status = afastVoiceEnabled ? 'ativada' : 'desativada';
             
-            if (afastVoiceEnabled) {
-                speakAfastMessage(`Voz do Afást ${status}.`, 'info');
-            }
-            
-            // Salvar preferência
+            // Apenas salvar preferência, sem falar
             localStorage.setItem('auroraOS_afast_voice', afastVoiceEnabled);
+            
+            // Mostrar feedback visual apenas
+            console.log(`🎤 Voz do AFÁST ${status}`);
         }
         
         function loadAfastVoiceSettings() {
