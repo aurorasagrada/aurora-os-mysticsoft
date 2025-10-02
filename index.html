@@ -1434,14 +1434,7 @@
         function setupEventListeners() {
             // Menu de contexto (botão direito)
             document.addEventListener('contextmenu', function(e) {
-                // Não mostrar menu em janelas, taskbar, menus ou dentro de iframes
-                const inWindow = e.target.closest('.window');
-                const inTaskbar = e.target.closest('.taskbar');
-                const inMenu = e.target.closest('.start-menu, .context-menu, .popup');
-                const inIcon = e.target.closest('.desktop-icon');
-                
-                // Mostrar menu se NÃO estiver em nenhum desses elementos
-                if (!inWindow && !inTaskbar && !inMenu && !inIcon) {
+                if (e.target.closest('.desktop')) {
                     e.preventDefault();
                     showContextMenu(e.clientX, e.clientY);
                 }
