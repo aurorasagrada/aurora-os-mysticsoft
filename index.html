@@ -1327,7 +1327,10 @@
             { id: 'portal-astrologico', name: 'Portal Astrológico', url: 'https://astro.com', icon: '⭐', premium: true },
             
             // Aplicativo local
-            { id: 'arquivos', name: 'Arquivos & Anotações', url: 'local://files', icon: '📁', premium: false }
+            { id: 'arquivos', name: 'Arquivos & Anotações', url: 'local://files', icon: '📁', premium: false },
+            
+            // Personalização
+            { id: 'personalizacao', name: 'Personalizar', url: 'local://personalization', icon: '🎨', premium: false }
         ];
         
         // Configuração de cores
@@ -1595,6 +1598,18 @@
         }
         
         function openWebsite(site) {
+            // Verificar se é a personalização
+            if (site.url === 'local://personalization') {
+                openPersonalization();
+                return;
+            }
+            
+            // Verificar se é arquivos locais
+            if (site.url === 'local://files') {
+                openLocalFilesApp();
+                return;
+            }
+            
             const windowId = `window-${site.id}`;
             
             // Verificar se janela já está aberta
