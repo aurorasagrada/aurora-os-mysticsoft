@@ -1434,7 +1434,13 @@
         function setupEventListeners() {
             // Menu de contexto (botão direito)
             document.addEventListener('contextmenu', function(e) {
-                if (e.target.closest('.desktop')) {
+                // Verificar se clicou no desktop (não em janelas, taskbar ou menus)
+                const isDesktop = e.target.classList.contains('desktop') || 
+                                 e.target.closest('.desktop-icons') ||
+                                 (e.target.closest('.desktop') && !e.target.closest('.window') && 
+                                  !e.target.closest('.taskbar') && !e.target.closest('.start-menu'));
+                
+                if (isDesktop) {
                     e.preventDefault();
                     showContextMenu(e.clientX, e.clientY);
                 }
