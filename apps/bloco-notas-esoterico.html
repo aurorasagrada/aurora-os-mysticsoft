@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📝 Bloco de Notas Esotérico - MysticSoft</title>
+    <style>
+        :root {
+            --vinho: #3e0a29;
+            --dourado: #f0aa53;
+            --azul-escuro: #0b1836;
+            --verde-claro: #b2d1b1;
+            --lilas-palido: #f2eaff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            background: #c0c0c0;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        /* Barra de Menu */
+        .menu-bar {
+            background: #c0c0c0;
+            border-bottom: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            padding: 2px 4px;
+            display: flex;
+            gap: 2px;
+        }
+        
+        .menu-item {
+            padding: 4px 8px;
+            font-size: 11px;
+            cursor: pointer;
+            color: black;
+            position: relative;
+        }
+        
+        .menu-item:hover {
+            background: #316AC5;
+            color: white;
+        }
+        
+        .menu-item.active {
+            background: #316AC5;
+            color: white;
+        }
+        
+        /* Dropdown Menu */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
+            display: none;
+            min-width: 180px;
+            z-index: 1000;
+        }
+        
+        .dropdown-menu.active {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 6px 12px;
+            font-size: 11px;
+            cursor: pointer;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .dropdown-item:hover {
+            background: #316AC5;
+            color: white;
+        }
+        
+        .dropdown-item .shortcut {
+            font-size: 9px;
+            color: #666;
+            margin-left: 20px;
+        }
+        
+        .dropdown-item:hover .shortcut {
+            color: white;
+        }
+        
+        .dropdown-separator {
+            height: 1px;
+            background: #808080;
+            margin: 2px 4px;
+            box-shadow: 0 1px 0 #ffffff;
+        }
+        
+        /* Barra de Ferramentas */
+        .toolbar {
+            background: #c0c0c0;
+            border-bottom: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            padding: 4px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: center;
+        }
+        
+        .toolbar-group {
+            display: flex;
+            gap: 2px;
+            padding-right: 8px;
+            border-right: 1px solid #808080;
+        }
+        
+        .toolbar-group:last-child {
+            border-right: none;
+        }
+        
+        .toolbar-button {
+            width: 24px;
+            height: 22px;
+            background: #c0c0c0;
+            border: 1px solid;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.8);
+        }
+        
+        .toolbar-button:hover {
+            background: #e0e0e0;
+        }
+        
+        .toolbar-button:active,
+        .toolbar-button.active {
+            border-color: #000000 #ffffff #ffffff #000000;
+            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.8);
+            background: #b0b0b0;
+        }
+        
+        .toolbar-button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .toolbar-select {
+            height: 22px;
+            background: white;
+            border: 1px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            padding: 2px 4px;
+            font-size: 11px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+        
+        .toolbar-select:focus {
+            outline: 1px dotted black;
+        }
+        
+        /* Área de Edição */
+        .editor-container {
+            height: calc(100vh - 120px);
+            background: #808080;
+            padding: 8px;
+            overflow: auto;
+        }
+        
+        .editor-paper {
+            background: white;
+            min-height: calc(100% - 16px);
+            padding: 40px 60px;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        
+        .editor-content {
+            min-height: 500px;
+            outline: none;
+            font-family: 'Times New Roman', serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            color: black;
+        }
+        
+        .editor-content:focus {
+            outline: none;
+        }
+        
+        /* Barra de Status */
+        .status-bar {
+            background: #c0c0c0;
+            border-top: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            padding: 4px 8px;
+            font-size: 10px;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 24px;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-separator {
+            width: 1px;
+            height: 14px;
+            background: #808080;
+            box-shadow: 1px 0 0 #ffffff;
+        }
+        
+        /* Modal de Símbolos */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: #c0c0c0;
+            border: 3px solid var(--azul-escuro);
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+            min-width: 400px;
+            max-width: 600px;
+        }
+        
+        .modal-header {
+            background: linear-gradient(90deg, var(--azul-escuro) 0%, #1a2a4a 100%);
+            color: white;
+            padding: 3px 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            height: 20px;
+        }
+        
+        .modal-close {
+            width: 16px;
+            height: 14px;
+            background: #ff6b6b;
+            border: 1px solid;
+            border-color: #ff8888 #cc0000 #cc0000 #ff8888;
+            cursor: pointer;
+            font-size: 9px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.8);
+        }
+        
+        .modal-close:hover {
+            background: #ff5252;
+        }
+        
+        .modal-close:active {
+            border-color: #cc0000 #ff8888 #ff8888 #cc0000;
+        }
+        
+        .modal-content {
+            padding: 16px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .symbols-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+        }
+        
+        .symbol-button {
+            width: 40px;
+            height: 40px;
+            background: #c0c0c0;
+            border: 1px solid;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.8);
+        }
+        
+        .symbol-button:hover {
+            background: #e0e0e0;
+        }
+        
+        .symbol-button:active {
+            border-color: #000000 #ffffff #ffffff #000000;
+            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.8);
+        }
+        
+        /* Templates */
+        .template-item {
+            padding: 12px;
+            border: 1px solid #808080;
+            margin-bottom: 8px;
+            cursor: pointer;
+            background: white;
+        }
+        
+        .template-item:hover {
+            background: var(--lilas-palido);
+            border-color: var(--dourado);
+        }
+        
+        .template-title {
+            font-weight: bold;
+            color: var(--azul-escuro);
+            margin-bottom: 4px;
+        }
+        
+        .template-description {
+            font-size: 10px;
+            color: #666;
+        }
+        
+        /* Color Picker */
+        .color-picker {
+            padding: 12px;
+        }
+        
+        .color-picker-section {
+            margin-bottom: 12px;
+        }
+        
+        .color-picker-title {
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--azul-escuro);
+            margin-bottom: 6px;
+            padding: 2px 4px;
+            background: #e0e0e0;
+            border: 1px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border: 2px solid;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            cursor: pointer;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.5);
+            position: relative;
+        }
+        
+        .color-option:hover {
+            border-color: var(--dourado);
+            box-shadow: 0 0 4px var(--dourado);
+            transform: scale(1.1);
+        }
+        
+        .color-option:active {
+            border-color: #000000 #ffffff #ffffff #000000;
+            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.5);
+        }
+        
+        /* Custom Color Picker */
+        .custom-color-section {
+            padding: 8px;
+            background: #e0e0e0;
+            border: 1px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            margin-top: 8px;
+        }
+        
+        .custom-color-label {
+            font-size: 10px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: block;
+        }
+        
+        .custom-color-input-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .custom-color-input {
+            width: 60px;
+            height: 32px;
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            cursor: pointer;
+            padding: 2px;
+        }
+        
+        .custom-color-input:hover {
+            border-color: var(--dourado);
+        }
+        
+        .custom-color-hex {
+            flex: 1;
+            height: 24px;
+            border: 1px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            padding: 4px 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        
+        .custom-color-apply {
+            height: 24px;
+            padding: 0 12px;
+            background: #c0c0c0;
+            border: 1px solid;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            cursor: pointer;
+            font-size: 10px;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.8);
+        }
+        
+        .custom-color-apply:hover {
+            background: #e0e0e0;
+        }
+        
+        .custom-color-apply:active {
+            border-color: #000000 #ffffff #ffffff #000000;
+            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.8);
+        }
+        
+        .color-preview {
+            width: 32px;
+            height: 32px;
+            border: 2px solid;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.5);
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .editor-paper {
+                padding: 20px;
+            }
+            
+            .toolbar {
+                overflow-x: auto;
+            }
+            
+            .modal {
+                min-width: 90vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de Menu -->
+    <div class="menu-bar">
+        <div class="menu-item" onclick="toggleMenu('fileMenu', this)">
+            Arquivo
+            <div class="dropdown-menu" id="fileMenu">
+                <div class="dropdown-item" onclick="newDocument()">
+                    <span>📄 Novo</span>
+                    <span class="shortcut">Ctrl+N</span>
+                </div>
+                <div class="dropdown-item" onclick="openDocument()">
+                    <span>📂 Abrir</span>
+                    <span class="shortcut">Ctrl+O</span>
+                </div>
+                <div class="dropdown-item" onclick="saveDocument()">
+                    <span>💾 Salvar</span>
+                    <span class="shortcut">Ctrl+S</span>
+                </div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="printDocument()">
+                    <span>🖨️ Imprimir</span>
+                    <span class="shortcut">Ctrl+P</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-item" onclick="toggleMenu('editMenu', this)">
+            Editar
+            <div class="dropdown-menu" id="editMenu">
+                <div class="dropdown-item" onclick="document.execCommand('undo')">
+                    <span>↶ Desfazer</span>
+                    <span class="shortcut">Ctrl+Z</span>
+                </div>
+                <div class="dropdown-item" onclick="document.execCommand('redo')">
+                    <span>↷ Refazer</span>
+                    <span class="shortcut">Ctrl+Y</span>
+                </div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="document.execCommand('copy')">
+                    <span>📋 Copiar</span>
+                    <span class="shortcut">Ctrl+C</span>
+                </div>
+                <div class="dropdown-item" onclick="document.execCommand('cut')">
+                    <span>✂️ Recortar</span>
+                    <span class="shortcut">Ctrl+X</span>
+                </div>
+                <div class="dropdown-item" onclick="document.execCommand('paste')">
+                    <span>📄 Colar</span>
+                    <span class="shortcut">Ctrl+V</span>
+                </div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="document.execCommand('selectAll')">
+                    <span>✅ Selecionar Tudo</span>
+                    <span class="shortcut">Ctrl+A</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-item" onclick="toggleMenu('insertMenu', this)">
+            Inserir
+            <div class="dropdown-menu" id="insertMenu">
+                <div class="dropdown-item" onclick="openSymbolsModal()">
+                    <span>🔮 Símbolos Místicos</span>
+                </div>
+                <div class="dropdown-item" onclick="insertDate()">
+                    <span>📅 Data e Hora</span>
+                </div>
+                <div class="dropdown-item" onclick="insertMoonPhase()">
+                    <span>🌙 Fase da Lua</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-item" onclick="toggleMenu('formatMenu', this)">
+            Formatar
+            <div class="dropdown-menu" id="formatMenu">
+                <div class="dropdown-item" onclick="openColorModal()">
+                    <span>🎨 Cor do Texto</span>
+                </div>
+                <div class="dropdown-item" onclick="document.execCommand('removeFormat')">
+                    <span>🧹 Limpar Formatação</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-item" onclick="toggleMenu('templateMenu', this)">
+            Templates
+            <div class="dropdown-menu" id="templateMenu">
+                <div class="dropdown-item" onclick="loadTemplate('ritual')">
+                    <span>🕯️ Ritual Místico</span>
+                </div>
+                <div class="dropdown-item" onclick="loadTemplate('grimorio')">
+                    <span>📖 Grimório</span>
+                </div>
+                <div class="dropdown-item" onclick="loadTemplate('diario')">
+                    <span>🌙 Diário Lunar</span>
+                </div>
+                <div class="dropdown-item" onclick="loadTemplate('feitico')">
+                    <span>✨ Feitiço</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Barra de Ferramentas -->
+    <div class="toolbar">
+        <!-- Grupo: Fonte -->
+        <div class="toolbar-group">
+            <select class="toolbar-select" onchange="changeFontFamily(this.value)" style="width: 120px;">
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Arial">Arial</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Verdana">Verdana</option>
+            </select>
+            
+            <select class="toolbar-select" onchange="changeFontSize(this.value)" style="width: 50px;">
+                <option value="1">8pt</option>
+                <option value="2">10pt</option>
+                <option value="3" selected>12pt</option>
+                <option value="4">14pt</option>
+                <option value="5">18pt</option>
+                <option value="6">24pt</option>
+                <option value="7">36pt</option>
+            </select>
+        </div>
+        
+        <!-- Grupo: Formatação -->
+        <div class="toolbar-group">
+            <button class="toolbar-button" onclick="formatText('bold')" title="Negrito (Ctrl+B)">
+                <strong>B</strong>
+            </button>
+            <button class="toolbar-button" onclick="formatText('italic')" title="Itálico (Ctrl+I)">
+                <em>I</em>
+            </button>
+            <button class="toolbar-button" onclick="formatText('underline')" title="Sublinhado (Ctrl+U)">
+                <u>U</u>
+            </button>
+        </div>
+        
+        <!-- Grupo: Alinhamento -->
+        <div class="toolbar-group">
+            <button class="toolbar-button" onclick="formatText('justifyLeft')" title="Alinhar à Esquerda">
+                ≡
+            </button>
+            <button class="toolbar-button" onclick="formatText('justifyCenter')" title="Centralizar">
+                ≣
+            </button>
+            <button class="toolbar-button" onclick="formatText('justifyRight')" title="Alinhar à Direita">
+                ≡
+            </button>
+            <button class="toolbar-button" onclick="formatText('justifyFull')" title="Justificar">
+                ≣
+            </button>
+        </div>
+        
+        <!-- Grupo: Listas -->
+        <div class="toolbar-group">
+            <button class="toolbar-button" onclick="formatText('insertUnorderedList')" title="Lista com Marcadores">
+                •
+            </button>
+            <button class="toolbar-button" onclick="formatText('insertOrderedList')" title="Lista Numerada">
+                1.
+            </button>
+        </div>
+        
+        <!-- Grupo: Símbolos Místicos -->
+        <div class="toolbar-group">
+            <button class="toolbar-button" onclick="insertSymbol('🌙')" title="Lua">🌙</button>
+            <button class="toolbar-button" onclick="insertSymbol('⭐')" title="Estrela">⭐</button>
+            <button class="toolbar-button" onclick="insertSymbol('✨')" title="Brilho">✨</button>
+            <button class="toolbar-button" onclick="insertSymbol('🔮')" title="Bola de Cristal">🔮</button>
+            <button class="toolbar-button" onclick="openSymbolsModal()" title="Mais Símbolos">+</button>
+        </div>
+    </div>
+    
+    <!-- Área de Edição -->
+    <div class="editor-container">
+        <div class="editor-paper">
+            <div class="editor-content" contenteditable="true" id="editor" oninput="updateStatus()">
+                
+            </div>
+        </div>
+    </div>
+    
+    <!-- Barra de Status -->
+    <div class="status-bar">
+        <div class="status-item">
+            <span id="wordCount">Palavras: 0</span>
+            <span class="status-separator"></span>
+            <span id="charCount">Caracteres: 0</span>
+        </div>
+        <div class="status-item">
+            <span id="moonPhase">🌙 Lua Crescente</span>
+            <span class="status-separator"></span>
+            <span id="currentDate">02/10/2025</span>
+        </div>
+    </div>
+    
+    <!-- Modal de Símbolos -->
+    <div class="modal-overlay" id="symbolsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <span>🔮 Símbolos Místicos</span>
+                <button class="modal-close" onclick="closeModal('symbolsModal')">×</button>
+            </div>
+            <div class="modal-content">
+                <div class="symbols-grid" id="symbolsGrid">
+                    <!-- Símbolos serão gerados via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Cores -->
+    <div class="modal-overlay" id="colorModal">
+        <div class="modal">
+            <div class="modal-header">
+                <span>🎨 Seletor de Cores Completo</span>
+                <button class="modal-close" onclick="closeModal('colorModal')">×</button>
+            </div>
+            <div class="modal-content">
+                <div class="color-picker">
+                    <!-- Cores Místicas -->
+                    <div class="color-picker-section">
+                        <div class="color-picker-title">🔮 CORES MÍSTICAS DA AURORA SAGRADA</div>
+                        <div class="color-grid" id="mysticColors">
+                            <!-- Gerado via JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Cores Padrão -->
+                    <div class="color-picker-section">
+                        <div class="color-picker-title">🎨 CORES PADRÃO</div>
+                        <div class="color-grid" id="standardColors">
+                            <!-- Gerado via JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Tons de Cinza -->
+                    <div class="color-picker-section">
+                        <div class="color-picker-title">⚫ TONS DE CINZA</div>
+                        <div class="color-grid" id="grayColors">
+                            <!-- Gerado via JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Seletor Personalizado -->
+                    <div class="custom-color-section">
+                        <label class="custom-color-label">✨ COR PERSONALIZADA</label>
+                        <div class="custom-color-input-group">
+                            <input type="color" id="customColorInput" class="custom-color-input" value="#3e0a29">
+                            <input type="text" id="customColorHex" class="custom-color-hex" value="#3E0A29" maxlength="7" placeholder="#000000">
+                            <div class="color-preview" id="colorPreview" style="background: #3e0a29;"></div>
+                            <button class="custom-color-apply" onclick="applyCustomColor()">Aplicar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Símbolos Místicos
+        const mysticSymbols = [
+            '☽', '☾', '🌙', '🌛', '🌜', '🌚', '🌝', '🌞',
+            '⭐', '🌟', '✨', '💫', '🌠', '⚡', '🔥', '💧',
+            '🔮', '🎴', '🃏', '🎲', '🔯', '✡️', '☪️', '🕉️',
+            '☯️', '☸️', '✝️', '☦️', '🕎', '🔱', '⚜️', '🗝️',
+            '🕯️', '🪔', '💀', '👁️', '🧿', '🪬', '🌺', '🌸',
+            '🌹', '🥀', '🌿', '☘️', '🍀', '🌾', '🌱', '🪴',
+            '🦋', '🐉', '🦅', '🦉', '🐺', '🐈‍⬛', '🦇', '🕷️'
+        ];
+        
+        // Cores Místicas da Aurora Sagrada
+        const mysticColors = [
+            '#3e0a29', // Vinho profundo
+            '#f0aa53', // Dourado solar
+            '#0b1836', // Azul-noite
+            '#b2d1b1', // Verde-claro etéreo
+            '#f2eaff', // Lilás pálido
+            '#8B0000', // Vermelho escuro
+            '#4B0082', // Índigo
+            '#800080', // Roxo
+            '#FF1493', // Rosa profundo
+            '#2F4F4F', // Cinza ardósia
+            '#8B4513', // Marrom místico
+            '#DAA520'  // Ouro velho
+        ];
+        
+        // Cores Padrão (Paleta completa)
+        const standardColors = [
+            // Vermelhos
+            '#FF0000', '#DC143C', '#B22222', '#8B0000', '#CD5C5C', '#F08080',
+            // Laranjas
+            '#FF8C00', '#FF7F50', '#FF6347', '#FF4500', '#FFA500', '#FFD700',
+            // Amarelos
+            '#FFFF00', '#FFD700', '#FFA500', '#F0E68C', '#FFFACD', '#FAFAD2',
+            // Verdes
+            '#00FF00', '#32CD32', '#228B22', '#008000', '#006400', '#90EE90',
+            // Azuis
+            '#0000FF', '#4169E1', '#1E90FF', '#00BFFF', '#87CEEB', '#87CEFA',
+            // Roxos
+            '#800080', '#9370DB', '#8A2BE2', '#9400D3', '#9932CC', '#BA55D3',
+            // Rosas
+            '#FF69B4', '#FF1493', '#C71585', '#DB7093', '#FFB6C1', '#FFC0CB',
+            // Marrons
+            '#8B4513', '#A0522D', '#D2691E', '#CD853F', '#DEB887', '#F4A460',
+            // Cinzas (adicionais)
+            '#696969', '#808080', '#A9A9A9', '#C0C0C0', '#D3D3D3', '#DCDCDC'
+        ];
+        
+        // Tons de Cinza (Escala completa)
+        const grayColors = [
+            '#000000', '#1A1A1A', '#333333', '#4D4D4D', '#666666', '#808080',
+            '#999999', '#B3B3B3', '#CCCCCC', '#E0E0E0', '#F0F0F0', '#FFFFFF'
+        ];
+        
+        // Templates
+        const templates = {
+            ritual: `<h2 style="text-align: center; color: #3e0a29;">🕯️ RITUAL MÍSTICO 🕯️</h2>
+<p><strong>Data:</strong> ${new Date().toLocaleDateString('pt-BR')}</p>
+<p><strong>Fase da Lua:</strong> 🌙 Lua Crescente</p>
+<p><strong>Hora Planetária:</strong> ☿ Mercúrio</p>
+<br>
+<p><strong>Intenção:</strong></p>
+<p>[Descreva sua intenção aqui]</p>
+<br>
+<p><strong>Materiais Necessários:</strong></p>
+<ul>
+    <li>Velas</li>
+    <li>Incenso</li>
+    <li>Cristais</li>
+</ul>
+<br>
+<p><strong>Procedimento:</strong></p>
+<p>[Descreva o passo a passo do ritual]</p>
+<br>
+<p><strong>Observações:</strong></p>
+<p>[Anote suas experiências e resultados]</p>`,
+            
+            grimorio: `<h1 style="text-align: center; color: #0b1836;">📖 GRIMÓRIO PESSOAL 📖</h1>
+<p style="text-align: center;"><em>Livro de Sabedoria Mística</em></p>
+<hr>
+<br>
+<h3>✨ Entrada: ${new Date().toLocaleDateString('pt-BR')}</h3>
+<br>
+<p><strong>Título:</strong></p>
+<p>[Nome do conhecimento ou prática]</p>
+<br>
+<p><strong>Categoria:</strong></p>
+<p>🔮 [Feitiços / Rituais / Correspondências / Estudos]</p>
+<br>
+<p><strong>Descrição:</strong></p>
+<p>[Descreva o conhecimento adquirido]</p>
+<br>
+<p><strong>Aplicações:</strong></p>
+<p>[Como e quando utilizar]</p>
+<br>
+<p><strong>Notas Pessoais:</strong></p>
+<p>[Suas reflexões e experiências]</p>`,
+            
+            diario: `<h2 style="text-align: center; color: #3e0a29;">🌙 DIÁRIO LUNAR 🌙</h2>
+<p><strong>Data:</strong> ${new Date().toLocaleDateString('pt-BR')}</p>
+<p><strong>Fase da Lua:</strong> 🌙 Lua Crescente</p>
+<p><strong>Signo Lunar:</strong> ♋ Câncer</p>
+<br>
+<p><strong>Energia do Dia:</strong></p>
+<p>[Como você está se sentindo hoje?]</p>
+<br>
+<p><strong>Sonhos:</strong></p>
+<p>[Registre seus sonhos da noite passada]</p>
+<br>
+<p><strong>Intuições:</strong></p>
+<p>[Insights e mensagens recebidas]</p>
+<br>
+<p><strong>Gratidão:</strong></p>
+<p>[Pelo que você é grato hoje?]</p>
+<br>
+<p><strong>Intenções:</strong></p>
+<p>[O que você deseja manifestar?]</p>`,
+            
+            feitico: `<h2 style="text-align: center; color: #4B0082;">✨ FEITIÇO ✨</h2>
+<p><strong>Nome:</strong> [Nome do Feitiço]</p>
+<p><strong>Data de Criação:</strong> ${new Date().toLocaleDateString('pt-BR')}</p>
+<p><strong>Melhor Momento:</strong> 🌙 Lua Cheia</p>
+<br>
+<p><strong>Propósito:</strong></p>
+<p>[Para que serve este feitiço]</p>
+<br>
+<p><strong>Ingredientes:</strong></p>
+<ul>
+    <li>Ervas</li>
+    <li>Cristais</li>
+    <li>Óleos</li>
+    <li>Outros</li>
+</ul>
+<br>
+<p><strong>Encantamento:</strong></p>
+<p style="font-style: italic; color: #800080;">
+[Escreva as palavras mágicas aqui]
+</p>
+<br>
+<p><strong>Instruções:</strong></p>
+<ol>
+    <li>Prepare o espaço sagrado</li>
+    <li>Reúna os ingredientes</li>
+    <li>Recite o encantamento</li>
+    <li>Finalize o ritual</li>
+</ol>
+<br>
+<p><strong>Avisos:</strong></p>
+<p>[Precauções e considerações importantes]</p>`
+        };
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            generateSymbolsGrid();
+            generateColorPicker();
+            updateStatus();
+            updateMoonPhase();
+            updateDate();
+            
+            // Atalhos de teclado
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey || e.metaKey) {
+                    switch(e.key.toLowerCase()) {
+                        case 'b':
+                            e.preventDefault();
+                            formatText('bold');
+                            break;
+                        case 'i':
+                            e.preventDefault();
+                            formatText('italic');
+                            break;
+                        case 'u':
+                            e.preventDefault();
+                            formatText('underline');
+                            break;
+                        case 's':
+                            e.preventDefault();
+                            saveDocument();
+                            break;
+                        case 'p':
+                            e.preventDefault();
+                            printDocument();
+                            break;
+                        case 'n':
+                            e.preventDefault();
+                            newDocument();
+                            break;
+                    }
+                }
+            });
+            
+            // Fechar menus ao clicar fora
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.menu-item')) {
+                    closeAllMenus();
+                }
+            });
+        });
+        
+        // Gerar grid de símbolos
+        function generateSymbolsGrid() {
+            const grid = document.getElementById('symbolsGrid');
+            grid.innerHTML = '';
+            
+            mysticSymbols.forEach(symbol => {
+                const button = document.createElement('button');
+                button.className = 'symbol-button';
+                button.textContent = symbol;
+                button.onclick = () => {
+                    insertSymbol(symbol);
+                    closeModal('symbolsModal');
+                };
+                grid.appendChild(button);
+            });
+        }
+        
+        // Gerar seletor de cores completo
+        function generateColorPicker() {
+            // Cores Místicas
+            const mysticGrid = document.getElementById('mysticColors');
+            mysticGrid.innerHTML = '';
+            mysticColors.forEach(color => {
+                const button = document.createElement('div');
+                button.className = 'color-option';
+                button.style.background = color;
+                button.title = color.toUpperCase();
+                button.onclick = () => {
+                    applyTextColor(color);
+                    closeModal('colorModal');
+                };
+                mysticGrid.appendChild(button);
+            });
+            
+            // Cores Padrão
+            const standardGrid = document.getElementById('standardColors');
+            standardGrid.innerHTML = '';
+            standardColors.forEach(color => {
+                const button = document.createElement('div');
+                button.className = 'color-option';
+                button.style.background = color;
+                button.title = color.toUpperCase();
+                button.onclick = () => {
+                    applyTextColor(color);
+                    closeModal('colorModal');
+                };
+                standardGrid.appendChild(button);
+            });
+            
+            // Tons de Cinza
+            const grayGrid = document.getElementById('grayColors');
+            grayGrid.innerHTML = '';
+            grayColors.forEach(color => {
+                const button = document.createElement('div');
+                button.className = 'color-option';
+                button.style.background = color;
+                button.title = color.toUpperCase();
+                button.onclick = () => {
+                    applyTextColor(color);
+                    closeModal('colorModal');
+                };
+                grayGrid.appendChild(button);
+            });
+            
+            // Sincronizar color picker nativo com preview
+            const customInput = document.getElementById('customColorInput');
+            const hexInput = document.getElementById('customColorHex');
+            const preview = document.getElementById('colorPreview');
+            
+            customInput.addEventListener('input', function() {
+                const color = this.value.toUpperCase();
+                hexInput.value = color;
+                preview.style.background = color;
+            });
+            
+            hexInput.addEventListener('input', function() {
+                let value = this.value.trim();
+                if (!value.startsWith('#')) {
+                    value = '#' + value;
+                }
+                if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                    customInput.value = value;
+                    preview.style.background = value;
+                }
+            });
+        }
+        
+        // Aplicar cor personalizada
+        function applyCustomColor() {
+            const hexInput = document.getElementById('customColorHex');
+            let color = hexInput.value.trim();
+            
+            if (!color.startsWith('#')) {
+                color = '#' + color;
+            }
+            
+            if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
+                applyTextColor(color);
+                closeModal('colorModal');
+            } else {
+                alert('⚠️ Cor inválida! Use o formato #000000');
+            }
+        }
+        
+        // Funções de Menu
+        function toggleMenu(menuId, menuItem) {
+            const menu = document.getElementById(menuId);
+            const isActive = menu.classList.contains('active');
+            
+            closeAllMenus();
+            
+            if (!isActive) {
+                menu.classList.add('active');
+                menuItem.classList.add('active');
+            }
+        }
+        
+        function closeAllMenus() {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('active');
+            });
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+        }
+        
+        // Funções de Formatação
+        function formatText(command) {
+            document.execCommand(command, false, null);
+            document.getElementById('editor').focus();
+        }
+        
+        function changeFontFamily(font) {
+            document.execCommand('fontName', false, font);
+            document.getElementById('editor').focus();
+        }
+        
+        function changeFontSize(size) {
+            document.execCommand('fontSize', false, size);
+            document.getElementById('editor').focus();
+        }
+        
+        function applyTextColor(color) {
+            document.execCommand('foreColor', false, color);
+            document.getElementById('editor').focus();
+        }
+        
+        // Inserir Símbolos
+        function insertSymbol(symbol) {
+            const editor = document.getElementById('editor');
+            editor.focus();
+            document.execCommand('insertText', false, symbol);
+        }
+        
+        function insertDate() {
+            const now = new Date();
+            const dateStr = now.toLocaleString('pt-BR');
+            insertSymbol(dateStr);
+            closeAllMenus();
+        }
+        
+        function insertMoonPhase() {
+            const phases = ['🌑 Lua Nova', '🌒 Lua Crescente', '🌓 Quarto Crescente', '🌔 Lua Gibosa Crescente', 
+                          '🌕 Lua Cheia', '🌖 Lua Gibosa Minguante', '🌗 Quarto Minguante', '🌘 Lua Minguante'];
+            const phase = phases[Math.floor(Math.random() * phases.length)];
+            insertSymbol(phase);
+            closeAllMenus();
+        }
+        
+        // Modais
+        function openSymbolsModal() {
+            document.getElementById('symbolsModal').classList.add('active');
+            closeAllMenus();
+        }
+        
+        function openColorModal() {
+            document.getElementById('colorModal').classList.add('active');
+            closeAllMenus();
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // Templates
+        function loadTemplate(templateName) {
+            if (confirm('Carregar template? O conteúdo atual será substituído.')) {
+                document.getElementById('editor').innerHTML = templates[templateName];
+                updateStatus();
+            }
+            closeAllMenus();
+        }
+        
+        // Documento
+        function newDocument() {
+            if (confirm('Criar novo documento? O conteúdo atual será perdido.')) {
+                document.getElementById('editor').innerHTML = '';
+                updateStatus();
+            }
+            closeAllMenus();
+        }
+        
+        function saveDocument() {
+            const content = document.getElementById('editor').innerHTML;
+            const filename = prompt('Nome do arquivo:', 'documento-mistico.html');
+            
+            if (filename) {
+                const blob = new Blob([content], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                // Salvar também no localStorage
+                localStorage.setItem('mysticNote_' + filename, content);
+                alert('✨ Documento salvo com sucesso!');
+            }
+            closeAllMenus();
+        }
+        
+        function openDocument() {
+            const savedDocs = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('mysticNote_')) {
+                    savedDocs.push(key.replace('mysticNote_', ''));
+                }
+            }
+            
+            if (savedDocs.length === 0) {
+                alert('Nenhum documento salvo encontrado.');
+                return;
+            }
+            
+            const filename = prompt('Documentos salvos:\n' + savedDocs.join('\n') + '\n\nDigite o nome do arquivo:');
+            
+            if (filename) {
+                const content = localStorage.getItem('mysticNote_' + filename);
+                if (content) {
+                    document.getElementById('editor').innerHTML = content;
+                    updateStatus();
+                    alert('✨ Documento carregado!');
+                } else {
+                    alert('Documento não encontrado.');
+                }
+            }
+            closeAllMenus();
+        }
+        
+        function printDocument() {
+            window.print();
+            closeAllMenus();
+        }
+        
+        // Status
+        function updateStatus() {
+            const editor = document.getElementById('editor');
+            const text = editor.innerText || '';
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+            const chars = text.length;
+            
+            document.getElementById('wordCount').textContent = `Palavras: ${words}`;
+            document.getElementById('charCount').textContent = `Caracteres: ${chars}`;
+        }
+        
+        function updateMoonPhase() {
+            const phases = ['🌑 Lua Nova', '🌒 Lua Crescente', '🌓 Quarto Crescente', '🌔 Lua Gibosa Crescente', 
+                          '🌕 Lua Cheia', '🌖 Lua Gibosa Minguante', '🌗 Quarto Minguante', '🌘 Lua Minguante'];
+            
+            // Cálculo simplificado da fase da lua
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            
+            const c = Math.floor(year / 100);
+            const e = year - 1900;
+            const jd = (c / 4) - 2 * c + e + Math.floor(e / 4) + Math.floor((8 * (month + 1)) / 5) + day - 1;
+            const phase = Math.floor((jd + 4.867) / 29.53) % 8;
+            
+            document.getElementById('moonPhase').textContent = phases[phase];
+        }
+        
+        function updateDate() {
+            const now = new Date();
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('pt-BR');
+        }
+    </script>
+</body>
+</html>

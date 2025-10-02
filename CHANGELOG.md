@@ -63,6 +63,54 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
+## [2.0.0] - 2025-10-02
+
+### Adicionado
+- 🎨 **Seletor de Cores Completo** na área de Personalização
+  - 12 cores místicas da Aurora Sagrada
+  - 54 cores padrão organizadas por família
+  - 12 tons de cinza (preto ao branco)
+  - Color picker personalizado (16.777.216 cores)
+  - Campo hexadecimal com validação
+  - Preview em tempo real
+- 📝 **Bloco de Notas Esotérico** - Editor de texto místico completo
+  - Barra de menu estilo Microsoft Word
+  - Formatação rica (negrito, itálico, sublinhado)
+  - Seletor de fontes e tamanhos
+  - Alinhamento e listas
+  - 78+ cores para texto
+  - 4 templates pré-formatados (Ritual, Grimório, Diário Lunar, Feitiço)
+  - Símbolos místicos integrados
+  - Contador de palavras e caracteres
+  - Salvamento em localStorage
+
+### Melhorado
+- 🎨 Sistema de personalização agora permite alterar:
+  - Fundo do Desktop
+  - Cor da Barra de Tarefas
+  - Cor do Botão Iniciar
+  - Cabeçalho das Janelas
+  - Cor do Texto (Destaque)
+  - Relógio e Widgets
+- 🔧 CSS Variables dinâmicas para temas
+- 💾 Sistema de salvamento de preferências
+- 🎨 Estética Windows ME mantida em todas as novas funcionalidades
+
+### Técnico
+- Adicionadas funções JavaScript:
+  - `generateThemeColorPicker()`
+  - `applyThemeColor(color)`
+  - `applyThemeCustomColor()`
+  - `updateColorPreview()`
+- Novos arrays de cores:
+  - `themeMysticColors` (12 cores)
+  - `themeStandardColors` (54 cores)
+  - `themeGrayColors` (12 cores)
+- Arquivo `apps/bloco-notas-esoterico.html` (40KB, 1.250 linhas)
+- Documentação completa em `apps/BLOCO-NOTAS-ESOTERICO-DOC.md`
+
+---
+
 ## [Unreleased]
 
 ### Planejado
