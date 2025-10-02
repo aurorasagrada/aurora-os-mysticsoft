@@ -4,1321 +4,1897 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aurora OS • MysticSoft</title>
+    <link href="https://fonts.googleapis.com/css2?family=Alice&family=VT323&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
         
         :root {
+            /* Tema Aurora Sagrada */
             --vinho: #3e0a29;
-            --verde: #b2d1b1;
-            --azul: #0b1836;
+            --verde-claro: #b2d1b1;
+            --azul-escuro: #0b1836;
             --dourado: #f0aa53;
             --pergaminho: #f2eaff;
-            --roxo-mistico: #4a0e4e;
-            --prata: #c0c0c0;
-            --cinza-escuro: #808080;
+            
+            /* Variáveis de tema dinâmicas */
+            --theme-bg: linear-gradient(135deg, var(--azul-escuro) 0%, var(--vinho) 100%);
+            --theme-taskbar: var(--vinho);
+            --theme-start-btn: var(--vinho);
+            --theme-start-text: var(--dourado);
+            --theme-clock: var(--dourado);
+            --theme-window-header: var(--azul-escuro);
         }
-
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
         }
-
+        
         body {
-            font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--azul);
-            color: var(--pergaminho);
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+            background: var(--theme-bg);
             height: 100vh;
             overflow: hidden;
-            font-size: 11px;
+            user-select: none;
         }
-
-        /* === TELA DE BOOT === */
-        .boot-screen {
-            position: fixed;
-            inset: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%),
-                linear-gradient(135deg, var(--azul) 0%, #1a2a4a 50%, #2a1a4a 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            cursor: pointer;
-        }
-
-        .boot-logo {
-            font-size: 64px;
-            margin-bottom: 20px;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        .boot-title {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 48px;
-            color: var(--dourado);
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .boot-subtitle {
-            font-family: 'Cinzel', serif;
-            font-size: 18px;
-            color: var(--prata);
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-        }
-
-        .boot-info {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .boot-progress {
-            width: 300px;
-            height: 8px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-
-        .boot-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--dourado), var(--verde));
-            width: 0%;
-            animation: loading 3s ease-in-out infinite;
-        }
-
-        .boot-text {
-            color: var(--prata);
-            margin-bottom: 30px;
-        }
-
-        .boot-click {
-            color: var(--dourado);
-            font-size: 16px;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        .boot-footer {
-            position: absolute;
-            bottom: 20px;
-            text-align: center;
-            color: var(--prata);
-            font-size: 10px;
-        }
-
-        @keyframes glow {
-            from { text-shadow: 0 0 20px var(--dourado); }
-            to { text-shadow: 0 0 30px var(--dourado), 0 0 40px var(--dourado); }
-        }
-
-        @keyframes loading {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-
-        /* === DESKTOP === */
+        
+        /* Desktop */
         .desktop {
-            position: fixed;
-            inset: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, var(--azul) 0%, #1a2a4a 50%, #2a1a4a 100%);
-            display: none;
-            padding: 20px;
-            padding-bottom: 60px;
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 40px);
+            background: var(--theme-bg);
+            background-attachment: fixed;
         }
-
-        .desktop.show {
-            display: block;
-        }
-
-        /* Wallpapers */
-        .desktop.wallpaper-mystic {
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, var(--azul) 0%, #1a2a4a 50%, #2a1a4a 100%);
-        }
-
-        .desktop.wallpaper-cosmic {
-            background: 
-                radial-gradient(circle at 30% 70%, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 70% 30%, rgba(75, 0, 130, 0.3) 0%, transparent 50%),
-                linear-gradient(135deg, #0f0f23 0%, #1a0033 50%, #2d1b69 100%);
-        }
-
-        .desktop.wallpaper-aurora {
-            background: 
-                radial-gradient(ellipse at top, rgba(0, 255, 127, 0.2) 0%, transparent 50%),
-                radial-gradient(ellipse at bottom, rgba(138, 43, 226, 0.2) 0%, transparent 50%),
-                linear-gradient(180deg, #001122 0%, #003366 50%, #002244 100%);
-        }
-
-        /* === ÍCONES DO DESKTOP === */
+        
         .desktop-icons {
             display: grid;
-            grid-template-columns: repeat(auto-fill, 80px);
+            grid-template-columns: repeat(auto-fit, 80px);
             gap: 20px;
             padding: 20px;
+            height: 100%;
+            align-content: start;
         }
-
+        
         .desktop-icon {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 8px;
             cursor: pointer;
-            transition: all 0.2s;
+            border-radius: 0;
+            transition: none;
+            position: relative;
         }
-
+        
         .desktop-icon:hover {
-            background: rgba(255,255,255,0.1);
-            transform: scale(1.05);
+            background: rgba(240, 170, 83, 0.2);
+            outline: 1px dotted var(--dourado);
         }
-
+        
+        .desktop-icon.selected {
+            background: rgba(240, 170, 83, 0.3);
+            outline: 1px dotted var(--dourado);
+        }
+        
         .desktop-icon .icon {
             font-size: 32px;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.8));
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
         }
-
+        
+        .desktop-icon.premium .icon::after {
+            content: '⭐';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 16px;
+            color: var(--dourado);
+            text-shadow: 0 0 5px var(--dourado);
+            animation: starGlow 2s ease-in-out infinite;
+        }
+        
         .desktop-icon .label {
-            font-size: 11px;
-            text-align: center;
             color: white;
+            font-size: 10px;
+            text-align: center;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            max-width: 70px;
+            word-wrap: break-word;
         }
-
-        /* === TASKBAR === */
+        
+        @keyframes iconBreathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes starGlow {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        /* Menu de Contexto (Botão Direito) */
+        .context-menu {
+            position: fixed;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            z-index: 3000;
+            display: none;
+            min-width: 200px;
+        }
+        
+        .context-menu-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: black;
+            border-bottom: 1px solid #a0a0a0;
+        }
+        
+        .context-menu-item:hover {
+            background: #316AC5;
+            color: white;
+        }
+        
+        .context-menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .context-menu-separator {
+            height: 1px;
+            background: #808080;
+            margin: 2px 0;
+        }
+        
+        /* Taskbar Aprimorada - Estilo Windows ME */
         .taskbar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 40px;
-            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border-top: 2px outset #c0c0c0;
+            height: 30px;
+            background: var(--theme-taskbar);
+            border-top: 2px solid;
+            border-color: rgba(255,255,255,0.3) transparent transparent transparent;
             display: flex;
             align-items: center;
-            padding: 0 8px;
+            padding: 0 4px;
             z-index: 1000;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
         }
-
+        
         .start-button {
-            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border: 2px outset #c0c0c0;
-            padding: 4px 12px;
-            font-weight: bold;
-            font-size: 11px;
-            color: black;
+            background: var(--theme-start-btn);
+            border: 2px solid;
+            border-color: rgba(255,255,255,0.4) rgba(0,0,0,0.4) rgba(0,0,0,0.4) rgba(255,255,255,0.4);
+            color: var(--theme-start-text);
+            padding: 3px 10px;
             cursor: pointer;
-            margin-right: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            transition: none;
+            border-radius: 0;
+            height: 24px;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.3);
         }
-
+        
         .start-button:hover {
-            background: linear-gradient(180deg, #d0d0d0 0%, #909090 100%);
+            background: #4a1a35;
         }
-
+        
         .start-button:active,
         .start-button.active {
-            border: 2px inset #c0c0c0;
+            border-color: rgba(0,0,0,0.4) rgba(255,255,255,0.4) rgba(255,255,255,0.4) rgba(0,0,0,0.4);
+            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.3);
+            padding-top: 4px;
+            padding-left: 11px;
         }
-
-        .taskbar-center {
+        
+        .start-logo {
+            font-size: 16px;
+            filter: drop-shadow(0 0 3px var(--dourado));
+        }
+        
+        .taskbar-items {
             flex: 1;
             display: flex;
-            align-items: center;
             gap: 4px;
+            margin-left: 12px;
         }
-
+        
+        .taskbar-item {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid;
+            border-color: rgba(255,255,255,0.3) rgba(0,0,0,0.3) rgba(0,0,0,0.3) rgba(255,255,255,0.3);
+            color: var(--dourado);
+            padding: 2px 8px;
+            cursor: pointer;
+            font-size: 10px;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            border-radius: 0;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.2);
+        }
+        
+        .taskbar-item:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .taskbar-item.active {
+            background: rgba(0,0,0,0.2);
+            border-color: rgba(0,0,0,0.3) rgba(255,255,255,0.3) rgba(255,255,255,0.3) rgba(0,0,0,0.3);
+            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.2);
+        }
+        
+        /* Área direita da taskbar */
         .taskbar-right {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
-        .astro-chips {
-            display: flex;
-            gap: 4px;
-            margin-right: 8px;
-        }
-
-        .astro-chip {
-            background: rgba(240, 170, 83, 0.2);
-            border: 1px solid var(--dourado);
-            border-radius: 12px;
-            padding: 2px 6px;
-            font-size: 10px;
-            color: var(--dourado);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .astro-chip:hover {
-            background: rgba(240, 170, 83, 0.3);
-            transform: scale(1.05);
-        }
-
-        .astro-chip.critical {
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.5; }
-        }
-
-        .volume-icon {
-            font-size: 16px;
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .clock {
-            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border: 1px inset #c0c0c0;
-            padding: 4px 8px;
-            font-size: 11px;
-            color: black;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        /* === MENU INICIAR === */
-        .start-menu {
-            position: fixed;
-            bottom: 42px;
-            left: 8px;
-            width: 250px;
-            background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-            border: 2px outset #c0c0c0;
-            display: none;
-            z-index: 2000;
-        }
-
-        .start-menu.show {
-            display: block;
-        }
-
-        .start-menu-header {
-            background: linear-gradient(90deg, var(--azul), var(--roxo-mistico));
-            color: white;
-            padding: 8px;
-            font-weight: bold;
-            font-size: 12px;
-        }
-
-        .start-menu-items {
-            padding: 4px 0;
-        }
-
-        .start-menu-item {
+        
+        .taskbar-widget {
             display: flex;
             align-items: center;
-            padding: 4px 8px;
+            gap: 4px;
+            padding: 2px 6px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid;
+            border-color: rgba(255,255,255,0.3) rgba(0,0,0,0.3) rgba(0,0,0,0.3) rgba(255,255,255,0.3);
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 10px;
+            color: var(--theme-clock);
+            text-shadow: 0 0 3px var(--dourado);
+            transition: none;
+            height: 22px;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.2);
+        }
+        
+        .taskbar-widget:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .taskbar-widget:active {
+            border-color: rgba(0,0,0,0.3) rgba(255,255,255,0.3) rgba(255,255,255,0.3) rgba(0,0,0,0.3);
+            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.2);
+        }
+        
+        .planetary-symbol {
+            font-size: 14px;
+            animation: planetGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes planetGlow {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; text-shadow: 0 0 8px var(--dourado); }
+        }
+        
+        .clock {
+            color: var(--theme-clock);
+            font-size: 11px;
+            font-weight: bold;
+            text-shadow: 0 0 3px var(--dourado);
+        }
+        
+        .notification-icon, .volume-icon {
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 3px;
+            transition: all 0.1s;
+        }
+        
+        .notification-icon:hover, .volume-icon:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* Popups */
+        .popup {
+            position: fixed;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            z-index: 2000;
+            display: none;
+            border-radius: 4px;
+        }
+        
+        .popup.active {
+            display: block;
+        }
+        
+        /* Calendário Popup */
+        .calendar-popup {
+            bottom: 50px;
+            right: 10px;
+            width: 280px;
+            padding: 12px;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        
+        .calendar-nav {
+            background: #d0d0d0;
+            border: 1px outset #d0d0d0;
+            cursor: pointer;
+            padding: 2px 6px;
+            font-size: 10px;
+        }
+        
+        .calendar-nav:hover {
+            background: #e0e0e0;
+        }
+        
+        .calendar-nav:active {
+            border: 1px inset #d0d0d0;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            text-align: center;
+        }
+        
+        .calendar-day-header {
+            font-size: 9px;
+            font-weight: bold;
+            padding: 4px 2px;
+            background: #a0a0a0;
+            color: white;
+        }
+        
+        .calendar-day {
+            padding: 4px 2px;
+            cursor: pointer;
+            font-size: 10px;
+            border-radius: 2px;
+        }
+        
+        .calendar-day:hover {
+            background: #316AC5;
+            color: white;
+        }
+        
+        .calendar-day.today {
+            background: var(--dourado);
+            color: black;
+            font-weight: bold;
+        }
+        
+        .calendar-day.other-month {
+            color: #808080;
+        }
+        
+        /* Volume Popup */
+        .volume-popup {
+            bottom: 50px;
+            right: 10px;
+            width: 200px;
+            padding: 12px;
+        }
+        
+        .volume-control {
+            margin-bottom: 8px;
+        }
+        
+        .volume-label {
+            font-size: 10px;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+        
+        .volume-slider {
+            width: 100%;
+            height: 4px;
+            background: #808080;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .volume-fill {
+            height: 100%;
+            background: var(--dourado);
+            border-radius: 2px;
+            transition: width 0.1s;
+        }
+        
+        .volume-thumb {
+            position: absolute;
+            top: -4px;
+            width: 12px;
+            height: 12px;
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translateX(-50%);
+        }
+        
+        /* Planetary Info Popup */
+        .planetary-popup {
+            bottom: 50px;
+            right: 10px;
+            width: 300px;
+            padding: 12px;
+        }
+        
+        .planetary-info {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        
+        .planetary-current {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--azul-escuro);
+        }
+        
+        .planetary-time {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .planetary-ruler {
+            font-size: 12px;
+            color: var(--vinho);
+            font-weight: bold;
+        }
+        
+        /* Modal de Personalização */
+        .personalization-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 4000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .personalization-modal.active {
+            display: flex;
+        }
+        
+        .personalization-dialog {
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            width: 600px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 4px;
+        }
+        
+        .personalization-header {
+            background: var(--theme-window-header);
+            color: white;
+            padding: 8px 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .personalization-close {
+            background: #ff6b6b;
+            color: white;
+            border: 1px outset #ff6b6b;
+            width: 20px;
+            height: 18px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .personalization-close:hover {
+            background: #ff5252;
+        }
+        
+        .personalization-close:active {
+            border: 1px inset #ff6b6b;
+        }
+        
+        .personalization-content {
+            padding: 16px;
+        }
+        
+        .personalization-section {
+            margin-bottom: 20px;
+            border: 1px inset #c0c0c0;
+            padding: 12px;
+        }
+        
+        .personalization-section h3 {
+            margin-bottom: 12px;
+            color: var(--azul-escuro);
+            font-size: 12px;
+        }
+        
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+        
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border: 2px outset #c0c0c0;
+            cursor: pointer;
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .color-option:hover {
+            border: 2px inset #c0c0c0;
+        }
+        
+        .color-option.selected {
+            border: 2px solid var(--dourado);
+            box-shadow: 0 0 4px var(--dourado);
+        }
+        
+        .wallpaper-section {
+            margin-bottom: 12px;
+        }
+        
+        .wallpaper-upload {
+            margin-bottom: 8px;
+        }
+        
+        .wallpaper-upload input[type="file"] {
+            width: 100%;
+            padding: 4px;
+            border: 1px inset #c0c0c0;
+        }
+        
+        .wallpaper-presets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        
+        .wallpaper-preset {
+            height: 60px;
+            border: 2px outset #c0c0c0;
+            cursor: pointer;
+            border-radius: 4px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .wallpaper-preset:hover {
+            border: 2px inset #c0c0c0;
+        }
+        
+        .wallpaper-preset.selected {
+            border: 2px solid var(--dourado);
+            box-shadow: 0 0 4px var(--dourado);
+        }
+        
+        .personalization-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #808080;
+        }
+        
+        .personalization-button {
+            background: #d0d0d0;
+            border: 1px outset #d0d0d0;
+            padding: 6px 12px;
             cursor: pointer;
             font-size: 11px;
-            color: black;
         }
-
+        
+        .personalization-button:hover {
+            background: #e0e0e0;
+        }
+        
+        .personalization-button:active {
+            border: 1px inset #d0d0d0;
+        }
+        
+        .personalization-button.primary {
+            background: var(--azul-escuro);
+            color: white;
+        }
+        
+        .personalization-button.primary:hover {
+            background: #1a2a4a;
+        }
+        
+        /* Menu Iniciar - Estilo Windows ME */
+        .start-menu {
+            position: fixed;
+            bottom: 30px;
+            left: 4px;
+            width: 280px;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: rgba(255,255,255,0.8) rgba(0,0,0,0.5) rgba(0,0,0,0.5) rgba(255,255,255,0.8);
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+            z-index: 2500;
+            display: none;
+            max-height: 500px;
+            overflow-y: auto;
+            border-radius: 0;
+        }
+        
+        .start-menu.active {
+            display: block;
+        }
+        
+        @keyframes menuSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .start-menu-header {
+            background: var(--theme-window-header);
+            color: white;
+            padding: 12px 16px;
+            font-weight: bold;
+            font-size: 14px;
+            border-bottom: 2px solid #808080;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        }
+        
+        .start-menu-header .logo {
+            font-size: 20px;
+            filter: drop-shadow(0 0 5px var(--dourado));
+        }
+        
+        .start-menu-items {
+            background: #c0c0c0;
+            padding: 8px 0;
+        }
+        
+        .start-menu-item {
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: black;
+            transition: none;
+            position: relative;
+            height: 24px;
+        }
+        
         .start-menu-item:hover {
             background: #316AC5;
             color: white;
         }
-
+        
         .start-menu-item .icon {
-            margin-right: 8px;
             font-size: 16px;
+            min-width: 16px;
+            text-align: center;
         }
-
-        /* === JANELAS === */
-        .window {
+        
+        .start-menu-item .text {
+            flex: 1;
+            font-weight: normal;
+        }
+        
+        .start-menu-item.premium::after {
+            content: '►';
             position: absolute;
-            background: #c0c0c0;
-            border: 2px outset #c0c0c0;
-            min-width: 300px;
-            min-height: 200px;
-            z-index: 1500;
+            right: 8px;
+            font-size: 10px;
+            color: black;
         }
-
-        .window-header {
-            background: linear-gradient(90deg, #316AC5, #1e4176);
+        
+        .start-menu-item.premium:hover::after {
             color: white;
-            padding: 4px 8px;
+        }
+        
+        .start-menu-separator {
+            height: 1px;
+            background: #808080;
+            margin: 2px 4px;
+            box-shadow: 0 1px 0 #FFFFFF;
+        }
+        
+        .start-menu-footer {
+            background: #d0d0d0;
+            padding: 8px 16px;
+            border-top: 1px solid #808080;
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+        }
+        
+        /* Janelas - Estilo Windows ME */
+        .window {
+            position: fixed;
+            background: #c0c0c0;
+            border: 3px solid var(--azul-escuro);
+            min-width: 400px;
+            min-height: 300px;
+            z-index: 1500;
+            display: none;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+            border-radius: 0;
+        }
+        
+        .window.active {
+            display: block;
+        }
+        
+        .window.focused {
+            z-index: 1600;
+            border-color: var(--azul-escuro);
+        }
+        
+        .window:not(.focused) {
+            border-color: #808080;
+        }
+        
+        .window-header {
+            background: linear-gradient(90deg, var(--theme-window-header) 0%, #1a2a4a 100%);
+            color: white;
+            padding: 3px 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: move;
             font-size: 11px;
             font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            height: 20px;
         }
-
-        .window-controls button {
-            background: #c0c0c0;
-            border: 1px outset #c0c0c0;
+        
+        .window:not(.focused) .window-header {
+            background: linear-gradient(90deg, #808080 0%, #A0A0A0 100%);
+        }
+        
+        .window-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .window-controls {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .window-control {
             width: 16px;
             height: 14px;
-            font-size: 10px;
+            background: #c0c0c0;
+            border: 1px solid;
+            border-color: #FFFFFF #000000 #000000 #FFFFFF;
             cursor: pointer;
+            font-size: 9px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.8);
             margin-left: 2px;
         }
-
-        .window-controls button:hover {
-            background: #d0d0d0;
+        
+        .window-control:hover {
+            background: #E0E0E0;
         }
-
-        .window-controls button:active {
-            border: 1px inset #c0c0c0;
+        
+        .window-control:active {
+            border-color: #000000 #FFFFFF #FFFFFF #000000;
+            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.8);
+            padding-top: 1px;
+            padding-left: 1px;
         }
-
-        .window-content {
-            padding: 8px;
-            background: #c0c0c0;
-            color: black;
-            font-size: 11px;
-            height: calc(100% - 24px);
-            overflow-y: auto;
-        }
-
-        /* === VOLUME POPUP === */
-        .volume-popup {
-            position: fixed;
-            bottom: 50px;
-            right: 100px;
-            width: 200px;
-            background: #c0c0c0;
-            border: 2px outset #c0c0c0;
-            padding: 8px;
-            display: none;
-            z-index: 2000;
-        }
-
-        .volume-popup.show {
-            display: block;
-        }
-
-        .volume-control {
-            margin-bottom: 8px;
-        }
-
-        .volume-label {
-            font-size: 10px;
-            margin-bottom: 2px;
-            color: black;
-        }
-
-        .volume-slider {
-            width: 100%;
-            height: 4px;
-            background: #808080;
-            border: 1px inset #c0c0c0;
-        }
-
-        /* === NOTIFICAÇÕES === */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, var(--roxo-mistico), var(--vinho));
-            border: 2px solid var(--dourado);
-            border-radius: 8px;
-            padding: 12px;
+        
+        .window-control.close {
+            background: #ff6b6b;
             color: white;
-            max-width: 300px;
-            z-index: 3000;
-            animation: slideIn 0.3s ease-out;
+            border-color: #ff8888 #cc0000 #cc0000 #ff8888;
         }
-
-        .notification-title {
-            font-weight: bold;
-            margin-bottom: 4px;
-            color: var(--dourado);
+        
+        .window-control.close:hover {
+            background: #ff5252;
         }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-
-        /* === WALLPAPER SELECTOR === */
-        .wallpaper-selector {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #c0c0c0;
-            border: 2px outset #c0c0c0;
-            padding: 16px;
-            display: none;
-            z-index: 2500;
-            width: 400px;
-        }
-
-        .wallpaper-selector.show {
-            display: block;
-        }
-
-        .wallpaper-options {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin: 12px 0;
-        }
-
-        .wallpaper-option {
-            width: 80px;
-            height: 60px;
-            border: 2px solid #808080;
-            cursor: pointer;
-            border-radius: 4px;
+        
+        .window-content {
+            height: calc(100% - 24px);
+            overflow: hidden;
             position: relative;
         }
-
-        .wallpaper-option.selected {
-            border-color: var(--dourado);
-            box-shadow: 0 0 8px var(--dourado);
+        
+        .window-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
-
-        .wallpaper-option.mystic {
-            background: linear-gradient(135deg, var(--azul), #1a2a4a);
+        
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            font-size: 12px;
+            color: #666;
         }
-
-        .wallpaper-option.cosmic {
-            background: linear-gradient(135deg, #0f0f23, #2d1b69);
+        
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--azul-escuro);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 12px;
         }
-
-        .wallpaper-option.aurora {
-            background: linear-gradient(180deg, #001122, #003366);
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-
-        /* === SPARKLES === */
-        .sparkle {
-            position: fixed;
-            pointer-events: none;
-            z-index: 100;
-            animation: sparkle 3s linear infinite;
+        
+        .window-resize-handle {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            cursor: se-resize;
+            background: linear-gradient(-45deg, transparent 40%, #808080 40%, #808080 60%, transparent 60%);
         }
-
-        @keyframes sparkle {
-            0% { opacity: 0; transform: scale(0) rotate(0deg); }
-            50% { opacity: 1; transform: scale(1) rotate(180deg); }
-            100% { opacity: 0; transform: scale(0) rotate(360deg); }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fit, 60px);
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .desktop-icon .icon {
+                font-size: 24px;
+            }
+            
+            .desktop-icon .label {
+                font-size: 9px;
+            }
+            
+            .taskbar {
+                height: 36px;
+            }
+            
+            .desktop {
+                height: calc(100vh - 36px);
+            }
+            
+            .start-menu {
+                width: 280px;
+            }
+            
+            .personalization-dialog {
+                width: 90vw;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fit, 50px);
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .desktop-icon .icon {
+                font-size: 20px;
+            }
+            
+            .taskbar-right {
+                gap: 4px;
+            }
+            
+            .taskbar-widget {
+                padding: 2px 4px;
+                font-size: 9px;
+            }
+            
+            .start-menu {
+                width: 260px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- TELA DE BOOT -->
-    <div class="boot-screen" id="boot-screen">
-        <div class="boot-logo">🔮</div>
-        <div class="boot-title">MYSTICSOFT</div>
-        <div class="boot-subtitle">MILLENNIUM EDITION</div>
-        <div class="boot-info">
-            <div>Sistema Operacional Místico</div>
-            <div>Versão 2025.09.11 Build 2001</div>
-        </div>
-        <div class="boot-progress">
-            <div class="boot-progress-bar"></div>
-        </div>
-        <div class="boot-text">Inicializando sistema...</div>
-        <div class="boot-click">Clique para iniciar</div>
-        <div class="boot-footer">
-            Copyright © 2025 MysticSoft Corporation<br>
-            Todos os direitos reservados • Powered by Aurora Engine
+    <div class="desktop" id="desktop">
+        <div class="desktop-icons" id="desktopIcons">
+            <!-- Ícones serão gerados dinamicamente -->
         </div>
     </div>
-
-    <!-- DESKTOP -->
-    <div class="desktop wallpaper-mystic" id="desktop">
-        <div class="desktop-icons">
-            <div class="desktop-icon" data-app="astromagick">
-                <div class="icon">🔮</div>
-                <div class="label">AstroMágick</div>
-            </div>
-            <div class="desktop-icon" data-app="numerologia">
-                <div class="icon">🔢</div>
-                <div class="label">Numerologia</div>
-            </div>
-            <div class="desktop-icon" data-app="i-ching">
-                <div class="icon">☯️</div>
-                <div class="label">I Ching</div>
-            </div>
-            <div class="desktop-icon" data-app="runas">
-                <div class="icon">ᚱ</div>
-                <div class="label">Runas</div>
-            </div>
-            <div class="desktop-icon" data-app="cristaloterapia">
-                <div class="icon">💎</div>
-                <div class="label">Cristaloterapia</div>
-            </div>
-            <div class="desktop-icon" data-app="carta-natal">
-                <div class="icon">🌟</div>
-                <div class="label">Carta Natal</div>
-            </div>
-            <div class="desktop-icon" data-app="aurora-player">
-                <div class="icon">🎵</div>
-                <div class="label">Aurora Player</div>
-            </div>
-            <div class="desktop-icon" data-app="witch-tv">
-                <div class="icon">📺</div>
-                <div class="label">Witch.TV</div>
-            </div>
-            <div class="desktop-icon" data-app="afast">
-                <div class="icon">🛡️</div>
-                <div class="label">AFÁST!</div>
-            </div>
-            <div class="desktop-icon" data-app="taro">
-                <div class="icon">🃏</div>
-                <div class="label">Tarô Místico</div>
-            </div>
-            <div class="desktop-icon" data-app="biblioteca">
-                <div class="icon">📚</div>
-                <div class="label">Biblioteca</div>
-            </div>
-            <div class="desktop-icon" data-app="configuracoes">
-                <div class="icon">⚙️</div>
-                <div class="label">Configurações</div>
-            </div>
+    
+    <!-- Menu de Contexto -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" onclick="openPersonalization()">
+            <span>⚙️</span>
+            <span>Personalizar</span>
+        </div>
+        <div class="context-menu-separator"></div>
+        <div class="context-menu-item" onclick="refreshDesktop()">
+            <span>🔄</span>
+            <span>Atualizar</span>
+        </div>
+        <div class="context-menu-item" onclick="arrangeIcons()">
+            <span>📐</span>
+            <span>Organizar ícones</span>
         </div>
     </div>
-
-    <!-- TASKBAR -->
+    
+    <!-- Taskbar -->
     <div class="taskbar">
-        <button class="start-button" id="start-button">
-            <span style="color: var(--dourado);">⭐</span> Iniciar
+        <button class="start-button" onclick="toggleStartMenu()">
+            <span class="start-logo">🌟</span>
+            <span>Iniciar</span>
         </button>
         
-        <div class="taskbar-center"></div>
+        <div class="taskbar-items" id="taskbarItems">
+            <!-- Itens da taskbar serão adicionados dinamicamente -->
+        </div>
         
         <div class="taskbar-right">
-            <div class="astro-chips">
-                <div class="astro-chip" data-chip="moon" title="Lua Minguante - Liberação">🌖</div>
-                <div class="astro-chip critical" data-chip="mercury" title="Mercúrio Retrógrado - Cuidado">☿R</div>
-                <div class="astro-chip" data-chip="voc" title="Lua Fora de Curso até 23:45">VOC</div>
+            <!-- Widget Planetário -->
+            <div class="taskbar-widget" onclick="togglePlanetaryPopup()" title="Hora Planetária Atual">
+                <span class="planetary-symbol" id="planetarySymbol">☉</span>
+                <span id="planetaryName">Sol</span>
             </div>
             
-            <div class="volume-icon" id="volume-icon">🔊</div>
+            <!-- Relógio e Calendário -->
+            <div class="taskbar-widget" onclick="toggleCalendarPopup()" title="Calendário">
+                <span class="clock" id="clock">00:00</span>
+            </div>
             
-            <div class="clock" id="clock">
-                <div class="clock-time">20:30</div>
-                <div class="clock-date">11/09</div>
+            <!-- Notificações -->
+            <div class="notification-icon" onclick="toggleNotifications()" title="Central de Notificações">
+                🔔
+            </div>
+            
+            <!-- Volume -->
+            <div class="volume-icon" onclick="toggleVolumePopup()" title="Controle de Volume">
+                🔊
             </div>
         </div>
     </div>
-
-    <!-- MENU INICIAR -->
-    <div class="start-menu" id="start-menu">
+    
+    <!-- Menu Iniciar -->
+    <div class="start-menu" id="startMenu">
         <div class="start-menu-header">
-            🌟 Aurora OS • MysticSoft
+            <span class="logo">🌟</span>
+            <span>Aurora OS • MysticSoft</span>
         </div>
-        <div class="start-menu-items">
-            <div class="start-menu-item" data-app="astromagick">
-                <span class="icon">🔮</span>
-                <span>AstroMágick - Portal Astrológico</span>
+        <div class="start-menu-items" id="startMenuItems">
+            <!-- Itens do menu serão gerados dinamicamente -->
+        </div>
+        <div class="start-menu-separator"></div>
+        <div class="start-menu-footer">
+            Clique em qualquer item para abrir
+        </div>
+    </div>
+    
+    <!-- Popup do Calendário -->
+    <div class="popup calendar-popup" id="calendarPopup">
+        <div class="calendar-header">
+            <button class="calendar-nav" onclick="previousMonth()">◀</button>
+            <span id="calendarTitle">Janeiro 2024</span>
+            <button class="calendar-nav" onclick="nextMonth()">▶</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid">
+            <!-- Calendário será gerado dinamicamente -->
+        </div>
+    </div>
+    
+    <!-- Popup do Volume -->
+    <div class="popup volume-popup" id="volumePopup">
+        <div class="volume-control">
+            <div class="volume-label">Volume Principal</div>
+            <div class="volume-slider" onclick="setVolume(event, 'master')">
+                <div class="volume-fill" id="masterVolumeFill" style="width: 70%"></div>
+                <div class="volume-thumb" id="masterVolumeThumb" style="left: 70%"></div>
             </div>
-            <div class="start-menu-item" data-app="numerologia">
-                <span class="icon">🔢</span>
-                <span>Numerologia Avançada</span>
+        </div>
+        <div class="volume-control">
+            <div class="volume-label">Notificações</div>
+            <div class="volume-slider" onclick="setVolume(event, 'notifications')">
+                <div class="volume-fill" id="notificationsVolumeFill" style="width: 50%"></div>
+                <div class="volume-thumb" id="notificationsVolumeThumb" style="left: 50%"></div>
             </div>
-            <div class="start-menu-item" data-app="i-ching">
-                <span class="icon">☯️</span>
-                <span>I Ching - Oráculo Digital</span>
-            </div>
-            <div class="start-menu-item" data-app="runas">
-                <span class="icon">ᚱ</span>
-                <span>Runas Nórdicas</span>
-            </div>
-            <div class="start-menu-item" data-app="cristaloterapia">
-                <span class="icon">💎</span>
-                <span>Cristaloterapia Personalizada</span>
-            </div>
-            <div class="start-menu-item" data-app="carta-natal">
-                <span class="icon">🌟</span>
-                <span>Carta Natal</span>
-            </div>
-            <div class="start-menu-item" data-app="aurora-player">
-                <span class="icon">🎵</span>
-                <span>Aurora Player</span>
-            </div>
-            <div class="start-menu-item" data-app="witch-tv">
-                <span class="icon">📺</span>
-                <span>Witch.TV</span>
-            </div>
-            <div class="start-menu-item" data-app="taro">
-                <span class="icon">🃏</span>
-                <span>Tarô Místico</span>
-            </div>
-            <div class="start-menu-item" data-app="biblioteca">
-                <span class="icon">📚</span>
-                <span>Biblioteca</span>
-            </div>
-            <div class="start-menu-item" data-app="configuracoes">
-                <span class="icon">⚙️</span>
-                <span>Configurações</span>
+        </div>
+        <div class="volume-control">
+            <div class="volume-label">Sistema</div>
+            <div class="volume-slider" onclick="setVolume(event, 'system')">
+                <div class="volume-fill" id="systemVolumeFill" style="width: 60%"></div>
+                <div class="volume-thumb" id="systemVolumeThumb" style="left: 60%"></div>
             </div>
         </div>
     </div>
-
-    <!-- VOLUME POPUP -->
-    <div class="volume-popup" id="volume-popup">
-        <h3 style="margin-bottom: 8px; color: black;">🔊 Controles de Volume</h3>
-        <div class="volume-control">
-            <div class="volume-label">🎤 AFÁST! (Narradora)</div>
-            <input type="range" class="volume-slider" min="0" max="100" value="75" id="volume-afast">
-            <span id="volume-afast-value">75%</span>
+    
+    <!-- Popup Planetário -->
+    <div class="popup planetary-popup" id="planetaryPopup">
+        <div class="planetary-info">
+            <div class="planetary-current">
+                <span id="currentPlanetSymbol">☉</span>
+                <span id="currentPlanetName">Sol</span>
+            </div>
+            <div class="planetary-time" id="planetaryTime">
+                Hora 1 do Dia • 06:00 - 07:00
+            </div>
+            <div class="planetary-ruler">
+                Regente do Dia: <span id="dayRuler">Sol</span>
+            </div>
         </div>
-        <div class="volume-control">
-            <div class="volume-label">🔊 Sistema</div>
-            <input type="range" class="volume-slider" min="0" max="100" value="50" id="volume-system">
-            <span id="volume-system-value">50%</span>
-        </div>
-        <div style="margin-top: 8px;">
-            <button onclick="testAFAST()" style="padding: 4px 8px; margin-right: 4px;">Testar AFÁST!</button>
-            <button onclick="testSystem()" style="padding: 4px 8px;">Som Sistema</button>
+        <div style="font-size: 10px; color: #666; text-align: center;">
+            Sistema baseado nas horas planetárias tradicionais
         </div>
     </div>
-
-    <!-- WALLPAPER SELECTOR -->
-    <div class="wallpaper-selector" id="wallpaper-selector">
-        <h3 style="color: black; margin-bottom: 8px;">🖼️ Personalizar Papel de Parede</h3>
-        <div class="wallpaper-options">
-            <div class="wallpaper-option mystic selected" data-wallpaper="mystic" title="Místico"></div>
-            <div class="wallpaper-option cosmic" data-wallpaper="cosmic" title="Cósmico"></div>
-            <div class="wallpaper-option aurora" data-wallpaper="aurora" title="Aurora Boreal"></div>
-        </div>
-        <div style="text-align: center; margin-top: 12px;">
-            <button onclick="applyWallpaper()" style="padding: 6px 12px; margin-right: 8px;">Aplicar</button>
-            <button onclick="hideWallpaperSelector()" style="padding: 6px 12px;">Cancelar</button>
+    
+    <!-- Modal de Personalização -->
+    <div class="personalization-modal" id="personalizationModal">
+        <div class="personalization-dialog">
+            <div class="personalization-header">
+                <span>Personalização do Aurora OS</span>
+                <button class="personalization-close" onclick="closePersonalization()">×</button>
+            </div>
+            <div class="personalization-content">
+                <div class="personalization-section">
+                    <h3>Cores do Tema</h3>
+                    <div class="color-palette" id="colorPalette">
+                        <!-- Cores serão geradas dinamicamente -->
+                    </div>
+                </div>
+                
+                <div class="personalization-section">
+                    <h3>Papel de Parede</h3>
+                    <div class="wallpaper-section">
+                        <div class="wallpaper-upload">
+                            <input type="file" id="wallpaperUpload" accept="image/*" onchange="uploadWallpaper(event)">
+                        </div>
+                        <div class="wallpaper-presets" id="wallpaperPresets">
+                            <!-- Presets serão gerados dinamicamente -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="personalization-section">
+                    <h3>Configurações da Taskbar</h3>
+                    <label>
+                        <input type="checkbox" id="showPlanetaryWidget" checked onchange="togglePlanetaryWidget()">
+                        Mostrar widget planetário
+                    </label><br>
+                    <label>
+                        <input type="checkbox" id="showNotifications" checked onchange="toggleNotifications()">
+                        Mostrar notificações
+                    </label><br>
+                    <label>
+                        <input type="checkbox" id="showVolumeControl" checked onchange="toggleVolumeControl()">
+                        Mostrar controle de volume
+                    </label>
+                </div>
+                
+                <div class="personalization-buttons">
+                    <button class="personalization-button" onclick="resetPersonalization()">Restaurar Padrão</button>
+                    <button class="personalization-button primary" onclick="savePersonalization()">Aplicar</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Variáveis globais
-        let selectedWallpaper = 'mystic';
-        let auroraOS = null;
-
-        // Classe principal do Aurora OS
-        class AuroraOS {
-            constructor() {
-                this.volumes = {
-                    afast: 75,
-                    system: 50
-                };
-                this.afastEnabled = true;
-                this.init();
-            }
-
-            init() {
-                this.setupEventListeners();
-                this.updateClock();
-                setInterval(() => this.updateClock(), 1000);
-                
-                // Iniciar notificações AFÁST! após 5 segundos
-                setTimeout(() => {
-                    this.startAFASTNotifications();
-                }, 5000);
-            }
-
-            setupEventListeners() {
-                // Boot screen
-                const bootScreen = document.getElementById('boot-screen');
-                if (bootScreen) {
-                    bootScreen.addEventListener('click', () => this.startBoot());
-                }
-                
-                // Start button
-                const startButton = document.getElementById('start-button');
-                if (startButton) {
-                    startButton.addEventListener('click', () => this.toggleStartMenu());
-                }
-                
-                // Volume icon
-                const volumeIcon = document.getElementById('volume-icon');
-                if (volumeIcon) {
-                    volumeIcon.addEventListener('click', () => this.toggleVolumePopup());
-                }
-                
-                // Clock
-                const clock = document.getElementById('clock');
-                if (clock) {
-                    clock.addEventListener('click', () => this.showPlanetaryHour());
-                }
-                
-                // Desktop icons
-                document.querySelectorAll('.desktop-icon').forEach(icon => {
-                    icon.addEventListener('dblclick', () => {
-                        const appName = icon.dataset.app;
-                        this.openApp(appName);
-                    });
-                });
-                
-                // Menu items
-                document.querySelectorAll('.start-menu-item').forEach(item => {
-                    item.addEventListener('click', () => {
-                        const appName = item.dataset.app;
-                        this.openApp(appName);
-                        this.hideStartMenu();
-                    });
-                });
-                
-                // Astro chips
-                document.querySelectorAll('.astro-chip').forEach(chip => {
-                    chip.addEventListener('click', () => {
-                        const chipType = chip.dataset.chip;
-                        this.showChipInfo(chipType);
-                    });
-                });
-                
-                // Volume sliders
-                const volumeAfast = document.getElementById('volume-afast');
-                if (volumeAfast) {
-                    volumeAfast.addEventListener('input', (e) => {
-                        this.volumes.afast = e.target.value;
-                        const valueSpan = document.getElementById('volume-afast-value');
-                        if (valueSpan) {
-                            valueSpan.textContent = e.target.value + '%';
-                        }
-                        this.updateVolumeIcon();
-                    });
-                }
-                
-                const volumeSystem = document.getElementById('volume-system');
-                if (volumeSystem) {
-                    volumeSystem.addEventListener('input', (e) => {
-                        this.volumes.system = e.target.value;
-                        const valueSpan = document.getElementById('volume-system-value');
-                        if (valueSpan) {
-                            valueSpan.textContent = e.target.value + '%';
-                        }
-                        this.updateVolumeIcon();
-                    });
-                }
-                
-                // Wallpaper options
-                document.querySelectorAll('.wallpaper-option').forEach(option => {
-                    option.addEventListener('click', () => {
-                        document.querySelectorAll('.wallpaper-option').forEach(opt => opt.classList.remove('selected'));
-                        option.classList.add('selected');
-                        selectedWallpaper = option.dataset.wallpaper;
-                    });
-                });
-                
-                // Desktop right-click
-                const desktop = document.getElementById('desktop');
-                if (desktop) {
-                    desktop.addEventListener('contextmenu', (e) => {
-                        e.preventDefault();
-                        this.showWallpaperSelector();
-                    });
-                }
-                
-                // Click outside to close menus
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('.start-button') && !e.target.closest('.start-menu')) {
-                        this.hideStartMenu();
-                    }
-                    if (!e.target.closest('.volume-icon') && !e.target.closest('.volume-popup')) {
-                        this.hideVolumePopup();
-                    }
-                });
-            }
-
-            startBoot() {
-                const bootScreen = document.getElementById('boot-screen');
-                const desktop = document.getElementById('desktop');
-                
-                if (bootScreen && desktop) {
-                    bootScreen.style.animation = 'fadeOut 1s ease-out forwards';
-                    
-                    setTimeout(() => {
-                        bootScreen.style.display = 'none';
-                        desktop.classList.add('show');
-                        this.playBootComplete();
-                        this.showAFASTNotification('🌟 Sistema Iniciado', 'Aurora OS • MysticSoft carregado com sucesso!');
-                    }, 1000);
-                }
-            }
-
-            playBootComplete() {
-                try {
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.frequency.value = 800;
-                    oscillator.type = 'sine';
-                    gainNode.gain.value = (this.volumes.system / 100) * 0.2;
-                    
-                    oscillator.start();
-                    oscillator.stop(audioContext.currentTime + 0.5);
-                } catch (e) {
-                    console.log('Audio não disponível');
-                }
-            }
-
-            updateClock() {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('pt-BR', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                });
-                const dateString = now.toLocaleDateString('pt-BR', {
-                    day: '2-digit',
-                    month: '2-digit'
-                });
-                
-                const clockTime = document.querySelector('.clock-time');
-                const clockDate = document.querySelector('.clock-date');
-                
-                if (clockTime) clockTime.textContent = timeString;
-                if (clockDate) clockDate.textContent = dateString;
-            }
-
-            toggleStartMenu() {
-                const menu = document.getElementById('start-menu');
-                const button = document.getElementById('start-button');
-                
-                if (menu && button) {
-                    if (menu.classList.contains('show')) {
-                        this.hideStartMenu();
-                    } else {
-                        menu.classList.add('show');
-                        button.classList.add('active');
-                    }
-                }
-            }
-
-            hideStartMenu() {
-                const menu = document.getElementById('start-menu');
-                const button = document.getElementById('start-button');
-                
-                if (menu) menu.classList.remove('show');
-                if (button) button.classList.remove('active');
-            }
-
-            toggleVolumePopup() {
-                const popup = document.getElementById('volume-popup');
-                if (popup) {
-                    popup.classList.toggle('show');
-                }
-            }
-
-            hideVolumePopup() {
-                const popup = document.getElementById('volume-popup');
-                if (popup) {
-                    popup.classList.remove('show');
-                }
-            }
-
-            updateVolumeIcon() {
-                const icon = document.getElementById('volume-icon');
-                if (icon) {
-                    const maxVolume = Math.max(this.volumes.afast, this.volumes.system);
-                    
-                    if (maxVolume === 0) {
-                        icon.textContent = '🔇';
-                    } else if (maxVolume < 30) {
-                        icon.textContent = '🔈';
-                    } else if (maxVolume < 70) {
-                        icon.textContent = '🔉';
-                    } else {
-                        icon.textContent = '🔊';
-                    }
-                }
-            }
-
-            showPlanetaryHour() {
-                this.showAFASTNotification('☉ Hora Planetária', 'Hora do Sol - Ideal para liderança, criatividade e novos projetos. Tempo restante: 58:42');
-            }
-
-            showChipInfo(chipType) {
-                const chipData = {
-                    'moon': {
-                        title: '🌖 Lua Minguante',
-                        message: 'Fase de liberação e limpeza energética. Ideal para banhos de descarrego e meditação.'
-                    },
-                    'mercury': {
-                        title: '☿ Mercúrio Retrógrado',
-                        message: 'Período de cautela com comunicação, tecnologia e viagens. Revise contratos e faça backup.'
-                    },
-                    'voc': {
-                        title: '🌙 Lua Fora de Curso',
-                        message: 'Evite decisões importantes até 23:45. Momento para reflexão e planejamento.'
-                    }
-                };
-                
-                const data = chipData[chipType];
-                if (data) {
-                    this.showAFASTNotification(data.title, data.message);
-                }
-            }
-
-            openApp(appName) {
-                console.log('Abrindo aplicação:', appName);
-                
-                const appTitles = {
-                    'astromagick': '🔮 AstroMágick - Portal Astrológico',
-                    'numerologia': '🔢 Numerologia Avançada',
-                    'i-ching': '☯️ I Ching - Oráculo Digital',
-                    'runas': 'ᚱ Runas Nórdicas',
-                    'cristaloterapia': '💎 Cristaloterapia Personalizada',
-                    'carta-natal': '🌟 Carta Natal Completa',
-                    'aurora-player': '🎵 Aurora Player',
-                    'witch-tv': '📺 Witch.TV',
-                    'afast': '🛡️ AFÁST! - Sistema de Proteção',
-                    'taro': '🃏 Tarô Místico',
-                    'biblioteca': '📚 Biblioteca Mística',
-                    'configuracoes': '⚙️ Configurações do Sistema'
-                };
-                
-                const title = appTitles[appName] || appName;
-                this.createWindow(title, this.getAppContent(appName));
-                this.showAFASTNotification('🚀 Aplicação Aberta', `${title} foi iniciada com sucesso!`);
-            }
-
-            getAppContent(appName) {
-                const contents = {
-                    'astromagick': `
-                        <h2>🔮 Portal Astrológico AstroMágick</h2>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
-                            <div style="background: #e0e0e0; padding: 10px; border: 1px inset #c0c0c0;">
-                                <h3>🌙 Fases Lunares</h3>
-                                <p><strong>Lua Minguante</strong></p>
-                                <small>Liberação e limpeza</small>
-                            </div>
-                            <div style="background: #e0e0e0; padding: 10px; border: 1px inset #c0c0c0;">
-                                <h3>☿ Mercúrio Retrógrado</h3>
-                                <p><strong>Até 15/09</strong></p>
-                                <small>Cuidado com comunicação</small>
-                            </div>
-                            <div style="background: #e0e0e0; padding: 10px; border: 1px inset #c0c0c0;">
-                                <h3>🌙 Lua Fora de Curso</h3>
-                                <p><strong>Até 23:45</strong></p>
-                                <small>Evite decisões</small>
-                            </div>
-                            <div style="background: #e0e0e0; padding: 10px; border: 1px inset #c0c0c0;">
-                                <h3>☉ Hora Planetária</h3>
-                                <p><strong>Sol</strong></p>
-                                <small>Liderança e criatividade</small>
-                            </div>
-                        </div>
-                    `,
-                    'aurora-player': `
-                        <h2>🎵 Aurora Player</h2>
-                        <div style="text-align: center; margin: 20px 0;">
-                            <div style="margin-bottom: 15px;">
-                                <h3>🎶 Tocando Agora</h3>
-                                <p style="font-size: 14px; color: #333;">Música Cósmica Relaxante</p>
-                                <small>Aurora Sounds Collection</small>
-                            </div>
-                            <div style="margin: 15px 0;">
-                                <button onclick="alert('⏮️ Faixa anterior')" style="margin: 0 5px; padding: 8px;">⏮️</button>
-                                <button onclick="this.textContent = this.textContent === '▶️' ? '⏸️' : '▶️'" style="margin: 0 5px; padding: 8px 12px; font-size: 16px;">▶️</button>
-                                <button onclick="alert('⏭️ Próxima faixa')" style="margin: 0 5px; padding: 8px;">⏭️</button>
-                            </div>
-                            <div style="background: #808080; height: 4px; border-radius: 2px; margin: 15px 0;">
-                                <div style="background: #316AC5; height: 100%; width: 35%; border-radius: 2px;"></div>
-                            </div>
-                        </div>
-                    `,
-                    'taro': `
-                        <h2>🃏 Tarô Místico</h2>
-                        <div style="text-align: center; margin: 20px 0;">
-                            <p>Consulte as cartas sagradas para orientação</p>
-                            <button onclick="puxarCarta()" style="padding: 10px 20px; margin: 15px 0; background: #316AC5; color: white; border: none; cursor: pointer;">🔮 Puxar Carta</button>
-                            <div id="carta-resultado" style="display: none; margin-top: 15px; background: #e0e0e0; padding: 15px; border: 1px inset #c0c0c0;">
-                                <div style="font-size: 32px; margin: 10px 0;">🃏</div>
-                                <h3 id="carta-nome"></h3>
-                                <p id="carta-significado"></p>
-                            </div>
-                        </div>
-                    `
-                };
-                
-                return contents[appName] || `
-                    <h2>🔮 ${appName}</h2>
-                    <p>Aplicação em desenvolvimento...</p>
-                    <p>Em breve estará disponível!</p>
-                `;
-            }
-
-            createWindow(title, content) {
-                const windowId = `window-${Date.now()}`;
-                const windowElement = document.createElement('div');
-                windowElement.className = 'window';
-                windowElement.id = windowId;
-                windowElement.innerHTML = `
-                    <div class="window-header">
-                        <span class="window-title">${title}</span>
-                        <div class="window-controls">
-                            <button onclick="this.parentElement.parentElement.parentElement.style.display='none'">✕</button>
-                        </div>
-                    </div>
-                    <div class="window-content">
-                        ${content}
-                    </div>
-                `;
-                
-                // Posição aleatória
-                windowElement.style.left = Math.random() * 200 + 50 + 'px';
-                windowElement.style.top = Math.random() * 100 + 50 + 'px';
-                
-                const desktop = document.getElementById('desktop');
-                if (desktop) {
-                    desktop.appendChild(windowElement);
-                }
-                
-                // Tornar arrastável
-                this.makeDraggable(windowElement);
-            }
-
-            makeDraggable(element) {
-                const header = element.querySelector('.window-header');
-                if (!header) return;
-                
-                let isDragging = false;
-                let currentX;
-                let currentY;
-                let initialX;
-                let initialY;
-                let xOffset = 0;
-                let yOffset = 0;
-
-                header.addEventListener('mousedown', (e) => {
-                    initialX = e.clientX - xOffset;
-                    initialY = e.clientY - yOffset;
-
-                    if (e.target === header || e.target.classList.contains('window-title')) {
-                        isDragging = true;
-                    }
-                });
-
-                document.addEventListener('mousemove', (e) => {
-                    if (isDragging) {
-                        e.preventDefault();
-                        currentX = e.clientX - initialX;
-                        currentY = e.clientY - initialY;
-
-                        xOffset = currentX;
-                        yOffset = currentY;
-
-                        element.style.transform = `translate(${currentX}px, ${currentY}px)`;
-                    }
-                });
-
-                document.addEventListener('mouseup', () => {
-                    initialX = currentX;
-                    initialY = currentY;
-                    isDragging = false;
-                });
-            }
-
-            startAFASTNotifications() {
-                // Primeira notificação
-                this.showAFASTNotification('🛡️ AFÁST! Ativo', 'Sistema de proteção energética iniciado com sucesso!');
-                
-                // Notificações periódicas
-                setInterval(() => {
-                    const notifications = [
-                        { title: '🌙 Alerta Lunar', message: 'Lua Minguante favorece limpeza energética e liberação.' },
-                        { title: '☿ Mercúrio Retrógrado', message: 'Cuidado com comunicações e tecnologia até 15/09.' },
-                        { title: '🛡️ Proteção Ativa', message: 'Energias negativas neutralizadas pelo sistema AFÁST!' },
-                        { title: '🌙 Lua Fora de Curso', message: 'Evite decisões importantes até 23:45.' }
-                    ];
-                    
-                    const notification = notifications[Math.floor(Math.random() * notifications.length)];
-                    this.showAFASTNotification(notification.title, notification.message);
-                }, 30000); // A cada 30 segundos
-            }
-
-            showAFASTNotification(title, message) {
-                // Criar notificação visual
-                const notification = document.createElement('div');
-                notification.className = 'notification';
-                notification.innerHTML = `
-                    <div class="notification-title">${title}</div>
-                    <div>${message}</div>
-                `;
-                document.body.appendChild(notification);
-
-                // Síntese de voz em português
-                if ('speechSynthesis' in window && this.afastEnabled) {
-                    const utterance = new SpeechSynthesisUtterance(message);
-                    utterance.lang = 'pt-BR';
-                    utterance.rate = 0.9;
-                    utterance.pitch = 1.1;
-                    utterance.volume = this.volumes.afast / 100;
-                    
-                    // Tentar usar voz feminina
-                    const voices = speechSynthesis.getVoices();
-                    const femaleVoice = voices.find(voice => 
-                        voice.lang.includes('pt') && 
-                        (voice.name.toLowerCase().includes('female') || 
-                         voice.name.toLowerCase().includes('feminina') || 
-                         voice.name.toLowerCase().includes('woman'))
-                    );
-                    
-                    if (femaleVoice) {
-                        utterance.voice = femaleVoice;
-                    }
-                    
-                    speechSynthesis.speak(utterance);
-                }
-
-                // Remover após 4 segundos
-                setTimeout(() => {
-                    notification.style.animation = 'slideOut 0.3s ease-in';
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            notification.parentNode.removeChild(notification);
-                        }
-                    }, 300);
-                }, 4000);
-            }
-
-            showWallpaperSelector() {
-                const selector = document.getElementById('wallpaper-selector');
-                if (selector) {
-                    selector.classList.add('show');
-                }
-            }
-        }
-
-        // Funções globais
-        function testAFAST() {
-            if (auroraOS) {
-                auroraOS.showAFASTNotification('🧪 Teste AFÁST!', 'Sistema de proteção funcionando perfeitamente!');
-            }
-        }
-
-        function testSystem() {
-            try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.value = 1000;
-                oscillator.type = 'square';
-                gainNode.gain.value = 0.1;
-                
-                oscillator.start();
-                oscillator.stop(audioContext.currentTime + 0.2);
-            } catch (e) {
-                alert('🔊 Beep! (Audio não disponível)');
-            }
-        }
-
-        function applyWallpaper() {
-            const desktop = document.getElementById('desktop');
-            if (desktop) {
-                desktop.classList.remove('wallpaper-mystic', 'wallpaper-cosmic', 'wallpaper-aurora');
-                desktop.classList.add(`wallpaper-${selectedWallpaper}`);
-                
-                localStorage.setItem('aurora-wallpaper', selectedWallpaper);
-                
-                if (auroraOS) {
-                    const wallpaperNames = {
-                        'mystic': 'Místico',
-                        'cosmic': 'Cósmico',
-                        'aurora': 'Aurora Boreal'
-                    };
-                    auroraOS.showAFASTNotification('🖼️ Wallpaper Alterado', 
-                        `Papel de parede "${wallpaperNames[selectedWallpaper]}" aplicado com sucesso!`);
-                }
-            }
+        // Configuração dos sites/aplicativos
+        const sitesConfig = [
+            // Sites básicos
+            { id: 'google', name: 'Google', url: 'https://google.com', icon: '🔍', premium: false },
+            { id: 'youtube', name: 'YouTube', url: 'https://youtube.com', icon: '📺', premium: false },
+            { id: 'github', name: 'GitHub', url: 'https://github.com', icon: '💻', premium: false },
+            { id: 'spotify', name: 'Spotify', url: 'https://spotify.com', icon: '🎵', premium: false },
             
-            hideWallpaperSelector();
-        }
-
-        function hideWallpaperSelector() {
-            const selector = document.getElementById('wallpaper-selector');
-            if (selector) {
-                selector.classList.remove('show');
-            }
-        }
-
-        function createSparkles() {
-            setInterval(() => {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.textContent = '✨';
-                sparkle.style.left = Math.random() * window.innerWidth + 'px';
-                sparkle.style.top = Math.random() * window.innerHeight + 'px';
-                sparkle.style.fontSize = Math.random() * 20 + 10 + 'px';
-                
-                document.body.appendChild(sparkle);
-                
-                setTimeout(() => {
-                    if (sparkle.parentNode) {
-                        sparkle.parentNode.removeChild(sparkle);
-                    }
-                }, 3000);
-            }, 2000);
-        }
-
-        function puxarCarta() {
-            const cartas = [
-                { nome: 'O Louco', significado: 'Novos começos, espontaneidade, fé no desconhecido.' },
-                { nome: 'O Mago', significado: 'Manifestação, poder pessoal, recursos disponíveis.' },
-                { nome: 'A Sacerdotisa', significado: 'Intuição, mistério, conhecimento oculto.' },
-                { nome: 'O Imperador', significado: 'Autoridade, estrutura, controle.' },
-                { nome: 'A Força', significado: 'Coragem interior, paciência, compaixão.' }
-            ];
+            // Sites premium
+            { id: 'mysticsoft', name: 'MysticSoft Portal', url: 'https://wix.com', icon: '🌟', premium: true },
+            { id: 'loja-mistica', name: 'Loja Mística', url: 'https://wix.com', icon: '🛒', premium: true },
+            { id: 'tarot-online', name: 'Tarot Online', url: 'https://tarot.com', icon: '🔮', premium: true },
+            { id: 'portal-astrologico', name: 'Portal Astrológico', url: 'https://astro.com', icon: '⭐', premium: true },
             
-            const carta = cartas[Math.floor(Math.random() * cartas.length)];
-            const nomeElement = document.getElementById('carta-nome');
-            const significadoElement = document.getElementById('carta-significado');
-            const resultadoElement = document.getElementById('carta-resultado');
-            
-            if (nomeElement) nomeElement.textContent = carta.nome;
-            if (significadoElement) significadoElement.textContent = carta.significado;
-            if (resultadoElement) resultadoElement.style.display = 'block';
-        }
-
+            // Aplicativo local
+            { id: 'arquivos', name: 'Arquivos & Anotações', url: 'local://files', icon: '📁', premium: false }
+        ];
+        
+        // Configuração de cores
+        const colorThemes = [
+            { name: 'Aurora Original', primary: '#3e0a29', secondary: '#0b1836', accent: '#f0aa53' },
+            { name: 'Noite Cósmica', primary: '#1a1a2e', secondary: '#16213e', accent: '#e94560' },
+            { name: 'Rosa Místico', primary: '#8b1538', secondary: '#2d1b69', accent: '#f39c12' },
+            { name: 'Verde Floresta', primary: '#2d5016', secondary: '#1b4332', accent: '#95d5b2' },
+            { name: 'Azul Oceano', primary: '#023047', secondary: '#219ebc', accent: '#ffb703' },
+            { name: 'Roxo Imperial', primary: '#5a189a', secondary: '#240046', accent: '#ff006e' },
+            { name: 'Dourado Real', primary: '#b7410e', secondary: '#6f1d1b', accent: '#ffd60a' },
+            { name: 'Prata Lunar', primary: '#495057', secondary: '#212529', accent: '#adb5bd' }
+        ];
+        
+        // Presets de wallpaper
+        const wallpaperPresets = [
+            { name: 'Aurora Original', gradient: 'linear-gradient(135deg, #0b1836 0%, #3e0a29 100%)' },
+            { name: 'Noite Estrelada', gradient: 'linear-gradient(135deg, #000428 0%, #004e92 100%)' },
+            { name: 'Pôr do Sol', gradient: 'linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%)' },
+            { name: 'Floresta Mística', gradient: 'linear-gradient(135deg, #134e5e 0%, #71b280 100%)' },
+            { name: 'Oceano Profundo', gradient: 'linear-gradient(135deg, #667db6 0%, #0082c8 100%)' },
+            { name: 'Rosa Crepúsculo', gradient: 'linear-gradient(135deg, #8360c3 0%, #2ebf91 100%)' }
+        ];
+        
+        // Símbolos planetários
+        const planetarySymbols = {
+            'Sol': '☉',
+            'Lua': '☽',
+            'Marte': '♂',
+            'Mercúrio': '☿',
+            'Júpiter': '♃',
+            'Vênus': '♀',
+            'Saturno': '♄'
+        };
+        
+        // Ordem caldaica dos planetas
+        const chaldeanOrder = ['Saturno', 'Júpiter', 'Marte', 'Sol', 'Vênus', 'Mercúrio', 'Lua'];
+        const dayRulers = ['Sol', 'Lua', 'Marte', 'Mercúrio', 'Júpiter', 'Vênus', 'Saturno']; // Dom, Seg, Ter, Qua, Qui, Sex, Sáb
+        
+        // Estado do sistema
+        let currentTheme = 0;
+        let currentWallpaper = 0;
+        let openWindows = [];
+        let currentDate = new Date();
+        let currentPlanetaryHour = { planet: 'Sol', hour: 1, period: 'dia' };
+        
+        // Volumes do sistema
+        let volumes = {
+            master: 70,
+            notifications: 50,
+            system: 60
+        };
+        
         // Inicialização
-        document.addEventListener('DOMContentLoaded', () => {
-            auroraOS = new AuroraOS();
-            createSparkles();
+        document.addEventListener('DOMContentLoaded', function() {
+            generateDesktopIcons();
+            generateStartMenu();
+            generateColorPalette();
+            generateWallpaperPresets();
+            updateClock();
+            updatePlanetaryInfo();
+            loadPersonalization();
             
-            // Carregar wallpaper salvo
-            const savedWallpaper = localStorage.getItem('aurora-wallpaper') || 'mystic';
-            const desktop = document.getElementById('desktop');
-            if (desktop) {
-                desktop.classList.remove('wallpaper-mystic', 'wallpaper-cosmic', 'wallpaper-aurora');
-                desktop.classList.add(`wallpaper-${savedWallpaper}`);
+            // Atualiza relógio a cada segundo
+            setInterval(updateClock, 1000);
+            
+            // Atualiza informações planetárias a cada minuto
+            setInterval(updatePlanetaryInfo, 60000);
+            
+            // Event listeners
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            // Menu de contexto (botão direito)
+            document.addEventListener('contextmenu', function(e) {
+                if (e.target.closest('.desktop')) {
+                    e.preventDefault();
+                    showContextMenu(e.clientX, e.clientY);
+                }
+            });
+            
+            // Fechar menus ao clicar fora
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.context-menu')) {
+                    hideContextMenu();
+                }
+                if (!e.target.closest('.start-menu') && !e.target.closest('.start-button')) {
+                    hideStartMenu();
+                }
+                if (!e.target.closest('.popup')) {
+                    hideAllPopups();
+                }
+            });
+            
+            // Drag and drop para janelas
+            setupWindowDragging();
+        }
+        
+        function generateDesktopIcons() {
+            const container = document.getElementById('desktopIcons');
+            container.innerHTML = '';
+            
+            sitesConfig.forEach(site => {
+                const icon = document.createElement('div');
+                icon.className = `desktop-icon ${site.premium ? 'premium' : ''}`;
+                icon.onclick = () => openSite(site);
+                
+                icon.innerHTML = `
+                    <div class="icon">${site.icon}</div>
+                    <div class="label">${site.name}</div>
+                `;
+                
+                container.appendChild(icon);
+            });
+        }
+        
+        function generateStartMenu() {
+            const container = document.getElementById('startMenuItems');
+            container.innerHTML = '';
+            
+            // Separar sites básicos e premium
+            const basicSites = sitesConfig.filter(site => !site.premium);
+            const premiumSites = sitesConfig.filter(site => site.premium);
+            
+            // Adicionar sites básicos
+            basicSites.forEach(site => {
+                const item = document.createElement('div');
+                item.className = 'start-menu-item';
+                item.onclick = () => openSite(site);
+                
+                item.innerHTML = `
+                    <div class="icon">${site.icon}</div>
+                    <div class="text">${site.name}</div>
+                `;
+                
+                container.appendChild(item);
+            });
+            
+            if (premiumSites.length > 0) {
+                const separator = document.createElement('div');
+                separator.className = 'start-menu-separator';
+                container.appendChild(separator);
+                
+                // Adicionar sites premium
+                premiumSites.forEach(site => {
+                    const item = document.createElement('div');
+                    item.className = 'start-menu-item premium';
+                    item.onclick = () => openSite(site);
+                    
+                    item.innerHTML = `
+                        <div class="icon">${site.icon}</div>
+                        <div class="text">${site.name}</div>
+                    `;
+                    
+                    container.appendChild(item);
+                });
+            }
+        }
+        
+        function generateColorPalette() {
+            const container = document.getElementById('colorPalette');
+            container.innerHTML = '';
+            
+            colorThemes.forEach((theme, index) => {
+                const colorOption = document.createElement('div');
+                colorOption.className = `color-option ${index === currentTheme ? 'selected' : ''}`;
+                colorOption.style.background = `linear-gradient(45deg, ${theme.primary}, ${theme.secondary})`;
+                colorOption.title = theme.name;
+                colorOption.onclick = () => selectColorTheme(index);
+                
+                container.appendChild(colorOption);
+            });
+        }
+        
+        function generateWallpaperPresets() {
+            const container = document.getElementById('wallpaperPresets');
+            container.innerHTML = '';
+            
+            wallpaperPresets.forEach((preset, index) => {
+                const wallpaperOption = document.createElement('div');
+                wallpaperOption.className = `wallpaper-preset ${index === currentWallpaper ? 'selected' : ''}`;
+                wallpaperOption.style.background = preset.gradient;
+                wallpaperOption.title = preset.name;
+                wallpaperOption.onclick = () => selectWallpaper(index);
+                
+                container.appendChild(wallpaperOption);
+            });
+        }
+        
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            document.getElementById('clock').textContent = timeString;
+        }
+        
+        function updatePlanetaryInfo() {
+            const now = new Date();
+            const dayOfWeek = now.getDay();
+            const hour = now.getHours();
+            
+            // Calcular hora planetária (simplificado)
+            const dayRuler = dayRulers[dayOfWeek];
+            const rulerIndex = chaldeanOrder.indexOf(dayRuler);
+            const planetIndex = (rulerIndex + hour) % 7;
+            const currentPlanet = chaldeanOrder[planetIndex];
+            
+            // Atualizar interface
+            const symbol = planetarySymbols[currentPlanet];
+            document.getElementById('planetarySymbol').textContent = symbol;
+            document.getElementById('planetaryName').textContent = currentPlanet;
+            document.getElementById('currentPlanetSymbol').textContent = symbol;
+            document.getElementById('currentPlanetName').textContent = currentPlanet;
+            document.getElementById('dayRuler').textContent = dayRuler;
+            
+            // Determinar período (dia/noite) - simplificado
+            const period = (hour >= 6 && hour < 18) ? 'dia' : 'noite';
+            const hourInPeriod = period === 'dia' ? hour - 5 : (hour >= 18 ? hour - 17 : hour + 7);
+            
+            document.getElementById('planetaryTime').textContent = 
+                `Hora ${hourInPeriod} do ${period === 'dia' ? 'Dia' : 'Noite'} • ${hour}:00 - ${(hour + 1) % 24}:00`;
+            
+            currentPlanetaryHour = { planet: currentPlanet, hour: hourInPeriod, period };
+        }
+        
+        function openSite(site) {
+            if (site.url === 'local://files') {
+                // Abrir aplicativo local de arquivos
+                openLocalFilesApp();
+            } else {
+                // Abrir site em janela
+                openWebsite(site);
+            }
+            hideStartMenu();
+        }
+        
+        function openWebsite(site) {
+            const windowId = `window-${site.id}`;
+            
+            // Verificar se janela já está aberta
+            if (document.getElementById(windowId)) {
+                focusWindow(windowId);
+                return;
             }
             
-            console.log('🌟 Aurora OS • MysticSoft Millennium Edition inicializado com sucesso!');
-        });
+            const window = document.createElement('div');
+            window.id = windowId;
+            window.className = 'window active focused';
+            window.style.left = `${100 + openWindows.length * 30}px`;
+            window.style.top = `${50 + openWindows.length * 30}px`;
+            window.style.width = '800px';
+            window.style.height = '600px';
+            
+            window.innerHTML = `
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>${site.icon}</span>
+                        <span>${site.name}</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-control" onclick="minimizeWindow('${windowId}')">_</div>
+                        <div class="window-control" onclick="maximizeWindow('${windowId}')">□</div>
+                        <div class="window-control close" onclick="closeWindow('${windowId}')">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="loading-overlay" id="loading-${site.id}">
+                        <div class="loading-spinner"></div>
+                        <div>Carregando ${site.name}...</div>
+                    </div>
+                    <iframe class="window-iframe" src="${site.url}" onload="hideLoading('${site.id}')"></iframe>
+                </div>
+                <div class="window-resize-handle"></div>
+            `;
+            
+            document.body.appendChild(window);
+            openWindows.push({ id: windowId, title: site.name, icon: site.icon });
+            updateTaskbar();
+            
+            // Remover loading após 3 segundos (fallback)
+            setTimeout(() => hideLoading(site.id), 3000);
+        }
+        
+        function openLocalFilesApp() {
+            const windowId = 'window-files';
+            
+            if (document.getElementById(windowId)) {
+                focusWindow(windowId);
+                return;
+            }
+            
+            const window = document.createElement('div');
+            window.id = windowId;
+            window.className = 'window active focused';
+            window.style.left = '150px';
+            window.style.top = '100px';
+            window.style.width = '700px';
+            window.style.height = '500px';
+            
+            window.innerHTML = `
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>📁</span>
+                        <span>Arquivos & Anotações</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-control" onclick="minimizeWindow('${windowId}')">_</div>
+                        <div class="window-control" onclick="maximizeWindow('${windowId}')">□</div>
+                        <div class="window-control close" onclick="closeWindow('${windowId}')">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div style="padding: 20px; text-align: center; color: #666;">
+                        <h3>Gerenciador de Arquivos</h3>
+                        <p>Sistema de arquivos em desenvolvimento...</p>
+                        <br>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px;">
+                            <div style="padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+                                <div style="font-size: 32px; margin-bottom: 10px;">📄</div>
+                                <div>Documentos</div>
+                            </div>
+                            <div style="padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+                                <div style="font-size: 32px; margin-bottom: 10px;">🖼️</div>
+                                <div>Imagens</div>
+                            </div>
+                            <div style="padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+                                <div style="font-size: 32px; margin-bottom: 10px;">🎵</div>
+                                <div>Áudios</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="window-resize-handle"></div>
+            `;
+            
+            document.body.appendChild(window);
+            openWindows.push({ id: windowId, title: 'Arquivos & Anotações', icon: '📁' });
+            updateTaskbar();
+        }
+        
+        function hideLoading(siteId) {
+            const loading = document.getElementById(`loading-${siteId}`);
+            if (loading) {
+                loading.style.display = 'none';
+            }
+        }
+        
+        function closeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.remove();
+                openWindows = openWindows.filter(w => w.id !== windowId);
+                updateTaskbar();
+            }
+        }
+        
+        function minimizeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.style.display = 'none';
+            }
+        }
+        
+        function maximizeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                if (window.style.width === '100vw') {
+                    // Restaurar
+                    window.style.width = '800px';
+                    window.style.height = '600px';
+                    window.style.left = '100px';
+                    window.style.top = '50px';
+                } else {
+                    // Maximizar
+                    window.style.width = '100vw';
+                    window.style.height = 'calc(100vh - 40px)';
+                    window.style.left = '0';
+                    window.style.top = '0';
+                }
+            }
+        }
+        
+        function focusWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.style.display = 'block';
+                window.style.zIndex = '1600';
+                
+                // Remover foco de outras janelas
+                document.querySelectorAll('.window').forEach(w => {
+                    if (w.id !== windowId) {
+                        w.style.zIndex = '1500';
+                    }
+                });
+            }
+        }
+        
+        function updateTaskbar() {
+            const container = document.getElementById('taskbarItems');
+            container.innerHTML = '';
+            
+            openWindows.forEach(window => {
+                const item = document.createElement('div');
+                item.className = 'taskbar-item';
+                item.onclick = () => focusWindow(window.id);
+                item.innerHTML = `${window.icon} ${window.title}`;
+                container.appendChild(item);
+            });
+        }
+        
+        function setupWindowDragging() {
+            // Implementação simplificada do drag de janelas
+            let isDragging = false;
+            let currentWindow = null;
+            let offset = { x: 0, y: 0 };
+            
+            document.addEventListener('mousedown', function(e) {
+                const header = e.target.closest('.window-header');
+                if (header && !e.target.closest('.window-control')) {
+                    isDragging = true;
+                    currentWindow = header.closest('.window');
+                    const rect = currentWindow.getBoundingClientRect();
+                    offset.x = e.clientX - rect.left;
+                    offset.y = e.clientY - rect.top;
+                    e.preventDefault();
+                }
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (isDragging && currentWindow) {
+                    currentWindow.style.left = (e.clientX - offset.x) + 'px';
+                    currentWindow.style.top = (e.clientY - offset.y) + 'px';
+                }
+            });
+            
+            document.addEventListener('mouseup', function() {
+                isDragging = false;
+                currentWindow = null;
+            });
+        }
+        
+        // Funções do menu de contexto
+        function showContextMenu(x, y) {
+            const menu = document.getElementById('contextMenu');
+            menu.style.display = 'block';
+            menu.style.left = x + 'px';
+            menu.style.top = y + 'px';
+        }
+        
+        function hideContextMenu() {
+            document.getElementById('contextMenu').style.display = 'none';
+        }
+        
+        function refreshDesktop() {
+            location.reload();
+            hideContextMenu();
+        }
+        
+        function arrangeIcons() {
+            // Reorganizar ícones automaticamente
+            generateDesktopIcons();
+            hideContextMenu();
+        }
+        
+        // Funções do menu iniciar
+        function toggleStartMenu() {
+            const menu = document.getElementById('startMenu');
+            menu.classList.toggle('active');
+        }
+        
+        function hideStartMenu() {
+            document.getElementById('startMenu').classList.remove('active');
+        }
+        
+        // Funções dos popups
+        function toggleCalendarPopup() {
+            const popup = document.getElementById('calendarPopup');
+            hideAllPopups();
+            popup.classList.toggle('active');
+            if (popup.classList.contains('active')) {
+                generateCalendar();
+            }
+        }
+        
+        function toggleVolumePopup() {
+            const popup = document.getElementById('volumePopup');
+            hideAllPopups();
+            popup.classList.toggle('active');
+        }
+        
+        function togglePlanetaryPopup() {
+            const popup = document.getElementById('planetaryPopup');
+            hideAllPopups();
+            popup.classList.toggle('active');
+        }
+        
+        function toggleNotifications() {
+            // Implementar sistema de notificações
+            console.log('Sistema de notificações em desenvolvimento');
+        }
+        
+        function hideAllPopups() {
+            document.querySelectorAll('.popup').forEach(popup => {
+                popup.classList.remove('active');
+            });
+        }
+        
+        // Funções do calendário
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const title = document.getElementById('calendarTitle');
+            
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            title.textContent = currentDate.toLocaleDateString('pt-BR', { 
+                month: 'long', 
+                year: 'numeric' 
+            });
+            
+            grid.innerHTML = '';
+            
+            // Cabeçalhos dos dias da semana
+            const dayHeaders = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            dayHeaders.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'calendar-day-header';
+                header.textContent = day;
+                grid.appendChild(header);
+            });
+            
+            // Primeiro dia do mês e último dia
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const today = new Date();
+            
+            // Dias vazios no início
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day other-month';
+                grid.appendChild(emptyDay);
+            }
+            
+            // Dias do mês
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                
+                // Marcar dia atual
+                if (year === today.getFullYear() && 
+                    month === today.getMonth() && 
+                    day === today.getDate()) {
+                    dayElement.classList.add('today');
+                }
+                
+                grid.appendChild(dayElement);
+            }
+        }
+        
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar();
+        }
+        
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar();
+        }
+        
+        // Funções de volume
+        function setVolume(event, type) {
+            const slider = event.currentTarget;
+            const rect = slider.getBoundingClientRect();
+            const percentage = ((event.clientX - rect.left) / rect.width) * 100;
+            const clampedPercentage = Math.max(0, Math.min(100, percentage));
+            
+            volumes[type] = clampedPercentage;
+            
+            const fill = document.getElementById(`${type}VolumeFill`);
+            const thumb = document.getElementById(`${type}VolumeThumb`);
+            
+            fill.style.width = clampedPercentage + '%';
+            thumb.style.left = clampedPercentage + '%';
+        }
+        
+        // Funções de personalização
+        function openPersonalization() {
+            document.getElementById('personalizationModal').classList.add('active');
+            hideContextMenu();
+        }
+        
+        function closePersonalization() {
+            document.getElementById('personalizationModal').classList.remove('active');
+        }
+        
+        function selectColorTheme(index) {
+            currentTheme = index;
+            applyColorTheme();
+            
+            // Atualizar seleção visual
+            document.querySelectorAll('.color-option').forEach((option, i) => {
+                option.classList.toggle('selected', i === index);
+            });
+        }
+        
+        function selectWallpaper(index) {
+            currentWallpaper = index;
+            applyWallpaper();
+            
+            // Atualizar seleção visual
+            document.querySelectorAll('.wallpaper-preset').forEach((preset, i) => {
+                preset.classList.toggle('selected', i === index);
+            });
+        }
+        
+        function applyColorTheme() {
+            const theme = colorThemes[currentTheme];
+            const root = document.documentElement;
+            
+            root.style.setProperty('--vinho', theme.primary);
+            root.style.setProperty('--azul-escuro', theme.secondary);
+            root.style.setProperty('--dourado', theme.accent);
+            root.style.setProperty('--theme-taskbar', theme.primary);
+            root.style.setProperty('--theme-start-btn', theme.primary);
+            root.style.setProperty('--theme-start-text', theme.accent);
+            root.style.setProperty('--theme-clock', theme.accent);
+            root.style.setProperty('--theme-window-header', theme.secondary);
+        }
+        
+        function applyWallpaper() {
+            const wallpaper = wallpaperPresets[currentWallpaper];
+            const root = document.documentElement;
+            
+            root.style.setProperty('--theme-bg', wallpaper.gradient);
+            document.body.style.background = wallpaper.gradient;
+            document.querySelector('.desktop').style.background = wallpaper.gradient;
+        }
+        
+        function uploadWallpaper(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageUrl = e.target.result;
+                    document.body.style.backgroundImage = `url(${imageUrl})`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                    document.querySelector('.desktop').style.backgroundImage = `url(${imageUrl})`;
+                    document.querySelector('.desktop').style.backgroundSize = 'cover';
+                    document.querySelector('.desktop').style.backgroundPosition = 'center';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function togglePlanetaryWidget() {
+            const widget = document.querySelector('.taskbar-widget');
+            const checkbox = document.getElementById('showPlanetaryWidget');
+            widget.style.display = checkbox.checked ? 'flex' : 'none';
+        }
+        
+        function toggleNotifications() {
+            const icon = document.querySelector('.notification-icon');
+            const checkbox = document.getElementById('showNotifications');
+            icon.style.display = checkbox.checked ? 'block' : 'none';
+        }
+        
+        function toggleVolumeControl() {
+            const icon = document.querySelector('.volume-icon');
+            const checkbox = document.getElementById('showVolumeControl');
+            icon.style.display = checkbox.checked ? 'block' : 'none';
+        }
+        
+        function savePersonalization() {
+            const settings = {
+                theme: currentTheme,
+                wallpaper: currentWallpaper,
+                showPlanetaryWidget: document.getElementById('showPlanetaryWidget').checked,
+                showNotifications: document.getElementById('showNotifications').checked,
+                showVolumeControl: document.getElementById('showVolumeControl').checked,
+                volumes: volumes
+            };
+            
+            localStorage.setItem('auroraOS_settings', JSON.stringify(settings));
+            closePersonalization();
+            
+            // Mostrar notificação de sucesso
+            console.log('Configurações salvas com sucesso!');
+        }
+        
+        function loadPersonalization() {
+            const saved = localStorage.getItem('auroraOS_settings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                
+                currentTheme = settings.theme || 0;
+                currentWallpaper = settings.wallpaper || 0;
+                volumes = settings.volumes || volumes;
+                
+                applyColorTheme();
+                applyWallpaper();
+                
+                // Aplicar configurações de widgets
+                if (settings.showPlanetaryWidget !== undefined) {
+                    document.getElementById('showPlanetaryWidget').checked = settings.showPlanetaryWidget;
+                    togglePlanetaryWidget();
+                }
+                
+                if (settings.showNotifications !== undefined) {
+                    document.getElementById('showNotifications').checked = settings.showNotifications;
+                    toggleNotifications();
+                }
+                
+                if (settings.showVolumeControl !== undefined) {
+                    document.getElementById('showVolumeControl').checked = settings.showVolumeControl;
+                    toggleVolumeControl();
+                }
+            }
+        }
+        
+        function resetPersonalization() {
+            localStorage.removeItem('auroraOS_settings');
+            currentTheme = 0;
+            currentWallpaper = 0;
+            volumes = { master: 70, notifications: 50, system: 60 };
+            
+            applyColorTheme();
+            applyWallpaper();
+            
+            // Resetar checkboxes
+            document.getElementById('showPlanetaryWidget').checked = true;
+            document.getElementById('showNotifications').checked = true;
+            document.getElementById('showVolumeControl').checked = true;
+            
+            togglePlanetaryWidget();
+            toggleNotifications();
+            toggleVolumeControl();
+            
+            // Atualizar seleções visuais
+            generateColorPalette();
+            generateWallpaperPresets();
+        }
     </script>
 </body>
 </html>
