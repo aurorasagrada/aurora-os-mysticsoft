@@ -549,128 +549,6 @@
             margin-bottom: 12px;
         }
         
-        /* Theme Color Picker Styles */
-        .theme-color-section {
-            margin-bottom: 12px;
-        }
-        
-        .theme-color-title {
-            font-size: 10px;
-            font-weight: bold;
-            color: var(--azul-escuro);
-            margin-bottom: 6px;
-            padding: 2px 4px;
-            background: #e0e0e0;
-            border: 1px solid;
-            border-color: #ffffff #808080 #808080 #ffffff;
-        }
-        
-        .theme-color-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 4px;
-            margin-bottom: 8px;
-        }
-        
-        .theme-color-option {
-            width: 32px;
-            height: 32px;
-            border: 2px solid;
-            border-color: #ffffff #000000 #000000 #ffffff;
-            cursor: pointer;
-            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.5);
-            position: relative;
-        }
-        
-        .theme-color-option:hover {
-            border-color: var(--dourado);
-            box-shadow: 0 0 4px var(--dourado);
-            transform: scale(1.1);
-        }
-        
-        .theme-color-option:active {
-            border-color: #000000 #ffffff #ffffff #000000;
-            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.5);
-        }
-        
-        .theme-color-option.selected {
-            border: 3px solid var(--dourado);
-            box-shadow: 0 0 6px var(--dourado);
-        }
-        
-        .theme-custom-color-section {
-            padding: 8px;
-            background: #e0e0e0;
-            border: 1px solid;
-            border-color: #808080 #ffffff #ffffff #808080;
-            margin-top: 8px;
-        }
-        
-        .theme-custom-color-label {
-            font-size: 10px;
-            font-weight: bold;
-            margin-bottom: 6px;
-            display: block;
-        }
-        
-        .theme-custom-color-input-group {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        
-        .theme-custom-color-input {
-            width: 60px;
-            height: 32px;
-            border: 2px solid;
-            border-color: #808080 #ffffff #ffffff #808080;
-            cursor: pointer;
-            padding: 2px;
-        }
-        
-        .theme-custom-color-input:hover {
-            border-color: var(--dourado);
-        }
-        
-        .theme-custom-color-hex {
-            flex: 1;
-            height: 24px;
-            border: 1px solid;
-            border-color: #808080 #ffffff #ffffff #808080;
-            padding: 4px 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 11px;
-            text-transform: uppercase;
-        }
-        
-        .theme-custom-color-apply {
-            height: 24px;
-            padding: 0 12px;
-            background: #c0c0c0;
-            border: 1px solid;
-            border-color: #ffffff #000000 #000000 #ffffff;
-            cursor: pointer;
-            font-size: 10px;
-            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.8);
-        }
-        
-        .theme-custom-color-apply:hover {
-            background: #e0e0e0;
-        }
-        
-        .theme-custom-color-apply:active {
-            border-color: #000000 #ffffff #ffffff #000000;
-            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.8);
-        }
-        
-        .theme-color-preview {
-            width: 32px;
-            height: 32px;
-            border: 2px solid;
-            border-color: #ffffff #000000 #000000 #ffffff;
-            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.5);
-        }
-        
         .color-option {
             width: 32px;
             height: 32px;
@@ -687,6 +565,93 @@
         .color-option.selected {
             border: 2px solid var(--dourado);
             box-shadow: 0 0 4px var(--dourado);
+        }
+        
+        /* Estilos do seletor de cores do tema */
+        .theme-color-section {
+            margin-bottom: 15px;
+        }
+        
+        .theme-color-section h4 {
+            margin: 10px 0 5px 0;
+            font-size: 11px;
+            font-weight: bold;
+            color: #000;
+        }
+        
+        .theme-color-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .theme-color-box {
+            width: 100%;
+            aspect-ratio: 1;
+            border: 2px outset #fff;
+            cursor: pointer;
+            transition: none;
+        }
+        
+        .theme-color-box:hover {
+            border: 2px inset #000;
+        }
+        
+        .theme-color-box:active {
+            border: 2px inset #808080;
+        }
+        
+        .theme-custom-color {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .theme-custom-color input[type="color"] {
+            width: 50px;
+            height: 30px;
+            border: 2px inset #fff;
+            cursor: pointer;
+        }
+        
+        .theme-custom-color input[type="text"] {
+            flex: 1;
+            padding: 4px;
+            border: 2px inset #fff;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .theme-color-preview {
+            width: 30px;
+            height: 30px;
+            border: 2px outset #fff;
+        }
+        
+        .theme-apply-btn {
+            padding: 4px 12px;
+            border: 2px outset #fff;
+            background: #c0c0c0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .theme-apply-btn:hover {
+            background: #d0d0d0;
+        }
+        
+        .theme-apply-btn:active {
+            border: 2px inset #808080;
+        }
+        
+        .theme-preview-box {
+            padding: 10px;
+            border: 2px inset #fff;
+            background: #fff;
+            margin-top: 10px;
+            text-align: center;
+            color: #666;
         }
         
         .wallpaper-section {
@@ -1213,65 +1178,20 @@
             <div class="personalization-content">
                 <div class="personalization-section">
                     <h3>🎨 Personalização de Cores</h3>
-                    <p style="font-size: 10px; color: #666; margin-bottom: 12px;">Escolha as cores para cada elemento do sistema</p>
+                    <p style="margin-bottom: 10px; color: #666;">Escolha as cores para cada elemento do sistema</p>
                     
-                    <!-- Seletor de Elemento -->
-                    <div class="theme-element-selector">
-                        <label style="font-weight: bold; font-size: 10px; display: block; margin-bottom: 6px;">Elemento a personalizar:</label>
-                        <select id="themeElementSelect" onchange="updateColorPreview()" style="width: 100%; padding: 4px; border: 1px inset #808080; font-size: 11px;">
-                            <option value="desktop">🖥️ Fundo do Desktop</option>
-                            <option value="taskbar">📊 Barra de Tarefas</option>
-                            <option value="start-btn">🌟 Botão Iniciar</option>
-                            <option value="window-header">🪟 Cabeçalho das Janelas</option>
-                            <option value="text-color">✏️ Cor do Texto (Destaque)</option>
-                            <option value="clock-color">🕐 Relógio e Widgets</option>
-                        </select>
-                    </div>
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Elemento a personalizar:</label>
+                    <select id="themeElement" style="width: 100%; padding: 5px; margin-bottom: 15px; border: 2px inset #fff; background: #fff;">
+                        <option value="desktop">🖥️ Fundo do Desktop</option>
+                        <option value="taskbar">📊 Barra de Tarefas</option>
+                        <option value="start-btn">🌟 Botão Iniciar</option>
+                        <option value="window-header">🪟 Cabeçalho das Janelas</option>
+                        <option value="text">✏️ Cor do Texto (Destaque)</option>
+                        <option value="clock">🕐 Relógio e Widgets</option>
+                    </select>
                     
-                    <!-- Seletor de Cores Completo -->
-                    <div class="theme-color-picker" style="margin-top: 12px;">
-                        <!-- Cores Místicas -->
-                        <div class="theme-color-section">
-                            <div class="theme-color-title">🔮 CORES MÍSTICAS DA AURORA SAGRADA</div>
-                            <div class="theme-color-grid" id="themeMysticColors">
-                                <!-- Gerado via JavaScript -->
-                            </div>
-                        </div>
-                        
-                        <!-- Cores Padrão -->
-                        <div class="theme-color-section">
-                            <div class="theme-color-title">🎨 CORES PADRÃO</div>
-                            <div class="theme-color-grid" id="themeStandardColors">
-                                <!-- Gerado via JavaScript -->
-                            </div>
-                        </div>
-                        
-                        <!-- Tons de Cinza -->
-                        <div class="theme-color-section">
-                            <div class="theme-color-title">⚫ TONS DE CINZA</div>
-                            <div class="theme-color-grid" id="themeGrayColors">
-                                <!-- Gerado via JavaScript -->
-                            </div>
-                        </div>
-                        
-                        <!-- Seletor Personalizado -->
-                        <div class="theme-custom-color-section">
-                            <label class="theme-custom-color-label">✨ COR PERSONALIZADA</label>
-                            <div class="theme-custom-color-input-group">
-                                <input type="color" id="themeCustomColorInput" class="theme-custom-color-input" value="#3e0a29">
-                                <input type="text" id="themeCustomColorHex" class="theme-custom-color-hex" value="#3E0A29" maxlength="7" placeholder="#000000">
-                                <div class="theme-color-preview" id="themeColorPreview" style="background: #3e0a29;"></div>
-                                <button class="theme-custom-color-apply" onclick="applyThemeCustomColor()">Aplicar</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Preview do Tema -->
-                    <div class="theme-preview-section" style="margin-top: 16px; padding: 12px; background: #e0e0e0; border: 1px inset #808080;">
-                        <div style="font-weight: bold; font-size: 10px; margin-bottom: 8px;">👁️ PREVIEW</div>
-                        <div id="themePreview" style="font-size: 10px; color: #333;">
-                            Selecione um elemento e uma cor para visualizar as mudanças
-                        </div>
+                    <div id="themeColorPicker">
+                        <!-- Seletor de cores será gerado dinamicamente -->
                     </div>
                 </div>
                 
@@ -1327,40 +1247,10 @@
             { id: 'portal-astrologico', name: 'Portal Astrológico', url: 'https://astro.com', icon: '⭐', premium: true },
             
             // Aplicativo local
-            { id: 'arquivos', name: 'Arquivos & Anotações', url: 'local://files', icon: '📁', premium: false },
-            
-            // Personalização
-            { id: 'personalizacao', name: 'Personalizar', url: 'local://personalization', icon: '🎨', premium: false }
+            { id: 'arquivos', name: 'Arquivos & Anotações', url: 'local://files', icon: '📁', premium: false }
         ];
         
         // Configuração de cores
-        // Cores para o seletor de tema
-        const themeMysticColors = [
-            '#3e0a29', '#f0aa53', '#0b1836', '#b2d1b1', '#f2eaff', '#8B0000',
-            '#4B0082', '#800080', '#FF1493', '#2F4F4F', '#8B4513', '#DAA520'
-        ];
-        
-        const themeStandardColors = [
-            '#FF0000', '#DC143C', '#B22222', '#8B0000', '#CD5C5C', '#F08080',
-            '#FF8C00', '#FF7F50', '#FF6347', '#FF4500', '#FFA500', '#FFD700',
-            '#FFFF00', '#FFD700', '#FFA500', '#F0E68C', '#FFFACD', '#FAFAD2',
-            '#00FF00', '#32CD32', '#228B22', '#008000', '#006400', '#90EE90',
-            '#0000FF', '#4169E1', '#1E90FF', '#00BFFF', '#87CEEB', '#87CEFA',
-            '#800080', '#9370DB', '#8A2BE2', '#9400D3', '#9932CC', '#BA55D3',
-            '#FF69B4', '#FF1493', '#C71585', '#DB7093', '#FFB6C1', '#FFC0CB',
-            '#8B4513', '#A0522D', '#D2691E', '#CD853F', '#DEB887', '#F4A460',
-            '#696969', '#808080', '#A9A9A9', '#C0C0C0', '#D3D3D3', '#DCDCDC'
-        ];
-        
-        const themeGrayColors = [
-            '#000000', '#1A1A1A', '#333333', '#4D4D4D', '#666666', '#808080',
-            '#999999', '#B3B3B3', '#CCCCCC', '#E0E0E0', '#F0F0F0', '#FFFFFF'
-        ];
-        
-        // Estado do seletor de cores do tema
-        let currentThemeElement = 'desktop';
-        let currentThemeColors = {};
-        
         const colorThemes = [
             { name: 'Aurora Original', primary: '#3e0a29', secondary: '#0b1836', accent: '#f0aa53' },
             { name: 'Noite Cósmica', primary: '#1a1a2e', secondary: '#16213e', accent: '#e94560' },
@@ -1519,18 +1409,141 @@
         }
         
         function generateColorPalette() {
-            const container = document.getElementById('colorPalette');
-            container.innerHTML = '';
+            const container = document.getElementById('themeColorPicker');
+            if (!container) return;
             
-            colorThemes.forEach((theme, index) => {
-                const colorOption = document.createElement('div');
-                colorOption.className = `color-option ${index === currentTheme ? 'selected' : ''}`;
-                colorOption.style.background = `linear-gradient(45deg, ${theme.primary}, ${theme.secondary})`;
-                colorOption.title = theme.name;
-                colorOption.onclick = () => selectColorTheme(index);
+            // Cores místicas da Aurora Sagrada
+            const mysticColors = [
+                '#3e0a29', '#f0aa53', '#0b1836', '#b2d1b1', '#f2eaff', '#8b0000',
+                '#4b0082', '#800080', '#c71585', '#2f4f4f', '#8b4513', '#daa520'
+            ];
+            
+            // Cores padrão organizadas por família
+            const standardColors = [
+                // Vermelhos
+                '#ff0000', '#ff4500', '#dc143c', '#8b0000', '#cd5c5c', '#f08080',
+                // Laranjas
+                '#ff8c00', '#ff6347', '#ff7f50', '#ffa500', '#ff8c00', '#ffd700',
+                // Amarelos
+                '#ffff00', '#ffd700', '#ffffe0', '#fffacd', '#fff8dc', '#f5deb3',
+                // Verdes
+                '#00ff00', '#32cd32', '#90ee90', '#98fb98', '#00fa9a', '#00ff7f',
+                // Azuis
+                '#0000ff', '#4169e1', '#6495ed', '#87ceeb', '#87cefa', '#add8e6',
+                // Roxos
+                '#8b00ff', '#9370db', '#ba55d3', '#da70d6', '#ee82ee', '#dda0dd',
+                // Rosas
+                '#ff1493', '#ff69b4', '#ffb6c1', '#ffc0cb', '#ffe4e1', '#fff0f5',
+                // Marrons
+                '#8b4513', '#a0522d', '#d2691e', '#cd853f', '#deb887', '#f5deb3',
+                // Cinzas
+                '#696969', '#808080', '#a9a9a9', '#c0c0c0', '#d3d3d3', '#dcdcdc'
+            ];
+            
+            // Tons de cinza
+            const grayScale = [
+                '#000000', '#1a1a1a', '#333333', '#4d4d4d', '#666666', '#808080',
+                '#999999', '#b3b3b3', '#cccccc', '#e6e6e6', '#f5f5f5', '#ffffff'
+            ];
+            
+            container.innerHTML = `
+                <div class="theme-color-section">
+                    <h4>🔮 CORES MÍSTICAS DA AURORA SAGRADA</h4>
+                    <div class="theme-color-grid">
+                        ${mysticColors.map(color => `
+                            <div class="theme-color-box" style="background: ${color}" 
+                                 onclick="applyThemeColor('${color}')" title="${color}"></div>
+                        `).join('')}
+                    </div>
+                </div>
                 
-                container.appendChild(colorOption);
-            });
+                <div class="theme-color-section">
+                    <h4>🎨 CORES PADRÃO</h4>
+                    <div class="theme-color-grid">
+                        ${standardColors.map(color => `
+                            <div class="theme-color-box" style="background: ${color}" 
+                                 onclick="applyThemeColor('${color}')" title="${color}"></div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="theme-color-section">
+                    <h4>⚫ TONS DE CINZA</h4>
+                    <div class="theme-color-grid">
+                        ${grayScale.map(color => `
+                            <div class="theme-color-box" style="background: ${color}" 
+                                 onclick="applyThemeColor('${color}')" title="${color}"></div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="theme-color-section">
+                    <h4>✨ COR PERSONALIZADA</h4>
+                    <div class="theme-custom-color">
+                        <input type="color" id="customColorPicker" value="#3e0a29" 
+                               onchange="updateColorPreview()">
+                        <input type="text" id="customColorHex" value="#3e0a29" 
+                               placeholder="#000000" maxlength="7" 
+                               oninput="updateColorPreview()">
+                        <div class="theme-color-preview" id="colorPreview" style="background: #3e0a29"></div>
+                        <button class="theme-apply-btn" onclick="applyThemeCustomColor()">Aplicar</button>
+                    </div>
+                </div>
+                
+                <div class="theme-preview-box" id="themePreview">
+                    Selecione um elemento e uma cor para visualizar as mudanças
+                </div>
+            `;
+        }
+        
+        function applyThemeColor(color) {
+            const element = document.getElementById('themeElement').value;
+            const root = document.documentElement;
+            
+            switch(element) {
+                case 'desktop':
+                    root.style.setProperty('--theme-bg', `linear-gradient(135deg, ${color} 0%, ${color} 100%)`);
+                    break;
+                case 'taskbar':
+                    root.style.setProperty('--theme-taskbar', color);
+                    break;
+                case 'start-btn':
+                    root.style.setProperty('--theme-start-btn', color);
+                    break;
+                case 'window-header':
+                    root.style.setProperty('--theme-window-header', color);
+                    break;
+                case 'text':
+                    root.style.setProperty('--theme-start-text', color);
+                    break;
+                case 'clock':
+                    root.style.setProperty('--theme-clock', color);
+                    break;
+            }
+            
+            document.getElementById('themePreview').textContent = `Cor ${color} aplicada ao elemento!`;
+        }
+        
+        function updateColorPreview() {
+            const picker = document.getElementById('customColorPicker');
+            const hex = document.getElementById('customColorHex');
+            const preview = document.getElementById('colorPreview');
+            
+            if (picker && hex && preview) {
+                const color = hex.value.startsWith('#') ? hex.value : picker.value;
+                preview.style.background = color;
+                picker.value = color;
+                hex.value = color;
+            }
+        }
+        
+        function applyThemeCustomColor() {
+            const color = document.getElementById('customColorHex').value;
+            if (color.match(/^#[0-9A-F]{6}$/i)) {
+                applyThemeColor(color);
+            } else {
+                alert('Código de cor inválido! Use o formato #000000');
+            }
         }
         
         function generateWallpaperPresets() {
@@ -1598,18 +1611,6 @@
         }
         
         function openWebsite(site) {
-            // Verificar se é a personalização
-            if (site.url === 'local://personalization') {
-                openPersonalization();
-                return;
-            }
-            
-            // Verificar se é arquivos locais
-            if (site.url === 'local://files') {
-                openLocalFilesApp();
-                return;
-            }
-            
             const windowId = `window-${site.id}`;
             
             // Verificar se janela já está aberta
@@ -1963,7 +1964,6 @@
         function openPersonalization() {
             document.getElementById('personalizationModal').classList.add('active');
             hideContextMenu();
-            generateThemeColorPicker();
         }
         
         function closePersonalization() {
@@ -2046,155 +2046,6 @@
             const icon = document.querySelector('.volume-icon');
             const checkbox = document.getElementById('showVolumeControl');
             icon.style.display = checkbox.checked ? 'block' : 'none';
-        }
-        
-        // Funções do seletor de cores do tema
-        function generateThemeColorPicker() {
-            // Cores Místicas
-            const mysticGrid = document.getElementById('themeMysticColors');
-            if (mysticGrid) {
-                mysticGrid.innerHTML = '';
-                themeMysticColors.forEach(color => {
-                    const button = document.createElement('div');
-                    button.className = 'theme-color-option';
-                    button.style.background = color;
-                    button.title = color.toUpperCase();
-                    button.onclick = () => applyThemeColor(color);
-                    mysticGrid.appendChild(button);
-                });
-            }
-            
-            // Cores Padrão
-            const standardGrid = document.getElementById('themeStandardColors');
-            if (standardGrid) {
-                standardGrid.innerHTML = '';
-                themeStandardColors.forEach(color => {
-                    const button = document.createElement('div');
-                    button.className = 'theme-color-option';
-                    button.style.background = color;
-                    button.title = color.toUpperCase();
-                    button.onclick = () => applyThemeColor(color);
-                    standardGrid.appendChild(button);
-                });
-            }
-            
-            // Tons de Cinza
-            const grayGrid = document.getElementById('themeGrayColors');
-            if (grayGrid) {
-                grayGrid.innerHTML = '';
-                themeGrayColors.forEach(color => {
-                    const button = document.createElement('div');
-                    button.className = 'theme-color-option';
-                    button.style.background = color;
-                    button.title = color.toUpperCase();
-                    button.onclick = () => applyThemeColor(color);
-                    grayGrid.appendChild(button);
-                });
-            }
-            
-            // Sincronizar color picker nativo com preview
-            const customInput = document.getElementById('themeCustomColorInput');
-            const hexInput = document.getElementById('themeCustomColorHex');
-            const preview = document.getElementById('themeColorPreview');
-            
-            if (customInput && hexInput && preview) {
-                customInput.addEventListener('input', function() {
-                    const color = this.value.toUpperCase();
-                    hexInput.value = color;
-                    preview.style.background = color;
-                });
-                
-                hexInput.addEventListener('input', function() {
-                    let value = this.value.trim();
-                    if (!value.startsWith('#')) {
-                        value = '#' + value;
-                    }
-                    if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
-                        customInput.value = value;
-                        preview.style.background = value;
-                    }
-                });
-            }
-        }
-        
-        function applyThemeColor(color) {
-            const element = document.getElementById('themeElementSelect').value;
-            currentThemeElement = element;
-            
-            const root = document.documentElement;
-            
-            switch(element) {
-                case 'desktop':
-                    root.style.setProperty('--theme-bg', `linear-gradient(135deg, ${color} 0%, #000000 100%)`);
-                    document.body.style.background = `linear-gradient(135deg, ${color} 0%, #000000 100%)`;
-                    document.querySelector('.desktop').style.background = `linear-gradient(135deg, ${color} 0%, #000000 100%)`;
-                    updatePreview(`Fundo do Desktop alterado para ${color}`);
-                    break;
-                case 'taskbar':
-                    root.style.setProperty('--theme-taskbar', color);
-                    root.style.setProperty('--vinho', color);
-                    updatePreview(`Barra de Tarefas alterada para ${color}`);
-                    break;
-                case 'start-btn':
-                    root.style.setProperty('--theme-start-btn', color);
-                    updatePreview(`Botão Iniciar alterado para ${color}`);
-                    break;
-                case 'window-header':
-                    root.style.setProperty('--theme-window-header', color);
-                    root.style.setProperty('--azul-escuro', color);
-                    updatePreview(`Cabeçalho das Janelas alterado para ${color}`);
-                    break;
-                case 'text-color':
-                    root.style.setProperty('--theme-start-text', color);
-                    updatePreview(`Cor do Texto (Destaque) alterada para ${color}`);
-                    break;
-                case 'clock-color':
-                    root.style.setProperty('--theme-clock', color);
-                    root.style.setProperty('--dourado', color);
-                    updatePreview(`Relógio e Widgets alterados para ${color}`);
-                    break;
-            }
-            
-            // Salvar no estado
-            currentThemeColors[element] = color;
-        }
-        
-        function applyThemeCustomColor() {
-            const hexInput = document.getElementById('themeCustomColorHex');
-            let color = hexInput.value.trim();
-            
-            if (!color.startsWith('#')) {
-                color = '#' + color;
-            }
-            
-            if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
-                applyThemeColor(color);
-            } else {
-                alert('⚠️ Cor inválida! Use o formato #000000');
-            }
-        }
-        
-        function updateColorPreview() {
-            const element = document.getElementById('themeElementSelect').value;
-            currentThemeElement = element;
-            
-            const elementNames = {
-                'desktop': '🖥️ Fundo do Desktop',
-                'taskbar': '📊 Barra de Tarefas',
-                'start-btn': '🌟 Botão Iniciar',
-                'window-header': '🪟 Cabeçalho das Janelas',
-                'text-color': '✏️ Cor do Texto (Destaque)',
-                'clock-color': '🕐 Relógio e Widgets'
-            };
-            
-            updatePreview(`Selecione uma cor para ${elementNames[element]}`);
-        }
-        
-        function updatePreview(message) {
-            const preview = document.getElementById('themePreview');
-            if (preview) {
-                preview.textContent = message;
-            }
         }
         
         function savePersonalization() {
