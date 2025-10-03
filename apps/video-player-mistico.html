@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player Místico • Aurora OS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+            font-size: 11px;
+            background: #c0c0c0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .player-container {
+            width: 100%;
+            height: 100vh;
+            background: #c0c0c0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Video Display */
+        .video-display {
+            background: #000;
+            margin: 8px;
+            border: 2px inset #808080;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .video-element {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .video-placeholder {
+            color: #3e0a29;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .video-placeholder-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .video-display:hover .video-overlay {
+            opacity: 1;
+        }
+        
+        .video-info {
+            color: #f0aa53;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .video-title {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .video-metadata {
+            font-size: 10px;
+            color: #b2d1b1;
+        }
+        
+        /* Barra de Progresso */
+        .progress-section {
+            margin: 8px;
+            padding: 8px;
+            background: #c0c0c0;
+            border: 2px inset #fff;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 20px;
+            background: #fff;
+            border: 2px inset #808080;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #0a246a, #1084d0);
+            width: 0%;
+            transition: width 0.1s linear;
+            position: relative;
+        }
+        
+        .progress-buffer {
+            position: absolute;
+            height: 100%;
+            background: rgba(10, 36, 106, 0.3);
+            width: 0%;
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4px;
+            font-size: 10px;
+            color: #000;
+        }
+        
+        /* Controles */
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: #c0c0c0;
+            border-top: 2px solid #fff;
+        }
+        
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px outset #fff;
+            background: #c0c0c0;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: none;
+            user-select: none;
+        }
+        
+        .control-btn:hover {
+            background: #d0d0d0;
+        }
+        
+        .control-btn:active {
+            border: 2px inset #808080;
+        }
+        
+        .control-btn.active {
+            background: #0a246a;
+            color: #f0aa53;
+            border: 2px inset #808080;
+        }
+        
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Volume e Velocidade */
+        .bottom-controls {
+            display: flex;
+            gap: 12px;
+            padding: 8px 12px;
+            background: #c0c0c0;
+            border-top: 2px solid #fff;
+        }
+        
+        .volume-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+        
+        .volume-icon {
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .volume-slider {
+            flex: 1;
+            height: 20px;
+            -webkit-appearance: none;
+            background: #fff;
+            border: 2px inset #808080;
+            outline: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            cursor: pointer;
+        }
+        
+        .volume-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            cursor: pointer;
+        }
+        
+        .volume-label {
+            min-width: 35px;
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        .speed-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .speed-label {
+            font-weight: bold;
+        }
+        
+        .speed-select {
+            padding: 2px 4px;
+            border: 2px inset #808080;
+            background: #fff;
+            font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+            font-size: 11px;
+        }
+        
+        /* Playlist */
+        .playlist-section {
+            margin: 8px;
+            border: 2px inset #fff;
+            background: #fff;
+            max-height: 180px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .playlist-section.show {
+            display: block;
+        }
+        
+        .playlist-header {
+            background: #0a246a;
+            color: #f0aa53;
+            padding: 4px 8px;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .playlist-actions {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .playlist-action-btn {
+            padding: 2px 8px;
+            border: 1px outset #fff;
+            background: #c0c0c0;
+            color: #000;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        
+        .playlist-action-btn:hover {
+            background: #d0d0d0;
+        }
+        
+        .playlist-action-btn:active {
+            border: 1px inset #808080;
+        }
+        
+        .playlist-item {
+            padding: 6px 8px;
+            cursor: pointer;
+            border-bottom: 1px solid #c0c0c0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .playlist-item:hover {
+            background: #e0e0e0;
+        }
+        
+        .playlist-item.active {
+            background: #0a246a;
+            color: #f0aa53;
+            font-weight: bold;
+        }
+        
+        .playlist-item-info {
+            flex: 1;
+        }
+        
+        .playlist-item-title {
+            font-weight: bold;
+            font-size: 11px;
+        }
+        
+        .playlist-item-meta {
+            font-size: 10px;
+            color: #666;
+        }
+        
+        .playlist-item.active .playlist-item-meta {
+            color: #b2d1b1;
+        }
+        
+        .playlist-item-duration {
+            font-size: 10px;
+            color: #666;
+            margin-left: 8px;
+        }
+        
+        .playlist-item.active .playlist-item-duration {
+            color: #f0aa53;
+        }
+        
+        .playlist-item-remove {
+            padding: 2px 6px;
+            border: 1px outset #fff;
+            background: #c0c0c0;
+            cursor: pointer;
+            font-size: 9px;
+            margin-left: 8px;
+        }
+        
+        .playlist-item-remove:hover {
+            background: #ff6b6b;
+            color: #fff;
+        }
+        
+        .playlist-empty {
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        
+        /* Status Bar */
+        .status-bar {
+            background: #c0c0c0;
+            border-top: 2px solid #fff;
+            padding: 4px 8px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .status-separator {
+            border-left: 2px solid #808080;
+            border-right: 2px solid #fff;
+            height: 12px;
+            margin: 0 4px;
+        }
+        
+        /* Scrollbar Windows ME */
+        ::-webkit-scrollbar {
+            width: 16px;
+            height: 16px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #c0c0c0;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d0d0d0;
+        }
+        
+        ::-webkit-scrollbar-button {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+        }
+        
+        /* Fullscreen */
+        .player-container.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+        }
+        
+        .player-container.fullscreen .video-display {
+            margin: 0;
+            border: none;
+        }
+        
+        /* Loading */
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #f0aa53;
+            font-size: 32px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container" id="playerContainer">
+        <!-- Video Display -->
+        <div class="video-display" id="videoDisplay">
+            <div class="video-placeholder" id="placeholder">
+                <div class="video-placeholder-icon">🎬</div>
+                <div>Nenhum vídeo carregado</div>
+                <div style="margin-top: 8px; font-size: 10px; opacity: 0.7;">
+                    Abra um vídeo do Explorador de Arquivos ou adicione à playlist
+                </div>
+            </div>
+            <video class="video-element" id="videoElement" style="display: none;"></video>
+            <div class="loading-spinner" id="loadingSpinner" style="display: none;">⏳</div>
+            <div class="video-overlay" id="videoOverlay">
+                <div class="video-info">
+                    <div class="video-title" id="videoTitle">Título do Vídeo</div>
+                    <div class="video-metadata" id="videoMetadata">Resolução • Duração • Tamanho</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-section">
+            <div class="progress-bar-container" id="progressContainer">
+                <div class="progress-buffer" id="progressBuffer"></div>
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="time-display">
+                <span id="currentTime">00:00</span>
+                <span id="totalTime">00:00</span>
+            </div>
+        </div>
+        
+        <!-- Main Controls -->
+        <div class="player-controls">
+            <button class="control-btn" id="prevBtn" title="Anterior (Ctrl+Left)" disabled>⏮</button>
+            <button class="control-btn" id="rewindBtn" title="Retroceder 10s (Left)">⏪</button>
+            <button class="control-btn" id="playPauseBtn" title="Reproduzir/Pausar (Space)" disabled>▶</button>
+            <button class="control-btn" id="forwardBtn" title="Avançar 10s (Right)">⏩</button>
+            <button class="control-btn" id="nextBtn" title="Próximo (Ctrl+Right)" disabled>⏭</button>
+            <div style="width: 2px; height: 30px; background: #808080; margin: 0 4px;"></div>
+            <button class="control-btn" id="stopBtn" title="Parar (S)" disabled>⏹</button>
+            <button class="control-btn" id="loopBtn" title="Repetir (L)">🔁</button>
+            <button class="control-btn" id="playlistBtn" title="Mostrar Playlist (P)">📋</button>
+            <button class="control-btn" id="fullscreenBtn" title="Tela Cheia (F)">⛶</button>
+        </div>
+        
+        <!-- Volume and Speed Controls -->
+        <div class="bottom-controls">
+            <div class="volume-section">
+                <span class="volume-icon" id="volumeIcon" title="Mudo (M)">🔊</span>
+                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
+                <span class="volume-label" id="volumeLabel">100%</span>
+            </div>
+            <div class="speed-section">
+                <span class="speed-label">Velocidade:</span>
+                <select class="speed-select" id="speedSelect">
+                    <option value="0.25">0.25x</option>
+                    <option value="0.5">0.5x</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2x</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Playlist -->
+        <div class="playlist-section" id="playlistSection">
+            <div class="playlist-header">
+                <span>📼 Playlist de Vídeos (<span id="playlistCount">0</span>)</span>
+                <div class="playlist-actions">
+                    <button class="playlist-action-btn" id="loadFromFolderBtn">📁 Carregar Pasta</button>
+                    <button class="playlist-action-btn" id="clearPlaylistBtn">🗑 Limpar</button>
+                </div>
+            </div>
+            <div id="playlistItems">
+                <div class="playlist-empty">
+                    Nenhum vídeo na playlist. Adicione vídeos do Explorador de Arquivos.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-item">
+                <span id="statusText">Pronto</span>
+            </div>
+            <div class="status-item">
+                <span id="videoFormat">-</span>
+                <span class="status-separator"></span>
+                <span id="videoResolution">-</span>
+                <span class="status-separator"></span>
+                <span id="playlistStatus">0 vídeos</span>
+            </div>
+        </div>
+    </div>
+    
+    <script src="filesystem-api.js"></script>
+    <script>
+        // ═══════════════════════════════════════════════════════════
+        // 🎬 VIDEO PLAYER MÍSTICO - AURORA OS
+        // ═══════════════════════════════════════════════════════════
+        
+        class VideoPlayerMistico {
+            constructor() {
+                this.video = document.getElementById('videoElement');
+                this.playlist = [];
+                this.currentIndex = -1;
+                this.isLooping = false;
+                this.isPlaylistVisible = false;
+                
+                this.initElements();
+                this.initEventListeners();
+                this.initMessageListener();
+                this.loadPlaylistFromStorage();
+            }
+            
+            initElements() {
+                // Display elements
+                this.placeholder = document.getElementById('placeholder');
+                this.videoOverlay = document.getElementById('videoOverlay');
+                this.videoTitle = document.getElementById('videoTitle');
+                this.videoMetadata = document.getElementById('videoMetadata');
+                this.loadingSpinner = document.getElementById('loadingSpinner');
+                
+                // Progress elements
+                this.progressContainer = document.getElementById('progressContainer');
+                this.progressBar = document.getElementById('progressBar');
+                this.progressBuffer = document.getElementById('progressBuffer');
+                this.currentTime = document.getElementById('currentTime');
+                this.totalTime = document.getElementById('totalTime');
+                
+                // Control buttons
+                this.playPauseBtn = document.getElementById('playPauseBtn');
+                this.stopBtn = document.getElementById('stopBtn');
+                this.prevBtn = document.getElementById('prevBtn');
+                this.nextBtn = document.getElementById('nextBtn');
+                this.rewindBtn = document.getElementById('rewindBtn');
+                this.forwardBtn = document.getElementById('forwardBtn');
+                this.loopBtn = document.getElementById('loopBtn');
+                this.playlistBtn = document.getElementById('playlistBtn');
+                this.fullscreenBtn = document.getElementById('fullscreenBtn');
+                
+                // Volume elements
+                this.volumeSlider = document.getElementById('volumeSlider');
+                this.volumeLabel = document.getElementById('volumeLabel');
+                this.volumeIcon = document.getElementById('volumeIcon');
+                
+                // Speed elements
+                this.speedSelect = document.getElementById('speedSelect');
+                
+                // Playlist elements
+                this.playlistSection = document.getElementById('playlistSection');
+                this.playlistItems = document.getElementById('playlistItems');
+                this.playlistCount = document.getElementById('playlistCount');
+                this.loadFromFolderBtn = document.getElementById('loadFromFolderBtn');
+                this.clearPlaylistBtn = document.getElementById('clearPlaylistBtn');
+                
+                // Status elements
+                this.statusText = document.getElementById('statusText');
+                this.videoFormat = document.getElementById('videoFormat');
+                this.videoResolution = document.getElementById('videoResolution');
+                this.playlistStatus = document.getElementById('playlistStatus');
+            }
+            
+            initEventListeners() {
+                // Video events
+                this.video.addEventListener('loadedmetadata', () => this.onVideoLoaded());
+                this.video.addEventListener('timeupdate', () => this.onTimeUpdate());
+                this.video.addEventListener('progress', () => this.onProgress());
+                this.video.addEventListener('ended', () => this.onVideoEnded());
+                this.video.addEventListener('play', () => this.onPlay());
+                this.video.addEventListener('pause', () => this.onPause());
+                this.video.addEventListener('waiting', () => this.showLoading());
+                this.video.addEventListener('canplay', () => this.hideLoading());
+                this.video.addEventListener('error', (e) => this.onVideoError(e));
+                
+                // Control buttons
+                this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+                this.stopBtn.addEventListener('click', () => this.stop());
+                this.prevBtn.addEventListener('click', () => this.playPrevious());
+                this.nextBtn.addEventListener('click', () => this.playNext());
+                this.rewindBtn.addEventListener('click', () => this.rewind());
+                this.forwardBtn.addEventListener('click', () => this.forward());
+                this.loopBtn.addEventListener('click', () => this.toggleLoop());
+                this.playlistBtn.addEventListener('click', () => this.togglePlaylist());
+                this.fullscreenBtn.addEventListener('click', () => this.toggleFullscreen());
+                
+                // Progress bar
+                this.progressContainer.addEventListener('click', (e) => this.seek(e));
+                
+                // Volume
+                this.volumeSlider.addEventListener('input', (e) => this.setVolume(e.target.value));
+                this.volumeIcon.addEventListener('click', () => this.toggleMute());
+                
+                // Speed
+                this.speedSelect.addEventListener('change', (e) => this.setSpeed(e.target.value));
+                
+                // Playlist actions
+                this.loadFromFolderBtn.addEventListener('click', () => this.loadFromFolder());
+                this.clearPlaylistBtn.addEventListener('click', () => this.clearPlaylist());
+                
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => this.handleKeyboard(e));
+                
+                // Video display click to play/pause
+                this.video.addEventListener('click', () => this.togglePlayPause());
+            }
+            
+            initMessageListener() {
+                window.addEventListener('message', (event) => {
+                    if (event.data.type === 'OPEN_VIDEO') {
+                        this.openVideo(event.data.file);
+                    } else if (event.data.type === 'ADD_TO_PLAYLIST') {
+                        this.addToPlaylist(event.data.file);
+                    }
+                });
+            }
+            
+            // ═══════════════════════════════════════════════════════════
+            // VIDEO PLAYBACK
+            // ═══════════════════════════════════════════════════════════
+            
+            openVideo(file) {
+                if (!file) return;
+                
+                // Add to playlist if not already there
+                const existingIndex = this.playlist.findIndex(v => v.id === file.id);
+                if (existingIndex === -1) {
+                    this.playlist.push(file);
+                    this.savePlaylistToStorage();
+                    this.renderPlaylist();
+                    this.currentIndex = this.playlist.length - 1;
+                } else {
+                    this.currentIndex = existingIndex;
+                }
+                
+                this.loadVideo(file);
+            }
+            
+            loadVideo(file) {
+                this.showLoading();
+                this.placeholder.style.display = 'none';
+                this.video.style.display = 'block';
+                
+                // Set video source
+                this.video.src = file.content; // Assuming content is a data URL or blob URL
+                this.video.load();
+                
+                // Update UI
+                this.videoTitle.textContent = file.name;
+                this.updateMetadata(file);
+                this.updateActivePlaylistItem();
+                this.enableControls();
+                
+                this.statusText.textContent = `Reproduzindo: ${file.name}`;
+            }
+            
+            togglePlayPause() {
+                if (this.video.paused) {
+                    this.video.play();
+                } else {
+                    this.video.pause();
+                }
+            }
+            
+            stop() {
+                this.video.pause();
+                this.video.currentTime = 0;
+                this.statusText.textContent = 'Parado';
+            }
+            
+            playPrevious() {
+                if (this.currentIndex > 0) {
+                    this.currentIndex--;
+                    this.loadVideo(this.playlist[this.currentIndex]);
+                    this.video.play();
+                }
+            }
+            
+            playNext() {
+                if (this.currentIndex < this.playlist.length - 1) {
+                    this.currentIndex++;
+                    this.loadVideo(this.playlist[this.currentIndex]);
+                    this.video.play();
+                }
+            }
+            
+            rewind() {
+                this.video.currentTime = Math.max(0, this.video.currentTime - 10);
+            }
+            
+            forward() {
+                this.video.currentTime = Math.min(this.video.duration, this.video.currentTime + 10);
+            }
+            
+            seek(event) {
+                const rect = this.progressContainer.getBoundingClientRect();
+                const pos = (event.clientX - rect.left) / rect.width;
+                this.video.currentTime = pos * this.video.duration;
+            }
+            
+            setVolume(value) {
+                this.video.volume = value / 100;
+                this.volumeLabel.textContent = value + '%';
+                this.updateVolumeIcon(value);
+            }
+            
+            toggleMute() {
+                this.video.muted = !this.video.muted;
+                if (this.video.muted) {
+                    this.volumeIcon.textContent = '🔇';
+                    this.volumeLabel.textContent = '0%';
+                } else {
+                    this.updateVolumeIcon(this.volumeSlider.value);
+                    this.volumeLabel.textContent = this.volumeSlider.value + '%';
+                }
+            }
+            
+            updateVolumeIcon(value) {
+                if (value == 0) {
+                    this.volumeIcon.textContent = '🔇';
+                } else if (value < 50) {
+                    this.volumeIcon.textContent = '🔉';
+                } else {
+                    this.volumeIcon.textContent = '🔊';
+                }
+            }
+            
+            setSpeed(value) {
+                this.video.playbackRate = parseFloat(value);
+            }
+            
+            toggleLoop() {
+                this.isLooping = !this.isLooping;
+                this.video.loop = this.isLooping;
+                this.loopBtn.classList.toggle('active', this.isLooping);
+                this.statusText.textContent = this.isLooping ? 'Repetição ativada' : 'Repetição desativada';
+            }
+            
+            toggleFullscreen() {
+                const container = document.getElementById('playerContainer');
+                if (!document.fullscreenElement) {
+                    container.requestFullscreen();
+                    container.classList.add('fullscreen');
+                    this.fullscreenBtn.textContent = '⛶';
+                } else {
+                    document.exitFullscreen();
+                    container.classList.remove('fullscreen');
+                    this.fullscreenBtn.textContent = '⛶';
+                }
+            }
+            
+            // ═══════════════════════════════════════════════════════════
+            // PLAYLIST MANAGEMENT
+            // ═══════════════════════════════════════════════════════════
+            
+            addToPlaylist(file) {
+                const exists = this.playlist.find(v => v.id === file.id);
+                if (!exists) {
+                    this.playlist.push(file);
+                    this.savePlaylistToStorage();
+                    this.renderPlaylist();
+                    this.statusText.textContent = `Adicionado: ${file.name}`;
+                }
+            }
+            
+            removeFromPlaylist(index) {
+                if (index === this.currentIndex) {
+                    this.stop();
+                    this.video.src = '';
+                    this.video.style.display = 'none';
+                    this.placeholder.style.display = 'block';
+                    this.disableControls();
+                }
+                
+                this.playlist.splice(index, 1);
+                
+                if (index < this.currentIndex) {
+                    this.currentIndex--;
+                } else if (index === this.currentIndex) {
+                    this.currentIndex = -1;
+                }
+                
+                this.savePlaylistToStorage();
+                this.renderPlaylist();
+            }
+            
+            clearPlaylist() {
+                if (confirm('Deseja limpar toda a playlist?')) {
+                    this.playlist = [];
+                    this.currentIndex = -1;
+                    this.stop();
+                    this.video.src = '';
+                    this.video.style.display = 'none';
+                    this.placeholder.style.display = 'block';
+                    this.disableControls();
+                    this.savePlaylistToStorage();
+                    this.renderPlaylist();
+                    this.statusText.textContent = 'Playlist limpa';
+                }
+            }
+            
+            loadFromFolder() {
+                // Request videos from file explorer
+                const videos = AuroraFileSystem.listFiles('my-videos', ['.mp4', '.webm', '.ogg', '.avi', '.mov']);
+                
+                if (videos.length === 0) {
+                    alert('Nenhum vídeo encontrado na pasta "Meus Vídeos".');
+                    return;
+                }
+                
+                videos.forEach(video => {
+                    const exists = this.playlist.find(v => v.id === video.id);
+                    if (!exists) {
+                        this.playlist.push(video);
+                    }
+                });
+                
+                this.savePlaylistToStorage();
+                this.renderPlaylist();
+                this.statusText.textContent = `${videos.length} vídeos carregados`;
+            }
+            
+            togglePlaylist() {
+                this.isPlaylistVisible = !this.isPlaylistVisible;
+                this.playlistSection.classList.toggle('show', this.isPlaylistVisible);
+                this.playlistBtn.classList.toggle('active', this.isPlaylistVisible);
+            }
+            
+            renderPlaylist() {
+                this.playlistCount.textContent = this.playlist.length;
+                this.playlistStatus.textContent = `${this.playlist.length} vídeos`;
+                
+                if (this.playlist.length === 0) {
+                    this.playlistItems.innerHTML = '<div class="playlist-empty">Nenhum vídeo na playlist. Adicione vídeos do Explorador de Arquivos.</div>';
+                    return;
+                }
+                
+                this.playlistItems.innerHTML = this.playlist.map((video, index) => `
+                    <div class="playlist-item ${index === this.currentIndex ? 'active' : ''}" 
+                         onclick="videoPlayer.playFromPlaylist(${index})">
+                        <div class="playlist-item-info">
+                            <div class="playlist-item-title">${video.name}</div>
+                            <div class="playlist-item-meta">${AuroraFileSystem.formatSize(video.size)}</div>
+                        </div>
+                        <span class="playlist-item-duration">--:--</span>
+                        <button class="playlist-item-remove" onclick="event.stopPropagation(); videoPlayer.removeFromPlaylist(${index})">✕</button>
+                    </div>
+                `).join('');
+            }
+            
+            playFromPlaylist(index) {
+                this.currentIndex = index;
+                this.loadVideo(this.playlist[index]);
+                this.video.play();
+            }
+            
+            updateActivePlaylistItem() {
+                const items = this.playlistItems.querySelectorAll('.playlist-item');
+                items.forEach((item, index) => {
+                    item.classList.toggle('active', index === this.currentIndex);
+                });
+            }
+            
+            savePlaylistToStorage() {
+                localStorage.setItem('videoPlayer_playlist', JSON.stringify(this.playlist));
+                localStorage.setItem('videoPlayer_currentIndex', this.currentIndex);
+            }
+            
+            loadPlaylistFromStorage() {
+                const stored = localStorage.getItem('videoPlayer_playlist');
+                if (stored) {
+                    this.playlist = JSON.parse(stored);
+                    this.currentIndex = parseInt(localStorage.getItem('videoPlayer_currentIndex') || '-1');
+                    this.renderPlaylist();
+                }
+            }
+            
+            // ═══════════════════════════════════════════════════════════
+            // EVENT HANDLERS
+            // ═══════════════════════════════════════════════════════════
+            
+            onVideoLoaded() {
+                this.hideLoading();
+                this.totalTime.textContent = this.formatTime(this.video.duration);
+                this.updateVideoInfo();
+            }
+            
+            onTimeUpdate() {
+                const progress = (this.video.currentTime / this.video.duration) * 100;
+                this.progressBar.style.width = progress + '%';
+                this.currentTime.textContent = this.formatTime(this.video.currentTime);
+            }
+            
+            onProgress() {
+                if (this.video.buffered.length > 0) {
+                    const buffered = (this.video.buffered.end(this.video.buffered.length - 1) / this.video.duration) * 100;
+                    this.progressBuffer.style.width = buffered + '%';
+                }
+            }
+            
+            onVideoEnded() {
+                if (!this.isLooping && this.currentIndex < this.playlist.length - 1) {
+                    this.playNext();
+                } else if (!this.isLooping) {
+                    this.statusText.textContent = 'Reprodução finalizada';
+                }
+            }
+            
+            onPlay() {
+                this.playPauseBtn.textContent = '⏸';
+                this.statusText.textContent = 'Reproduzindo';
+            }
+            
+            onPause() {
+                this.playPauseBtn.textContent = '▶';
+                this.statusText.textContent = 'Pausado';
+            }
+            
+            onVideoError(e) {
+                this.hideLoading();
+                alert('Erro ao carregar vídeo. Formato não suportado ou arquivo corrompido.');
+                this.statusText.textContent = 'Erro ao carregar vídeo';
+            }
+            
+            // ═══════════════════════════════════════════════════════════
+            // UI UPDATES
+            // ═══════════════════════════════════════════════════════════
+            
+            updateMetadata(file) {
+                const size = AuroraFileSystem.formatSize(file.size);
+                this.videoMetadata.textContent = `${file.extension.toUpperCase()} • ${size}`;
+            }
+            
+            updateVideoInfo() {
+                const width = this.video.videoWidth;
+                const height = this.video.videoHeight;
+                const duration = this.formatTime(this.video.duration);
+                
+                this.videoResolution.textContent = `${width}x${height}`;
+                this.videoFormat.textContent = this.playlist[this.currentIndex]?.extension.toUpperCase() || '-';
+            }
+            
+            enableControls() {
+                this.playPauseBtn.disabled = false;
+                this.stopBtn.disabled = false;
+                this.prevBtn.disabled = this.currentIndex <= 0;
+                this.nextBtn.disabled = this.currentIndex >= this.playlist.length - 1;
+            }
+            
+            disableControls() {
+                this.playPauseBtn.disabled = true;
+                this.stopBtn.disabled = true;
+                this.prevBtn.disabled = true;
+                this.nextBtn.disabled = true;
+            }
+            
+            showLoading() {
+                this.loadingSpinner.style.display = 'block';
+            }
+            
+            hideLoading() {
+                this.loadingSpinner.style.display = 'none';
+            }
+            
+            // ═══════════════════════════════════════════════════════════
+            // KEYBOARD SHORTCUTS
+            // ═══════════════════════════════════════════════════════════
+            
+            handleKeyboard(e) {
+                // Ignore if typing in input
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+                
+                switch(e.key.toLowerCase()) {
+                    case ' ':
+                        e.preventDefault();
+                        this.togglePlayPause();
+                        break;
+                    case 's':
+                        this.stop();
+                        break;
+                    case 'arrowleft':
+                        if (e.ctrlKey) {
+                            this.playPrevious();
+                        } else {
+                            this.rewind();
+                        }
+                        break;
+                    case 'arrowright':
+                        if (e.ctrlKey) {
+                            this.playNext();
+                        } else {
+                            this.forward();
+                        }
+                        break;
+                    case 'l':
+                        this.toggleLoop();
+                        break;
+                    case 'p':
+                        this.togglePlaylist();
+                        break;
+                    case 'f':
+                        this.toggleFullscreen();
+                        break;
+                    case 'm':
+                        this.toggleMute();
+                        break;
+                }
+            }
+            
+            // ═══════════════════════════════════════════════════════════
+            // UTILITIES
+            // ═══════════════════════════════════════════════════════════
+            
+            formatTime(seconds) {
+                if (isNaN(seconds)) return '00:00';
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+        }
+        
+        // Initialize player
+        let videoPlayer;
+        window.addEventListener('DOMContentLoaded', () => {
+            videoPlayer = new VideoPlayerMistico();
+        });
+    </script>
+</body>
+</html>

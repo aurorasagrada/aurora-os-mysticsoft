@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorador de Arquivos • Aurora OS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+            font-size: 11px;
+            background: #c0c0c0;
+            overflow: hidden;
+        }
+        
+        .explorer-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #c0c0c0;
+        }
+        
+        /* Barra de Ferramentas */
+        .toolbar {
+            background: #c0c0c0;
+            border-bottom: 2px solid #808080;
+            padding: 4px;
+            display: flex;
+            gap: 2px;
+            flex-wrap: wrap;
+        }
+        
+        .toolbar-btn {
+            padding: 4px 8px;
+            border: 2px outset #fff;
+            background: #c0c0c0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+        }
+        
+        .toolbar-btn:hover {
+            background: #d4d0c8;
+        }
+        
+        .toolbar-btn:active {
+            border: 2px inset #808080;
+        }
+        
+        .toolbar-separator {
+            width: 2px;
+            background: #808080;
+            margin: 0 4px;
+        }
+        
+        /* Barra de Endereço */
+        .address-bar {
+            background: #c0c0c0;
+            padding: 4px;
+            border-bottom: 2px solid #808080;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .address-label {
+            font-weight: bold;
+        }
+        
+        .address-input {
+            flex: 1;
+            padding: 4px;
+            border: 2px inset #808080;
+            background: #fff;
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+        }
+        
+        /* Container Principal */
+        .main-container {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        /* Painel Esquerdo - Árvore de Pastas */
+        .sidebar {
+            width: 200px;
+            background: #fff;
+            border-right: 2px solid #808080;
+            overflow-y: auto;
+            padding: 8px;
+        }
+        
+        .folder-tree-item {
+            padding: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            user-select: none;
+        }
+        
+        .folder-tree-item:hover {
+            background: #316ac5;
+            color: #fff;
+        }
+        
+        .folder-tree-item.selected {
+            background: #316ac5;
+            color: #fff;
+        }
+        
+        .folder-tree-item img {
+            width: 16px;
+            height: 16px;
+            image-rendering: pixelated;
+        }
+        
+        .folder-tree-children {
+            margin-left: 16px;
+        }
+        
+        /* Painel Direito - Conteúdo */
+        .content-area {
+            flex: 1;
+            background: #fff;
+            overflow-y: auto;
+            padding: 8px;
+            position: relative;
+        }
+        
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 16px;
+            padding: 8px;
+        }
+        
+        .file-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            user-select: none;
+        }
+        
+        .file-item:hover {
+            background: #e0e0ff;
+        }
+        
+        .file-item.selected {
+            background: #316ac5;
+            color: #fff;
+            border: 1px dotted #fff;
+        }
+        
+        .file-item img {
+            width: 48px;
+            height: 48px;
+            image-rendering: pixelated;
+            margin-bottom: 4px;
+        }
+        
+        .file-item.thumbnail img {
+            object-fit: cover;
+        }
+        
+        .file-name {
+            text-align: center;
+            word-wrap: break-word;
+            max-width: 80px;
+            font-size: 11px;
+        }
+        
+        .file-size {
+            font-size: 9px;
+            color: #666;
+            margin-top: 2px;
+        }
+        
+        .file-item.selected .file-size {
+            color: #fff;
+        }
+        
+        /* Lista Detalhada */
+        .file-list {
+            display: none;
+        }
+        
+        .file-list.active {
+            display: table;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .file-list-header {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            font-weight: bold;
+        }
+        
+        .file-list-header td {
+            padding: 4px 8px;
+            border-right: 2px solid #808080;
+        }
+        
+        .file-list-row {
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+        }
+        
+        .file-list-row:hover {
+            background: #e0e0ff;
+        }
+        
+        .file-list-row.selected {
+            background: #316ac5;
+            color: #fff;
+        }
+        
+        .file-list-row td {
+            padding: 4px 8px;
+        }
+        
+        /* Menu de Contexto */
+        .context-menu {
+            position: fixed;
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 10000;
+            min-width: 180px;
+        }
+        
+        .context-menu.active {
+            display: block;
+        }
+        
+        .context-menu-item {
+            padding: 4px 24px 4px 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .context-menu-item:hover {
+            background: #316ac5;
+            color: #fff;
+        }
+        
+        .context-menu-separator {
+            height: 2px;
+            background: #808080;
+            margin: 2px 0;
+        }
+        
+        /* Barra de Status */
+        .status-bar {
+            background: #c0c0c0;
+            border-top: 2px solid #fff;
+            padding: 4px 8px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+            min-width: 300px;
+            max-width: 500px;
+        }
+        
+        .modal-header {
+            background: linear-gradient(to right, #0a246a, #1084d0);
+            color: #fff;
+            padding: 4px 8px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 16px;
+        }
+        
+        .modal-footer {
+            padding: 8px 16px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            border-top: 2px solid #808080;
+        }
+        
+        .modal-btn {
+            padding: 4px 16px;
+            border: 2px outset #fff;
+            background: #c0c0c0;
+            cursor: pointer;
+            min-width: 75px;
+        }
+        
+        .modal-btn:active {
+            border: 2px inset #808080;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 4px;
+            border: 2px inset #808080;
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+        
+        /* Mensagem Vazia */
+        .empty-message {
+            text-align: center;
+            color: #808080;
+            padding: 40px;
+            font-size: 12px;
+        }
+        
+        /* Scrollbar Windows ME */
+        ::-webkit-scrollbar {
+            width: 16px;
+            height: 16px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #c0c0c0;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4d0c8;
+        }
+        
+        ::-webkit-scrollbar-button {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="explorer-container">
+        <!-- Barra de Ferramentas -->
+        <div class="toolbar">
+            <button class="toolbar-btn" onclick="goBack()" title="Voltar">
+                ◀ Voltar
+            </button>
+            <button class="toolbar-btn" onclick="goForward()" title="Avançar">
+                Avançar ▶
+            </button>
+            <button class="toolbar-btn" onclick="goUp()" title="Acima">
+                ⬆ Acima
+            </button>
+            <div class="toolbar-separator"></div>
+            <button class="toolbar-btn" onclick="createNewFolder()" title="Nova Pasta">
+                📁 Nova Pasta
+            </button>
+            <button class="toolbar-btn" onclick="uploadFiles()" title="Upload">
+                📤 Upload
+            </button>
+            <div class="toolbar-separator"></div>
+            <button class="toolbar-btn" onclick="copySelected()" title="Copiar">
+                📋 Copiar
+            </button>
+            <button class="toolbar-btn" onclick="cutSelected()" title="Recortar">
+                ✂️ Recortar
+            </button>
+            <button class="toolbar-btn" onclick="pasteClipboard()" title="Colar">
+                📄 Colar
+            </button>
+            <button class="toolbar-btn" onclick="deleteSelected()" title="Excluir">
+                🗑️ Excluir
+            </button>
+            <div class="toolbar-separator"></div>
+            <button class="toolbar-btn" onclick="toggleView()" title="Alternar Visualização">
+                👁️ Visualizar
+            </button>
+            <button class="toolbar-btn" onclick="showSearch()" title="Pesquisar">
+                🔍 Pesquisar
+            </button>
+        </div>
+        
+        <!-- Barra de Endereço -->
+        <div class="address-bar">
+            <span class="address-label">Endereço:</span>
+            <input type="text" class="address-input" id="addressBar" readonly>
+        </div>
+        
+        <!-- Container Principal -->
+        <div class="main-container">
+            <!-- Sidebar - Árvore de Pastas -->
+            <div class="sidebar" id="sidebar">
+                <!-- Será preenchido dinamicamente -->
+            </div>
+            
+            <!-- Área de Conteúdo -->
+            <div class="content-area" id="contentArea" oncontextmenu="showContextMenu(event)">
+                <div class="file-grid" id="fileGrid">
+                    <!-- Será preenchido dinamicamente -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Barra de Status -->
+        <div class="status-bar">
+            <span id="statusLeft">0 objetos</span>
+            <span id="statusRight">0 bytes</span>
+        </div>
+    </div>
+    
+    <!-- Menu de Contexto -->
+    <div class="context-menu" id="contextMenu">
+        <!-- Será preenchido dinamicamente -->
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="modalTitle">Título</span>
+                <button onclick="closeModal()" style="background:none;border:none;color:#fff;cursor:pointer;font-size:16px;">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Conteúdo dinâmico -->
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <!-- Botões dinâmicos -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="filesystem-api.js"></script>
+    <script>
+        // ═══════════════════════════════════════════════════════════
+        // 🎨 CONFIGURAÇÃO DE ÍCONES - COLE SEUS LINKS AQUI
+        // ═══════════════════════════════════════════════════════════
+        
+        const folderIcons = {
+            "root": "https://via.placeholder.com/48/0000FF/FFFFFF?text=PC",
+            "my-documents": "https://via.placeholder.com/48/FFD700/000000?text=Docs",
+            "my-pictures": "https://via.placeholder.com/48/FF69B4/FFFFFF?text=Img",
+            "my-music": "https://via.placeholder.com/48/9370DB/FFFFFF?text=Music",
+            "my-videos": "https://via.placeholder.com/48/FF4500/FFFFFF?text=Video",
+            "my-docs": "https://via.placeholder.com/48/32CD32/FFFFFF?text=Doc",
+            "trash": "https://via.placeholder.com/48/808080/FFFFFF?text=Trash",
+            "trash-full": "https://via.placeholder.com/48/FF0000/FFFFFF?text=Full",
+            "folder": "https://via.placeholder.com/48/FFD700/000000?text=Folder"
+        };
+        
+        const fileIcons = {
+            '.jpg': "https://via.placeholder.com/48/FF69B4/FFFFFF?text=JPG",
+            '.png': "https://via.placeholder.com/48/FF69B4/FFFFFF?text=PNG",
+            '.gif': "https://via.placeholder.com/48/FF69B4/FFFFFF?text=GIF",
+            '.mp3': "https://via.placeholder.com/48/9370DB/FFFFFF?text=MP3",
+            '.wav': "https://via.placeholder.com/48/9370DB/FFFFFF?text=WAV",
+            '.mp4': "https://via.placeholder.com/48/FF4500/FFFFFF?text=MP4",
+            '.avi': "https://via.placeholder.com/48/FF4500/FFFFFF?text=AVI",
+            '.txt': "https://via.placeholder.com/48/32CD32/FFFFFF?text=TXT",
+            '.pdf': "https://via.placeholder.com/48/FF0000/FFFFFF?text=PDF",
+            'default': "https://via.placeholder.com/48/808080/FFFFFF?text=File"
+        };
+        
+        // ═══════════════════════════════════════════════════════════
+        // 💾 SISTEMA DE ARQUIVOS
+        // ═══════════════════════════════════════════════════════════
+        
+        let fileSystem = null;
+        let currentFolder = 'my-documents';
+        let selectedItems = [];
+        let clipboard = null;
+        let viewMode = 'icons'; // icons, list
+        let history = [];
+        let historyIndex = -1;
+        
+        // Inicializar sistema de arquivos
+        function initFileSystem() {
+            const stored = localStorage.getItem('auroraOS_fileSystem');
+            
+            if (stored) {
+                fileSystem = JSON.parse(stored);
+            } else {
+                fileSystem = createDefaultFileSystem();
+                saveFileSystem();
+            }
+        }
+        
+        function createDefaultFileSystem() {
+            return {
+                folders: {
+                    "root": {
+                        id: "root",
+                        name: "Meu Computador",
+                        parent: null,
+                        children: ["my-documents", "trash"],
+                        files: [],
+                        special: true,
+                        created: new Date().toISOString()
+                    },
+                    "my-documents": {
+                        id: "my-documents",
+                        name: "Meus Documentos",
+                        parent: "root",
+                        children: ["my-pictures", "my-music", "my-videos", "my-docs"],
+                        files: [],
+                        special: true,
+                        created: new Date().toISOString()
+                    },
+                    "my-pictures": {
+                        id: "my-pictures",
+                        name: "Minhas Imagens",
+                        parent: "my-documents",
+                        children: [],
+                        files: [],
+                        special: true,
+                        acceptedTypes: ['image/*'],
+                        created: new Date().toISOString()
+                    },
+                    "my-music": {
+                        id: "my-music",
+                        name: "Minhas Músicas",
+                        parent: "my-documents",
+                        children: [],
+                        files: [],
+                        special: true,
+                        acceptedTypes: ['audio/*'],
+                        created: new Date().toISOString()
+                    },
+                    "my-videos": {
+                        id: "my-videos",
+                        name: "Meus Vídeos",
+                        parent: "my-documents",
+                        children: [],
+                        files: [],
+                        special: true,
+                        acceptedTypes: ['video/*'],
+                        created: new Date().toISOString()
+                    },
+                    "my-docs": {
+                        id: "my-docs",
+                        name: "Documentos",
+                        parent: "my-documents",
+                        children: [],
+                        files: [],
+                        special: true,
+                        acceptedTypes: ['text/*', 'application/pdf'],
+                        created: new Date().toISOString()
+                    },
+                    "trash": {
+                        id: "trash",
+                        name: "Lixeira",
+                        parent: "root",
+                        children: [],
+                        files: [],
+                        special: true,
+                        created: new Date().toISOString()
+                    }
+                },
+                files: {},
+                settings: {
+                    viewMode: 'icons',
+                    sortBy: 'name',
+                    sortOrder: 'asc'
+                }
+            };
+        }
+        
+        function saveFileSystem() {
+            localStorage.setItem('auroraOS_fileSystem', JSON.stringify(fileSystem));
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // 🎨 RENDERIZAÇÃO
+        // ═══════════════════════════════════════════════════════════
+        
+        function render() {
+            renderSidebar();
+            renderContent();
+            updateAddressBar();
+            updateStatusBar();
+        }
+        
+        function renderSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.innerHTML = renderFolderTree('root', 0);
+        }
+        
+        function renderFolderTree(folderId, level) {
+            const folder = fileSystem.folders[folderId];
+            if (!folder) return '';
+            
+            const icon = getIcon(folder);
+            const isSelected = folderId === currentFolder ? 'selected' : '';
+            
+            let html = `
+                <div class="folder-tree-item ${isSelected}" onclick="navigateTo('${folderId}')">
+                    <img src="${icon}" alt="">
+                    <span>${folder.name}</span>
+                </div>
+            `;
+            
+            if (folder.children && folder.children.length > 0) {
+                html += '<div class="folder-tree-children">';
+                for (let childId of folder.children) {
+                    html += renderFolderTree(childId, level + 1);
+                }
+                html += '</div>';
+            }
+            
+            return html;
+        }
+        
+        function renderContent() {
+            const folder = fileSystem.folders[currentFolder];
+            if (!folder) return;
+            
+            const fileGrid = document.getElementById('fileGrid');
+            fileGrid.innerHTML = '';
+            
+            // Renderizar subpastas
+            if (folder.children) {
+                for (let childId of folder.children) {
+                    const childFolder = fileSystem.folders[childId];
+                    if (childFolder) {
+                        fileGrid.innerHTML += renderFileItem(childFolder, 'folder');
+                    }
+                }
+            }
+            
+            // Renderizar arquivos
+            if (folder.files) {
+                for (let fileId of folder.files) {
+                    const file = fileSystem.files[fileId];
+                    if (file) {
+                        fileGrid.innerHTML += renderFileItem(file, 'file');
+                    }
+                }
+            }
+            
+            if (fileGrid.innerHTML === '') {
+                fileGrid.innerHTML = '<div class="empty-message">Esta pasta está vazia</div>';
+            }
+        }
+        
+        function renderFileItem(item, type) {
+            const icon = item.thumbnail || getIcon(item);
+            const thumbnailClass = item.thumbnail ? 'thumbnail' : '';
+            const size = item.size ? formatSize(item.size) : '';
+            
+            return `
+                <div class="file-item ${thumbnailClass}" 
+                     data-id="${item.id}" 
+                     data-type="${type}"
+                     onclick="selectItem(event, '${item.id}', '${type}')"
+                     ondblclick="openItem('${item.id}', '${type}')"
+                     oncontextmenu="showItemContextMenu(event, '${item.id}', '${type}')">
+                    <img src="${icon}" alt="${item.name}">
+                    <div class="file-name">${item.name}</div>
+                    ${size ? `<div class="file-size">${size}</div>` : ''}
+                </div>
+            `;
+        }
+        
+        function getIcon(item) {
+            if (item.special) {
+                return folderIcons[item.id] || folderIcons.folder;
+            } else if (item.children !== undefined) {
+                return folderIcons.folder;
+            } else {
+                const ext = getExtension(item.name).toLowerCase();
+                return fileIcons[ext] || fileIcons.default;
+            }
+        }
+        
+        function updateAddressBar() {
+            const path = getPath(currentFolder);
+            document.getElementById('addressBar').value = path;
+        }
+        
+        function updateStatusBar() {
+            const folder = fileSystem.folders[currentFolder];
+            if (!folder) return;
+            
+            const itemCount = (folder.children?.length || 0) + (folder.files?.length || 0);
+            const totalSize = calculateFolderSize(currentFolder);
+            
+            document.getElementById('statusLeft').textContent = `${itemCount} objeto(s)`;
+            document.getElementById('statusRight').textContent = formatSize(totalSize);
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // 🖱️ INTERAÇÕES
+        // ═══════════════════════════════════════════════════════════
+        
+        function navigateTo(folderId) {
+            if (historyIndex < history.length - 1) {
+                history = history.slice(0, historyIndex + 1);
+            }
+            history.push(folderId);
+            historyIndex++;
+            
+            currentFolder = folderId;
+            selectedItems = [];
+            render();
+        }
+        
+        function goBack() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                currentFolder = history[historyIndex];
+                selectedItems = [];
+                render();
+            }
+        }
+        
+        function goForward() {
+            if (historyIndex < history.length - 1) {
+                historyIndex++;
+                currentFolder = history[historyIndex];
+                selectedItems = [];
+                render();
+            }
+        }
+        
+        function goUp() {
+            const folder = fileSystem.folders[currentFolder];
+            if (folder && folder.parent) {
+                navigateTo(folder.parent);
+            }
+        }
+        
+        function selectItem(event, id, type) {
+            if (!event.ctrlKey) {
+                document.querySelectorAll('.file-item').forEach(el => el.classList.remove('selected'));
+                selectedItems = [];
+            }
+            
+            const element = event.currentTarget;
+            element.classList.toggle('selected');
+            
+            const index = selectedItems.findIndex(item => item.id === id);
+            if (index > -1) {
+                selectedItems.splice(index, 1);
+            } else {
+                selectedItems.push({ id, type });
+            }
+        }
+        
+        function openItem(id, type) {
+            if (type === 'folder') {
+                navigateTo(id);
+            } else {
+                const file = fileSystem.files[id];
+                if (file) {
+                    openFile(file);
+                }
+            }
+        }
+        
+        function openFile(file) {
+            const ext = file.extension.toLowerCase();
+            
+            // Detectar tipo de arquivo e abrir no aplicativo apropriado
+            if (['.txt', '.html', '.rtf', '.md', '.doc'].includes(ext)) {
+                // Abrir no Bloco de Notas
+                openInNotesApp(file);
+            } else if (['.mp3', '.wav', '.ogg', '.m4a'].includes(ext)) {
+                // Abrir no Media Player
+                openInMediaPlayer(file);
+            } else if (['.jpg', '.jpeg', '.png', '.gif', '.bmp'].includes(ext)) {
+                // Visualizar imagem
+                viewImage(file);
+            } else if (['.mp4', '.avi', '.mkv', '.webm'].includes(ext)) {
+                // Visualizar vídeo
+                viewVideo(file);
+            } else {
+                alert(`Tipo de arquivo não suportado: ${ext}\n\nArquivo: ${file.name}`);
+            }
+        }
+        
+        function openInNotesApp(file) {
+            // Enviar mensagem para o Bloco de Notas via postMessage
+            window.parent.postMessage({
+                action: 'openApp',
+                app: 'bloco-notas',
+                fileData: {
+                    action: 'openFile',
+                    fileId: file.id,
+                    fileName: file.name,
+                    content: file.content
+                }
+            }, '*');
+            
+            alert(`✨ Abrindo "${file.name}" no Bloco de Notas Esotérico...`);
+        }
+        
+        function openInMediaPlayer(file) {
+            // Enviar mensagem para o Media Player via postMessage
+            window.parent.postMessage({
+                action: 'openApp',
+                app: 'media-player',
+                fileData: {
+                    action: 'playAudio',
+                    fileId: file.id,
+                    fileName: file.name,
+                    content: file.content
+                }
+            }, '*');
+            
+            alert(`🎵 Adicionando "${file.name}" ao Media Player...`);
+        }
+        
+        function viewImage(file) {
+            // Abrir modal com visualizador de imagem
+            showModal(`Visualizador de Imagens - ${file.name}`, `
+                <div style="text-align: center;">
+                    <img src="${file.content}" style="max-width: 100%; max-height: 500px; border: 2px solid #808080;">
+                </div>
+            `, [
+                { text: 'Fechar', onclick: 'closeModal()' }
+            ]);
+        }
+        
+        function viewVideo(file) {
+            // Enviar mensagem para o Video Player via postMessage
+            window.parent.postMessage({
+                action: 'openApp',
+                app: 'video-player',
+                fileData: {
+                    action: 'playVideo',
+                    fileId: file.id,
+                    fileName: file.name,
+                    content: file.content,
+                    extension: file.extension,
+                    size: file.size
+                }
+            }, '*');
+            
+            alert(`🎬 Abrindo "${file.name}" no Video Player Místico...`);
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // 📁 OPERAÇÕES DE ARQUIVO
+        // ═══════════════════════════════════════════════════════════
+        
+        function createNewFolder() {
+            showModal('Nova Pasta', `
+                <label>Nome da pasta:</label>
+                <input type="text" class="modal-input" id="folderNameInput" value="Nova Pasta">
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()' },
+                { text: 'Criar', onclick: 'confirmCreateFolder()' }
+            ]);
+            
+            setTimeout(() => document.getElementById('folderNameInput').select(), 100);
+        }
+        
+        function confirmCreateFolder() {
+            const name = document.getElementById('folderNameInput').value.trim();
+            if (!name) {
+                alert('Digite um nome para a pasta');
+                return;
+            }
+            
+            const folderId = generateId();
+            const folder = {
+                id: folderId,
+                name: name,
+                parent: currentFolder,
+                children: [],
+                files: [],
+                special: false,
+                created: new Date().toISOString(),
+                modified: new Date().toISOString()
+            };
+            
+            fileSystem.folders[folderId] = folder;
+            fileSystem.folders[currentFolder].children.push(folderId);
+            
+            saveFileSystem();
+            closeModal();
+            render();
+        }
+        
+        function uploadFiles() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.multiple = true;
+            input.accept = '*/*';
+            
+            input.onchange = function(e) {
+                const files = e.target.files;
+                let processed = 0;
+                
+                for (let file of files) {
+                    processFile(file, () => {
+                        processed++;
+                        if (processed === files.length) {
+                            render();
+                            alert(`${files.length} arquivo(s) adicionado(s)!`);
+                        }
+                    });
+                }
+            };
+            
+            input.click();
+        }
+        
+        function processFile(file, callback) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const fileData = {
+                    id: generateId(),
+                    name: file.name,
+                    type: file.type,
+                    extension: getExtension(file.name),
+                    content: e.target.result,
+                    size: file.size,
+                    created: new Date().toISOString(),
+                    modified: new Date(file.lastModified).toISOString(),
+                    folder: currentFolder,
+                    thumbnail: null
+                };
+                
+                // Gerar thumbnail para imagens
+                if (file.type.startsWith('image/')) {
+                    generateThumbnail(e.target.result, fileData);
+                }
+                
+                fileSystem.files[fileData.id] = fileData;
+                fileSystem.folders[currentFolder].files.push(fileData.id);
+                
+                saveFileSystem();
+                callback();
+            };
+            
+            reader.readAsDataURL(file);
+        }
+        
+        function generateThumbnail(dataUrl, fileData) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                canvas.width = 48;
+                canvas.height = 48;
+                
+                ctx.drawImage(img, 0, 0, 48, 48);
+                fileData.thumbnail = canvas.toDataURL('image/jpeg', 0.7);
+                saveFileSystem();
+            };
+            img.src = dataUrl;
+        }
+        
+        function copySelected() {
+            if (selectedItems.length === 0) {
+                alert('Selecione um ou mais itens para copiar');
+                return;
+            }
+            
+            clipboard = {
+                action: 'copy',
+                items: [...selectedItems]
+            };
+            
+            alert(`${selectedItems.length} item(ns) copiado(s)`);
+        }
+        
+        function cutSelected() {
+            if (selectedItems.length === 0) {
+                alert('Selecione um ou mais itens para recortar');
+                return;
+            }
+            
+            clipboard = {
+                action: 'cut',
+                items: [...selectedItems]
+            };
+            
+            alert(`${selectedItems.length} item(ns) recortado(s)`);
+        }
+        
+        function pasteClipboard() {
+            if (!clipboard) {
+                alert('Área de transferência vazia');
+                return;
+            }
+            
+            for (let item of clipboard.items) {
+                if (item.type === 'folder') {
+                    // Copiar/mover pasta
+                    if (clipboard.action === 'copy') {
+                        duplicateFolder(item.id, currentFolder);
+                    } else {
+                        moveFolder(item.id, currentFolder);
+                    }
+                } else {
+                    // Copiar/mover arquivo
+                    if (clipboard.action === 'copy') {
+                        duplicateFile(item.id, currentFolder);
+                    } else {
+                        moveFile(item.id, currentFolder);
+                    }
+                }
+            }
+            
+            if (clipboard.action === 'cut') {
+                clipboard = null;
+            }
+            
+            saveFileSystem();
+            render();
+        }
+        
+        function deleteSelected() {
+            if (selectedItems.length === 0) {
+                alert('Selecione um ou mais itens para excluir');
+                return;
+            }
+            
+            if (!confirm(`Deseja mover ${selectedItems.length} item(ns) para a lixeira?`)) {
+                return;
+            }
+            
+            for (let item of selectedItems) {
+                if (item.type === 'folder') {
+                    moveFolder(item.id, 'trash');
+                } else {
+                    moveFile(item.id, 'trash');
+                }
+            }
+            
+            selectedItems = [];
+            saveFileSystem();
+            render();
+        }
+        
+        function moveFile(fileId, targetFolderId) {
+            const file = fileSystem.files[fileId];
+            if (!file) return;
+            
+            // Remover da pasta atual
+            const currentFolderObj = fileSystem.folders[file.folder];
+            const index = currentFolderObj.files.indexOf(fileId);
+            if (index > -1) {
+                currentFolderObj.files.splice(index, 1);
+            }
+            
+            // Adicionar na pasta destino
+            file.folder = targetFolderId;
+            fileSystem.folders[targetFolderId].files.push(fileId);
+        }
+        
+        function moveFolder(folderId, targetFolderId) {
+            const folder = fileSystem.folders[folderId];
+            if (!folder || folder.special) return;
+            
+            // Remover da pasta pai atual
+            const parentFolder = fileSystem.folders[folder.parent];
+            const index = parentFolder.children.indexOf(folderId);
+            if (index > -1) {
+                parentFolder.children.splice(index, 1);
+            }
+            
+            // Adicionar na pasta destino
+            folder.parent = targetFolderId;
+            fileSystem.folders[targetFolderId].children.push(folderId);
+        }
+        
+        function duplicateFile(fileId, targetFolderId) {
+            const file = fileSystem.files[fileId];
+            if (!file) return;
+            
+            const newId = generateId();
+            const newFile = {
+                ...file,
+                id: newId,
+                name: `Cópia de ${file.name}`,
+                folder: targetFolderId,
+                created: new Date().toISOString()
+            };
+            
+            fileSystem.files[newId] = newFile;
+            fileSystem.folders[targetFolderId].files.push(newId);
+        }
+        
+        function duplicateFolder(folderId, targetFolderId) {
+            // Implementação simplificada
+            alert('Duplicação de pastas ainda não implementada');
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // 🖱️ MENU DE CONTEXTO
+        // ═══════════════════════════════════════════════════════════
+        
+        function showContextMenu(event) {
+            event.preventDefault();
+            
+            const menu = document.getElementById('contextMenu');
+            menu.innerHTML = `
+                <div class="context-menu-item" onclick="createNewFolder()">📁 Nova Pasta</div>
+                <div class="context-menu-item" onclick="uploadFiles()">📤 Upload Arquivo</div>
+                <div class="context-menu-separator"></div>
+                <div class="context-menu-item" onclick="pasteClipboard()">📄 Colar</div>
+                <div class="context-menu-separator"></div>
+                <div class="context-menu-item" onclick="render()">🔄 Atualizar</div>
+            `;
+            
+            menu.style.left = event.clientX + 'px';
+            menu.style.top = event.clientY + 'px';
+            menu.classList.add('active');
+            
+            document.addEventListener('click', hideContextMenu);
+        }
+        
+        function showItemContextMenu(event, id, type) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const menu = document.getElementById('contextMenu');
+            menu.innerHTML = `
+                <div class="context-menu-item" onclick="openItem('${id}', '${type}')">📂 Abrir</div>
+                <div class="context-menu-separator"></div>
+                <div class="context-menu-item" onclick="copySelected()">📋 Copiar</div>
+                <div class="context-menu-item" onclick="cutSelected()">✂️ Recortar</div>
+                <div class="context-menu-item" onclick="deleteSelected()">🗑️ Excluir</div>
+                <div class="context-menu-separator"></div>
+                <div class="context-menu-item" onclick="showProperties('${id}', '${type}')">ℹ️ Propriedades</div>
+            `;
+            
+            menu.style.left = event.clientX + 'px';
+            menu.style.top = event.clientY + 'px';
+            menu.classList.add('active');
+            
+            document.addEventListener('click', hideContextMenu);
+        }
+        
+        function hideContextMenu() {
+            document.getElementById('contextMenu').classList.remove('active');
+            document.removeEventListener('click', hideContextMenu);
+        }
+        
+        function showProperties(id, type) {
+            const item = type === 'folder' ? fileSystem.folders[id] : fileSystem.files[id];
+            if (!item) return;
+            
+            const size = type === 'file' ? formatSize(item.size) : calculateFolderSize(id);
+            const created = new Date(item.created).toLocaleString('pt-BR');
+            const modified = item.modified ? new Date(item.modified).toLocaleString('pt-BR') : 'N/A';
+            
+            showModal(`Propriedades de ${item.name}`, `
+                <p><strong>Nome:</strong> ${item.name}</p>
+                <p><strong>Tipo:</strong> ${type === 'folder' ? 'Pasta' : 'Arquivo'}</p>
+                ${type === 'file' ? `<p><strong>Tamanho:</strong> ${size}</p>` : ''}
+                <p><strong>Criado:</strong> ${created}</p>
+                <p><strong>Modificado:</strong> ${modified}</p>
+            `, [
+                { text: 'OK', onclick: 'closeModal()' }
+            ]);
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // 🔧 FUNÇÕES AUXILIARES
+        // ═══════════════════════════════════════════════════════════
+        
+        function showModal(title, body, buttons) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = body;
+            
+            const footer = document.getElementById('modalFooter');
+            footer.innerHTML = '';
+            for (let btn of buttons) {
+                footer.innerHTML += `<button class="modal-btn" onclick="${btn.onclick}">${btn.text}</button>`;
+            }
+            
+            document.getElementById('modal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+        
+        function toggleView() {
+            viewMode = viewMode === 'icons' ? 'list' : 'icons';
+            render();
+        }
+        
+        function showSearch() {
+            alert('Funcionalidade de pesquisa em desenvolvimento');
+        }
+        
+        function getPath(folderId) {
+            const parts = [];
+            let current = folderId;
+            
+            while (current) {
+                const folder = fileSystem.folders[current];
+                if (!folder) break;
+                parts.unshift(folder.name);
+                current = folder.parent;
+            }
+            
+            return parts.join(' \\ ');
+        }
+        
+        function getExtension(filename) {
+            const parts = filename.split('.');
+            return parts.length > 1 ? '.' + parts.pop() : '';
+        }
+        
+        function formatSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+        
+        function calculateFolderSize(folderId) {
+            const folder = fileSystem.folders[folderId];
+            if (!folder) return 0;
+            
+            let size = 0;
+            
+            // Somar arquivos
+            if (folder.files) {
+                for (let fileId of folder.files) {
+                    const file = fileSystem.files[fileId];
+                    if (file) size += file.size || 0;
+                }
+            }
+            
+            // Somar subpastas
+            if (folder.children) {
+                for (let childId of folder.children) {
+                    size += calculateFolderSize(childId);
+                }
+            }
+            
+            return size;
+        }
+        
+        function generateId() {
+            return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // 🚀 INICIALIZAÇÃO
+        // ═══════════════════════════════════════════════════════════
+        
+        window.onload = function() {
+            initFileSystem();
+            navigateTo('my-documents');
+        };
+    </script>
+</body>
+</html>
