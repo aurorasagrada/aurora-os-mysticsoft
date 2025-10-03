@@ -1246,8 +1246,11 @@
             { id: 'tarot-online', name: 'Tarot Online', url: 'https://tarot.com', icon: '🔮', premium: true },
             { id: 'portal-astrologico', name: 'Portal Astrológico', url: 'https://astro.com', icon: '⭐', premium: true },
             
-            // Aplicativo local
-            { id: 'arquivos', name: 'Arquivos & Anotações', url: 'local://files', icon: '📁', premium: false }
+            // Aplicativos locais
+            { id: 'arquivos', name: 'Explorador de Arquivos', url: 'local://files', icon: '📁', premium: false },
+            { id: 'bloco-notas', name: 'Bloco de Notas Esotérico', url: 'local://notepad', icon: '📝', premium: false },
+            { id: 'media-player', name: 'Media Player Místico', url: 'local://music', icon: '🎵', premium: false },
+            { id: 'video-player', name: 'Video Player Místico', url: 'local://video', icon: '🎬', premium: false }
         ];
         
         // Configuração de cores
@@ -1601,8 +1604,17 @@
         
         function openSite(site) {
             if (site.url === 'local://files') {
-                // Abrir aplicativo local de arquivos
-                openLocalFilesApp();
+                // Abrir Explorador de Arquivos
+                openLocalApp('explorador-arquivos', 'Explorador de Arquivos', '📁', 900, 650);
+            } else if (site.url === 'local://notepad') {
+                // Abrir Bloco de Notas
+                openLocalApp('bloco-notas-esoterico', 'Bloco de Notas Esotérico', '📝', 800, 600);
+            } else if (site.url === 'local://music') {
+                // Abrir Media Player
+                openLocalApp('media-player-mistico', 'Media Player Místico', '🎵', 700, 550);
+            } else if (site.url === 'local://video') {
+                // Abrir Video Player
+                openLocalApp('video-player-mistico', 'Video Player Místico', '🎬', 900, 650);
             } else {
                 // Abrir site em janela
                 openWebsite(site);
@@ -1657,9 +1669,10 @@
             setTimeout(() => hideLoading(site.id), 3000);
         }
         
-        function openLocalFilesApp() {
-            const windowId = 'window-files';
+        function openLocalApp(appFile, appTitle, appIcon, width, height) {
+            const windowId = `window-${appFile}`;
             
+            // Verificar se janela já está aberta
             if (document.getElementById(windowId)) {
                 focusWindow(windowId);
                 return;
@@ -1668,16 +1681,16 @@
             const window = document.createElement('div');
             window.id = windowId;
             window.className = 'window active focused';
-            window.style.left = '150px';
-            window.style.top = '100px';
-            window.style.width = '700px';
-            window.style.height = '500px';
+            window.style.left = `${100 + openWindows.length * 30}px`;
+            window.style.top = `${50 + openWindows.length * 30}px`;
+            window.style.width = `${width}px`;
+            window.style.height = `${height}px`;
             
             window.innerHTML = `
                 <div class="window-header">
                     <div class="window-title">
-                        <span>📁</span>
-                        <span>Arquivos & Anotações</span>
+                        <span>${appIcon}</span>
+                        <span>${appTitle}</span>
                     </div>
                     <div class="window-controls">
                         <div class="window-control" onclick="minimizeWindow('${windowId}')">_</div>
@@ -1686,32 +1699,51 @@
                     </div>
                 </div>
                 <div class="window-content">
-                    <div style="padding: 20px; text-align: center; color: #666;">
-                        <h3>Gerenciador de Arquivos</h3>
-                        <p>Sistema de arquivos em desenvolvimento...</p>
-                        <br>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px;">
-                            <div style="padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-                                <div style="font-size: 32px; margin-bottom: 10px;">📄</div>
-                                <div>Documentos</div>
-                            </div>
-                            <div style="padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-                                <div style="font-size: 32px; margin-bottom: 10px;">🖼️</div>
-                                <div>Imagens</div>
-                            </div>
-                            <div style="padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-                                <div style="font-size: 32px; margin-bottom: 10px;">🎵</div>
-                                <div>Áudios</div>
-                            </div>
-                        </div>
+                    <div class="loading-overlay" id="loading-${appFile}">
+                        <div class="loading-spinner"></div>
+                        <div>Carregando ${appTitle}...</div>
                     </div>
+                    <iframe class="window-iframe" src="apps/${appFile}.html" onload="hideLoading('${appFile}')" id="iframe-${appFile}"></iframe>
                 </div>
                 <div class="window-resize-handle"></div>
             `;
             
             document.body.appendChild(window);
-            openWindows.push({ id: windowId, title: 'Arquivos & Anotações', icon: '📁' });
+            openWindows.push({ id: windowId, title: appTitle, icon: appIcon });
             updateTaskbar();
+            
+            // Remover loading após 3 segundos (fallback)
+            setTimeout(() => hideLoading(appFile), 3000);
+            
+            // Configurar comunicação entre apps
+            setupAppCommunication(windowId, appFile);
+        }
+        
+        function setupAppCommunication(windowId, appFile) {
+            // Escutar mensagens dos aplicativos
+            window.addEventListener('message', function(event) {
+                // Mensagem do File Explorer para abrir outros apps
+                if (event.data.action === 'openApp') {
+                    const appMap = {
+                        'bloco-notas': ['bloco-notas-esoterico', 'Bloco de Notas Esotérico', '📝', 800, 600],
+                        'media-player': ['media-player-mistico', 'Media Player Místico', '🎵', 700, 550],
+                        'video-player': ['video-player-mistico', 'Video Player Místico', '🎬', 900, 650]
+                    };
+                    
+                    const appInfo = appMap[event.data.app];
+                    if (appInfo) {
+                        openLocalApp(...appInfo);
+                        
+                        // Enviar dados do arquivo para a aplicação após um delay
+                        setTimeout(() => {
+                            const iframe = document.getElementById(`iframe-${appInfo[0]}`);
+                            if (iframe && iframe.contentWindow) {
+                                iframe.contentWindow.postMessage(event.data.fileData, '*');
+                            }
+                        }, 1000);
+                    }
+                }
+            });
         }
         
         function hideLoading(siteId) {
