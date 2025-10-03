@@ -1457,6 +1457,49 @@
                 }
             });
             
+            // Long press para menu de contexto no mobile
+            let longPressTimer;
+            let longPressStartX, longPressStartY;
+            const longPressDuration = 500; // 500ms para ativar
+            const moveThreshold = 10; // pixels de movimento permitido
+            
+            document.addEventListener('touchstart', function(e) {
+                if (e.target.closest('.desktop') && !e.target.closest('.desktop-icon')) {
+                    const touch = e.touches[0];
+                    longPressStartX = touch.clientX;
+                    longPressStartY = touch.clientY;
+                    
+                    longPressTimer = setTimeout(() => {
+                        // Vibrar se disponível (feedback tátil)
+                        if (navigator.vibrate) {
+                            navigator.vibrate(50);
+                        }
+                        showContextMenu(longPressStartX, longPressStartY);
+                    }, longPressDuration);
+                }
+            }, { passive: true });
+            
+            document.addEventListener('touchmove', function(e) {
+                if (longPressTimer) {
+                    const touch = e.touches[0];
+                    const deltaX = Math.abs(touch.clientX - longPressStartX);
+                    const deltaY = Math.abs(touch.clientY - longPressStartY);
+                    
+                    // Cancelar se mover muito
+                    if (deltaX > moveThreshold || deltaY > moveThreshold) {
+                        clearTimeout(longPressTimer);
+                        longPressTimer = null;
+                    }
+                }
+            }, { passive: true });
+            
+            document.addEventListener('touchend', function(e) {
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+            }, { passive: true });
+            
             // Fechar menus ao clicar fora
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.context-menu')) {
@@ -2127,8 +2170,8 @@
         }
         
         function arrangeIcons() {
-            // Reorganizar ícones automaticamente
-            generateDesktopIcons();
+            // Reorganizar ícones automaticamente (resetar posições)
+            resetIconPositions();
             hideContextMenu();
         }
         
