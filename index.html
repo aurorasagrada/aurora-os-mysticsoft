@@ -1238,6 +1238,41 @@
                 </div>
                 
                 <div class="personalization-section">
+                    <h3>📊 Barra de Tarefas (Taskbar)</h3>
+                    <p style="margin-bottom: 10px; color: #666;">Personalize a cor da barra de tarefas na parte inferior</p>
+                    
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Temas Predefinidos:</label>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px;">
+                        <button class="personalization-button" onclick="applyTaskbarTheme('mystic-wine')" style="padding: 8px;">
+                            🍷 Vinho Místico
+                        </button>
+                        <button class="personalization-button" onclick="applyTaskbarTheme('dark-blue')" style="padding: 8px;">
+                            🌊 Azul Escuro
+                        </button>
+                        <button class="personalization-button" onclick="applyTaskbarTheme('deep-purple')" style="padding: 8px;">
+                            💜 Roxo Profundo
+                        </button>
+                        <button class="personalization-button" onclick="applyTaskbarTheme('forest-green')" style="padding: 8px;">
+                            🌲 Verde Floresta
+                        </button>
+                        <button class="personalization-button" onclick="applyTaskbarTheme('midnight-black')" style="padding: 8px;">
+                            🌑 Preto Meia-Noite
+                        </button>
+                        <button class="personalization-button" onclick="applyTaskbarTheme('golden-bronze')" style="padding: 8px;">
+                            🥉 Bronze Dourado
+                        </button>
+                    </div>
+                    
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Ou escolha uma cor personalizada:</label>
+                    <div style="margin-bottom: 10px;">
+                        <input type="color" id="taskbarColor" value="#3e0a29" style="width: 100%; height: 50px; border: 2px inset #fff; cursor: pointer;">
+                    </div>
+                    <button class="personalization-button primary" onclick="applyCustomTaskbarColor()" style="width: 100%; margin-top: 5px;">
+                        ✨ Aplicar Cor Personalizada
+                    </button>
+                </div>
+                
+                <div class="personalization-section">
                     <h3>🎨 Barra Lateral do Menu Iniciar</h3>
                     <p style="margin-bottom: 10px; color: #666;">Personalize a cor da barra lateral vertical do Menu Iniciar</p>
                     
@@ -1385,6 +1420,7 @@
             updateClock();
             updatePlanetaryInfo();
             loadPersonalization();
+            loadTaskbarColor();
             loadStartMenuTheme();
             
             // Atualiza relógio a cada segundo
@@ -2222,8 +2258,54 @@
             generateColorPalette();
             generateWallpaperPresets();
             
-            // Resetar cores do Menu Iniciar
+            // Resetar cores da Taskbar e Menu Iniciar
+            applyTaskbarTheme('mystic-wine');
             applyStartMenuTheme('windows-me');
+        }
+        
+        // Funções para personalizar Barra de Tarefas (Taskbar)
+        function applyTaskbarTheme(themeName) {
+            const themes = {
+                'mystic-wine': '#3e0a29',
+                'dark-blue': '#0b1836',
+                'deep-purple': '#4b0082',
+                'forest-green': '#1b4332',
+                'midnight-black': '#1a1a1a',
+                'golden-bronze': '#8b6914'
+            };
+            
+            const color = themes[themeName];
+            if (color) {
+                document.documentElement.style.setProperty('--theme-taskbar', color);
+                document.documentElement.style.setProperty('--theme-start-btn', color);
+                
+                // Atualizar input de cor
+                document.getElementById('taskbarColor').value = color;
+                
+                // Salvar no localStorage
+                localStorage.setItem('auroraOS_taskbarColor', color);
+            }
+        }
+        
+        function applyCustomTaskbarColor() {
+            const color = document.getElementById('taskbarColor').value;
+            
+            document.documentElement.style.setProperty('--theme-taskbar', color);
+            document.documentElement.style.setProperty('--theme-start-btn', color);
+            
+            // Salvar no localStorage
+            localStorage.setItem('auroraOS_taskbarColor', color);
+        }
+        
+        function loadTaskbarColor() {
+            const saved = localStorage.getItem('auroraOS_taskbarColor');
+            if (saved) {
+                document.documentElement.style.setProperty('--theme-taskbar', saved);
+                document.documentElement.style.setProperty('--theme-start-btn', saved);
+                
+                // Atualizar input de cor
+                document.getElementById('taskbarColor').value = saved;
+            }
         }
         
         // Funções para personalizar barra lateral do Menu Iniciar
