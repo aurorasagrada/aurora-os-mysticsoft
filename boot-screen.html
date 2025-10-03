@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora OS • Inicializando...</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', 'Consolas', monospace;
+            overflow: hidden;
+            background: #000;
+            color: #fff;
+        }
+        
+        /* ========== TELA 1: BIOS/POST ========== */
+        .bios-screen {
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            color: #fff;
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .bios-logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        
+        .bios-text {
+            margin-top: 120px;
+            white-space: pre-wrap;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+        
+        .bios-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background: #fff;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+            margin-left: 2px;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        /* ========== TELA 2: BOOT/SPLASH ========== */
+        .boot-screen {
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .boot-screen.active {
+            display: flex;
+        }
+        
+        .boot-logo {
+            max-width: 600px;
+            width: 80%;
+            height: auto;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            margin-bottom: 60px;
+            animation: logoFadeIn 1s ease-out;
+        }
+        
+        @keyframes logoFadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Barra de progresso estilo Windows ME/XP */
+        .progress-container {
+            width: 300px;
+            position: relative;
+            animation: progressFadeIn 1s ease-out 0.5s both;
+        }
+        
+        @keyframes progressFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        .progress-bar-outer {
+            width: 100%;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00aa00 0%, #00ff00 50%, #00aa00 100%);
+            background-size: 200% 100%;
+            animation: 
+                progressFill 3s ease-in-out forwards,
+                progressShine 1.5s linear infinite;
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        @keyframes progressFill {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        @keyframes progressShine {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Texto de carregamento */
+        .boot-text {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
+            animation: progressFadeIn 1s ease-out 0.8s both;
+        }
+        
+        /* MysticSoft no canto superior direito */
+        .boot-brand {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            font-size: 14px;
+            color: #999;
+            font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
+            letter-spacing: 2px;
+            animation: progressFadeIn 1s ease-out 0.3s both;
+        }
+        
+        /* Copyright */
+        .boot-copyright {
+            position: absolute;
+            bottom: 30px;
+            font-size: 10px;
+            color: #666;
+            font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
+        }
+        
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .bios-logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .bios-text {
+                font-size: 11px;
+                margin-top: 100px;
+            }
+            
+            .boot-logo {
+                max-width: 400px;
+            }
+            
+            .progress-container {
+                width: 250px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .bios-text {
+                font-size: 9px;
+            }
+            
+            .boot-logo {
+                max-width: 300px;
+            }
+            
+            .progress-container {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- TELA 1: BIOS/POST -->
+    <div class="bios-screen" id="biosScreen">
+        <img src="assets/icons/mysticsoft-window-only.png" alt="MysticSoft" class="bios-logo">
+        <div class="bios-text" id="biosText"></div>
+    </div>
+    
+    <!-- TELA 2: BOOT/SPLASH -->
+    <div class="boot-screen" id="bootScreen">
+        <div class="boot-brand">MysticSoft</div>
+        
+        <img src="assets/icons/mysticsoft-logo-full.png" alt="MysticSoft" class="boot-logo">
+        
+        <div class="progress-container">
+            <div class="progress-bar-outer">
+                <div class="progress-bar-fill"></div>
+            </div>
+        </div>
+        
+        <div class="boot-text">Iniciando Aurora OS...</div>
+        
+        <div class="boot-copyright">
+            © 2025 MysticSoft Technologies • Aurora Sagrada
+        </div>
+    </div>
+    
+    <script>
+        // Texto da tela BIOS
+        const biosTextContent = `MysticSoft BIOS v1.0
+Copyright (C) 2025 MysticSoft Technologies
+
+Initializing Mystical Operating System...
+
+────────────────────────────────────────────────────────────────
+
+O MysticSoft é uma criação digital que une estética retrô 
+dos anos 90/2000 com funcionalidades mágickas e esotéricas.
+
+Ele se apresenta como um "sistema operacional oculto".
+
+É um projeto que mistura arte, nostalgia, tecnologia e 
+ocultismo.
+
+────────────────────────────────────────────────────────────────
+
+Detecting hardware...
+CPU: Mystical Processor Unit (MPU)
+Memory: 666 MB Cosmic RAM
+Storage: Infinite Akashic Records
+
+Loading mystical drivers...
+[OK] Crystal Energy Driver
+[OK] Lunar Phase Synchronizer
+[OK] Astral Projection Module
+[OK] Tarot Card Reader Interface
+[OK] Planetary Alignment System
+
+Press any key to continue...`;
+        
+        // Função para digitar texto (efeito typewriter)
+        let charIndex = 0;
+        const biosTextElement = document.getElementById('biosText');
+        const typingSpeed = 15; // ms por caractere
+        
+        function typeWriter() {
+            if (charIndex < biosTextContent.length) {
+                biosTextElement.textContent += biosTextContent.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, typingSpeed);
+                
+                // Auto-scroll
+                window.scrollTo(0, document.body.scrollHeight);
+            } else {
+                // Adicionar cursor piscante
+                const cursor = document.createElement('span');
+                cursor.className = 'bios-cursor';
+                biosTextElement.appendChild(cursor);
+                
+                // Esperar 2 segundos e ir para tela de boot
+                setTimeout(goToBootScreen, 2000);
+            }
+        }
+        
+        // Iniciar digitação após pequeno delay
+        setTimeout(typeWriter, 500);
+        
+        // Permitir pular com qualquer tecla
+        let canSkip = false;
+        setTimeout(() => { canSkip = true; }, 1000);
+        
+        document.addEventListener('keydown', function(e) {
+            if (canSkip && charIndex < biosTextContent.length) {
+                // Pular digitação
+                biosTextElement.textContent = biosTextContent;
+                charIndex = biosTextContent.length;
+                
+                const cursor = document.createElement('span');
+                cursor.className = 'bios-cursor';
+                biosTextElement.appendChild(cursor);
+                
+                setTimeout(goToBootScreen, 500);
+            } else if (charIndex >= biosTextContent.length) {
+                goToBootScreen();
+            }
+        });
+        
+        // Ir para tela de boot
+        function goToBootScreen() {
+            document.getElementById('biosScreen').style.display = 'none';
+            document.getElementById('bootScreen').classList.add('active');
+            
+            // Após 3.5 segundos, ir para o sistema
+            setTimeout(() => {
+                // Fade out
+                document.body.style.transition = 'opacity 0.5s ease-out';
+                document.body.style.opacity = '0';
+                
+                setTimeout(() => {
+                    // Verificar se deve pular welcome screen
+                    const skipWelcome = localStorage.getItem('auroraOS_skipWelcome');
+                    if (skipWelcome === 'true') {
+                        window.location.href = 'index.html';
+                    } else {
+                        window.location.href = 'welcome-screen.html';
+                    }
+                }, 500);
+            }, 3500);
+        }
+        
+        // Permitir clicar para pular
+        document.getElementById('bootScreen').addEventListener('click', function() {
+            if (document.getElementById('bootScreen').classList.contains('active')) {
+                const skipWelcome = localStorage.getItem('auroraOS_skipWelcome');
+                document.body.style.transition = 'opacity 0.3s ease-out';
+                document.body.style.opacity = '0';
+                
+                setTimeout(() => {
+                    if (skipWelcome === 'true') {
+                        window.location.href = 'index.html';
+                    } else {
+                        window.location.href = 'welcome-screen.html';
+                    }
+                }, 300);
+            }
+        });
+    </script>
+</body>
+</html>
