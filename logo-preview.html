@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview Logo MysticSoft</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #fff;
+            margin-bottom: 40px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .preview-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .preview-box h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .preview-box p {
+            color: #ccc;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .logo-display {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+        
+        .logo-display img {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .size-small img {
+            width: 50px;
+        }
+        
+        .size-medium img {
+            width: 150px;
+        }
+        
+        .size-large img {
+            width: 300px;
+        }
+        
+        .size-xlarge img {
+            width: 500px;
+        }
+        
+        /* Botão Iniciar simulado */
+        .start-button-demo {
+            background: linear-gradient(180deg, #5a2d45 0%, #3e0a29 100%);
+            border: 2px solid;
+            border-color: #8b5a6f #3e0a29 #3e0a29 #8b5a6f;
+            color: #fff;
+            padding: 4px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            margin-top: 10px;
+        }
+        
+        .start-button-demo img {
+            width: 18px;
+            height: 18px;
+        }
+        
+        @media (max-width: 768px) {
+            .preview-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .size-xlarge img {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🌙 Preview Logo MysticSoft ✨</h1>
+    
+    <div class="preview-container">
+        <!-- Tamanho Pequeno -->
+        <div class="preview-box">
+            <h2>Tamanho Pequeno (50px)</h2>
+            <p>Usado no botão Iniciar</p>
+            <div class="logo-display size-small">
+                <img src="mysticsoft-logo.png" alt="MysticSoft Logo">
+            </div>
+            <button class="start-button-demo">
+                <img src="mysticsoft-logo.png" alt="">
+                <span>Iniciar</span>
+            </button>
+        </div>
+        
+        <!-- Tamanho Médio -->
+        <div class="preview-box">
+            <h2>Tamanho Médio (150px)</h2>
+            <p>Usado em ícones e menus</p>
+            <div class="logo-display size-medium">
+                <img src="mysticsoft-logo.png" alt="MysticSoft Logo">
+            </div>
+        </div>
+        
+        <!-- Tamanho Grande -->
+        <div class="preview-box">
+            <h2>Tamanho Grande (300px)</h2>
+            <p>Usado na tela de boas-vindas</p>
+            <div class="logo-display size-large">
+                <img src="mysticsoft-logo.png" alt="MysticSoft Logo">
+            </div>
+        </div>
+        
+        <!-- Tamanho Extra Grande -->
+        <div class="preview-box">
+            <h2>Tamanho Extra Grande (500px)</h2>
+            <p>Usado na tela de boot</p>
+            <div class="logo-display size-xlarge">
+                <img src="mysticsoft-logo.png" alt="MysticSoft Logo">
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 40px; text-align: center; color: #999; font-size: 12px;">
+        <p>© 2025 MysticSoft Technologies • Aurora Sagrada</p>
+        <p style="margin-top: 10px;">Logo em pixel art com renderização autêntica</p>
+    </div>
+</body>
+</html>
