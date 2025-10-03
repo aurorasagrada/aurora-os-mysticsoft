@@ -56,12 +56,10 @@
         }
         
         .desktop-icons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, 80px);
-            gap: 20px;
-            padding: 20px;
+            position: relative;
+            width: 100%;
             height: 100%;
-            align-content: start;
+            padding: 20px;
         }
         
         .desktop-icon {
@@ -69,10 +67,21 @@
             flex-direction: column;
             align-items: center;
             padding: 8px;
-            cursor: pointer;
+            cursor: move;
+            cursor: grab;
             border-radius: 0;
             transition: none;
-            position: relative;
+            position: absolute;
+            width: 80px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+        
+        .desktop-icon.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+            z-index: 1000;
         }
         
         .desktop-icon:hover {
@@ -1469,18 +1478,156 @@
             const container = document.getElementById('desktopIcons');
             container.innerHTML = '';
             
-            sitesConfig.forEach(site => {
+            // Carregar posições salvas
+            const savedPositions = JSON.parse(localStorage.getItem('auroraOS_iconPositions') || '{}');
+            
+            sitesConfig.forEach((site, index) => {
                 const icon = document.createElement('div');
                 icon.className = `desktop-icon ${site.premium ? 'premium' : ''}`;
-                icon.onclick = () => openSite(site);
+                icon.dataset.siteId = site.id;
+                
+                // Aplicar posição salva ou calcular posição em grid
+                if (savedPositions[site.id]) {
+                    icon.style.left = savedPositions[site.id].x + 'px';
+                    icon.style.top = savedPositions[site.id].y + 'px';
+                } else {
+                    // Posição inicial em grid
+                    const col = index % 10;
+                    const row = Math.floor(index / 10);
+                    icon.style.left = (20 + col * 100) + 'px';
+                    icon.style.top = (20 + row * 100) + 'px';
+                }
                 
                 icon.innerHTML = `
                     <div class="icon">${site.icon}</div>
                     <div class="label">${site.name}</div>
                 `;
                 
+                // Adicionar evento de clique (com delay para não conflitar com drag)
+                let clickTimeout;
+                icon.addEventListener('mousedown', (e) => {
+                    clickTimeout = setTimeout(() => {
+                        clickTimeout = null;
+                    }, 200);
+                });
+                
+                icon.addEventListener('click', (e) => {
+                    if (clickTimeout) {
+                        clearTimeout(clickTimeout);
+                        openSite(site);
+                    }
+                });
+                
+                // Configurar drag and drop
+                setupIconDrag(icon);
+                
                 container.appendChild(icon);
             });
+        }
+        
+        // Sistema de Drag and Drop para ícones
+        function setupIconDrag(icon) {
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
+            
+            // Mouse events
+            icon.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', endDrag);
+            
+            // Touch events (mobile)
+            icon.addEventListener('touchstart', startDragTouch, { passive: false });
+            document.addEventListener('touchmove', dragTouch, { passive: false });
+            document.addEventListener('touchend', endDragTouch);
+            
+            function startDrag(e) {
+                if (e.button !== 0) return; // Apenas botão esquerdo
+                isDragging = true;
+                icon.classList.add('dragging');
+                
+                startX = e.clientX;
+                startY = e.clientY;
+                initialX = icon.offsetLeft;
+                initialY = icon.offsetTop;
+                
+                e.preventDefault();
+            }
+            
+            function drag(e) {
+                if (!isDragging) return;
+                
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                
+                icon.style.left = (initialX + deltaX) + 'px';
+                icon.style.top = (initialY + deltaY) + 'px';
+                
+                e.preventDefault();
+            }
+            
+            function endDrag(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                icon.classList.remove('dragging');
+                
+                // Salvar posição
+                saveIconPosition(icon);
+            }
+            
+            // Touch events
+            function startDragTouch(e) {
+                isDragging = true;
+                icon.classList.add('dragging');
+                
+                const touch = e.touches[0];
+                startX = touch.clientX;
+                startY = touch.clientY;
+                initialX = icon.offsetLeft;
+                initialY = icon.offsetTop;
+                
+                e.preventDefault();
+            }
+            
+            function dragTouch(e) {
+                if (!isDragging) return;
+                
+                const touch = e.touches[0];
+                const deltaX = touch.clientX - startX;
+                const deltaY = touch.clientY - startY;
+                
+                icon.style.left = (initialX + deltaX) + 'px';
+                icon.style.top = (initialY + deltaY) + 'px';
+                
+                e.preventDefault();
+            }
+            
+            function endDragTouch(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                icon.classList.remove('dragging');
+                
+                // Salvar posição
+                saveIconPosition(icon);
+            }
+        }
+        
+        // Salvar posição do ícone
+        function saveIconPosition(icon) {
+            const siteId = icon.dataset.siteId;
+            const positions = JSON.parse(localStorage.getItem('auroraOS_iconPositions') || '{}');
+            
+            positions[siteId] = {
+                x: icon.offsetLeft,
+                y: icon.offsetTop
+            };
+            
+            localStorage.setItem('auroraOS_iconPositions', JSON.stringify(positions));
+        }
+        
+        // Resetar posições dos ícones
+        function resetIconPositions() {
+            localStorage.removeItem('auroraOS_iconPositions');
+            generateDesktopIcons();
         }
         
         function generateStartMenu() {
