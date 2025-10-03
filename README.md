@@ -43,7 +43,10 @@ As cores originais da Aurora Sagrada foram preservadas e aplicadas estrategicame
 - 🛒 Loja Mística (premium)
 - 🔮 Tarot Online (premium)
 - ⭐ Portal Astrológico (premium)
-- 📁 Arquivos & Anotações
+- 📁 Explorador de Arquivos
+- 📝 Bloco de Notas Esotérico
+- 🎵 Media Player Místico
+- 🎬 Video Player Místico
 
 ### 2. Taskbar (Barra de Tarefas)
 
@@ -149,6 +152,106 @@ As cores originais da Aurora Sagrada foram preservadas e aplicadas estrategicame
 - Itens: fonte preta, 11px
 - Hover: azul #316AC5 com texto branco
 - Opções: Personalizar, Atualizar, Organizar ícones
+
+---
+
+## 📦 Aplicativos Locais Integrados
+
+### 🎬 Video Player Místico
+
+**Arquivo:** `apps/video-player-mistico.html`
+
+Reprodutor de vídeo completo com estética Windows ME e funcionalidades modernas:
+
+**Recursos:**
+- Suporte a múltiplos formatos: MP4, WebM, OGG, AVI, MOV
+- Sistema de playlist com persistência automática
+- Controles completos: Play, Pause, Stop, Próximo, Anterior
+- Navegação temporal: Retroceder/Avançar 10 segundos
+- Controle de volume com slider visual
+- Velocidade de reprodução ajustável (0.25x - 2x)
+- Modo tela cheia e repetição
+- 10 atalhos de teclado para controle rápido
+- Barra de progresso interativa e clicável
+- Status bar com informações em tempo real
+
+**Documentação:**
+- [📖 Documentação Técnica](apps/VIDEO-PLAYER-MISTICO-DOC.md)
+- [📚 Guia Rápido do Usuário](apps/VIDEO-PLAYER-GUIA-RAPIDO.md)
+- [🔄 Changelog](CHANGELOG-VIDEO-PLAYER.md)
+
+### 🎵 Media Player Místico
+
+**Arquivo:** `apps/media-player-mistico.html`
+
+Reprodutor de áudio com visualizador animado:
+
+**Recursos:**
+- Suporte a MP3, WAV, OGG, M4A
+- Playlist gerenciável com persistência
+- Visualizador de áudio em tempo real
+- Controles completos de reprodução
+- Integração automática com File Explorer
+- Cores Aurora Sagrada
+
+### 📝 Bloco de Notas Esotérico
+
+**Arquivo:** `apps/bloco-notas-esoterico.html`
+
+Editor de texto com interface Windows ME:
+
+**Recursos:**
+- Editor de texto rico
+- Salvar/Abrir arquivos do sistema
+- Formatação básica de texto
+- Integração com FileSystem API
+- Estética Windows ME autêntica
+- Cores Aurora Sagrada
+
+**Documentação:**
+- [📖 Documentação](apps/BLOCO-NOTAS-ESOTERICO-DOC.md)
+
+### 📁 Explorador de Arquivos
+
+**Arquivo:** `apps/explorador-arquivos.html`
+
+Gerenciador completo de arquivos:
+
+**Recursos:**
+- Navegação em estrutura de pastas
+- Upload de arquivos do computador
+- Visualização de diferentes tipos de arquivo
+- Sistema de lixeira funcional
+- Busca de arquivos
+- Integração automática com todos os aplicativos
+- Abertura inteligente por tipo de arquivo
+
+**Estrutura de Pastas:**
+```
+Meu Computador/
+├── Meus Documentos/
+│   ├── Minhas Imagens/
+│   ├── Minhas Músicas/
+│   ├── Meus Vídeos/
+│   └── Documentos/
+└── Lixeira/
+```
+
+### 🗄️ FileSystem API
+
+**Arquivo:** `apps/filesystem-api.js`
+
+Sistema de arquivos completo baseado em LocalStorage:
+
+**Recursos:**
+- Armazenamento persistente (~10MB)
+- Operações CRUD completas
+- Gerenciamento de metadados
+- Estrutura hierárquica de pastas
+- Integração com todos os aplicativos
+
+**Documentação:**
+- [📖 Integração do Sistema de Arquivos](apps/INTEGRACAO-SISTEMA-ARQUIVOS.md)
 
 ---
 
