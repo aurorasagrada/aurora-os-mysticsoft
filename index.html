@@ -214,6 +214,31 @@
             filter: drop-shadow(0 0 3px var(--dourado));
         }
         
+        /* Logo MysticSoft na Taskbar */
+        .mysticsoft-logo-container {
+            height: 28px;
+            width: 28px;
+            margin-left: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border: 1px solid;
+            border-color: rgba(255,255,255,0.3) rgba(0,0,0,0.3) rgba(0,0,0,0.3) rgba(255,255,255,0.3);
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.2);
+            border-radius: 2px;
+        }
+        
+        .mysticsoft-logo {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        
         .taskbar-items {
             flex: 1;
             display: flex;
@@ -1097,6 +1122,10 @@
             <span class="start-logo">🌟</span>
             <span>Iniciar</span>
         </button>
+        
+        <div class="mysticsoft-logo-container">
+            <img src="mysticsoft-logo.png" alt="MysticSoft" class="mysticsoft-logo" title="MysticSoft Technologies">
+        </div>
         
         <div class="taskbar-items" id="taskbarItems">
             <!-- Itens da taskbar serão adicionados dinamicamente -->
