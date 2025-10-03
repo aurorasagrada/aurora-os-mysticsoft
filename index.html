@@ -23,6 +23,12 @@
             --theme-start-text: var(--dourado);
             --theme-clock: var(--dourado);
             --theme-window-header: var(--azul-escuro);
+            
+            /* Menu Iniciar - Barra Lateral (personalizável) */
+            --theme-start-sidebar: #0A5A9E;
+            --theme-start-sidebar-end: #3A7ABE;
+            --theme-start-hover: #0A5A9E;
+            --theme-start-hover-end: #3A7ABE;
         }
         
         * {
@@ -727,12 +733,12 @@
             background: #1a2a4a;
         }
         
-        /* Menu Iniciar - Estilo Windows ME */
+        /* Menu Iniciar - Estilo Windows ME com Barra Lateral */
         .start-menu {
             position: fixed;
             bottom: 30px;
             left: 4px;
-            width: 280px;
+            width: 350px;
             background: #c0c0c0;
             border: 3px solid;
             border-color: #FFFFFF #000000 #000000 #FFFFFF;
@@ -740,13 +746,13 @@
             z-index: 2500;
             display: none;
             max-height: 500px;
-            overflow-y: auto;
+            overflow: hidden;
             border-radius: 0;
             font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
         }
         
         .start-menu.active {
-            display: block;
+            display: flex;
         }
         
         @keyframes menuSlideUp {
@@ -754,57 +760,72 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .start-menu-header {
-            background: linear-gradient(to right, #0A5A9E 0%, #3A7ABE 100%);
-            color: white;
-            padding: 8px 12px;
-            font-weight: bold;
-            font-size: 12px;
-            border-bottom: 1px solid #FFFFFF;
+        /* Barra Lateral Vertical */
+        .start-menu-sidebar {
+            width: 32px;
+            background: linear-gradient(to bottom, var(--theme-start-sidebar, #0A5A9E) 0%, var(--theme-start-sidebar-end, #3A7ABE) 100%);
             display: flex;
-            align-items: center;
-            gap: 8px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            height: 32px;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 12px 0;
+            position: relative;
         }
         
-        .start-menu-header .logo {
+        .start-menu-sidebar-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            color: white;
+            font-weight: bold;
             font-size: 18px;
-            filter: drop-shadow(0 0 4px rgba(255,255,255,0.8));
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            white-space: nowrap;
+        }
+        
+        /* Conteúdo Principal do Menu */
+        .start-menu-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #c0c0c0;
+            overflow-y: auto;
+            max-height: 500px;
         }
         
         .start-menu-items {
             background: #c0c0c0;
-            padding: 2px 0;
+            padding: 4px 0;
         }
         
         .start-menu-item {
-            padding: 4px 8px 4px 40px;
+            padding: 4px 12px 4px 48px;
             cursor: pointer;
             font-size: 11px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             color: #000000;
             transition: none;
             position: relative;
-            height: 28px;
+            height: 32px;
             border: 1px solid transparent;
-            margin: 1px 2px;
+            margin: 0 2px;
         }
         
         .start-menu-item:hover {
-            background: linear-gradient(to right, #0A5A9E 0%, #3A7ABE 100%);
+            background: linear-gradient(to right, var(--theme-start-hover, #0A5A9E) 0%, var(--theme-start-hover-end, #3A7ABE) 100%);
             color: white;
-            border: 1px solid #0A5A9E;
+            border: 1px solid var(--theme-start-hover, #0A5A9E);
         }
         
         .start-menu-item .icon {
-            font-size: 20px;
-            min-width: 20px;
+            font-size: 24px;
+            min-width: 24px;
             text-align: center;
             position: absolute;
-            left: 10px;
+            left: 12px;
+            filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3));
         }
         
         .start-menu-item .text {
@@ -812,7 +833,7 @@
             font-weight: normal;
         }
         
-        .start-menu-item.premium::after {
+        .start-menu-item.has-submenu::after {
             content: '►';
             position: absolute;
             right: 8px;
@@ -820,19 +841,19 @@
             color: #000000;
         }
         
-        .start-menu-item.premium:hover::after {
+        .start-menu-item.has-submenu:hover::after {
             color: white;
         }
         
         .start-menu-separator {
             height: 2px;
             background: linear-gradient(to bottom, #808080 0%, #808080 1px, #FFFFFF 1px, #FFFFFF 2px);
-            margin: 3px 6px;
+            margin: 3px 8px;
         }
         
         .start-menu-footer {
             background: linear-gradient(to bottom, #D4D0C8 0%, #C0C0C0 100%);
-            padding: 6px 12px;
+            padding: 8px 12px;
             border-top: 2px solid;
             border-color: #FFFFFF #808080 #808080 #FFFFFF;
             font-size: 10px;
@@ -1107,16 +1128,17 @@
     
     <!-- Menu Iniciar -->
     <div class="start-menu" id="startMenu">
-        <div class="start-menu-header">
-            <span class="logo">🌟</span>
-            <span>Aurora OS • MysticSoft</span>
+        <div class="start-menu-sidebar">
+            <div class="start-menu-sidebar-text">Aurora OS Místico</div>
         </div>
-        <div class="start-menu-items" id="startMenuItems">
-            <!-- Itens do menu serão gerados dinamicamente -->
-        </div>
-        <div class="start-menu-separator"></div>
-        <div class="start-menu-footer">
-            Clique em qualquer item para abrir
+        <div class="start-menu-content">
+            <div class="start-menu-items" id="startMenuItems">
+                <!-- Itens do menu serão gerados dinamicamente -->
+            </div>
+            <div class="start-menu-separator"></div>
+            <div class="start-menu-footer">
+                🌟 MysticSoft Technologies
+            </div>
         </div>
     </div>
     
@@ -1406,7 +1428,7 @@
                 // Adicionar sites premium
                 premiumSites.forEach(site => {
                     const item = document.createElement('div');
-                    item.className = 'start-menu-item premium';
+                    item.className = 'start-menu-item has-submenu';
                     item.onclick = () => openSite(site);
                     
                     item.innerHTML = `
