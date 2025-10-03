@@ -1238,6 +1238,48 @@
                 </div>
                 
                 <div class="personalization-section">
+                    <h3>🎨 Barra Lateral do Menu Iniciar</h3>
+                    <p style="margin-bottom: 10px; color: #666;">Personalize a cor da barra lateral vertical do Menu Iniciar</p>
+                    
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Temas Predefinidos:</label>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px;">
+                        <button class="personalization-button" onclick="applyStartMenuTheme('windows-me')" style="padding: 8px;">
+                            🪟 Windows ME
+                        </button>
+                        <button class="personalization-button" onclick="applyStartMenuTheme('mystic-wine')" style="padding: 8px;">
+                            🍷 Vinho Místico
+                        </button>
+                        <button class="personalization-button" onclick="applyStartMenuTheme('purple-imperial')" style="padding: 8px;">
+                            👑 Roxo Imperial
+                        </button>
+                        <button class="personalization-button" onclick="applyStartMenuTheme('emerald-forest')" style="padding: 8px;">
+                            🌲 Floresta Esmeralda
+                        </button>
+                        <button class="personalization-button" onclick="applyStartMenuTheme('cosmic-night')" style="padding: 8px;">
+                            🌌 Noite Cósmica
+                        </button>
+                        <button class="personalization-button" onclick="applyStartMenuTheme('golden-sunset')" style="padding: 8px;">
+                            🌅 Pôr do Sol Dourado
+                        </button>
+                    </div>
+                    
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Ou escolha cores personalizadas:</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                        <div>
+                            <label style="font-size: 10px; display: block; margin-bottom: 3px;">Cor Inicial:</label>
+                            <input type="color" id="startSidebarColorStart" value="#0A5A9E" style="width: 100%; height: 40px; border: 2px inset #fff; cursor: pointer;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; display: block; margin-bottom: 3px;">Cor Final:</label>
+                            <input type="color" id="startSidebarColorEnd" value="#3A7ABE" style="width: 100%; height: 40px; border: 2px inset #fff; cursor: pointer;">
+                        </div>
+                    </div>
+                    <button class="personalization-button primary" onclick="applyCustomStartMenuColor()" style="width: 100%; margin-top: 5px;">
+                        ✨ Aplicar Cores Personalizadas
+                    </button>
+                </div>
+                
+                <div class="personalization-section">
                     <h3>Configurações da Taskbar</h3>
                     <label>
                         <input type="checkbox" id="showPlanetaryWidget" checked onchange="togglePlanetaryWidget()">
@@ -1343,6 +1385,7 @@
             updateClock();
             updatePlanetaryInfo();
             loadPersonalization();
+            loadStartMenuTheme();
             
             // Atualiza relógio a cada segundo
             setInterval(updateClock, 1000);
@@ -2178,6 +2221,100 @@
             // Atualizar seleções visuais
             generateColorPalette();
             generateWallpaperPresets();
+            
+            // Resetar cores do Menu Iniciar
+            applyStartMenuTheme('windows-me');
+        }
+        
+        // Funções para personalizar barra lateral do Menu Iniciar
+        function applyStartMenuTheme(themeName) {
+            const themes = {
+                'windows-me': {
+                    start: '#0A5A9E',
+                    end: '#3A7ABE',
+                    hover: '#0A5A9E',
+                    hoverEnd: '#3A7ABE'
+                },
+                'mystic-wine': {
+                    start: '#3e0a29',
+                    end: '#6b1442',
+                    hover: '#3e0a29',
+                    hoverEnd: '#6b1442'
+                },
+                'purple-imperial': {
+                    start: '#4b0082',
+                    end: '#8b008b',
+                    hover: '#4b0082',
+                    hoverEnd: '#8b008b'
+                },
+                'emerald-forest': {
+                    start: '#2d5016',
+                    end: '#1b4332',
+                    hover: '#2d5016',
+                    hoverEnd: '#1b4332'
+                },
+                'cosmic-night': {
+                    start: '#0b1836',
+                    end: '#1a2a4a',
+                    hover: '#0b1836',
+                    hoverEnd: '#1a2a4a'
+                },
+                'golden-sunset': {
+                    start: '#d4860f',
+                    end: '#f0aa53',
+                    hover: '#d4860f',
+                    hoverEnd: '#f0aa53'
+                }
+            };
+            
+            const theme = themes[themeName];
+            if (theme) {
+                document.documentElement.style.setProperty('--theme-start-sidebar', theme.start);
+                document.documentElement.style.setProperty('--theme-start-sidebar-end', theme.end);
+                document.documentElement.style.setProperty('--theme-start-hover', theme.hover);
+                document.documentElement.style.setProperty('--theme-start-hover-end', theme.hoverEnd);
+                
+                // Atualizar inputs de cor
+                document.getElementById('startSidebarColorStart').value = theme.start;
+                document.getElementById('startSidebarColorEnd').value = theme.end;
+                
+                // Salvar no localStorage
+                localStorage.setItem('auroraOS_startMenuTheme', JSON.stringify(theme));
+            }
+        }
+        
+        function applyCustomStartMenuColor() {
+            const colorStart = document.getElementById('startSidebarColorStart').value;
+            const colorEnd = document.getElementById('startSidebarColorEnd').value;
+            
+            document.documentElement.style.setProperty('--theme-start-sidebar', colorStart);
+            document.documentElement.style.setProperty('--theme-start-sidebar-end', colorEnd);
+            document.documentElement.style.setProperty('--theme-start-hover', colorStart);
+            document.documentElement.style.setProperty('--theme-start-hover-end', colorEnd);
+            
+            // Salvar no localStorage
+            const customTheme = {
+                start: colorStart,
+                end: colorEnd,
+                hover: colorStart,
+                hoverEnd: colorEnd
+            };
+            localStorage.setItem('auroraOS_startMenuTheme', JSON.stringify(customTheme));
+        }
+        
+        function loadStartMenuTheme() {
+            const saved = localStorage.getItem('auroraOS_startMenuTheme');
+            if (saved) {
+                const theme = JSON.parse(saved);
+                document.documentElement.style.setProperty('--theme-start-sidebar', theme.start);
+                document.documentElement.style.setProperty('--theme-start-sidebar-end', theme.end);
+                document.documentElement.style.setProperty('--theme-start-hover', theme.hover);
+                document.documentElement.style.setProperty('--theme-start-hover-end', theme.hoverEnd);
+                
+                // Atualizar inputs de cor
+                document.getElementById('startSidebarColorStart').value = theme.start;
+                document.getElementById('startSidebarColorEnd').value = theme.end;
+            }
         }
     </script>
 </body>
