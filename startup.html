@@ -79,18 +79,12 @@
             animation: blink 1s step-end infinite;
         }
         
-        /* ==================== FASE 2: TELA BOOT (WHIMSIGOTH) ==================== */
+        /* ==================== FASE 2: TELA BOOT ==================== */
         
         .boot-screen {
             width: 100vw;
             height: 100vh;
-            background: linear-gradient(135deg, 
-                #1a0f2e 0%,    /* Roxo escuro */
-                #2d0a1f 25%,   /* Vinho profundo */
-                #4a1a4a 50%,   /* Roxo místico */
-                #3e0a29 75%,   /* Vinho escuro */
-                #1a0f2e 100%   /* Roxo escuro */
-            );
+            background: #000080; /* Azul escuro sólido */
             display: none;
             flex-direction: column;
             align-items: center;
@@ -99,133 +93,22 @@
             overflow: hidden;
         }
         
-        /* Partículas místicas flutuantes */
-        .mystical-particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: #f0aa53;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #f0aa53, 0 0 15px #d4860f;
-            animation: floatParticle 15s infinite ease-in-out;
-            opacity: 0;
-        }
-        
-        @keyframes floatParticle {
-            0%, 100% {
-                transform: translateY(0) translateX(0) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(100px) scale(0.5);
-                opacity: 0;
-            }
-        }
-        
-        /* Lua crescente de fundo */
-        .mystical-moon {
-            position: absolute;
-            top: 10%;
-            right: 15%;
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, 
-                rgba(240, 170, 83, 0.15) 0%,
-                rgba(212, 134, 15, 0.08) 50%,
-                transparent 70%
-            );
-            opacity: 0.6;
-            animation: moonGlow 4s ease-in-out infinite;
-            z-index: 1;
-        }
-        
-        @keyframes moonGlow {
-            0%, 100% {
-                opacity: 0.4;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.7;
-                transform: scale(1.1);
-            }
-        }
-        
-        /* Ornamento gótico superior */
-        .gothic-ornament-top {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            height: 80px;
-            background: linear-gradient(180deg, 
-                rgba(106, 20, 66, 0.4) 0%,
-                transparent 100%
-            );
-            clip-path: polygon(
-                50% 0%, 
-                45% 20%, 40% 40%, 35% 60%, 30% 80%, 25% 100%,
-                75% 100%, 70% 80%, 65% 60%, 60% 40%, 55% 20%
-            );
-            opacity: 0;
-            animation: fadeIn 1.5s ease-out 0.3s forwards;
-            z-index: 2;
-        }
-        
-        /* Ornamento gótico inferior */
-        .gothic-ornament-bottom {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            height: 80px;
-            background: linear-gradient(0deg, 
-                rgba(106, 20, 66, 0.4) 0%,
-                transparent 100%
-            );
-            clip-path: polygon(
-                25% 0%, 30% 20%, 35% 40%, 40% 60%, 45% 80%, 50% 100%,
-                55% 80%, 60% 60%, 65% 40%, 70% 20%, 75% 0%
-            );
-            opacity: 0;
-            animation: fadeIn 1.5s ease-out 0.5s forwards;
-            z-index: 2;
-        }
+        /* Elementos removidos - sem animações */
         
         .boot-screen.active {
             display: flex;
         }
         
-        /* Texto "MysticSoft" no canto */
+        /* Texto "MysticSoft" no canto - Verde claro (descrição) */
         .boot-brand {
             position: absolute;
             top: 30px;
             right: 40px;
             font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
             font-size: 13px;
-            color: #f0aa53;
+            color: #00ff00; /* Verde claro */
             letter-spacing: 3px;
             font-weight: normal;
-            opacity: 0;
-            text-shadow: 0 0 10px rgba(240, 170, 83, 0.6), 0 0 20px rgba(212, 134, 15, 0.4);
-            animation: fadeIn 1s ease-out 0.5s forwards;
             z-index: 10;
         }
         
@@ -233,7 +116,7 @@
             to { opacity: 1; }
         }
         
-        /* Logo grande centralizado */
+        /* Logo grande centralizado - SEM animações */
         .boot-logo {
             max-width: 800px;
             width: 80%;
@@ -241,126 +124,107 @@
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
-            margin-bottom: 100px;
-            opacity: 0;
-            transform: scale(0.9);
-            filter: drop-shadow(0 0 40px rgba(240, 170, 83, 0.7)) 
-                    drop-shadow(0 0 80px rgba(212, 134, 15, 0.5))
-                    drop-shadow(0 0 120px rgba(240, 170, 83, 0.3));
-            animation: logoAppear 1.2s ease-out forwards, logoGlowPulse 3s ease-in-out infinite;
+            margin-bottom: 60px;
             z-index: 10;
             position: relative;
-        }
-        
-        @keyframes logoAppear {
-            0% {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        
-        @keyframes logoGlowPulse {
-            0%, 100% {
-                filter: drop-shadow(0 0 20px rgba(240, 170, 83, 0.5)) 
-                        drop-shadow(0 0 40px rgba(212, 134, 15, 0.3));
-            }
-            50% {
-                filter: drop-shadow(0 0 40px rgba(240, 170, 83, 0.8)) 
-                        drop-shadow(0 0 80px rgba(212, 134, 15, 0.6))
-                        drop-shadow(0 0 120px rgba(240, 170, 83, 0.4));
-            }
         }
         
         /* Container da barra de progresso */
         .progress-container {
             width: 500px;
-            opacity: 0;
-            animation: fadeIn 1s ease-out 0.8s forwards;
             z-index: 10;
             position: relative;
         }
         
-        /* Barra de progresso em BLOCOS (Windows XP style) */
+        /* Barra de progresso - Fundo MAGENTA, blocos AMARELOS */
         .progress-bar {
             width: 100%;
             height: 24px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid rgba(240, 170, 83, 0.3);
-            border-radius: 6px;
+            background: #ff00ff; /* Magenta */
+            border: 2px solid #ffffff;
+            border-radius: 0;
             overflow: hidden;
             position: relative;
             display: flex;
-            gap: 3px;
-            padding: 3px;
-            box-shadow: 
-                0 0 20px rgba(0, 255, 0, 0.3),
-                inset 0 2px 5px rgba(0, 0, 0, 0.5);
+            gap: 2px;
+            padding: 2px;
         }
         
-        /* Blocos individuais da barra */
+        /* Blocos individuais da barra - AMARELOS */
         .progress-block {
             flex: 1;
             height: 100%;
             background: transparent;
-            border-radius: 2px;
-            opacity: 0;
-            animation: blockFill 0.15s ease-out forwards;
+            border-radius: 0;
             position: relative;
         }
         
         .progress-block.filled {
-            background: linear-gradient(180deg,
-                #00ff00 0%,
-                #00dd00 50%,
-                #00aa00 100%
-            );
-            box-shadow: 
-                0 0 8px rgba(0, 255, 0, 0.8),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+            background: #ffff00; /* Amarelo */
         }
         
-        @keyframes blockFill {
-            0% {
-                opacity: 0;
-                transform: scaleY(0.5);
-            }
-            100% {
-                opacity: 1;
-                transform: scaleY(1);
-            }
-        }
-        
-        /* Texto de carregamento */
+        /* Texto de carregamento - Verde claro (descrição) */
         .boot-text {
-            margin-top: 25px;
             font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
             font-size: 12px;
-            color: #d4a574;
-            text-align: center;
-            opacity: 0;
-            text-shadow: 0 0 8px rgba(212, 165, 116, 0.5);
-            animation: fadeIn 1s ease-out 1.2s forwards;
+            color: #00ff00; /* Verde claro */
+            margin-top: 20px;
+            letter-spacing: 1px;
             z-index: 10;
-            position: relative;
         }
         
-        /* Copyright */
-        .boot-copyright {
+        /* Copyright no rodapé - Branco/violeta (texto longo) */
+        .boot-footer {
             position: absolute;
             bottom: 30px;
             font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
-            font-size: 10px;
-            color: #a67c52;
-            opacity: 0;
-            text-shadow: 0 0 5px rgba(166, 124, 82, 0.4);
-            animation: fadeIn 1s ease-out 1.5s forwards;
+            font-size: 11px;
+            color: #e6e6fa; /* Lavanda (branco-violeta) */
             z-index: 10;
         }
+        
+        /* Título "BOAS VINDAS" - Amarelo (título grande) */
+        .welcome-title {
+            font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffff00; /* Amarelo */
+            margin-top: 40px;
+            letter-spacing: 4px;
+            display: none;
+            z-index: 10;
+        }
+        
+        .welcome-title.show {
+            display: block;
+        }
+        
+        /* Botão "Entrar no Sistema" */
+        .enter-button {
+            margin-top: 30px;
+            padding: 12px 40px;
+            font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            cursor: pointer;
+            display: none;
+            z-index: 10;
+        }
+        
+        .enter-button.show {
+            display: block;
+        }
+        
+        .enter-button:hover {
+            background: #d4d0c8;
+        }
+        
+        .enter-button:active {
+            border-color: #808080 #ffffff #ffffff #808080;
         
         /* ==================== RESPONSIVO ==================== */
         
@@ -474,15 +338,7 @@
     
     <!-- ==================== FASE 2: TELA BOOT (WHIMSIGOTH) ==================== -->
     <div class="boot-screen" id="bootScreen">
-        <!-- Lua mística de fundo -->
-        <div class="mystical-moon"></div>
-        
-        <!-- Ornamentos góticos -->
-        <div class="gothic-ornament-top"></div>
-        <div class="gothic-ornament-bottom"></div>
-        
-        <!-- Partículas místicas -->
-        <div class="mystical-particles" id="particles"></div>
+        <!-- Elementos decorativos removidos -->
         
         <!-- Texto MysticSoft -->
         <div class="boot-brand">MysticSoft</div>
@@ -497,12 +353,17 @@
             </div>
         </div>
         
-        <!-- Texto de carregamento -->
-        <div class="boot-text">Iniciando Aurora OS...</div>
+        
+        <div class="boot-text" id="bootText">Iniciando Aurora OS...</div>
+        
+        <!-- Título "BOAS VINDAS" (aparece após carregar) -->
+        <div class="welcome-title" id="welcomeTitle">BOAS VINDAS</div>
+        
+        <!-- Botão "Entrar no Sistema" (aparece após carregar) -->
+        <button class="enter-button" id="enterButton" onclick="goToNextScreen()">Entrar no Sistema</button>
         
         <!-- Copyright -->
-        <div class="boot-copyright">
-            © 2025 MysticSoft Technologies • Aurora Sagrada
+        <div class="boot-footer">© 2025 MysticSoft Technologies • Aurora Sagrada</div>
         </div>
     </div>
     
@@ -625,26 +486,7 @@ Press any key to continue...`;
             }
         }
         
-        // Criar partículas místicas
-        function createMysticalParticles() {
-            const container = document.getElementById('particles');
-            const particleCount = 40;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-                
-                // Tamanhos variados
-                const size = Math.random() * 2 + 2;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                
-                container.appendChild(particle);
-            }
-        }
+        // Função removida - sem partículas
         
         // Criar e animar blocos da barra de progresso
         function animateProgressBlocks() {
@@ -674,14 +516,15 @@ Press any key to continue...`;
             document.getElementById('biosScreen').classList.add('hidden');
             document.getElementById('bootScreen').classList.add('active');
             
-            // Criar partículas místicas
-            createMysticalParticles();
-            
             // Criar e animar blocos da barra
-            setTimeout(animateProgressBlocks, 800);
+            animateProgressBlocks();
             
-            // Ir para próxima tela após duração do boot
-            setTimeout(goToNextScreen, BOOT_DURATION);
+            // Após carregar, mostrar título e botão
+            setTimeout(() => {
+                document.getElementById('bootText').style.display = 'none';
+                document.getElementById('welcomeTitle').classList.add('show');
+                document.getElementById('enterButton').classList.add('show');
+            }, 3800); // 3.8 segundos (após barra completar)
         }
         
         // Ir para próxima tela (welcome ou desktop)
