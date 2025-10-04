@@ -6,6 +6,14 @@
     <title>Aurora OS • Inicializando...</title>
 
     <style>
+        /* Importar fonte Minecraftia */
+        @font-face {
+            font-family: 'Minecraftia';
+            src: url('Minecraftia-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -125,13 +133,13 @@
         
         /* Logo grande centralizado - SEM animações */
         .boot-logo {
-            max-width: 1200px;
-            width: 90%;
+            max-width: 600px;
+            width: 50%;
             height: auto;
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
-            margin-bottom: 180px;
+            margin-bottom: 60px;
             z-index: 10;
             position: relative;
             filter: drop-shadow(0 0 20px rgba(240, 170, 83, 0.3));
@@ -139,9 +147,11 @@
         
         /* Container da barra de progresso */
         .progress-container {
-            width: 500px;
+            width: 600px;
+            max-width: 80%;
             z-index: 10;
             position: relative;
+            margin-bottom: 40px;
         }
         
         /* Barra de progresso - Cores Aurora Sagrada - ESTILO QUADRICULADO */
@@ -194,14 +204,15 @@
             z-index: 10;
         }
         
-        /* Título "Boas Vindas!" - Dourado alquímico (título grande) - PIXELADO VINTAGE */
+        /* Título "Boas Vindas!" - Dourado alquímico (título grande) - FONTE MINECRAFTIA */
         .welcome-title {
-            font-family: 'Courier New', 'Courier', 'Nimbus Mono PS', 'Liberation Mono', monospace;
-            font-size: 48px;
-            font-weight: bold;
+            font-family: 'Minecraftia', 'Courier New', monospace;
+            font-size: 32px;
+            font-weight: normal;
             color: #f0aa53; /* Dourado alquímico (Aurora Sagrada) */
-            margin-top: 40px;
-            letter-spacing: 8px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            letter-spacing: 4px;
             display: none;
             z-index: 10;
             text-shadow: 0 0 25px rgba(240, 170, 83, 0.7), 0 0 50px rgba(240, 170, 83, 0.5), 0 0 75px rgba(240, 170, 83, 0.3);
@@ -257,9 +268,9 @@
             }
             
             .boot-logo {
-                width: 85%;
-                max-width: 500px;
-                margin-bottom: 140px;
+                width: 60%;
+                max-width: 450px;
+                margin-bottom: 50px;
             }
             
             .boot-brand {
@@ -269,7 +280,13 @@
             }
             
             .progress-container {
-                width: 350px;
+                width: 500px;
+                max-width: 85%;
+            }
+            
+            .welcome-title {
+                font-size: 28px;
+                letter-spacing: 4px;
             }
             
             .progress-bar {
@@ -297,13 +314,19 @@
             }
             
             .boot-logo {
-                width: 90%;
-                max-width: 350px;
-                margin-bottom: 120px;
+                width: 70%;
+                max-width: 300px;
+                margin-bottom: 40px;
             }
             
             .progress-container {
-                width: 280px;
+                width: 320px;
+                max-width: 90%;
+            }
+            
+            .welcome-title {
+                font-size: 22px;
+                letter-spacing: 3px;
             }
             
             .progress-bar {
@@ -376,10 +399,8 @@
         </div>
         
         
-        <div class="boot-text" id="bootText">Iniciando Aurora OS...</div>
-        
-        <!-- Título "Boas Vindas!" (aparece após carregar) -->
-        <div class="welcome-title" id="welcomeTitle">Boas Vindas!</div>
+        <!-- Texto "Carregando..." (durante o carregamento) -->
+        <div class="welcome-title show" id="welcomeTitle">Carregando...</div>
         
         <!-- Botão "Entrar no Sistema" (aparece após carregar) -->
         <button class="enter-button" id="enterButton" onclick="goToNextScreen()">Entrar no Sistema</button>
@@ -391,6 +412,17 @@
     
     <!-- Botão de pular (debug) -->
     <button class="skip-btn" onclick="skipToDesktop()">Pular →</button>
+    
+    <!-- ==================== ÁUDIOS ==================== -->
+    <audio id="biosBeep" preload="auto">
+        <source src="bios-beep.wav" type="audio/wav">
+    </audio>
+    <audio id="typingSound" preload="auto" loop>
+        <source src="typing-sound.wav" type="audio/wav">
+    </audio>
+    <audio id="dialupSound" preload="auto">
+        <source src="dialup-modem.mp3" type="audio/mpeg">
+    </audio>
     
     <script>
         // ==================== CONFIGURAÇÕES ====================
@@ -577,44 +609,54 @@ Press any key to continue...`;
         
         // Ir para tela de boot
         function goToBoot() {
+            // Tocar som de dial-up modem
+            const dialupSound = document.getElementById('dialupSound');
+            dialupSound.volume = 0.4;
+            dialupSound.play().catch(e => console.log('Erro ao tocar dial-up:', e));
+            
             document.getElementById('biosScreen').classList.add('hidden');
             document.getElementById('bootScreen').classList.add('active');
             
             // Criar e animar blocos da barra
             animateProgressBlocks();
             
-            // Após carregar, mostrar título e botão
+            // Após carregar, trocar "Carregando..." para "Boas Vindas!" e mostrar botão
             setTimeout(() => {
-                document.getElementById('bootText').style.display = 'none';
-                document.getElementById('welcomeTitle').classList.add('show');
+                const welcomeTitle = document.getElementById('welcomeTitle');
+                welcomeTitle.textContent = 'Boas Vindas!';
                 document.getElementById('enterButton').classList.add('show');
             }, 3800); // 3.8 segundos (após barra completar)
         }
         
-        // Ir para próxima tela (welcome ou desktop)
+        // Ir para próxima tela (mostrar apenas logo MysticSoft)
         function goToNextScreen() {
-            // Fade out
-            document.body.style.transition = 'opacity 0.5s ease-out';
-            document.body.style.opacity = '0';
+            const bootScreen = document.getElementById('bootScreen');
+            const welcomeTitle = document.getElementById('welcomeTitle');
+            const enterButton = document.getElementById('enterButton');
+            const progressContainer = document.querySelector('.progress-container');
+            const bootBrand = document.querySelector('.boot-brand');
+            const bootFooter = document.querySelector('.boot-footer');
             
-            setTimeout(() => {
-                // Verificar se deve pular welcome
-                const skipWelcome = localStorage.getItem('auroraOS_skipWelcome');
-                if (skipWelcome === 'true') {
-                    window.location.href = 'index.html';
-                } else {
-                    window.location.href = 'welcome-screen.html';
-                }
-            }, 500);
+            // Esconder todos os elementos exceto o logo
+            welcomeTitle.style.display = 'none';
+            enterButton.style.display = 'none';
+            progressContainer.style.display = 'none';
+            bootBrand.style.display = 'none';
+            bootFooter.style.display = 'none';
+            
+            // Centralizar e destacar o logo
+            const bootLogo = document.querySelector('.boot-logo');
+            bootLogo.style.marginBottom = '0';
+            bootLogo.style.maxWidth = '800px';
+            bootLogo.style.width = '60%';
+            
+            // Adicionar efeito de fade in no logo
+            bootLogo.style.animation = 'fadeIn 1s ease-in';
         }
         
         // Pular direto para desktop (debug)
         function skipToDesktop() {
-            document.body.style.transition = 'opacity 0.3s ease-out';
-            document.body.style.opacity = '0';
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 300);
+            goToNextScreen();
         }
         
         // ==================== EVENT LISTENERS ====================
@@ -644,7 +686,12 @@ Press any key to continue...`;
         
         // ==================== INICIALIZAÇÃO ====================
         
-        // Começar digitação após delay
+        // Tocar apenas bip BIOS no início (sem som de digitação)
+        const biosBeep = document.getElementById('biosBeep');
+        biosBeep.volume = 0.5;
+        biosBeep.play().catch(e => console.log('Autoplay bloqueado:', e));
+        
+        // Começar digitação após delay (sem som)
         setTimeout(() => {
             typingInterval = setInterval(typeWriter, TYPING_SPEED);
         }, BIOS_DELAY);
