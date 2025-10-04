@@ -79,17 +79,134 @@
             animation: blink 1s step-end infinite;
         }
         
-        /* ==================== FASE 2: TELA BOOT ==================== */
+        /* ==================== FASE 2: TELA BOOT (WHIMSIGOTH) ==================== */
         
         .boot-screen {
             width: 100vw;
             height: 100vh;
-            background: #000;
+            background: linear-gradient(135deg, 
+                #1a0f2e 0%,    /* Roxo escuro */
+                #2d0a1f 25%,   /* Vinho profundo */
+                #4a1a4a 50%,   /* Roxo místico */
+                #3e0a29 75%,   /* Vinho escuro */
+                #1a0f2e 100%   /* Roxo escuro */
+            );
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
+            overflow: hidden;
+        }
+        
+        /* Partículas místicas flutuantes */
+        .mystical-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #f0aa53;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #f0aa53, 0 0 15px #d4860f;
+            animation: floatParticle 15s infinite ease-in-out;
+            opacity: 0;
+        }
+        
+        @keyframes floatParticle {
+            0%, 100% {
+                transform: translateY(0) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        /* Lua crescente de fundo */
+        .mystical-moon {
+            position: absolute;
+            top: 10%;
+            right: 15%;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, 
+                rgba(240, 170, 83, 0.15) 0%,
+                rgba(212, 134, 15, 0.08) 50%,
+                transparent 70%
+            );
+            opacity: 0.6;
+            animation: moonGlow 4s ease-in-out infinite;
+            z-index: 1;
+        }
+        
+        @keyframes moonGlow {
+            0%, 100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
+        }
+        
+        /* Ornamento gótico superior */
+        .gothic-ornament-top {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 80px;
+            background: linear-gradient(180deg, 
+                rgba(106, 20, 66, 0.4) 0%,
+                transparent 100%
+            );
+            clip-path: polygon(
+                50% 0%, 
+                45% 20%, 40% 40%, 35% 60%, 30% 80%, 25% 100%,
+                75% 100%, 70% 80%, 65% 60%, 60% 40%, 55% 20%
+            );
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out 0.3s forwards;
+            z-index: 2;
+        }
+        
+        /* Ornamento gótico inferior */
+        .gothic-ornament-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 80px;
+            background: linear-gradient(0deg, 
+                rgba(106, 20, 66, 0.4) 0%,
+                transparent 100%
+            );
+            clip-path: polygon(
+                25% 0%, 30% 20%, 35% 40%, 40% 60%, 45% 80%, 50% 100%,
+                55% 80%, 60% 60%, 65% 40%, 70% 20%, 75% 0%
+            );
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out 0.5s forwards;
+            z-index: 2;
         }
         
         .boot-screen.active {
@@ -103,11 +220,13 @@
             right: 40px;
             font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
             font-size: 13px;
-            color: #999;
+            color: #f0aa53;
             letter-spacing: 3px;
             font-weight: normal;
             opacity: 0;
+            text-shadow: 0 0 10px rgba(240, 170, 83, 0.6), 0 0 20px rgba(212, 134, 15, 0.4);
             animation: fadeIn 1s ease-out 0.5s forwards;
+            z-index: 10;
         }
         
         @keyframes fadeIn {
@@ -125,7 +244,11 @@
             margin-bottom: 80px;
             opacity: 0;
             transform: scale(0.9);
-            animation: logoAppear 1.2s ease-out forwards;
+            filter: drop-shadow(0 0 30px rgba(240, 170, 83, 0.6)) 
+                    drop-shadow(0 0 60px rgba(212, 134, 15, 0.4));
+            animation: logoAppear 1.2s ease-out forwards, logoGlowPulse 3s ease-in-out infinite;
+            z-index: 10;
+            position: relative;
         }
         
         @keyframes logoAppear {
@@ -136,6 +259,18 @@
             100% {
                 opacity: 1;
                 transform: scale(1);
+            }
+        }
+        
+        @keyframes logoGlowPulse {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(240, 170, 83, 0.5)) 
+                        drop-shadow(0 0 40px rgba(212, 134, 15, 0.3));
+            }
+            50% {
+                filter: drop-shadow(0 0 40px rgba(240, 170, 83, 0.8)) 
+                        drop-shadow(0 0 80px rgba(212, 134, 15, 0.6))
+                        drop-shadow(0 0 120px rgba(240, 170, 83, 0.4));
             }
         }
         
@@ -192,10 +327,13 @@
             margin-top: 25px;
             font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
             font-size: 12px;
-            color: #999;
+            color: #d4a574;
             text-align: center;
             opacity: 0;
+            text-shadow: 0 0 8px rgba(212, 165, 116, 0.5);
             animation: fadeIn 1s ease-out 1.2s forwards;
+            z-index: 10;
+            position: relative;
         }
         
         /* Copyright */
@@ -204,9 +342,11 @@
             bottom: 30px;
             font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
             font-size: 10px;
-            color: #666;
+            color: #a67c52;
             opacity: 0;
+            text-shadow: 0 0 5px rgba(166, 124, 82, 0.4);
             animation: fadeIn 1s ease-out 1.5s forwards;
+            z-index: 10;
         }
         
         /* ==================== RESPONSIVO ==================== */
@@ -293,20 +433,35 @@
         <div class="bios-content" id="biosContent"></div>
     </div>
     
-    <!-- ==================== FASE 2: TELA BOOT ==================== -->
+    <!-- ==================== FASE 2: TELA BOOT (WHIMSIGOTH) ==================== -->
     <div class="boot-screen" id="bootScreen">
+        <!-- Lua mística de fundo -->
+        <div class="mystical-moon"></div>
+        
+        <!-- Ornamentos góticos -->
+        <div class="gothic-ornament-top"></div>
+        <div class="gothic-ornament-bottom"></div>
+        
+        <!-- Partículas místicas -->
+        <div class="mystical-particles" id="particles"></div>
+        
+        <!-- Texto MysticSoft -->
         <div class="boot-brand">MysticSoft</div>
         
+        <!-- Logo grande -->
         <img src="assets/icons/mysticsoft-logo-full.png" alt="MysticSoft" class="boot-logo">
         
+        <!-- Barra de progresso -->
         <div class="progress-container">
             <div class="progress-bar">
                 <div class="progress-fill"></div>
             </div>
         </div>
         
+        <!-- Texto de carregamento -->
         <div class="boot-text">Iniciando Aurora OS...</div>
         
+        <!-- Copyright -->
         <div class="boot-copyright">
             © 2025 MysticSoft Technologies • Aurora Sagrada
         </div>
@@ -431,10 +586,34 @@ Press any key to continue...`;
             }
         }
         
+        // Criar partículas místicas
+        function createMysticalParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 40;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                
+                // Tamanhos variados
+                const size = Math.random() * 2 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                container.appendChild(particle);
+            }
+        }
+        
         // Ir para tela de boot
         function goToBoot() {
             document.getElementById('biosScreen').classList.add('hidden');
             document.getElementById('bootScreen').classList.add('active');
+            
+            // Criar partículas místicas
+            createMysticalParticles();
             
             // Ir para próxima tela após duração do boot
             setTimeout(goToNextScreen, BOOT_DURATION);
