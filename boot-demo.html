@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora OS Boot - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+        
+        /* Container principal */
+        .screen {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        /* TELA BIOS */
+        .bios-screen {
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .bios-logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            image-rendering: pixelated;
+        }
+        
+        .bios-text {
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            margin-top: 120px;
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 16px;
+            background: #fff;
+            animation: blink 1s step-end infinite;
+            margin-left: 2px;
+        }
+        
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        /* TELA BOOT */
+        .boot-screen {
+            display: none;
+        }
+        
+        .boot-screen.active {
+            display: flex;
+        }
+        
+        .boot-brand {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            font-size: 14px;
+            color: #999;
+            font-family: Arial, sans-serif;
+            letter-spacing: 2px;
+        }
+        
+        .boot-logo {
+            max-width: 500px;
+            width: 70%;
+            margin-bottom: 60px;
+            image-rendering: pixelated;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .progress-container {
+            width: 300px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00aa00, #00ff00, #00aa00);
+            background-size: 200% 100%;
+            animation: 
+                fill 3s ease-in-out forwards,
+                shine 1.5s linear infinite;
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        @keyframes fill {
+            to { width: 100%; }
+        }
+        
+        @keyframes shine {
+            to { background-position: 200% 0; }
+        }
+        
+        .boot-text {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+            font-family: Arial, sans-serif;
+        }
+        
+        .copyright {
+            position: absolute;
+            bottom: 30px;
+            font-size: 10px;
+            color: #666;
+            font-family: Arial, sans-serif;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Botão de navegação */
+        .nav-buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- TELA 1: BIOS -->
+    <div class="screen bios-screen" id="biosScreen">
+        <img src="assets/icons/mysticsoft-window-only.png" alt="MysticSoft" class="bios-logo">
+        <div class="bios-text" id="biosText">MysticSoft BIOS v1.0
+Copyright (C) 2025 MysticSoft Technologies
+
+Initializing Mystical Operating System...
+
+────────────────────────────────────────────────────────────────
+
+O MysticSoft é uma criação digital que une estética retrô 
+dos anos 90/2000 com funcionalidades mágickas e esotéricas.
+
+Ele se apresenta como um "sistema operacional oculto".
+
+É um projeto que mistura arte, nostalgia, tecnologia e 
+ocultismo.
+
+────────────────────────────────────────────────────────────────
+
+Detecting hardware...
+CPU: Mystical Processor Unit (MPU)
+Memory: 666 MB Cosmic RAM
+Storage: Infinite Akashic Records
+
+Loading mystical drivers...
+[OK] Crystal Energy Driver
+[OK] Lunar Phase Synchronizer
+[OK] Astral Projection Module
+[OK] Tarot Card Reader Interface
+[OK] Planetary Alignment System
+
+Press any key to continue...<span class="cursor"></span></div>
+    </div>
+    
+    <!-- TELA 2: BOOT -->
+    <div class="screen boot-screen" id="bootScreen">
+        <div class="boot-brand">MysticSoft</div>
+        
+        <img src="assets/icons/mysticsoft-logo-full.png" alt="MysticSoft" class="boot-logo">
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+        
+        <div class="boot-text">Iniciando Aurora OS...</div>
+        
+        <div class="copyright">
+            © 2025 MysticSoft Technologies • Aurora Sagrada
+        </div>
+    </div>
+    
+    <!-- Botões de navegação para demo -->
+    <div class="nav-buttons">
+        <button class="nav-btn" onclick="showBios()">← Tela BIOS</button>
+        <button class="nav-btn" onclick="showBoot()">Tela Boot →</button>
+    </div>
+    
+    <script>
+        function showBios() {
+            document.getElementById('biosScreen').classList.remove('hidden');
+            document.getElementById('bootScreen').classList.remove('active');
+        }
+        
+        function showBoot() {
+            document.getElementById('biosScreen').classList.add('hidden');
+            document.getElementById('bootScreen').classList.add('active');
+        }
+        
+        // Permitir navegar com setas do teclado
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                showBios();
+            } else if (e.key === 'ArrowRight') {
+                showBoot();
+            }
+        });
+    </script>
+</body>
+</html>
