@@ -235,17 +235,18 @@
         
         /* Logo grande centralizado */
         .boot-logo {
-            max-width: 600px;
-            width: 70%;
+            max-width: 800px;
+            width: 80%;
             height: auto;
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
-            margin-bottom: 80px;
+            margin-bottom: 100px;
             opacity: 0;
             transform: scale(0.9);
-            filter: drop-shadow(0 0 30px rgba(240, 170, 83, 0.6)) 
-                    drop-shadow(0 0 60px rgba(212, 134, 15, 0.4));
+            filter: drop-shadow(0 0 40px rgba(240, 170, 83, 0.7)) 
+                    drop-shadow(0 0 80px rgba(212, 134, 15, 0.5))
+                    drop-shadow(0 0 120px rgba(240, 170, 83, 0.3));
             animation: logoAppear 1.2s ease-out forwards, logoGlowPulse 3s ease-in-out infinite;
             z-index: 10;
             position: relative;
@@ -276,50 +277,62 @@
         
         /* Container da barra de progresso */
         .progress-container {
-            width: 300px;
+            width: 500px;
             opacity: 0;
             animation: fadeIn 1s ease-out 0.8s forwards;
-        }
-        
-        /* Barra de progresso VERDE (Windows ME) */
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #000;
-            border: 1px solid #333;
-            border-radius: 4px;
-            overflow: hidden;
+            z-index: 10;
             position: relative;
         }
         
-        .progress-fill {
+        /* Barra de progresso em BLOCOS (Windows XP style) */
+        .progress-bar {
+            width: 100%;
+            height: 24px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(240, 170, 83, 0.3);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            gap: 3px;
+            padding: 3px;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 0, 0.3),
+                inset 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Blocos individuais da barra */
+        .progress-block {
+            flex: 1;
             height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, 
-                #00aa00 0%, 
-                #00ff00 25%, 
-                #00ee00 50%, 
-                #00ff00 75%, 
+            background: transparent;
+            border-radius: 2px;
+            opacity: 0;
+            animation: blockFill 0.15s ease-out forwards;
+            position: relative;
+        }
+        
+        .progress-block.filled {
+            background: linear-gradient(180deg,
+                #00ff00 0%,
+                #00dd00 50%,
                 #00aa00 100%
             );
-            background-size: 200% 100%;
-            border-radius: 3px;
             box-shadow: 
-                0 0 10px rgba(0, 255, 0, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            animation: 
-                progressFill 4s ease-in-out forwards,
-                progressShine 2s linear infinite;
+                0 0 8px rgba(0, 255, 0, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
         }
         
-        @keyframes progressFill {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
-        
-        @keyframes progressShine {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        @keyframes blockFill {
+            0% {
+                opacity: 0;
+                transform: scaleY(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: scaleY(1);
+            }
         }
         
         /* Texto de carregamento */
@@ -364,7 +377,7 @@
             
             .boot-logo {
                 width: 85%;
-                max-width: 400px;
+                max-width: 500px;
                 margin-bottom: 60px;
             }
             
@@ -375,11 +388,20 @@
             }
             
             .progress-container {
-                width: 250px;
+                width: 350px;
+            }
+            
+            .progress-bar {
+                height: 20px;
             }
             
             .boot-text {
                 font-size: 11px;
+            }
+            
+            .mystical-moon {
+                width: 100px;
+                height: 100px;
             }
         }
         
@@ -391,11 +413,28 @@
             
             .boot-logo {
                 width: 90%;
-                max-width: 300px;
+                max-width: 350px;
             }
             
             .progress-container {
+                width: 280px;
+            }
+            
+            .progress-bar {
+                height: 18px;
+                gap: 2px;
+                padding: 2px;
+            }
+            
+            .mystical-moon {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .gothic-ornament-top,
+            .gothic-ornament-bottom {
                 width: 200px;
+                height: 60px;
             }
         }
         
@@ -451,10 +490,10 @@
         <!-- Logo grande -->
         <img src="assets/icons/mysticsoft-logo-full.png" alt="MysticSoft" class="boot-logo">
         
-        <!-- Barra de progresso -->
+        <!-- Barra de progresso em blocos -->
         <div class="progress-container">
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
+            <div class="progress-bar" id="progressBar">
+                <!-- Blocos serão criados via JavaScript -->
             </div>
         </div>
         
@@ -607,6 +646,29 @@ Press any key to continue...`;
             }
         }
         
+        // Criar e animar blocos da barra de progresso
+        function animateProgressBlocks() {
+            const progressBar = document.getElementById('progressBar');
+            const blockCount = 30; // 30 blocos
+            const fillDuration = 3500; // 3.5 segundos
+            const delayPerBlock = fillDuration / blockCount;
+            
+            // Criar blocos
+            for (let i = 0; i < blockCount; i++) {
+                const block = document.createElement('div');
+                block.className = 'progress-block';
+                progressBar.appendChild(block);
+            }
+            
+            // Animar blocos sequencialmente
+            const blocks = progressBar.querySelectorAll('.progress-block');
+            blocks.forEach((block, index) => {
+                setTimeout(() => {
+                    block.classList.add('filled');
+                }, index * delayPerBlock);
+            });
+        }
+        
         // Ir para tela de boot
         function goToBoot() {
             document.getElementById('biosScreen').classList.add('hidden');
@@ -614,6 +676,9 @@ Press any key to continue...`;
             
             // Criar partículas místicas
             createMysticalParticles();
+            
+            // Criar e animar blocos da barra
+            setTimeout(animateProgressBlocks, 800);
             
             // Ir para próxima tela após duração do boot
             setTimeout(goToNextScreen, BOOT_DURATION);
