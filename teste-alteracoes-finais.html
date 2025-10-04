@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Alterações Finais</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
+            background: #0b1836; /* Azul-escuro cósmico */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px;
+            position: relative;
+        }
+        
+        /* Texto Aurora Sagrada no topo */
+        .boot-brand {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
+            font-size: 13px;
+            color: #b2d1b1; /* Verde-claro etéreo */
+            letter-spacing: 3px;
+            font-weight: normal;
+            z-index: 10;
+        }
+        
+        /* Logo grande */
+        .boot-logo {
+            max-width: 1200px;
+            width: 90%;
+            height: auto;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            margin-bottom: 180px;
+            z-index: 10;
+            position: relative;
+            filter: drop-shadow(0 0 20px rgba(240, 170, 83, 0.3));
+        }
+        
+        /* Barra de progresso - ESTILO QUADRICULADO */
+        .progress-container {
+            width: 500px;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 28px;
+            background: #3e0a29; /* Vinho profundo */
+            border: 2px solid #f2eaff; /* Pálido lilás */
+            border-radius: 0;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            gap: 4px;
+            padding: 4px;
+        }
+        
+        .progress-block {
+            flex: 1;
+            height: 100%;
+            background: #f0aa53; /* Dourado alquímico */
+            border-radius: 0;
+            border: 1px solid #f2eaff;
+            box-shadow: inset 0 0 5px rgba(240, 170, 83, 0.5);
+        }
+        
+        /* Título "Boas Vindas!" com fonte mística - PIXELADO VINTAGE */
+        .welcome-title {
+            font-family: 'Courier New', 'Courier', 'Nimbus Mono PS', 'Liberation Mono', monospace;
+            font-size: 48px;
+            font-weight: bold;
+            color: #f0aa53; /* Dourado alquímico */
+            margin-top: 40px;
+            letter-spacing: 8px;
+            z-index: 10;
+            text-shadow: 0 0 25px rgba(240, 170, 83, 0.7), 0 0 50px rgba(240, 170, 83, 0.5), 0 0 75px rgba(240, 170, 83, 0.3);
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: grayscale;
+            font-smooth: never;
+        }
+        
+        /* Botão "Entrar no Sistema" */
+        .enter-button {
+            margin-top: 30px;
+            padding: 12px 40px;
+            font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+            background: #c0c0c8;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .enter-button:hover {
+            background: #d4d0c8;
+        }
+        
+        .enter-button:active {
+            border-color: #808080 #ffffff #ffffff #808080;
+        }
+        
+        /* Copyright no rodapé */
+        .boot-footer {
+            position: absolute;
+            bottom: 30px;
+            font-family: 'MS Sans Serif', 'Tahoma', Arial, sans-serif;
+            font-size: 11px;
+            color: #f2eaff; /* Pálido lilás */
+            z-index: 10;
+        }
+        
+        /* Indicador de alterações */
+        .alteracoes {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            background: rgba(62, 10, 41, 0.8);
+            border: 2px solid #f0aa53;
+            padding: 15px 20px;
+            border-radius: 8px;
+            z-index: 20;
+        }
+        
+        .alteracoes h3 {
+            color: #f0aa53;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .alteracoes ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .alteracoes li {
+            color: #b2d1b1;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        
+        .alteracoes li:before {
+            content: "✓ ";
+            color: #f0aa53;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .boot-logo {
+                width: 85%;
+                max-width: 500px;
+                margin-bottom: 60px;
+            }
+            
+            .boot-brand {
+                font-size: 11px;
+                top: 20px;
+                right: 20px;
+            }
+            
+            .progress-container {
+                width: 350px;
+            }
+            
+            .welcome-title {
+                font-size: 32px;
+                letter-spacing: 4px;
+            }
+            
+            .alteracoes {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .boot-logo {
+                width: 90%;
+                max-width: 350px;
+            }
+            
+            .progress-container {
+                width: 280px;
+            }
+            
+            .welcome-title {
+                font-size: 28px;
+                letter-spacing: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Indicador de alterações -->
+    <div class="alteracoes">
+        <h3>🌙 ALTERAÇÕES FINAIS</h3>
+        <ul>
+            <li>"MysticSoft" → "Aurora Sagrada"</li>
+            <li>Fonte mística em "BOAS VINDAS"</li>
+            <li>Efeito de brilho dourado</li>
+        </ul>
+    </div>
+    
+    <!-- Texto Aurora Sagrada no topo -->
+    <div class="boot-brand">Aurora Sagrada</div>
+    
+    <!-- Logo grande -->
+    <img src="mysticsoft-logo-v2-no-bg.png" alt="MysticSoft" class="boot-logo">
+    
+    <!-- Barra de progresso em blocos (completa) -->
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+            <div class="progress-block"></div>
+        </div>
+    </div>
+    
+    <!-- Título "Boas Vindas!" com fonte mística -->
+    <div class="welcome-title">Boas Vindas!</div>
+    
+    <!-- Botão "Entrar no Sistema" -->
+    <button class="enter-button" onclick="window.location.href='startup.html'">Entrar no Sistema</button>
+    
+    <!-- Copyright -->
+    <div class="boot-footer">© 2025 MysticSoft Technologies • Aurora Sagrada</div>
+    
+</body>
+</html>
