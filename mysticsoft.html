@@ -2771,13 +2771,17 @@
         contextMenu.className = 'context-menu';
         contextMenu.id = 'desktopContextMenu';
         contextMenu.innerHTML = `
+            <div class="context-menu-item" onclick="openPersonalization()">
+                <span>⚙️</span> Personalizar
+            </div>
+            <div class="context-menu-separator"></div>
             <div class="context-menu-item" onclick="toggleSnapToGrid()">
                 <span id="snapToGridCheck"></span>Alinhar à grade
             </div>
-            <div class="context-menu-separator"></div>
             <div class="context-menu-item" onclick="organizeIcons()">
                 Organizar ícones
             </div>
+            <div class="context-menu-separator"></div>
             <div class="context-menu-item" onclick="refreshDesktop()">
                 Atualizar
             </div>
