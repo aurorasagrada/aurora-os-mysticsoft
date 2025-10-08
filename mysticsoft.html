@@ -1591,20 +1591,44 @@
                     <div class="label">${site.name}</div>
                 `;
                 
-                // Adicionar evento de clique (com delay para não conflitar com drag)
-                let clickTimeout;
-                icon.addEventListener('mousedown', (e) => {
-                    clickTimeout = setTimeout(() => {
-                        clickTimeout = null;
-                    }, 200);
+                // Sistema de clique/duplo clique
+                let clickCount = 0;
+                let clickTimer = null;
+                let lastClickTime = 0;
+                
+                // Duplo clique para desktop
+                icon.addEventListener('dblclick', (e) => {
+                    e.preventDefault();
+                    openSite(site);
                 });
                 
+                // Clique único para selecionar (desktop)
                 icon.addEventListener('click', (e) => {
-                    if (clickTimeout) {
-                        clearTimeout(clickTimeout);
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Remover seleção de outros ícones
+                    document.querySelectorAll('.desktop-icon').forEach(i => {
+                        if (i !== icon) i.classList.remove('selected');
+                    });
+                    
+                    // Selecionar este ícone
+                    icon.classList.toggle('selected');
+                });
+                
+                // Toque único para mobile (abre diretamente)
+                icon.addEventListener('touchend', (e) => {
+                    const now = Date.now();
+                    const timeSinceLastClick = now - lastClickTime;
+                    
+                    // Se não está arrastando e é um toque rápido
+                    if (timeSinceLastClick > 300 && !icon.classList.contains('dragging')) {
+                        e.preventDefault();
                         openSite(site);
                     }
-                });
+                    
+                    lastClickTime = now;
+                }, { passive: false });
                 
                 // Configurar drag and drop
                 setupIconDrag(icon);
@@ -2694,6 +2718,15 @@
                 
                 // Atualizar estado do checkbox
                 updateSnapToGridCheckbox();
+            }
+        });
+        
+        // Desselecionar ícones ao clicar no desktop (fora dos ícones)
+        desktop.addEventListener('click', (e) => {
+            if (e.target === desktop || e.target.classList.contains('desktop-icons')) {
+                document.querySelectorAll('.desktop-icon').forEach(icon => {
+                    icon.classList.remove('selected');
+                });
             }
         });
         
