@@ -652,30 +652,17 @@ Press any key to continue...`;
             }, 3800); // 3.8 segundos (após barra completar)
         }
         
-        // Ir para próxima tela (mostrar apenas logo MysticSoft)
+        // Ir para o sistema MysticSoft completo
         function goToNextScreen() {
+            // Fazer fade out da tela de boot
             const bootScreen = document.getElementById('bootScreen');
-            const welcomeTitle = document.getElementById('welcomeTitle');
-            const enterButton = document.getElementById('enterButton');
-            const progressContainer = document.querySelector('.progress-container');
-            const bootBrand = document.querySelector('.boot-brand');
-            const bootFooter = document.querySelector('.boot-footer');
+            bootScreen.style.transition = 'opacity 0.5s ease-out';
+            bootScreen.style.opacity = '0';
             
-            // Esconder todos os elementos exceto o logo
-            welcomeTitle.style.display = 'none';
-            enterButton.style.display = 'none';
-            progressContainer.style.display = 'none';
-            bootBrand.style.display = 'none';
-            bootFooter.style.display = 'none';
-            
-            // Centralizar e destacar o logo
-            const bootLogo = document.querySelector('.boot-logo');
-            bootLogo.style.marginBottom = '0';
-            bootLogo.style.maxWidth = '800px';
-            bootLogo.style.width = '60%';
-            
-            // Adicionar efeito de fade in no logo
-            bootLogo.style.animation = 'fadeIn 1s ease-in';
+            // Após fade out, redirecionar para o sistema MysticSoft
+            setTimeout(() => {
+                window.location.href = 'mysticsoft.html';
+            }, 500);
         }
         
         // Pular direto para desktop (debug)

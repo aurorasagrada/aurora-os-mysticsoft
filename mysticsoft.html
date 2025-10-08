@@ -1,0 +1,2600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora OS • MysticSoft</title>
+    <link href="https://fonts.googleapis.com/css2?family=Alice&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        
+        :root {
+            /* Tema Aurora Sagrada */
+            --vinho: #3e0a29;
+            --verde-claro: #b2d1b1;
+            --azul-escuro: #0b1836;
+            --dourado: #f0aa53;
+            --pergaminho: #f2eaff;
+            
+            /* Variáveis de tema dinâmicas */
+            --theme-bg: linear-gradient(135deg, var(--azul-escuro) 0%, var(--vinho) 100%);
+            --theme-taskbar: var(--vinho);
+            --theme-start-btn: var(--vinho);
+            --theme-start-text: var(--dourado);
+            --theme-clock: var(--dourado);
+            --theme-window-header: var(--azul-escuro);
+            
+            /* Menu Iniciar - Barra Lateral (personalizável) */
+            --theme-start-sidebar: #0A5A9E;
+            --theme-start-sidebar-end: #3A7ABE;
+            --theme-start-hover: #0A5A9E;
+            --theme-start-hover-end: #3A7ABE;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+            background: var(--theme-bg);
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        /* Desktop */
+        .desktop {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 40px);
+            background: var(--theme-bg);
+            background-attachment: fixed;
+        }
+        
+        .desktop-icons {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+        }
+        
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            cursor: move;
+            cursor: grab;
+            border-radius: 0;
+            transition: none;
+            position: absolute;
+            width: 80px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+        
+        .desktop-icon.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+            z-index: 1000;
+        }
+        
+        .desktop-icon:hover {
+            background: rgba(240, 170, 83, 0.2);
+            outline: 1px dotted var(--dourado);
+        }
+        
+        .desktop-icon.selected {
+            background: rgba(240, 170, 83, 0.3);
+            outline: 1px dotted var(--dourado);
+        }
+        
+        .desktop-icon .icon {
+            font-size: 32px;
+            margin-bottom: 4px;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.8));
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        
+        .desktop-icon.premium .icon::after {
+            content: '⭐';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 16px;
+            color: var(--dourado);
+            text-shadow: 0 0 5px var(--dourado);
+            animation: starGlow 2s ease-in-out infinite;
+        }
+        
+        .desktop-icon .label {
+            color: white;
+            font-size: 10px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            max-width: 70px;
+            word-wrap: break-word;
+        }
+        
+        @keyframes iconBreathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes starGlow {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        /* Menu de Contexto (Botão Direito) */
+        .context-menu {
+            position: fixed;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            z-index: 3000;
+            display: none;
+            min-width: 200px;
+        }
+        
+        .context-menu-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: black;
+            border-bottom: 1px solid #a0a0a0;
+        }
+        
+        .context-menu-item:hover {
+            background: #316AC5;
+            color: white;
+        }
+        
+        .context-menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .context-menu-separator {
+            height: 1px;
+            background: #808080;
+            margin: 2px 0;
+        }
+        
+        /* Taskbar Aprimorada - Estilo Windows ME */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: var(--theme-taskbar);
+            border-top: 2px solid;
+            border-color: rgba(255,255,255,0.3) transparent transparent transparent;
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+            z-index: 1000;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        
+        .start-button {
+            background: var(--theme-start-btn);
+            border: 2px solid;
+            border-color: rgba(255,255,255,0.4) rgba(0,0,0,0.4) rgba(0,0,0,0.4) rgba(255,255,255,0.4);
+            color: var(--theme-start-text);
+            padding: 3px 10px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            transition: none;
+            border-radius: 0;
+            height: 24px;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.3);
+        }
+        
+        .start-button:hover {
+            background: #4a1a35;
+        }
+        
+        .start-button:active,
+        .start-button.active {
+            border-color: rgba(0,0,0,0.4) rgba(255,255,255,0.4) rgba(255,255,255,0.4) rgba(0,0,0,0.4);
+            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.3);
+            padding-top: 4px;
+            padding-left: 11px;
+        }
+        
+        /* Logo no botão Iniciar */
+        .start-logo-img {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8));
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        
+        .taskbar-items {
+            flex: 1;
+            display: flex;
+            gap: 4px;
+            margin-left: 12px;
+        }
+        
+        .taskbar-item {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid;
+            border-color: rgba(255,255,255,0.3) rgba(0,0,0,0.3) rgba(0,0,0,0.3) rgba(255,255,255,0.3);
+            color: var(--dourado);
+            padding: 2px 8px;
+            cursor: pointer;
+            font-size: 10px;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            border-radius: 0;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.2);
+        }
+        
+        .taskbar-item:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .taskbar-item.active {
+            background: rgba(0,0,0,0.2);
+            border-color: rgba(0,0,0,0.3) rgba(255,255,255,0.3) rgba(255,255,255,0.3) rgba(0,0,0,0.3);
+            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.2);
+        }
+        
+        /* Área direita da taskbar */
+        .taskbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .taskbar-widget {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 6px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid;
+            border-color: rgba(255,255,255,0.3) rgba(0,0,0,0.3) rgba(0,0,0,0.3) rgba(255,255,255,0.3);
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 10px;
+            color: var(--theme-clock);
+            text-shadow: 0 0 3px var(--dourado);
+            transition: none;
+            height: 22px;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.2);
+        }
+        
+        .taskbar-widget:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .taskbar-widget:active {
+            border-color: rgba(0,0,0,0.3) rgba(255,255,255,0.3) rgba(255,255,255,0.3) rgba(0,0,0,0.3);
+            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.2);
+        }
+        
+        .planetary-symbol {
+            font-size: 14px;
+            animation: planetGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes planetGlow {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; text-shadow: 0 0 8px var(--dourado); }
+        }
+        
+        .clock {
+            color: var(--theme-clock);
+            font-size: 11px;
+            font-weight: bold;
+            text-shadow: 0 0 3px var(--dourado);
+        }
+        
+        .notification-icon, .volume-icon {
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 3px;
+            transition: all 0.1s;
+        }
+        
+        .notification-icon:hover, .volume-icon:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* Popups */
+        .popup {
+            position: fixed;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            z-index: 2000;
+            display: none;
+            border-radius: 4px;
+        }
+        
+        .popup.active {
+            display: block;
+        }
+        
+        /* Calendário Popup */
+        .calendar-popup {
+            bottom: 50px;
+            right: 10px;
+            width: 280px;
+            padding: 12px;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        
+        .calendar-nav {
+            background: #d0d0d0;
+            border: 1px outset #d0d0d0;
+            cursor: pointer;
+            padding: 2px 6px;
+            font-size: 10px;
+        }
+        
+        .calendar-nav:hover {
+            background: #e0e0e0;
+        }
+        
+        .calendar-nav:active {
+            border: 1px inset #d0d0d0;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            text-align: center;
+        }
+        
+        .calendar-day-header {
+            font-size: 9px;
+            font-weight: bold;
+            padding: 4px 2px;
+            background: #a0a0a0;
+            color: white;
+        }
+        
+        .calendar-day {
+            padding: 4px 2px;
+            cursor: pointer;
+            font-size: 10px;
+            border-radius: 2px;
+        }
+        
+        .calendar-day:hover {
+            background: #316AC5;
+            color: white;
+        }
+        
+        .calendar-day.today {
+            background: var(--dourado);
+            color: black;
+            font-weight: bold;
+        }
+        
+        .calendar-day.other-month {
+            color: #808080;
+        }
+        
+        /* Volume Popup */
+        .volume-popup {
+            bottom: 50px;
+            right: 10px;
+            width: 200px;
+            padding: 12px;
+        }
+        
+        .volume-control {
+            margin-bottom: 8px;
+        }
+        
+        .volume-label {
+            font-size: 10px;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+        
+        .volume-slider {
+            width: 100%;
+            height: 4px;
+            background: #808080;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .volume-fill {
+            height: 100%;
+            background: var(--dourado);
+            border-radius: 2px;
+            transition: width 0.1s;
+        }
+        
+        .volume-thumb {
+            position: absolute;
+            top: -4px;
+            width: 12px;
+            height: 12px;
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translateX(-50%);
+        }
+        
+        /* Planetary Info Popup */
+        .planetary-popup {
+            bottom: 50px;
+            right: 10px;
+            width: 300px;
+            padding: 12px;
+        }
+        
+        .planetary-info {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        
+        .planetary-current {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--azul-escuro);
+        }
+        
+        .planetary-time {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .planetary-ruler {
+            font-size: 12px;
+            color: var(--vinho);
+            font-weight: bold;
+        }
+        
+        /* Modal de Personalização */
+        .personalization-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 4000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .personalization-modal.active {
+            display: flex;
+        }
+        
+        .personalization-dialog {
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            width: 600px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 4px;
+        }
+        
+        .personalization-header {
+            background: var(--theme-window-header);
+            color: white;
+            padding: 8px 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .personalization-close {
+            background: #ff6b6b;
+            color: white;
+            border: 1px outset #ff6b6b;
+            width: 20px;
+            height: 18px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .personalization-close:hover {
+            background: #ff5252;
+        }
+        
+        .personalization-close:active {
+            border: 1px inset #ff6b6b;
+        }
+        
+        .personalization-content {
+            padding: 16px;
+        }
+        
+        .personalization-section {
+            margin-bottom: 20px;
+            border: 1px inset #c0c0c0;
+            padding: 12px;
+        }
+        
+        .personalization-section h3 {
+            margin-bottom: 12px;
+            color: var(--azul-escuro);
+            font-size: 12px;
+        }
+        
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+        
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border: 2px outset #c0c0c0;
+            cursor: pointer;
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .color-option:hover {
+            border: 2px inset #c0c0c0;
+        }
+        
+        .color-option.selected {
+            border: 2px solid var(--dourado);
+            box-shadow: 0 0 4px var(--dourado);
+        }
+        
+        /* Estilos do seletor de cores do tema */
+        .theme-color-section {
+            margin-bottom: 15px;
+        }
+        
+        .theme-color-section h4 {
+            margin: 10px 0 5px 0;
+            font-size: 11px;
+            font-weight: bold;
+            color: #000;
+        }
+        
+        .theme-color-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .theme-color-box {
+            width: 100%;
+            aspect-ratio: 1;
+            border: 2px outset #fff;
+            cursor: pointer;
+            transition: none;
+        }
+        
+        .theme-color-box:hover {
+            border: 2px inset #000;
+        }
+        
+        .theme-color-box:active {
+            border: 2px inset #808080;
+        }
+        
+        .theme-custom-color {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .theme-custom-color input[type="color"] {
+            width: 50px;
+            height: 30px;
+            border: 2px inset #fff;
+            cursor: pointer;
+        }
+        
+        .theme-custom-color input[type="text"] {
+            flex: 1;
+            padding: 4px;
+            border: 2px inset #fff;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .theme-color-preview {
+            width: 30px;
+            height: 30px;
+            border: 2px outset #fff;
+        }
+        
+        .theme-apply-btn {
+            padding: 4px 12px;
+            border: 2px outset #fff;
+            background: #c0c0c0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .theme-apply-btn:hover {
+            background: #d0d0d0;
+        }
+        
+        .theme-apply-btn:active {
+            border: 2px inset #808080;
+        }
+        
+        .theme-preview-box {
+            padding: 10px;
+            border: 2px inset #fff;
+            background: #fff;
+            margin-top: 10px;
+            text-align: center;
+            color: #666;
+        }
+        
+        .wallpaper-section {
+            margin-bottom: 12px;
+        }
+        
+        .wallpaper-upload {
+            margin-bottom: 8px;
+        }
+        
+        .wallpaper-upload input[type="file"] {
+            width: 100%;
+            padding: 4px;
+            border: 1px inset #c0c0c0;
+        }
+        
+        .wallpaper-presets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        
+        .wallpaper-preset {
+            height: 60px;
+            border: 2px outset #c0c0c0;
+            cursor: pointer;
+            border-radius: 4px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .wallpaper-preset:hover {
+            border: 2px inset #c0c0c0;
+        }
+        
+        .wallpaper-preset.selected {
+            border: 2px solid var(--dourado);
+            box-shadow: 0 0 4px var(--dourado);
+        }
+        
+        .personalization-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #808080;
+        }
+        
+        .personalization-button {
+            background: #d0d0d0;
+            border: 1px outset #d0d0d0;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .personalization-button:hover {
+            background: #e0e0e0;
+        }
+        
+        .personalization-button:active {
+            border: 1px inset #d0d0d0;
+        }
+        
+        .personalization-button.primary {
+            background: var(--azul-escuro);
+            color: white;
+        }
+        
+        .personalization-button.primary:hover {
+            background: #1a2a4a;
+        }
+        
+        /* Menu Iniciar - Estilo Windows ME com Barra Lateral */
+        .start-menu {
+            position: fixed;
+            bottom: 30px;
+            left: 4px;
+            width: 350px;
+            background: #c0c0c0;
+            border: 3px solid;
+            border-color: #FFFFFF #000000 #000000 #FFFFFF;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+            z-index: 2500;
+            display: none;
+            max-height: 500px;
+            overflow: hidden;
+            border-radius: 0;
+            font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+        }
+        
+        .start-menu.active {
+            display: flex;
+        }
+        
+        @keyframes menuSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Barra Lateral Vertical */
+        .start-menu-sidebar {
+            width: 32px;
+            background: linear-gradient(to bottom, var(--theme-start-sidebar, #0A5A9E) 0%, var(--theme-start-sidebar-end, #3A7ABE) 100%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 12px 0;
+            position: relative;
+        }
+        
+        .start-menu-sidebar-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            white-space: nowrap;
+        }
+        
+        /* Conteúdo Principal do Menu */
+        .start-menu-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #c0c0c0;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+        
+        .start-menu-items {
+            background: #c0c0c0;
+            padding: 4px 0;
+        }
+        
+        .start-menu-item {
+            padding: 4px 12px 4px 48px;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #000000;
+            transition: none;
+            position: relative;
+            height: 32px;
+            border: 1px solid transparent;
+            margin: 0 2px;
+        }
+        
+        .start-menu-item:hover {
+            background: linear-gradient(to right, var(--theme-start-hover, #0A5A9E) 0%, var(--theme-start-hover-end, #3A7ABE) 100%);
+            color: white;
+            border: 1px solid var(--theme-start-hover, #0A5A9E);
+        }
+        
+        .start-menu-item .icon {
+            font-size: 24px;
+            min-width: 24px;
+            text-align: center;
+            position: absolute;
+            left: 12px;
+            filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3));
+        }
+        
+        .start-menu-item .text {
+            flex: 1;
+            font-weight: normal;
+        }
+        
+        .start-menu-item.has-submenu::after {
+            content: '►';
+            position: absolute;
+            right: 8px;
+            font-size: 8px;
+            color: #000000;
+        }
+        
+        .start-menu-item.has-submenu:hover::after {
+            color: white;
+        }
+        
+        .start-menu-separator {
+            height: 2px;
+            background: linear-gradient(to bottom, #808080 0%, #808080 1px, #FFFFFF 1px, #FFFFFF 2px);
+            margin: 3px 8px;
+        }
+        
+        .start-menu-footer {
+            background: linear-gradient(to bottom, #D4D0C8 0%, #C0C0C0 100%);
+            padding: 8px 12px;
+            border-top: 2px solid;
+            border-color: #FFFFFF #808080 #808080 #FFFFFF;
+            font-size: 10px;
+            color: #000000;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        /* Janelas - Estilo Windows ME */
+        .window {
+            position: fixed;
+            background: #c0c0c0;
+            border: 3px solid var(--azul-escuro);
+            min-width: 400px;
+            min-height: 300px;
+            z-index: 1500;
+            display: none;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+            border-radius: 0;
+        }
+        
+        .window.active {
+            display: block;
+        }
+        
+        .window.focused {
+            z-index: 1600;
+            border-color: var(--azul-escuro);
+        }
+        
+        .window:not(.focused) {
+            border-color: #808080;
+        }
+        
+        .window-header {
+            background: linear-gradient(90deg, var(--theme-window-header) 0%, #1a2a4a 100%);
+            color: white;
+            padding: 3px 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            font-size: 11px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            height: 20px;
+        }
+        
+        .window:not(.focused) .window-header {
+            background: linear-gradient(90deg, #808080 0%, #A0A0A0 100%);
+        }
+        
+        .window-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .window-controls {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .window-control {
+            width: 16px;
+            height: 14px;
+            background: #c0c0c0;
+            border: 1px solid;
+            border-color: #FFFFFF #000000 #000000 #FFFFFF;
+            cursor: pointer;
+            font-size: 9px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            box-shadow: inset 1px 1px 0 rgba(255,255,255,0.8);
+            margin-left: 2px;
+        }
+        
+        .window-control:hover {
+            background: #E0E0E0;
+        }
+        
+        .window-control:active {
+            border-color: #000000 #FFFFFF #FFFFFF #000000;
+            box-shadow: inset -1px -1px 0 rgba(255,255,255,0.8);
+            padding-top: 1px;
+            padding-left: 1px;
+        }
+        
+        .window-control.close {
+            background: #ff6b6b;
+            color: white;
+            border-color: #ff8888 #cc0000 #cc0000 #ff8888;
+        }
+        
+        .window-control.close:hover {
+            background: #ff5252;
+        }
+        
+        .window-content {
+            height: calc(100% - 24px);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .window-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--azul-escuro);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 12px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .window-resize-handle {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            cursor: se-resize;
+            background: linear-gradient(-45deg, transparent 40%, #808080 40%, #808080 60%, transparent 60%);
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fit, 60px);
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .desktop-icon .icon {
+                font-size: 24px;
+            }
+            
+            .desktop-icon .label {
+                font-size: 9px;
+            }
+            
+            .taskbar {
+                height: 36px;
+            }
+            
+            .desktop {
+                height: calc(100vh - 36px);
+            }
+            
+            .start-menu {
+                width: 280px;
+            }
+            
+            .personalization-dialog {
+                width: 90vw;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .desktop-icons {
+                grid-template-columns: repeat(auto-fit, 50px);
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .desktop-icon .icon {
+                font-size: 20px;
+            }
+            
+            .taskbar-right {
+                gap: 4px;
+            }
+            
+            .taskbar-widget {
+                padding: 2px 4px;
+                font-size: 9px;
+            }
+            
+            .start-menu {
+                width: 260px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="desktop" id="desktop">
+        <div class="desktop-icons" id="desktopIcons">
+            <!-- Ícones serão gerados dinamicamente -->
+        </div>
+    </div>
+    
+    <!-- Menu de Contexto -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" onclick="openPersonalization()">
+            <span>⚙️</span>
+            <span>Personalizar</span>
+        </div>
+        <div class="context-menu-separator"></div>
+        <div class="context-menu-item" onclick="refreshDesktop()">
+            <span>🔄</span>
+            <span>Atualizar</span>
+        </div>
+        <div class="context-menu-item" onclick="arrangeIcons()">
+            <span>📐</span>
+            <span>Organizar ícones</span>
+        </div>
+    </div>
+    
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="start-button" onclick="toggleStartMenu()">
+            <img src="mysticsoft-logo.png" alt="MysticSoft" class="start-logo-img" title="MysticSoft Technologies">
+            <span>Iniciar</span>
+        </button>
+        
+        <div class="taskbar-items" id="taskbarItems">
+            <!-- Itens da taskbar serão adicionados dinamicamente -->
+        </div>
+        
+        <div class="taskbar-right">
+            <!-- Widget Planetário -->
+            <div class="taskbar-widget" onclick="togglePlanetaryPopup()" title="Hora Planetária Atual">
+                <span class="planetary-symbol" id="planetarySymbol">☉</span>
+                <span id="planetaryName">Sol</span>
+            </div>
+            
+            <!-- Relógio e Calendário -->
+            <div class="taskbar-widget" onclick="toggleCalendarPopup()" title="Calendário">
+                <span class="clock" id="clock">00:00</span>
+            </div>
+            
+            <!-- Notificações -->
+            <div class="notification-icon" onclick="toggleNotifications()" title="Central de Notificações">
+                🔔
+            </div>
+            
+            <!-- Volume -->
+            <div class="volume-icon" onclick="toggleVolumePopup()" title="Controle de Volume">
+                🔊
+            </div>
+        </div>
+    </div>
+    
+    <!-- Menu Iniciar -->
+    <div class="start-menu" id="startMenu">
+        <div class="start-menu-sidebar">
+            <div class="start-menu-sidebar-text">Aurora OS Místico</div>
+        </div>
+        <div class="start-menu-content">
+            <div class="start-menu-items" id="startMenuItems">
+                <!-- Itens do menu serão gerados dinamicamente -->
+            </div>
+            <div class="start-menu-separator"></div>
+            <div class="start-menu-footer">
+                🌟 MysticSoft Technologies
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popup do Calendário -->
+    <div class="popup calendar-popup" id="calendarPopup">
+        <div class="calendar-header">
+            <button class="calendar-nav" onclick="previousMonth()">◀</button>
+            <span id="calendarTitle">Janeiro 2024</span>
+            <button class="calendar-nav" onclick="nextMonth()">▶</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid">
+            <!-- Calendário será gerado dinamicamente -->
+        </div>
+    </div>
+    
+    <!-- Popup do Volume -->
+    <div class="popup volume-popup" id="volumePopup">
+        <div class="volume-control">
+            <div class="volume-label">Volume Principal</div>
+            <div class="volume-slider" onclick="setVolume(event, 'master')">
+                <div class="volume-fill" id="masterVolumeFill" style="width: 70%"></div>
+                <div class="volume-thumb" id="masterVolumeThumb" style="left: 70%"></div>
+            </div>
+        </div>
+        <div class="volume-control">
+            <div class="volume-label">Notificações</div>
+            <div class="volume-slider" onclick="setVolume(event, 'notifications')">
+                <div class="volume-fill" id="notificationsVolumeFill" style="width: 50%"></div>
+                <div class="volume-thumb" id="notificationsVolumeThumb" style="left: 50%"></div>
+            </div>
+        </div>
+        <div class="volume-control">
+            <div class="volume-label">Sistema</div>
+            <div class="volume-slider" onclick="setVolume(event, 'system')">
+                <div class="volume-fill" id="systemVolumeFill" style="width: 60%"></div>
+                <div class="volume-thumb" id="systemVolumeThumb" style="left: 60%"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popup Planetário -->
+    <div class="popup planetary-popup" id="planetaryPopup">
+        <div class="planetary-info">
+            <div class="planetary-current">
+                <span id="currentPlanetSymbol">☉</span>
+                <span id="currentPlanetName">Sol</span>
+            </div>
+            <div class="planetary-time" id="planetaryTime">
+                Hora 1 do Dia • 06:00 - 07:00
+            </div>
+            <div class="planetary-ruler">
+                Regente do Dia: <span id="dayRuler">Sol</span>
+            </div>
+        </div>
+        <div style="font-size: 10px; color: #666; text-align: center;">
+            Sistema baseado nas horas planetárias tradicionais
+        </div>
+    </div>
+    
+    <!-- Modal de Personalização -->
+    <div class="personalization-modal" id="personalizationModal">
+        <div class="personalization-dialog">
+            <div class="personalization-header">
+                <span>Personalização do Aurora OS</span>
+                <button class="personalization-close" onclick="closePersonalization()">×</button>
+            </div>
+            <div class="personalization-content">
+                <div class="personalization-section">
+                    <h3>🎨 Personalização de Cores</h3>
+                    <p style="margin-bottom: 10px; color: #666;">Escolha as cores para cada elemento do sistema</p>
+                    
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Elemento a personalizar:</label>
+                    <select id="themeElement" style="width: 100%; padding: 5px; margin-bottom: 15px; border: 2px inset #fff; background: #fff;">
+                        <option value="desktop">🖥️ Fundo do Desktop</option>
+                        <option value="taskbar">📊 Barra de Tarefas</option>
+                        <option value="start-btn">🌟 Botão Iniciar</option>
+                        <option value="window-header">🪟 Cabeçalho das Janelas</option>
+                        <option value="text">✏️ Cor do Texto (Destaque)</option>
+                        <option value="clock">🕐 Relógio e Widgets</option>
+                    </select>
+                    
+                    <div id="themeColorPicker">
+                        <!-- Seletor de cores será gerado dinamicamente -->
+                    </div>
+                </div>
+                
+                <div class="personalization-section">
+                    <h3>Papel de Parede</h3>
+                    <div class="wallpaper-section">
+                        <div class="wallpaper-upload">
+                            <input type="file" id="wallpaperUpload" accept="image/*" onchange="uploadWallpaper(event)">
+                        </div>
+                        <div class="wallpaper-presets" id="wallpaperPresets">
+                            <!-- Presets serão gerados dinamicamente -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="personalization-section">
+                    <h3>📊 Barra de Tarefas (Taskbar)</h3>
+                    <p style="margin-bottom: 10px; color: #666;">Personalize a cor da barra de tarefas na parte inferior</p>
+                    
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Temas Predefinidos:</label>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px;">
+                        <button class="personalization-button" onclick="applyTaskbarTheme('mystic-wine')" style="padding: 8px;">
+                            🍷 Vinho Místico
+                        </button>
+                        <button class="personalization-button" onclick="applyTaskbarTheme('dark-blue')" style="padding: 8px;">
+                            🌊 Azul Escuro
+                        </button>
+                        <button class="personalization-button" onclick="applyTaskbarTheme('deep-purple')" style="padding: 8px;">
+                            💜 Roxo Profundo
+                        </button>
+                        <button class="personalization-button" onclick="applyTaskbarTheme('forest-green')" style="padding: 8px;">
+                            🌲 Verde Floresta
+                        </button>
+                        <button class="personalization-button" onclick="applyTaskbarTheme('midnight-black')" style="padding: 8px;">
+                            🌑 Preto Meia-Noite
+                        </button>
+                        <button class="personalization-button" onclick="applyTaskbarTheme('golden-bronze')" style="padding: 8px;">
+                            🥉 Bronze Dourado
+                        </button>
+                    </div>
+                    
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Ou escolha uma cor personalizada:</label>
+                    <div style="margin-bottom: 10px;">
+                        <input type="color" id="taskbarColor" value="#3e0a29" style="width: 100%; height: 50px; border: 2px inset #fff; cursor: pointer;">
+                    </div>
+                    <button class="personalization-button primary" onclick="applyCustomTaskbarColor()" style="width: 100%; margin-top: 5px;">
+                        ✨ Aplicar Cor Personalizada
+                    </button>
+                </div>
+                
+                <div class="personalization-section">
+                    <h3>🎨 Barra Lateral do Menu Iniciar</h3>
+                    <p style="margin-bottom: 10px; color: #666;">Personalize a cor da barra lateral vertical do Menu Iniciar</p>
+                    
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Temas Predefinidos:</label>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px;">
+                        <button class="personalization-button" onclick="applyStartMenuTheme('windows-me')" style="padding: 8px;">
+                            🪟 Windows ME
+                        </button>
+                        <button class="personalization-button" onclick="applyStartMenuTheme('mystic-wine')" style="padding: 8px;">
+                            🍷 Vinho Místico
+                        </button>
+                        <button class="personalization-button" onclick="applyStartMenuTheme('purple-imperial')" style="padding: 8px;">
+                            👑 Roxo Imperial
+                        </button>
+                        <button class="personalization-button" onclick="applyStartMenuTheme('emerald-forest')" style="padding: 8px;">
+                            🌲 Floresta Esmeralda
+                        </button>
+                        <button class="personalization-button" onclick="applyStartMenuTheme('cosmic-night')" style="padding: 8px;">
+                            🌌 Noite Cósmica
+                        </button>
+                        <button class="personalization-button" onclick="applyStartMenuTheme('golden-sunset')" style="padding: 8px;">
+                            🌅 Pôr do Sol Dourado
+                        </button>
+                    </div>
+                    
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Ou escolha cores personalizadas:</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                        <div>
+                            <label style="font-size: 10px; display: block; margin-bottom: 3px;">Cor Inicial:</label>
+                            <input type="color" id="startSidebarColorStart" value="#0A5A9E" style="width: 100%; height: 40px; border: 2px inset #fff; cursor: pointer;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; display: block; margin-bottom: 3px;">Cor Final:</label>
+                            <input type="color" id="startSidebarColorEnd" value="#3A7ABE" style="width: 100%; height: 40px; border: 2px inset #fff; cursor: pointer;">
+                        </div>
+                    </div>
+                    <button class="personalization-button primary" onclick="applyCustomStartMenuColor()" style="width: 100%; margin-top: 5px;">
+                        ✨ Aplicar Cores Personalizadas
+                    </button>
+                </div>
+                
+                <div class="personalization-section">
+                    <h3>Configurações da Taskbar</h3>
+                    <label>
+                        <input type="checkbox" id="showPlanetaryWidget" checked onchange="togglePlanetaryWidget()">
+                        Mostrar widget planetário
+                    </label><br>
+                    <label>
+                        <input type="checkbox" id="showNotifications" checked onchange="toggleNotifications()">
+                        Mostrar notificações
+                    </label><br>
+                    <label>
+                        <input type="checkbox" id="showVolumeControl" checked onchange="toggleVolumeControl()">
+                        Mostrar controle de volume
+                    </label>
+                </div>
+                
+                <div class="personalization-buttons">
+                    <button class="personalization-button" onclick="resetPersonalization()">Restaurar Padrão</button>
+                    <button class="personalization-button primary" onclick="savePersonalization()">Aplicar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuração dos sites/aplicativos
+        const sitesConfig = [
+            // Sites básicos
+            { id: 'google', name: 'Google', url: 'https://google.com', icon: '🔍', premium: false },
+            { id: 'youtube', name: 'YouTube', url: 'https://youtube.com', icon: '📺', premium: false },
+            { id: 'github', name: 'GitHub', url: 'https://github.com', icon: '💻', premium: false },
+            { id: 'spotify', name: 'Spotify', url: 'https://spotify.com', icon: '🎵', premium: false },
+            
+            // Sites premium
+            { id: 'mysticsoft', name: 'MysticSoft Portal', url: 'https://wix.com', icon: '🌟', premium: true },
+            { id: 'loja-mistica', name: 'Loja Mística', url: 'https://wix.com', icon: '🛒', premium: true },
+            { id: 'tarot-online', name: 'Tarot Online', url: 'https://tarot.com', icon: '🔮', premium: true },
+            { id: 'portal-astrologico', name: 'Portal Astrológico', url: 'https://astro.com', icon: '⭐', premium: true },
+            
+            // Aplicativos locais
+            { id: 'arquivos', name: 'Explorador de Arquivos', url: 'local://files', icon: '📁', premium: false },
+            { id: 'bloco-notas', name: 'Bloco de Notas Esotérico', url: 'local://notepad', icon: '📝', premium: false },
+            { id: 'media-player', name: 'Media Player Místico', url: 'local://music', icon: '🎵', premium: false },
+            { id: 'video-player', name: 'Video Player Místico', url: 'local://video', icon: '🎬', premium: false }
+        ];
+        
+        // Configuração de cores
+        const colorThemes = [
+            { name: 'Aurora Original', primary: '#3e0a29', secondary: '#0b1836', accent: '#f0aa53' },
+            { name: 'Noite Cósmica', primary: '#1a1a2e', secondary: '#16213e', accent: '#e94560' },
+            { name: 'Rosa Místico', primary: '#8b1538', secondary: '#2d1b69', accent: '#f39c12' },
+            { name: 'Verde Floresta', primary: '#2d5016', secondary: '#1b4332', accent: '#95d5b2' },
+            { name: 'Azul Oceano', primary: '#023047', secondary: '#219ebc', accent: '#ffb703' },
+            { name: 'Roxo Imperial', primary: '#5a189a', secondary: '#240046', accent: '#ff006e' },
+            { name: 'Dourado Real', primary: '#b7410e', secondary: '#6f1d1b', accent: '#ffd60a' },
+            { name: 'Prata Lunar', primary: '#495057', secondary: '#212529', accent: '#adb5bd' }
+        ];
+        
+        // Presets de wallpaper
+        const wallpaperPresets = [
+            { name: 'Aurora Original', gradient: 'linear-gradient(135deg, #0b1836 0%, #3e0a29 100%)' },
+            { name: 'Noite Estrelada', gradient: 'linear-gradient(135deg, #000428 0%, #004e92 100%)' },
+            { name: 'Pôr do Sol', gradient: 'linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%)' },
+            { name: 'Floresta Mística', gradient: 'linear-gradient(135deg, #134e5e 0%, #71b280 100%)' },
+            { name: 'Oceano Profundo', gradient: 'linear-gradient(135deg, #667db6 0%, #0082c8 100%)' },
+            { name: 'Rosa Crepúsculo', gradient: 'linear-gradient(135deg, #8360c3 0%, #2ebf91 100%)' }
+        ];
+        
+        // Símbolos planetários
+        const planetarySymbols = {
+            'Sol': '☉',
+            'Lua': '☽',
+            'Marte': '♂',
+            'Mercúrio': '☿',
+            'Júpiter': '♃',
+            'Vênus': '♀',
+            'Saturno': '♄'
+        };
+        
+        // Ordem caldaica dos planetas
+        const chaldeanOrder = ['Saturno', 'Júpiter', 'Marte', 'Sol', 'Vênus', 'Mercúrio', 'Lua'];
+        const dayRulers = ['Sol', 'Lua', 'Marte', 'Mercúrio', 'Júpiter', 'Vênus', 'Saturno']; // Dom, Seg, Ter, Qua, Qui, Sex, Sáb
+        
+        // Estado do sistema
+        let currentTheme = 0;
+        let currentWallpaper = 0;
+        let openWindows = [];
+        let currentDate = new Date();
+        let currentPlanetaryHour = { planet: 'Sol', hour: 1, period: 'dia' };
+        
+        // Volumes do sistema
+        let volumes = {
+            master: 70,
+            notifications: 50,
+            system: 60
+        };
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            generateDesktopIcons();
+            generateStartMenu();
+            generateColorPalette();
+            generateWallpaperPresets();
+            updateClock();
+            updatePlanetaryInfo();
+            loadPersonalization();
+            loadTaskbarColor();
+            loadStartMenuTheme();
+            
+            // Atualiza relógio a cada segundo
+            setInterval(updateClock, 1000);
+            
+            // Atualiza informações planetárias a cada minuto
+            setInterval(updatePlanetaryInfo, 60000);
+            
+            // Event listeners
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            // Menu de contexto (botão direito)
+            document.addEventListener('contextmenu', function(e) {
+                if (e.target.closest('.desktop')) {
+                    e.preventDefault();
+                    showContextMenu(e.clientX, e.clientY);
+                }
+            });
+            
+            // Long press para menu de contexto no mobile
+            let longPressTimer;
+            let longPressStartX, longPressStartY;
+            const longPressDuration = 500; // 500ms para ativar
+            const moveThreshold = 10; // pixels de movimento permitido
+            
+            document.addEventListener('touchstart', function(e) {
+                if (e.target.closest('.desktop') && !e.target.closest('.desktop-icon')) {
+                    const touch = e.touches[0];
+                    longPressStartX = touch.clientX;
+                    longPressStartY = touch.clientY;
+                    
+                    longPressTimer = setTimeout(() => {
+                        // Vibrar se disponível (feedback tátil)
+                        if (navigator.vibrate) {
+                            navigator.vibrate(50);
+                        }
+                        showContextMenu(longPressStartX, longPressStartY);
+                    }, longPressDuration);
+                }
+            }, { passive: true });
+            
+            document.addEventListener('touchmove', function(e) {
+                if (longPressTimer) {
+                    const touch = e.touches[0];
+                    const deltaX = Math.abs(touch.clientX - longPressStartX);
+                    const deltaY = Math.abs(touch.clientY - longPressStartY);
+                    
+                    // Cancelar se mover muito
+                    if (deltaX > moveThreshold || deltaY > moveThreshold) {
+                        clearTimeout(longPressTimer);
+                        longPressTimer = null;
+                    }
+                }
+            }, { passive: true });
+            
+            document.addEventListener('touchend', function(e) {
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+            }, { passive: true });
+            
+            // Fechar menus ao clicar fora
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.context-menu')) {
+                    hideContextMenu();
+                }
+                if (!e.target.closest('.start-menu') && !e.target.closest('.start-button')) {
+                    hideStartMenu();
+                }
+                if (!e.target.closest('.popup')) {
+                    hideAllPopups();
+                }
+            });
+            
+            // Drag and drop para janelas
+            setupWindowDragging();
+        }
+        
+        function generateDesktopIcons() {
+            const container = document.getElementById('desktopIcons');
+            container.innerHTML = '';
+            
+            // Carregar posições salvas
+            const savedPositions = JSON.parse(localStorage.getItem('auroraOS_iconPositions') || '{}');
+            
+            sitesConfig.forEach((site, index) => {
+                const icon = document.createElement('div');
+                icon.className = `desktop-icon ${site.premium ? 'premium' : ''}`;
+                icon.dataset.siteId = site.id;
+                
+                // Aplicar posição salva ou calcular posição em grid
+                if (savedPositions[site.id]) {
+                    icon.style.left = savedPositions[site.id].x + 'px';
+                    icon.style.top = savedPositions[site.id].y + 'px';
+                } else {
+                    // Posição inicial em grid
+                    const col = index % 10;
+                    const row = Math.floor(index / 10);
+                    icon.style.left = (20 + col * 100) + 'px';
+                    icon.style.top = (20 + row * 100) + 'px';
+                }
+                
+                icon.innerHTML = `
+                    <div class="icon">${site.icon}</div>
+                    <div class="label">${site.name}</div>
+                `;
+                
+                // Adicionar evento de clique (com delay para não conflitar com drag)
+                let clickTimeout;
+                icon.addEventListener('mousedown', (e) => {
+                    clickTimeout = setTimeout(() => {
+                        clickTimeout = null;
+                    }, 200);
+                });
+                
+                icon.addEventListener('click', (e) => {
+                    if (clickTimeout) {
+                        clearTimeout(clickTimeout);
+                        openSite(site);
+                    }
+                });
+                
+                // Configurar drag and drop
+                setupIconDrag(icon);
+                
+                container.appendChild(icon);
+            });
+        }
+        
+        // Sistema de Drag and Drop para ícones
+        function setupIconDrag(icon) {
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
+            
+            // Mouse events
+            icon.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', endDrag);
+            
+            // Touch events (mobile)
+            icon.addEventListener('touchstart', startDragTouch, { passive: false });
+            document.addEventListener('touchmove', dragTouch, { passive: false });
+            document.addEventListener('touchend', endDragTouch);
+            
+            function startDrag(e) {
+                if (e.button !== 0) return; // Apenas botão esquerdo
+                isDragging = true;
+                icon.classList.add('dragging');
+                
+                startX = e.clientX;
+                startY = e.clientY;
+                initialX = icon.offsetLeft;
+                initialY = icon.offsetTop;
+                
+                e.preventDefault();
+            }
+            
+            function drag(e) {
+                if (!isDragging) return;
+                
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                
+                icon.style.left = (initialX + deltaX) + 'px';
+                icon.style.top = (initialY + deltaY) + 'px';
+                
+                e.preventDefault();
+            }
+            
+            function endDrag(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                icon.classList.remove('dragging');
+                
+                // Salvar posição
+                saveIconPosition(icon);
+            }
+            
+            // Touch events
+            function startDragTouch(e) {
+                isDragging = true;
+                icon.classList.add('dragging');
+                
+                const touch = e.touches[0];
+                startX = touch.clientX;
+                startY = touch.clientY;
+                initialX = icon.offsetLeft;
+                initialY = icon.offsetTop;
+                
+                e.preventDefault();
+            }
+            
+            function dragTouch(e) {
+                if (!isDragging) return;
+                
+                const touch = e.touches[0];
+                const deltaX = touch.clientX - startX;
+                const deltaY = touch.clientY - startY;
+                
+                icon.style.left = (initialX + deltaX) + 'px';
+                icon.style.top = (initialY + deltaY) + 'px';
+                
+                e.preventDefault();
+            }
+            
+            function endDragTouch(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                icon.classList.remove('dragging');
+                
+                // Salvar posição
+                saveIconPosition(icon);
+            }
+        }
+        
+        // Salvar posição do ícone
+        function saveIconPosition(icon) {
+            const siteId = icon.dataset.siteId;
+            const positions = JSON.parse(localStorage.getItem('auroraOS_iconPositions') || '{}');
+            
+            positions[siteId] = {
+                x: icon.offsetLeft,
+                y: icon.offsetTop
+            };
+            
+            localStorage.setItem('auroraOS_iconPositions', JSON.stringify(positions));
+        }
+        
+        // Resetar posições dos ícones
+        function resetIconPositions() {
+            localStorage.removeItem('auroraOS_iconPositions');
+            generateDesktopIcons();
+        }
+        
+        function generateStartMenu() {
+            const container = document.getElementById('startMenuItems');
+            container.innerHTML = '';
+            
+            // Separar sites básicos e premium
+            const basicSites = sitesConfig.filter(site => !site.premium);
+            const premiumSites = sitesConfig.filter(site => site.premium);
+            
+            // Adicionar sites básicos
+            basicSites.forEach(site => {
+                const item = document.createElement('div');
+                item.className = 'start-menu-item';
+                item.onclick = () => openSite(site);
+                
+                item.innerHTML = `
+                    <div class="icon">${site.icon}</div>
+                    <div class="text">${site.name}</div>
+                `;
+                
+                container.appendChild(item);
+            });
+            
+            if (premiumSites.length > 0) {
+                const separator = document.createElement('div');
+                separator.className = 'start-menu-separator';
+                container.appendChild(separator);
+                
+                // Adicionar sites premium
+                premiumSites.forEach(site => {
+                    const item = document.createElement('div');
+                    item.className = 'start-menu-item has-submenu';
+                    item.onclick = () => openSite(site);
+                    
+                    item.innerHTML = `
+                        <div class="icon">${site.icon}</div>
+                        <div class="text">${site.name}</div>
+                    `;
+                    
+                    container.appendChild(item);
+                });
+            }
+        }
+        
+        function generateColorPalette() {
+            const container = document.getElementById('themeColorPicker');
+            if (!container) return;
+            
+            // Cores místicas da Aurora Sagrada
+            const mysticColors = [
+                '#3e0a29', '#f0aa53', '#0b1836', '#b2d1b1', '#f2eaff', '#8b0000',
+                '#4b0082', '#800080', '#c71585', '#2f4f4f', '#8b4513', '#daa520'
+            ];
+            
+            // Cores padrão organizadas por família
+            const standardColors = [
+                // Vermelhos
+                '#ff0000', '#ff4500', '#dc143c', '#8b0000', '#cd5c5c', '#f08080',
+                // Laranjas
+                '#ff8c00', '#ff6347', '#ff7f50', '#ffa500', '#ff8c00', '#ffd700',
+                // Amarelos
+                '#ffff00', '#ffd700', '#ffffe0', '#fffacd', '#fff8dc', '#f5deb3',
+                // Verdes
+                '#00ff00', '#32cd32', '#90ee90', '#98fb98', '#00fa9a', '#00ff7f',
+                // Azuis
+                '#0000ff', '#4169e1', '#6495ed', '#87ceeb', '#87cefa', '#add8e6',
+                // Roxos
+                '#8b00ff', '#9370db', '#ba55d3', '#da70d6', '#ee82ee', '#dda0dd',
+                // Rosas
+                '#ff1493', '#ff69b4', '#ffb6c1', '#ffc0cb', '#ffe4e1', '#fff0f5',
+                // Marrons
+                '#8b4513', '#a0522d', '#d2691e', '#cd853f', '#deb887', '#f5deb3',
+                // Cinzas
+                '#696969', '#808080', '#a9a9a9', '#c0c0c0', '#d3d3d3', '#dcdcdc'
+            ];
+            
+            // Tons de cinza
+            const grayScale = [
+                '#000000', '#1a1a1a', '#333333', '#4d4d4d', '#666666', '#808080',
+                '#999999', '#b3b3b3', '#cccccc', '#e6e6e6', '#f5f5f5', '#ffffff'
+            ];
+            
+            container.innerHTML = `
+                <div class="theme-color-section">
+                    <h4>🔮 CORES MÍSTICAS DA AURORA SAGRADA</h4>
+                    <div class="theme-color-grid">
+                        ${mysticColors.map(color => `
+                            <div class="theme-color-box" style="background: ${color}" 
+                                 onclick="applyThemeColor('${color}')" title="${color}"></div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="theme-color-section">
+                    <h4>🎨 CORES PADRÃO</h4>
+                    <div class="theme-color-grid">
+                        ${standardColors.map(color => `
+                            <div class="theme-color-box" style="background: ${color}" 
+                                 onclick="applyThemeColor('${color}')" title="${color}"></div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="theme-color-section">
+                    <h4>⚫ TONS DE CINZA</h4>
+                    <div class="theme-color-grid">
+                        ${grayScale.map(color => `
+                            <div class="theme-color-box" style="background: ${color}" 
+                                 onclick="applyThemeColor('${color}')" title="${color}"></div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="theme-color-section">
+                    <h4>✨ COR PERSONALIZADA</h4>
+                    <div class="theme-custom-color">
+                        <input type="color" id="customColorPicker" value="#3e0a29" 
+                               onchange="updateColorPreview()">
+                        <input type="text" id="customColorHex" value="#3e0a29" 
+                               placeholder="#000000" maxlength="7" 
+                               oninput="updateColorPreview()">
+                        <div class="theme-color-preview" id="colorPreview" style="background: #3e0a29"></div>
+                        <button class="theme-apply-btn" onclick="applyThemeCustomColor()">Aplicar</button>
+                    </div>
+                </div>
+                
+                <div class="theme-preview-box" id="themePreview">
+                    Selecione um elemento e uma cor para visualizar as mudanças
+                </div>
+            `;
+        }
+        
+        function applyThemeColor(color) {
+            const element = document.getElementById('themeElement').value;
+            const root = document.documentElement;
+            
+            switch(element) {
+                case 'desktop':
+                    root.style.setProperty('--theme-bg', `linear-gradient(135deg, ${color} 0%, ${color} 100%)`);
+                    break;
+                case 'taskbar':
+                    root.style.setProperty('--theme-taskbar', color);
+                    break;
+                case 'start-btn':
+                    root.style.setProperty('--theme-start-btn', color);
+                    break;
+                case 'window-header':
+                    root.style.setProperty('--theme-window-header', color);
+                    break;
+                case 'text':
+                    root.style.setProperty('--theme-start-text', color);
+                    break;
+                case 'clock':
+                    root.style.setProperty('--theme-clock', color);
+                    break;
+            }
+            
+            document.getElementById('themePreview').textContent = `Cor ${color} aplicada ao elemento!`;
+        }
+        
+        function updateColorPreview() {
+            const picker = document.getElementById('customColorPicker');
+            const hex = document.getElementById('customColorHex');
+            const preview = document.getElementById('colorPreview');
+            
+            if (picker && hex && preview) {
+                const color = hex.value.startsWith('#') ? hex.value : picker.value;
+                preview.style.background = color;
+                picker.value = color;
+                hex.value = color;
+            }
+        }
+        
+        function applyThemeCustomColor() {
+            const color = document.getElementById('customColorHex').value;
+            if (color.match(/^#[0-9A-F]{6}$/i)) {
+                applyThemeColor(color);
+            } else {
+                alert('Código de cor inválido! Use o formato #000000');
+            }
+        }
+        
+        function generateWallpaperPresets() {
+            const container = document.getElementById('wallpaperPresets');
+            container.innerHTML = '';
+            
+            wallpaperPresets.forEach((preset, index) => {
+                const wallpaperOption = document.createElement('div');
+                wallpaperOption.className = `wallpaper-preset ${index === currentWallpaper ? 'selected' : ''}`;
+                wallpaperOption.style.background = preset.gradient;
+                wallpaperOption.title = preset.name;
+                wallpaperOption.onclick = () => selectWallpaper(index);
+                
+                container.appendChild(wallpaperOption);
+            });
+        }
+        
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            document.getElementById('clock').textContent = timeString;
+        }
+        
+        function updatePlanetaryInfo() {
+            const now = new Date();
+            const dayOfWeek = now.getDay();
+            const hour = now.getHours();
+            
+            // Calcular hora planetária (simplificado)
+            const dayRuler = dayRulers[dayOfWeek];
+            const rulerIndex = chaldeanOrder.indexOf(dayRuler);
+            const planetIndex = (rulerIndex + hour) % 7;
+            const currentPlanet = chaldeanOrder[planetIndex];
+            
+            // Atualizar interface
+            const symbol = planetarySymbols[currentPlanet];
+            document.getElementById('planetarySymbol').textContent = symbol;
+            document.getElementById('planetaryName').textContent = currentPlanet;
+            document.getElementById('currentPlanetSymbol').textContent = symbol;
+            document.getElementById('currentPlanetName').textContent = currentPlanet;
+            document.getElementById('dayRuler').textContent = dayRuler;
+            
+            // Determinar período (dia/noite) - simplificado
+            const period = (hour >= 6 && hour < 18) ? 'dia' : 'noite';
+            const hourInPeriod = period === 'dia' ? hour - 5 : (hour >= 18 ? hour - 17 : hour + 7);
+            
+            document.getElementById('planetaryTime').textContent = 
+                `Hora ${hourInPeriod} do ${period === 'dia' ? 'Dia' : 'Noite'} • ${hour}:00 - ${(hour + 1) % 24}:00`;
+            
+            currentPlanetaryHour = { planet: currentPlanet, hour: hourInPeriod, period };
+        }
+        
+        function openSite(site) {
+            if (site.url === 'local://files') {
+                // Abrir Explorador de Arquivos
+                openLocalApp('explorador-arquivos', 'Explorador de Arquivos', '📁', 900, 650);
+            } else if (site.url === 'local://notepad') {
+                // Abrir Bloco de Notas
+                openLocalApp('bloco-notas-esoterico', 'Bloco de Notas Esotérico', '📝', 800, 600);
+            } else if (site.url === 'local://music') {
+                // Abrir Media Player
+                openLocalApp('media-player-mistico', 'Media Player Místico', '🎵', 700, 550);
+            } else if (site.url === 'local://video') {
+                // Abrir Video Player
+                openLocalApp('video-player-mistico', 'Video Player Místico', '🎬', 900, 650);
+            } else {
+                // Abrir site em janela
+                openWebsite(site);
+            }
+            hideStartMenu();
+        }
+        
+        function openWebsite(site) {
+            const windowId = `window-${site.id}`;
+            
+            // Verificar se janela já está aberta
+            if (document.getElementById(windowId)) {
+                focusWindow(windowId);
+                return;
+            }
+            
+            const window = document.createElement('div');
+            window.id = windowId;
+            window.className = 'window active focused';
+            window.style.left = `${100 + openWindows.length * 30}px`;
+            window.style.top = `${50 + openWindows.length * 30}px`;
+            window.style.width = '800px';
+            window.style.height = '600px';
+            
+            window.innerHTML = `
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>${site.icon}</span>
+                        <span>${site.name}</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-control" onclick="minimizeWindow('${windowId}')">_</div>
+                        <div class="window-control" onclick="maximizeWindow('${windowId}')">□</div>
+                        <div class="window-control close" onclick="closeWindow('${windowId}')">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="loading-overlay" id="loading-${site.id}">
+                        <div class="loading-spinner"></div>
+                        <div>Carregando ${site.name}...</div>
+                    </div>
+                    <iframe class="window-iframe" src="${site.url}" onload="hideLoading('${site.id}')"></iframe>
+                </div>
+                <div class="window-resize-handle"></div>
+            `;
+            
+            document.body.appendChild(window);
+            openWindows.push({ id: windowId, title: site.name, icon: site.icon });
+            updateTaskbar();
+            
+            // Remover loading após 3 segundos (fallback)
+            setTimeout(() => hideLoading(site.id), 3000);
+        }
+        
+        function openLocalApp(appFile, appTitle, appIcon, width, height) {
+            const windowId = `window-${appFile}`;
+            
+            // Verificar se janela já está aberta
+            if (document.getElementById(windowId)) {
+                focusWindow(windowId);
+                return;
+            }
+            
+            const window = document.createElement('div');
+            window.id = windowId;
+            window.className = 'window active focused';
+            window.style.left = `${100 + openWindows.length * 30}px`;
+            window.style.top = `${50 + openWindows.length * 30}px`;
+            window.style.width = `${width}px`;
+            window.style.height = `${height}px`;
+            
+            window.innerHTML = `
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>${appIcon}</span>
+                        <span>${appTitle}</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-control" onclick="minimizeWindow('${windowId}')">_</div>
+                        <div class="window-control" onclick="maximizeWindow('${windowId}')">□</div>
+                        <div class="window-control close" onclick="closeWindow('${windowId}')">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="loading-overlay" id="loading-${appFile}">
+                        <div class="loading-spinner"></div>
+                        <div>Carregando ${appTitle}...</div>
+                    </div>
+                    <iframe class="window-iframe" src="apps/${appFile}.html" onload="hideLoading('${appFile}')" id="iframe-${appFile}"></iframe>
+                </div>
+                <div class="window-resize-handle"></div>
+            `;
+            
+            document.body.appendChild(window);
+            openWindows.push({ id: windowId, title: appTitle, icon: appIcon });
+            updateTaskbar();
+            
+            // Remover loading após 3 segundos (fallback)
+            setTimeout(() => hideLoading(appFile), 3000);
+            
+            // Configurar comunicação entre apps
+            setupAppCommunication(windowId, appFile);
+        }
+        
+        function setupAppCommunication(windowId, appFile) {
+            // Escutar mensagens dos aplicativos
+            window.addEventListener('message', function(event) {
+                // Mensagem do File Explorer para abrir outros apps
+                if (event.data.action === 'openApp') {
+                    const appMap = {
+                        'bloco-notas': ['bloco-notas-esoterico', 'Bloco de Notas Esotérico', '📝', 800, 600],
+                        'media-player': ['media-player-mistico', 'Media Player Místico', '🎵', 700, 550],
+                        'video-player': ['video-player-mistico', 'Video Player Místico', '🎬', 900, 650]
+                    };
+                    
+                    const appInfo = appMap[event.data.app];
+                    if (appInfo) {
+                        openLocalApp(...appInfo);
+                        
+                        // Enviar dados do arquivo para a aplicação após um delay
+                        setTimeout(() => {
+                            const iframe = document.getElementById(`iframe-${appInfo[0]}`);
+                            if (iframe && iframe.contentWindow) {
+                                iframe.contentWindow.postMessage(event.data.fileData, '*');
+                            }
+                        }, 1000);
+                    }
+                }
+            });
+        }
+        
+        function hideLoading(siteId) {
+            const loading = document.getElementById(`loading-${siteId}`);
+            if (loading) {
+                loading.style.display = 'none';
+            }
+        }
+        
+        function closeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.remove();
+                openWindows = openWindows.filter(w => w.id !== windowId);
+                updateTaskbar();
+            }
+        }
+        
+        function minimizeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.style.display = 'none';
+            }
+        }
+        
+        function maximizeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                if (window.style.width === '100vw') {
+                    // Restaurar
+                    window.style.width = '800px';
+                    window.style.height = '600px';
+                    window.style.left = '100px';
+                    window.style.top = '50px';
+                } else {
+                    // Maximizar
+                    window.style.width = '100vw';
+                    window.style.height = 'calc(100vh - 40px)';
+                    window.style.left = '0';
+                    window.style.top = '0';
+                }
+            }
+        }
+        
+        function focusWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.style.display = 'block';
+                window.style.zIndex = '1600';
+                
+                // Remover foco de outras janelas
+                document.querySelectorAll('.window').forEach(w => {
+                    if (w.id !== windowId) {
+                        w.style.zIndex = '1500';
+                    }
+                });
+            }
+        }
+        
+        function updateTaskbar() {
+            const container = document.getElementById('taskbarItems');
+            container.innerHTML = '';
+            
+            openWindows.forEach(window => {
+                const item = document.createElement('div');
+                item.className = 'taskbar-item';
+                item.onclick = () => focusWindow(window.id);
+                item.innerHTML = `${window.icon} ${window.title}`;
+                container.appendChild(item);
+            });
+        }
+        
+        function setupWindowDragging() {
+            // Implementação simplificada do drag de janelas
+            let isDragging = false;
+            let currentWindow = null;
+            let offset = { x: 0, y: 0 };
+            
+            document.addEventListener('mousedown', function(e) {
+                const header = e.target.closest('.window-header');
+                if (header && !e.target.closest('.window-control')) {
+                    isDragging = true;
+                    currentWindow = header.closest('.window');
+                    const rect = currentWindow.getBoundingClientRect();
+                    offset.x = e.clientX - rect.left;
+                    offset.y = e.clientY - rect.top;
+                    e.preventDefault();
+                }
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (isDragging && currentWindow) {
+                    currentWindow.style.left = (e.clientX - offset.x) + 'px';
+                    currentWindow.style.top = (e.clientY - offset.y) + 'px';
+                }
+            });
+            
+            document.addEventListener('mouseup', function() {
+                isDragging = false;
+                currentWindow = null;
+            });
+        }
+        
+        // Funções do menu de contexto
+        function showContextMenu(x, y) {
+            const menu = document.getElementById('contextMenu');
+            menu.style.display = 'block';
+            menu.style.left = x + 'px';
+            menu.style.top = y + 'px';
+        }
+        
+        function hideContextMenu() {
+            document.getElementById('contextMenu').style.display = 'none';
+        }
+        
+        function refreshDesktop() {
+            location.reload();
+            hideContextMenu();
+        }
+        
+        function arrangeIcons() {
+            // Reorganizar ícones automaticamente (resetar posições)
+            resetIconPositions();
+            hideContextMenu();
+        }
+        
+        // Funções do menu iniciar
+        function toggleStartMenu() {
+            const menu = document.getElementById('startMenu');
+            menu.classList.toggle('active');
+        }
+        
+        function hideStartMenu() {
+            document.getElementById('startMenu').classList.remove('active');
+        }
+        
+        // Funções dos popups
+        function toggleCalendarPopup() {
+            const popup = document.getElementById('calendarPopup');
+            hideAllPopups();
+            popup.classList.toggle('active');
+            if (popup.classList.contains('active')) {
+                generateCalendar();
+            }
+        }
+        
+        function toggleVolumePopup() {
+            const popup = document.getElementById('volumePopup');
+            hideAllPopups();
+            popup.classList.toggle('active');
+        }
+        
+        function togglePlanetaryPopup() {
+            const popup = document.getElementById('planetaryPopup');
+            hideAllPopups();
+            popup.classList.toggle('active');
+        }
+        
+        function toggleNotifications() {
+            // Implementar sistema de notificações
+            console.log('Sistema de notificações em desenvolvimento');
+        }
+        
+        function hideAllPopups() {
+            document.querySelectorAll('.popup').forEach(popup => {
+                popup.classList.remove('active');
+            });
+        }
+        
+        // Funções do calendário
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const title = document.getElementById('calendarTitle');
+            
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            title.textContent = currentDate.toLocaleDateString('pt-BR', { 
+                month: 'long', 
+                year: 'numeric' 
+            });
+            
+            grid.innerHTML = '';
+            
+            // Cabeçalhos dos dias da semana
+            const dayHeaders = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            dayHeaders.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'calendar-day-header';
+                header.textContent = day;
+                grid.appendChild(header);
+            });
+            
+            // Primeiro dia do mês e último dia
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const today = new Date();
+            
+            // Dias vazios no início
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day other-month';
+                grid.appendChild(emptyDay);
+            }
+            
+            // Dias do mês
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                
+                // Marcar dia atual
+                if (year === today.getFullYear() && 
+                    month === today.getMonth() && 
+                    day === today.getDate()) {
+                    dayElement.classList.add('today');
+                }
+                
+                grid.appendChild(dayElement);
+            }
+        }
+        
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar();
+        }
+        
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar();
+        }
+        
+        // Funções de volume
+        function setVolume(event, type) {
+            const slider = event.currentTarget;
+            const rect = slider.getBoundingClientRect();
+            const percentage = ((event.clientX - rect.left) / rect.width) * 100;
+            const clampedPercentage = Math.max(0, Math.min(100, percentage));
+            
+            volumes[type] = clampedPercentage;
+            
+            const fill = document.getElementById(`${type}VolumeFill`);
+            const thumb = document.getElementById(`${type}VolumeThumb`);
+            
+            fill.style.width = clampedPercentage + '%';
+            thumb.style.left = clampedPercentage + '%';
+        }
+        
+        // Funções de personalização
+        function openPersonalization() {
+            document.getElementById('personalizationModal').classList.add('active');
+            hideContextMenu();
+        }
+        
+        function closePersonalization() {
+            document.getElementById('personalizationModal').classList.remove('active');
+        }
+        
+        function selectColorTheme(index) {
+            currentTheme = index;
+            applyColorTheme();
+            
+            // Atualizar seleção visual
+            document.querySelectorAll('.color-option').forEach((option, i) => {
+                option.classList.toggle('selected', i === index);
+            });
+        }
+        
+        function selectWallpaper(index) {
+            currentWallpaper = index;
+            applyWallpaper();
+            
+            // Atualizar seleção visual
+            document.querySelectorAll('.wallpaper-preset').forEach((preset, i) => {
+                preset.classList.toggle('selected', i === index);
+            });
+        }
+        
+        function applyColorTheme() {
+            const theme = colorThemes[currentTheme];
+            const root = document.documentElement;
+            
+            root.style.setProperty('--vinho', theme.primary);
+            root.style.setProperty('--azul-escuro', theme.secondary);
+            root.style.setProperty('--dourado', theme.accent);
+            root.style.setProperty('--theme-taskbar', theme.primary);
+            root.style.setProperty('--theme-start-btn', theme.primary);
+            root.style.setProperty('--theme-start-text', theme.accent);
+            root.style.setProperty('--theme-clock', theme.accent);
+            root.style.setProperty('--theme-window-header', theme.secondary);
+        }
+        
+        function applyWallpaper() {
+            const wallpaper = wallpaperPresets[currentWallpaper];
+            const root = document.documentElement;
+            
+            root.style.setProperty('--theme-bg', wallpaper.gradient);
+            document.body.style.background = wallpaper.gradient;
+            document.querySelector('.desktop').style.background = wallpaper.gradient;
+        }
+        
+        function uploadWallpaper(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageUrl = e.target.result;
+                    document.body.style.backgroundImage = `url(${imageUrl})`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                    document.querySelector('.desktop').style.backgroundImage = `url(${imageUrl})`;
+                    document.querySelector('.desktop').style.backgroundSize = 'cover';
+                    document.querySelector('.desktop').style.backgroundPosition = 'center';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function togglePlanetaryWidget() {
+            const widget = document.querySelector('.taskbar-widget');
+            const checkbox = document.getElementById('showPlanetaryWidget');
+            widget.style.display = checkbox.checked ? 'flex' : 'none';
+        }
+        
+        function toggleNotifications() {
+            const icon = document.querySelector('.notification-icon');
+            const checkbox = document.getElementById('showNotifications');
+            icon.style.display = checkbox.checked ? 'block' : 'none';
+        }
+        
+        function toggleVolumeControl() {
+            const icon = document.querySelector('.volume-icon');
+            const checkbox = document.getElementById('showVolumeControl');
+            icon.style.display = checkbox.checked ? 'block' : 'none';
+        }
+        
+        function savePersonalization() {
+            const settings = {
+                theme: currentTheme,
+                wallpaper: currentWallpaper,
+                showPlanetaryWidget: document.getElementById('showPlanetaryWidget').checked,
+                showNotifications: document.getElementById('showNotifications').checked,
+                showVolumeControl: document.getElementById('showVolumeControl').checked,
+                volumes: volumes
+            };
+            
+            localStorage.setItem('auroraOS_settings', JSON.stringify(settings));
+            closePersonalization();
+            
+            // Mostrar notificação de sucesso
+            console.log('Configurações salvas com sucesso!');
+        }
+        
+        function loadPersonalization() {
+            const saved = localStorage.getItem('auroraOS_settings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                
+                currentTheme = settings.theme || 0;
+                currentWallpaper = settings.wallpaper || 0;
+                volumes = settings.volumes || volumes;
+                
+                applyColorTheme();
+                applyWallpaper();
+                
+                // Aplicar configurações de widgets
+                if (settings.showPlanetaryWidget !== undefined) {
+                    document.getElementById('showPlanetaryWidget').checked = settings.showPlanetaryWidget;
+                    togglePlanetaryWidget();
+                }
+                
+                if (settings.showNotifications !== undefined) {
+                    document.getElementById('showNotifications').checked = settings.showNotifications;
+                    toggleNotifications();
+                }
+                
+                if (settings.showVolumeControl !== undefined) {
+                    document.getElementById('showVolumeControl').checked = settings.showVolumeControl;
+                    toggleVolumeControl();
+                }
+            }
+        }
+        
+        function resetPersonalization() {
+            localStorage.removeItem('auroraOS_settings');
+            currentTheme = 0;
+            currentWallpaper = 0;
+            volumes = { master: 70, notifications: 50, system: 60 };
+            
+            applyColorTheme();
+            applyWallpaper();
+            
+            // Resetar checkboxes
+            document.getElementById('showPlanetaryWidget').checked = true;
+            document.getElementById('showNotifications').checked = true;
+            document.getElementById('showVolumeControl').checked = true;
+            
+            togglePlanetaryWidget();
+            toggleNotifications();
+            toggleVolumeControl();
+            
+            // Atualizar seleções visuais
+            generateColorPalette();
+            generateWallpaperPresets();
+            
+            // Resetar cores da Taskbar e Menu Iniciar
+            applyTaskbarTheme('mystic-wine');
+            applyStartMenuTheme('windows-me');
+        }
+        
+        // Funções para personalizar Barra de Tarefas (Taskbar)
+        function applyTaskbarTheme(themeName) {
+            const themes = {
+                'mystic-wine': '#3e0a29',
+                'dark-blue': '#0b1836',
+                'deep-purple': '#4b0082',
+                'forest-green': '#1b4332',
+                'midnight-black': '#1a1a1a',
+                'golden-bronze': '#8b6914'
+            };
+            
+            const color = themes[themeName];
+            if (color) {
+                document.documentElement.style.setProperty('--theme-taskbar', color);
+                document.documentElement.style.setProperty('--theme-start-btn', color);
+                
+                // Atualizar input de cor
+                document.getElementById('taskbarColor').value = color;
+                
+                // Salvar no localStorage
+                localStorage.setItem('auroraOS_taskbarColor', color);
+            }
+        }
+        
+        function applyCustomTaskbarColor() {
+            const color = document.getElementById('taskbarColor').value;
+            
+            document.documentElement.style.setProperty('--theme-taskbar', color);
+            document.documentElement.style.setProperty('--theme-start-btn', color);
+            
+            // Salvar no localStorage
+            localStorage.setItem('auroraOS_taskbarColor', color);
+        }
+        
+        function loadTaskbarColor() {
+            const saved = localStorage.getItem('auroraOS_taskbarColor');
+            if (saved) {
+                document.documentElement.style.setProperty('--theme-taskbar', saved);
+                document.documentElement.style.setProperty('--theme-start-btn', saved);
+                
+                // Atualizar input de cor
+                document.getElementById('taskbarColor').value = saved;
+            }
+        }
+        
+        // Funções para personalizar barra lateral do Menu Iniciar
+        function applyStartMenuTheme(themeName) {
+            const themes = {
+                'windows-me': {
+                    start: '#0A5A9E',
+                    end: '#3A7ABE',
+                    hover: '#0A5A9E',
+                    hoverEnd: '#3A7ABE'
+                },
+                'mystic-wine': {
+                    start: '#3e0a29',
+                    end: '#6b1442',
+                    hover: '#3e0a29',
+                    hoverEnd: '#6b1442'
+                },
+                'purple-imperial': {
+                    start: '#4b0082',
+                    end: '#8b008b',
+                    hover: '#4b0082',
+                    hoverEnd: '#8b008b'
+                },
+                'emerald-forest': {
+                    start: '#2d5016',
+                    end: '#1b4332',
+                    hover: '#2d5016',
+                    hoverEnd: '#1b4332'
+                },
+                'cosmic-night': {
+                    start: '#0b1836',
+                    end: '#1a2a4a',
+                    hover: '#0b1836',
+                    hoverEnd: '#1a2a4a'
+                },
+                'golden-sunset': {
+                    start: '#d4860f',
+                    end: '#f0aa53',
+                    hover: '#d4860f',
+                    hoverEnd: '#f0aa53'
+                }
+            };
+            
+            const theme = themes[themeName];
+            if (theme) {
+                document.documentElement.style.setProperty('--theme-start-sidebar', theme.start);
+                document.documentElement.style.setProperty('--theme-start-sidebar-end', theme.end);
+                document.documentElement.style.setProperty('--theme-start-hover', theme.hover);
+                document.documentElement.style.setProperty('--theme-start-hover-end', theme.hoverEnd);
+                
+                // Atualizar inputs de cor
+                document.getElementById('startSidebarColorStart').value = theme.start;
+                document.getElementById('startSidebarColorEnd').value = theme.end;
+                
+                // Salvar no localStorage
+                localStorage.setItem('auroraOS_startMenuTheme', JSON.stringify(theme));
+            }
+        }
+        
+        function applyCustomStartMenuColor() {
+            const colorStart = document.getElementById('startSidebarColorStart').value;
+            const colorEnd = document.getElementById('startSidebarColorEnd').value;
+            
+            document.documentElement.style.setProperty('--theme-start-sidebar', colorStart);
+            document.documentElement.style.setProperty('--theme-start-sidebar-end', colorEnd);
+            document.documentElement.style.setProperty('--theme-start-hover', colorStart);
+            document.documentElement.style.setProperty('--theme-start-hover-end', colorEnd);
+            
+            // Salvar no localStorage
+            const customTheme = {
+                start: colorStart,
+                end: colorEnd,
+                hover: colorStart,
+                hoverEnd: colorEnd
+            };
+            localStorage.setItem('auroraOS_startMenuTheme', JSON.stringify(customTheme));
+        }
+        
+        function loadStartMenuTheme() {
+            const saved = localStorage.getItem('auroraOS_startMenuTheme');
+            if (saved) {
+                const theme = JSON.parse(saved);
+                document.documentElement.style.setProperty('--theme-start-sidebar', theme.start);
+                document.documentElement.style.setProperty('--theme-start-sidebar-end', theme.end);
+                document.documentElement.style.setProperty('--theme-start-hover', theme.hover);
+                document.documentElement.style.setProperty('--theme-start-hover-end', theme.hoverEnd);
+                
+                // Atualizar inputs de cor
+                document.getElementById('startSidebarColorStart').value = theme.start;
+                document.getElementById('startSidebarColorEnd').value = theme.end;
+            }
+        }
+    </script>
+</body>
+</html>
+
