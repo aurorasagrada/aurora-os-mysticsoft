@@ -128,6 +128,87 @@
             50% { transform: scale(1.05); }
         }
         
+        /* Lixeira */
+        .recycle-bin {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            width: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+            z-index: 100;
+        }
+        
+        .recycle-bin:hover {
+            background: rgba(240, 170, 83, 0.2);
+            outline: 1px dotted var(--dourado);
+        }
+        
+        .recycle-bin.drag-over {
+            background: rgba(240, 170, 83, 0.4);
+            outline: 2px solid var(--dourado);
+            transform: scale(1.1);
+        }
+        
+        .recycle-bin .icon {
+            font-size: 48px;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.8));
+        }
+        
+        .recycle-bin .label {
+            color: white;
+            font-size: 10px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            margin-top: 4px;
+        }
+        
+        .recycle-bin-window .window-content {
+            padding: 10px;
+        }
+        
+        .trash-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #ccc;
+            cursor: pointer;
+        }
+        
+        .trash-item:hover {
+            background: rgba(240, 170, 83, 0.2);
+        }
+        
+        .trash-item .icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
+        .trash-item .info {
+            flex: 1;
+        }
+        
+        .trash-item .name {
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        
+        .trash-item .date {
+            font-size: 9px;
+            color: #666;
+        }
+        
+        .trash-actions {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            border-top: 2px solid #808080;
+            background: #c0c0c0;
+        }
+        
         @keyframes starGlow {
             0%, 100% { opacity: 0.7; transform: scale(1); }
             50% { opacity: 1; transform: scale(1.2); }
@@ -1131,6 +1212,12 @@
     <div class="desktop" id="desktop">
         <div class="desktop-icons" id="desktopIcons">
             <!-- Ícones serão gerados dinamicamente -->
+        </div>
+        
+        <!-- Lixeira -->
+        <div class="recycle-bin" id="recycleBin" ondblclick="openRecycleBin()">
+            <div class="icon" id="recycleBinIcon">🗑️</div>
+            <div class="label">Lixeira</div>
         </div>
     </div>
     
@@ -2808,6 +2895,173 @@
             contextMenu.classList.remove('active');
             // Pode adicionar animação ou reload de ícones aqui
         }
+        
+        // ==================== LIXEIRA ====================
+        
+        let trashItems = JSON.parse(localStorage.getItem('auroraOS_trash') || '[]');
+        
+        // Configurar zona de drop da lixeira
+        const recycleBin = document.getElementById('recycleBin');
+        const recycleBinIcon = document.getElementById('recycleBinIcon');
+        
+        recycleBin.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            recycleBin.classList.add('drag-over');
+        });
+        
+        recycleBin.addEventListener('dragleave', () => {
+            recycleBin.classList.remove('drag-over');
+        });
+        
+        recycleBin.addEventListener('drop', (e) => {
+            e.preventDefault();
+            recycleBin.classList.remove('drag-over');
+            
+            // Pegar o ícone arrastado
+            const draggedIcon = document.querySelector('.desktop-icon.dragging');
+            if (draggedIcon) {
+                moveToTrash(draggedIcon);
+            }
+        });
+        
+        // Mover ícone para lixeira
+        function moveToTrash(iconElement) {
+            const siteId = iconElement.dataset.siteId;
+            const site = sitesConfig.find(s => s.id === siteId);
+            
+            if (site) {
+                // Adicionar à lixeira com timestamp
+                trashItems.push({
+                    ...site,
+                    deletedAt: new Date().toISOString(),
+                    position: {
+                        left: iconElement.style.left,
+                        top: iconElement.style.top
+                    }
+                });
+                
+                // Salvar no localStorage
+                localStorage.setItem('auroraOS_trash', JSON.stringify(trashItems));
+                
+                // Remover do desktop
+                iconElement.remove();
+                
+                // Atualizar ícone da lixeira
+                updateRecycleBinIcon();
+                
+                // Remover da configuração
+                const index = sitesConfig.findIndex(s => s.id === siteId);
+                if (index > -1) {
+                    sitesConfig.splice(index, 1);
+                }
+            }
+        }
+        
+        // Atualizar ícone da lixeira (cheia/vazia)
+        function updateRecycleBinIcon() {
+            if (trashItems.length > 0) {
+                recycleBinIcon.textContent = '🗑️'; // Lixeira cheia
+            } else {
+                recycleBinIcon.textContent = '🗑️'; // Lixeira vazia (mesmo ícone)
+            }
+        }
+        
+        // Abrir janela da lixeira
+        function openRecycleBin() {
+            const existingWindow = document.querySelector('.recycle-bin-window');
+            if (existingWindow) {
+                existingWindow.remove();
+            }
+            
+            const trashWindow = document.createElement('div');
+            trashWindow.className = 'window recycle-bin-window';
+            trashWindow.style.width = '500px';
+            trashWindow.style.height = '400px';
+            trashWindow.style.left = '100px';
+            trashWindow.style.top = '100px';
+            trashWindow.style.zIndex = '1000';
+            
+            let trashItemsHTML = '';
+            if (trashItems.length === 0) {
+                trashItemsHTML = '<div style="padding: 20px; text-align: center; color: #666;">Lixeira vazia</div>';
+            } else {
+                trashItems.forEach((item, index) => {
+                    const date = new Date(item.deletedAt).toLocaleString('pt-BR');
+                    trashItemsHTML += `
+                        <div class="trash-item" data-index="${index}">
+                            <div class="icon">${item.icon}</div>
+                            <div class="info">
+                                <div class="name">${item.name}</div>
+                                <div class="date">Excluído em: ${date}</div>
+                            </div>
+                            <button onclick="restoreFromTrash(${index})" style="margin-right: 5px;">Restaurar</button>
+                            <button onclick="deleteFromTrashPermanently(${index})">Excluir</button>
+                        </div>
+                    `;
+                });
+            }
+            
+            trashWindow.innerHTML = `
+                <div class="window-header">
+                    <span class="window-title">🗑️ Lixeira</span>
+                    <button class="window-close" onclick="this.closest('.window').remove()">✕</button>
+                </div>
+                <div class="window-content" style="overflow-y: auto; max-height: 300px;">
+                    ${trashItemsHTML}
+                </div>
+                <div class="trash-actions">
+                    <button onclick="emptyTrash()" ${trashItems.length === 0 ? 'disabled' : ''}>Esvaziar Lixeira</button>
+                    <button onclick="this.closest('.window').remove()">Fechar</button>
+                </div>
+            `;
+            
+            document.body.appendChild(trashWindow);
+            makeWindowDraggable(trashWindow);
+        }
+        
+        // Restaurar item da lixeira
+        function restoreFromTrash(index) {
+            const item = trashItems[index];
+            
+            // Adicionar de volta ao sitesConfig
+            sitesConfig.push(item);
+            
+            // Remover da lixeira
+            trashItems.splice(index, 1);
+            localStorage.setItem('auroraOS_trash', JSON.stringify(trashItems));
+            
+            // Recriar ícones do desktop
+            createDesktopIcons();
+            
+            // Atualizar janela da lixeira
+            openRecycleBin();
+            
+            // Atualizar ícone
+            updateRecycleBinIcon();
+        }
+        
+        // Excluir permanentemente
+        function deleteFromTrashPermanently(index) {
+            if (confirm('Tem certeza que deseja excluir permanentemente este item?')) {
+                trashItems.splice(index, 1);
+                localStorage.setItem('auroraOS_trash', JSON.stringify(trashItems));
+                openRecycleBin();
+                updateRecycleBinIcon();
+            }
+        }
+        
+        // Esvaziar lixeira
+        function emptyTrash() {
+            if (confirm('Tem certeza que deseja esvaziar a lixeira? Esta ação não pode ser desfeita.')) {
+                trashItems = [];
+                localStorage.setItem('auroraOS_trash', JSON.stringify(trashItems));
+                openRecycleBin();
+                updateRecycleBinIcon();
+            }
+        }
+        
+        // Inicializar lixeira
+        updateRecycleBinIcon();
         
     </script>
     
