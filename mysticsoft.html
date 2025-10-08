@@ -1080,6 +1080,51 @@
                 width: 260px;
             }
         }
+        
+        /* Menu de contexto do desktop */
+        .context-menu {
+            position: fixed;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            padding: 2px;
+            min-width: 180px;
+            z-index: 10000;
+            display: none;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+        
+        .context-menu.active {
+            display: block;
+        }
+        
+        .context-menu-item {
+            padding: 4px 20px 4px 30px;
+            cursor: pointer;
+            position: relative;
+            font-size: 11px;
+            color: #000;
+            white-space: nowrap;
+        }
+        
+        .context-menu-item:hover {
+            background: #000080;
+            color: #ffffff;
+        }
+        
+        .context-menu-item.checked::before {
+            content: '✓';
+            position: absolute;
+            left: 8px;
+            font-weight: bold;
+        }
+        
+        .context-menu-separator {
+            height: 1px;
+            background: #808080;
+            margin: 2px 0;
+            border-top: 1px solid #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -1613,6 +1658,15 @@
                 isDragging = false;
                 icon.classList.remove('dragging');
                 
+                // Aplicar snap to grid se ativado
+                if (typeof snapToGrid !== 'undefined' && snapToGrid) {
+                    const currentX = parseInt(icon.style.left);
+                    const currentY = parseInt(icon.style.top);
+                    const snapped = snapPositionToGrid(currentX, currentY);
+                    icon.style.left = snapped.x + 'px';
+                    icon.style.top = snapped.y + 'px';
+                }
+                
                 // Salvar posição
                 saveIconPosition(icon);
             }
@@ -1648,6 +1702,15 @@
                 if (!isDragging) return;
                 isDragging = false;
                 icon.classList.remove('dragging');
+                
+                // Aplicar snap to grid se ativado
+                if (typeof snapToGrid !== 'undefined' && snapToGrid) {
+                    const currentX = parseInt(icon.style.left);
+                    const currentY = parseInt(icon.style.top);
+                    const snapped = snapPositionToGrid(currentX, currentY);
+                    icon.style.left = snapped.x + 'px';
+                    icon.style.top = snapped.y + 'px';
+                }
                 
                 // Salvar posição
                 saveIconPosition(icon);
@@ -2594,7 +2657,137 @@
                 document.getElementById('startSidebarColorEnd').value = theme.end;
             }
         }
+        
+        // ==================== MENU DE CONTEXTO DO DESKTOP ====================
+        
+        let snapToGrid = false;
+        const gridSize = 80; // Tamanho da grade em pixels
+        
+        // Criar menu de contexto
+        const contextMenu = document.createElement('div');
+        contextMenu.className = 'context-menu';
+        contextMenu.id = 'desktopContextMenu';
+        contextMenu.innerHTML = `
+            <div class="context-menu-item" onclick="toggleSnapToGrid()">
+                <span id="snapToGridCheck"></span>Alinhar à grade
+            </div>
+            <div class="context-menu-separator"></div>
+            <div class="context-menu-item" onclick="organizeIcons()">
+                Organizar ícones
+            </div>
+            <div class="context-menu-item" onclick="refreshDesktop()">
+                Atualizar
+            </div>
+        `;
+        document.body.appendChild(contextMenu);
+        
+        // Mostrar menu ao clicar com botão direito no desktop
+        const desktop = document.getElementById('desktop');
+        desktop.addEventListener('contextmenu', (e) => {
+            // Verificar se clicou no desktop e não em um ícone ou janela
+            if (e.target === desktop || e.target.classList.contains('desktop-icons')) {
+                e.preventDefault();
+                
+                contextMenu.style.left = e.clientX + 'px';
+                contextMenu.style.top = e.clientY + 'px';
+                contextMenu.classList.add('active');
+                
+                // Atualizar estado do checkbox
+                updateSnapToGridCheckbox();
+            }
+        });
+        
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!contextMenu.contains(e.target)) {
+                contextMenu.classList.remove('active');
+            }
+        });
+        
+        // Alternar snap to grid
+        function toggleSnapToGrid() {
+            snapToGrid = !snapToGrid;
+            updateSnapToGridCheckbox();
+            contextMenu.classList.remove('active');
+            
+            // Se ativado, alinhar todos os ícones imediatamente
+            if (snapToGrid) {
+                alignAllIconsToGrid();
+            }
+        }
+        
+        // Atualizar checkbox visual
+        function updateSnapToGridCheckbox() {
+            const checkElement = document.getElementById('snapToGridCheck');
+            const menuItem = checkElement.parentElement;
+            if (snapToGrid) {
+                menuItem.classList.add('checked');
+            } else {
+                menuItem.classList.remove('checked');
+            }
+        }
+        
+        // Função para alinhar posição à grade
+        function snapPositionToGrid(x, y) {
+            if (!snapToGrid) return { x, y };
+            
+            return {
+                x: Math.round(x / gridSize) * gridSize,
+                y: Math.round(y / gridSize) * gridSize
+            };
+        }
+        
+        // Alinhar todos os ícones à grade
+        function alignAllIconsToGrid() {
+            const icons = document.querySelectorAll('.desktop-icon');
+            icons.forEach(icon => {
+                const currentX = parseInt(icon.style.left) || icon.offsetLeft;
+                const currentY = parseInt(icon.style.top) || icon.offsetTop;
+                
+                const snapped = snapPositionToGrid(currentX, currentY);
+                icon.style.left = snapped.x + 'px';
+                icon.style.top = snapped.y + 'px';
+                
+                saveIconPosition(icon);
+            });
+        }
+        
+        // Organizar ícones automaticamente
+        function organizeIcons() {
+            const icons = Array.from(document.querySelectorAll('.desktop-icon'));
+            const padding = 20;
+            let x = padding;
+            let y = padding;
+            const maxHeight = window.innerHeight - 100; // Espaço para taskbar
+            
+            icons.forEach(icon => {
+                icon.style.left = x + 'px';
+                icon.style.top = y + 'px';
+                
+                y += gridSize;
+                
+                // Se ultrapassar altura, ir para próxima coluna
+                if (y + gridSize > maxHeight) {
+                    y = padding;
+                    x += gridSize;
+                }
+                
+                saveIconPosition(icon);
+            });
+            
+            contextMenu.classList.remove('active');
+        }
+        
+        // Atualizar desktop
+        function refreshDesktop() {
+            contextMenu.classList.remove('active');
+            // Pode adicionar animação ou reload de ícones aqui
+        }
+        
     </script>
+    
+    <!-- Menu de contexto será adicionado dinamicamente -->
+    
 </body>
 </html>
 
